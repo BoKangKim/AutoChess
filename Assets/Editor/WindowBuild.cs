@@ -28,6 +28,6 @@ public class WindowBuild
             Directory.CreateDirectory(time.FullName);
         }
 
-        BuildPipeline.BuildPlayer(scenes, folder_time + "build.exe", BuildTarget.Android, BuildOptions.None);
+        BuildPipeline.BuildPlayer(scenes, folder_time + "build.exe", BuildTarget.StandaloneWindows64, BuildOptions.None);
     }
 }
