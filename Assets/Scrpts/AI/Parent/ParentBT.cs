@@ -54,7 +54,7 @@ public abstract class ParentBT : MonoBehaviour
     {
         get
         {
-            return () => { return false; };
+            return () => { return true; };
         }
     }
 
