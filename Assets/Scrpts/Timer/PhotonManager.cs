@@ -56,7 +56,7 @@ public class PhotonManager : MonoBehaviourPunCallbacks // 내부 함수를 사용할 때 
     public override void OnPlayerEnteredRoom(Player newPlayer) // 방에 이미 들어왔을 때
     {
         // 현재 방에 플레이어가 2명 이상일 때
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
+        if (PhotonNetwork.CurrentRoom.PlayerCount >= 4)
         {
             PhotonNetwork.LoadLevel((int)MyScene.Ingame);
         }
