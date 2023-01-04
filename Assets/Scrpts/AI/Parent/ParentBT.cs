@@ -7,8 +7,12 @@ public abstract class ParentBT : MonoBehaviour
 {
     private INode root = null;
     private INode specialRoot = null;
-
     protected Animator myAni = null;
+
+    private string nickName = "";
+    protected AIObject target = null;
+
+    private string stageType = "PVP";
 
     private void Awake()
     {
@@ -46,18 +50,18 @@ public abstract class ParentBT : MonoBehaviour
                 ),
                
                 IfElseAction(isArangeIn, attack, move)
-            ) ;
+            );
     }
 
     protected virtual void initializingSpecialRootNode() {}
 
+    #region AI Behavior
     protected virtual Action idle 
     {
         get 
         {
             return () => 
             {
-                myAni.SetBool("isMove",false);
             };
         }
     }
@@ -79,7 +83,6 @@ public abstract class ParentBT : MonoBehaviour
         {
             return () => 
             {
-                myAni.SetBool("isMove",true);
             };
         }
     }
@@ -113,8 +116,6 @@ public abstract class ParentBT : MonoBehaviour
         {
             return () => 
             {
-                Debug.Log("Attack");
-                myAni.SetTrigger("isAttack");
             };
         }
     }
@@ -136,10 +137,11 @@ public abstract class ParentBT : MonoBehaviour
         {
             return () => 
             {
-                myAni.SetTrigger("isDeath");
+                
             };
         }
     }
 
-   
+
+    #endregion
 }
