@@ -8,45 +8,57 @@ public abstract class ParentBT : MonoBehaviour
     private INode root = null;
     private INode specialRoot = null;
 
+    protected Animator myAni = null;
+
     private void Awake()
     {
         InitializingRootNode();
         initializingSpecialRootNode();
     }
 
+    private void Start()
+    {
+        myAni = GetComponent<Animator>();
+    }
+
     private void Update()
     {
         root.Run();
-
+        
         if(specialRoot == null)
         {
             return;
         }
+
+        specialRoot.Run();
     }
 
     private void InitializingRootNode()
     {
         root = Selector
             (
-                IfAction(isDeath,death),
+                IfAction(isDeath, death),
 
                 Sequence
                 (
                     ActionN(idle),
                     NotIf(findEnemy)
                 ),
-
-                IfElseAction(isArangeIn,attack,move)
-            );
+               
+                IfElseAction(isArangeIn, attack, move)
+            ) ;
     }
 
-    protected virtual void initializingSpecialRootNode() { }
+    protected virtual void initializingSpecialRootNode() {}
 
     protected virtual Action idle 
     {
         get 
         {
-            return () => { };
+            return () => 
+            {
+                myAni.SetBool("isMove",false);
+            };
         }
     }
 
@@ -54,7 +66,10 @@ public abstract class ParentBT : MonoBehaviour
     {
         get
         {
-            return () => { return true; };
+            return () => 
+            {
+                return true; 
+            };
         }
     }
 
@@ -62,7 +77,10 @@ public abstract class ParentBT : MonoBehaviour
     {
         get 
         {
-            return () => { };
+            return () => 
+            {
+                myAni.SetBool("isMove",true);
+            };
         }
     }
 
@@ -70,7 +88,22 @@ public abstract class ParentBT : MonoBehaviour
     {
         get 
         {
-            return () => { return false; };
+            return () => 
+            { 
+                return false; 
+            };
+        }
+    }
+
+    protected virtual Func<bool> isAttackAble
+    {
+        get 
+        {
+
+            return () =>
+            {
+                return false;
+            };
         }
     }
 
@@ -78,7 +111,11 @@ public abstract class ParentBT : MonoBehaviour
     {
         get
         {
-            return () => { };
+            return () => 
+            {
+                Debug.Log("Attack");
+                myAni.SetTrigger("isAttack");
+            };
         }
     }
 
@@ -86,7 +123,10 @@ public abstract class ParentBT : MonoBehaviour
     {
         get
         {
-            return () => { return false; };
+            return () => 
+            {
+                return false; 
+            };
         }
     }
 
@@ -94,7 +134,10 @@ public abstract class ParentBT : MonoBehaviour
     {
         get
         {
-            return () => { };
+            return () => 
+            {
+                myAni.SetTrigger("isDeath");
+            };
         }
     }
 

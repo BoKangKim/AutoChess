@@ -5,41 +5,95 @@ using UnityEngine;
 
 public class ExampleAI : ParentBT
 {
-    protected override Action idle => base.idle;
+    private int hp = 100;
+    private float time = 0f;
+    private float attackTime = 0.5f;
+    private GameObject[] enemies = null;
+    private GameObject target = null;
 
-    protected override Action move 
+
+    protected override Func<bool> isDeath
     {
         get 
         {
-            return () => 
+            return () => hp <= 0;
+        }
+    }
+
+    protected override Func<bool> isAttackAble
+    {
+        get 
+        {
+            time += Time.deltaTime;
+            return () =>
             {
-                if (Input.GetKey(KeyCode.W))
+                if(time >= attackTime)
                 {
-                    gameObject.transform.Translate(Vector3.forward * 2f);
+                    time = 0f;
+                    return true;
                 }
-                if (Input.GetKey(KeyCode.S))
+                else
                 {
-                    gameObject.transform.Translate(-Vector3.forward * 2f);
-                }
-                if (Input.GetKey(KeyCode.A))
-                {
-                    gameObject.transform.Translate(-Vector3.right * 2f);
-                }
-                if (Input.GetKey(KeyCode.D))
-                {
-                    gameObject.transform.Translate(Vector3.right * 2f);
+                    return false;
                 }
             };
         }
     }
 
-    protected override Action attack
+    protected override Func<bool> findEnemy
     {
-        get
+        get 
         {
-            return () => { Debug.Log("Attack"); };
+            return () =>
+            {
+                Debug.Log("findEnemy");
+
+                enemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+                if(enemies.Length <= 0 )
+                {
+                    return false;
+                }
+                else
+                {
+                    target = enemies[0];
+                    return true;
+                }
+
+            };
         }
     }
 
-    protected override Func<bool> isArangeIn => base.isArangeIn;
+    protected override Action move
+    {
+        get
+        {
+            return () =>
+            {
+                myAni.SetBool("isMove",true);
+                gameObject.transform.LookAt(target.transform);
+                gameObject.transform.Translate(Vector3.forward * 0.1f);
+            };
+        }
+    }
+
+    protected override Func<bool> isArangeIn
+    {
+        get
+        {
+            return () =>
+            {
+                if (Vector3.Distance(target.transform.position, gameObject.transform.position) < 0.5f)
+                {
+                    myAni.SetBool("isMove", false);
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            };
+        }
+    }
 }
