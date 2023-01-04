@@ -10,6 +10,7 @@ public abstract class ParentBT : MonoBehaviour
 
     private void Awake()
     {
+        InitializingRootNode();
         initializingSpecialRootNode();
     }
 
@@ -39,7 +40,7 @@ public abstract class ParentBT : MonoBehaviour
             );
     }
 
-    protected abstract void initializingSpecialRootNode();
+    protected virtual void initializingSpecialRootNode() { }
 
     protected virtual Action idle 
     {
