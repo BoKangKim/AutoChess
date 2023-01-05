@@ -4,15 +4,15 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
+  - drag
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Unit
   - Water
   - UI
-  - 
+  - Space
   - 
   - 
   - 
