@@ -17,14 +17,12 @@ namespace ZoneSystem
         {
             safetyZoneObject = new GameObject[2, 7];
             battleZoneObject = new GameObject[3, 7];
-
         }
 
 
 
         public void OnClick_UnitInst()
         {
-
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -36,14 +34,6 @@ namespace ZoneSystem
                     }
                 }
             }
-
-
-
-
-
-
         }
-
-
     }
 }
