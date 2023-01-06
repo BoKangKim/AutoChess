@@ -9,9 +9,14 @@ namespace UnitClass
         public GameObject[,] SafetyZone = new GameObject[2, 7]; //세이프티존은 7X2로 총 14칸
     }
 
-    public static class UnitCountAndSynergy
+    public static class GetBattleZoneUnitCount
     {
         private static Player[] players = new Player[4]; // 얘 불러다가 쓰려면 static void 에서 써야함
+    }
+
+    public static class GetSafetyZoneUnitCount
+    {
+        private static Player[] players = new Player[4];
     }
 
 
