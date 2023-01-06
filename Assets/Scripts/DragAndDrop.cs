@@ -8,7 +8,7 @@ namespace ZoneSystem
     public class DragAndDrop : MonoBehaviour
     {
         MapController mapController;
-        GameObject selectedObject;
+        public GameObject selectedObject { get; private set; }
         Camera cam;
         int unitLayer;
         int battleSpaceLayer;
@@ -150,7 +150,6 @@ namespace ZoneSystem
             //Drag
             if (selectedObject != null)
             {
-
                 Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.WorldToScreenPoint(selectedObject.transform.position).z);
                 Vector3 worldPosition = cam.ScreenToWorldPoint(position);
 
@@ -194,7 +193,7 @@ namespace ZoneSystem
                 selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                 selectedObject = null;
             }
-
+          
         }
     }
 }

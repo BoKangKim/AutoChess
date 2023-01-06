@@ -6,12 +6,12 @@ namespace ZoneSystem
 {
     public class MapController : MonoBehaviour
     {
-
         public GameObject[,] safetyZoneObject;
         public GameObject[,] battleZoneObject;
 
         [SerializeField]
         public GameObject UnitPrefab;
+
 
         void Start()
         {
@@ -24,6 +24,7 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst()
         {
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -37,12 +38,12 @@ namespace ZoneSystem
             }
 
 
+
+
+
+
         }
 
-        //GameObject ChackSafetyZone()
-        //{
-
-        //}
 
     }
 }

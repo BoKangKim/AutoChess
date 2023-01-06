@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 
@@ -11,6 +12,9 @@ namespace ZoneSystem
         #region ╫л╠шео
         private UIManager() { }
         private static UIManager inst = null;
+
+        PointerEventData pe = new PointerEventData(EventSystem.current);
+
         public static UIManager Inst
         {
             get
@@ -32,8 +36,13 @@ namespace ZoneSystem
 
         void Start()
         {
+            
+
+
 
         }
+
+
 
         void Update()
         {
