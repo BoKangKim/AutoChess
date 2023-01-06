@@ -4,10 +4,10 @@ using static BehaviorTree.BehaviorTreeMan;
 using System;
 using System.Collections.Generic;
 using Battle.Stage;
+using Battle.Location;
 
 namespace Battle.AI
 {
-
     public abstract class ParentBT : MonoBehaviour
     {
         private INode root = null;
@@ -21,7 +21,11 @@ namespace Battle.AI
         protected string myType = null;
         private string nickName = "";
 
-        protected int myPositionRocation = 0;
+        protected LocationXY myLocation;
+        public LocationXY getMyLocation()
+        {
+            return myLocation;
+        }
 
         private void Awake()
         {
@@ -34,9 +38,11 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             // Object 받을 예정
             // 일단 내가 찾고 나중에 원혁이형이 완성되면
             // 수정
+            findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
         }
 
         private void Update()
@@ -126,7 +132,7 @@ namespace Battle.AI
             }
         }
 
-        protected void searchingTarget()
+        protected virtual void searchingTarget()
         {
             float minDistance = 100000f;
 

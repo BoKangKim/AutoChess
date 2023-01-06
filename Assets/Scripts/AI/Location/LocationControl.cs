@@ -1,23 +1,28 @@
 using UnityEngine;
 
-namespace Battle.AI
+namespace Battle.Location
 {
-    public struct Location
+    public struct LocationXY
     {
         public int x;
         public int y;
+
+        public void init(int x, int y)
+        {
+            this.x = x;
+            this.y = y;
+        }
     }
 
-
-    public class LocationControl
+    public static class LocationControl
     {
         private const float radius = 0.65f;
         private const float tileDistanceX = 1.3f;
         private const float tileDistanceY = 1.1f;
 
-        public Location convertPositionToLocation(Vector3 unitPostion)
+        public static LocationXY convertPositionToLocation(Vector3 unitPostion)
         {
-            Location location;
+            LocationXY location;
 
             location.x = (int)(unitPostion.x / tileDistanceX);
             location.y = (int)(unitPostion.y / tileDistanceY);
@@ -25,7 +30,7 @@ namespace Battle.AI
             return location;
         }
 
-        public Vector3 convertLocationToPosition(Location location)
+        public static Vector3 convertLocationToPosition(LocationXY location)
         {
             Vector3 position = Vector3.zero;
 
@@ -35,7 +40,7 @@ namespace Battle.AI
             return position;
         }
 
-        public Vector3 getDirectionVector(Location from,Location to)
+        public static Vector3 getFromLocationDirectionVector(LocationXY from, LocationXY to)
         {
             Vector3 fromPos = Vector3.zero;
             Vector3 toPos = Vector3.zero;
@@ -46,7 +51,7 @@ namespace Battle.AI
             return (toPos - fromPos).normalized;
         }
 
-        private bool isEscapeLocation(Location location,Vector3 unitPosition)
+        private static bool isEscapeLocation(LocationXY location,Vector3 unitPosition)
         {
             Vector3 convertResult = convertLocationToPosition(location);
 
@@ -58,8 +63,17 @@ namespace Battle.AI
 
             return false;
         }
+
+        public static float getDistance(LocationXY from,LocationXY to)
+        {
+            float distance = 0;
+
+            distance = Mathf.Sqrt(Mathf.Pow(from.x - to.x,2) + Mathf.Pow(from.y - to.y,2));
+
+            return distance;
+        }
         
-}
+    }
 
 }
 
