@@ -3,7 +3,7 @@ using UnityEngine;
 using Battle.Location;
 using Battle.AI;
 
-namespace Battle.RTAstar 
+namespace Battle.RTASTAR 
 {
     public class RTAstar
     {
@@ -38,30 +38,62 @@ namespace Battle.RTAstar
             }
         }
 
-        public LocationXY searchNextLocation(LocationXY unitLocation)
+        public LocationXY searchNextLocation(LocationXY unitLocation,LocationXY target)
         {
             initWeight();
             updateWeight();
-
-            List<LocationXY> nearLocations = new List<LocationXY>();
-            // Â¦ ¿ì»ó ¿ìÇÏ
-            // È¦ ÁÂ»ó ÁÂÇÏ
             
-
-            LocationXY result = unitLocation;
-            return result;
+            return calcLocationWeight(unitLocation, target);
         }
 
-        private void calcLocationWeight(LocationXY unitLocation)
+        private LocationXY calcLocationWeight(LocationXY unitLocation, LocationXY target)
         {
-            if (unitLocation.y % 2 == 0)
-            {
+            List<LocationXY> nearLocation = new List<LocationXY>();
 
-            }
-            else
+            for (int i = unitLocation.y - 1; i <= unitLocation.y + 1; i++)
             {
+                for(int j = unitLocation.x - 1; j <= unitLocation.x + 1; j++)
+                {
+                    if (checkLocationArrange(j, i))
+                    {
+                        if (unitLocation.y % 2 == 0)
+                        {
+                            if (i == unitLocation.x - 1)
+                            {
+                                weight[i, j] += 100;
+                            }
+                        }
+                        else
+                        {
+                            if (i == unitLocation.x + 1)
+                            {
+                                weight[i, j] += 100;
+                            }
+                        }
 
+                        nearLocation.Add(new LocationXY());
+                        nearLocation[nearLocation.Count - 1].init(j, i);
+                    }
+
+                }
             }
+
+            float minWeight = 10000f;
+            float temp = 0f;
+            int index = 0;
+
+            for(int i = 0; i < nearLocation.Count; i++)
+            {
+                weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
+
+                if(minWeight > (temp = weight[nearLocation[i].y, nearLocation[i].x]))
+                {
+                    minWeight = temp;
+                    index = i;
+                }
+            }
+
+            return nearLocation[index];
         }
 
         private bool checkLocationArrange(int x, int y)

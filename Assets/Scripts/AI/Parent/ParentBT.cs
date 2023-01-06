@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using Battle.Stage;
 using Battle.Location;
+using Battle.RTASTAR;
 
 namespace Battle.AI
 {
@@ -19,9 +20,11 @@ namespace Battle.AI
         private List<ParentBT> enemies = null;
 
         protected string myType = null;
-        private string nickName = "";
+        [SerializeField] private string nickName = "";
 
         protected LocationXY myLocation;
+        protected RTAstar rta = null;
+
         public LocationXY getMyLocation()
         {
             return myLocation;
@@ -31,6 +34,7 @@ namespace Battle.AI
         {
             InitializingRootNode();
             initializingSpecialRootNode();
+            rta = new RTAstar();
             myType = initializingMytype();
         }
 
@@ -191,6 +195,11 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    LocationXY next = rta.searchNextLocation(myLocation, target.myLocation);
+                    Vector3 nextPosition = LocationControl.convertLocationToPosition(next).normalized;
+
+                    gameObject.transform.LookAt(nextPosition);
+                    gameObject.transform.Translate(Vector3.forward * 0.2f);
                 };
             }
         }
@@ -201,7 +210,14 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    return false;
+                    if(LocationControl.getDistance(target.myLocation, myLocation) <= 1f)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
                 };
             }
         }
@@ -210,7 +226,6 @@ namespace Battle.AI
         {
             get
             {
-
                 return () =>
                 {
                     return false;
@@ -224,6 +239,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("Attack");
+                    myAni.SetTrigger("isAttack");
                 };
             }
         }
