@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.4440221, g: 0.49316514, b: 0.5722316, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2932,6 +2932,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitPrefab: {fileID: 8002274128534423478, guid: 7ea94162a84684d40b520bbe001aaf8e, type: 3}
+  Unit: {fileID: 11400000, guid: 3dd4b372eae138c43955e20df3c58d23, type: 2}
+  SpeciesType:
+  - {fileID: 11400000, guid: c4444b9816ba5324eb2b8a69f3c01661, type: 2}
+  - {fileID: 11400000, guid: 86d748a7e4f9adc40bb54307b9c3fd08, type: 2}
+  - {fileID: 11400000, guid: 0c7ed02aba2f4844bb222a76a603f135, type: 2}
+  - {fileID: 11400000, guid: ae0fdf257266fc849973796acafb1f26, type: 2}
+  - {fileID: 11400000, guid: c3217e7a571b07d4c9ce942f9da5581b, type: 2}
+  ClassType:
+  - {fileID: 11400000, guid: d6bf13efe10483d4da07675ae1f3e970, type: 2}
+  - {fileID: 11400000, guid: 6a45ca0aefe2b454c979f8f2b574a83e, type: 2}
+  - {fileID: 11400000, guid: b4cacf53d8eb0344286ddf1ddd4f69b7, type: 2}
+  - {fileID: 11400000, guid: a305a25c9f1ee324ebd71b5d5444af10, type: 2}
+  - {fileID: 11400000, guid: ea765113f0194554396e9a52a383669b, type: 2}
 --- !u!1001 &1945753790
 PrefabInstance:
   m_ObjectHideFlags: 0
