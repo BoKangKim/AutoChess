@@ -23,6 +23,11 @@ namespace Battle.AI
         [SerializeField] private string nickName = "";
 
         protected LocationXY myLocation;
+        protected LocationXY next;
+        protected Vector3 nextPos;
+        protected Vector3 dir;
+
+        Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
 
         public LocationXY getMyLocation()
@@ -47,11 +52,21 @@ namespace Battle.AI
             // 일단 내가 찾고 나중에 원혁이형이 완성되면
             // 수정
             findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
+            searchingTarget();
+
+            next = rta.searchNextLocation(myLocation, target.myLocation);
+            nextPos = LocationControl.convertLocationToPosition(next);
+            dir = (nextPos - transform.position).normalized;
         }
 
         private void Update()
         {
             root.Run();
+
+            if(LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
+            {
+                myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
+            }
 
             if (specialRoot == null)
             {
@@ -151,14 +166,6 @@ namespace Battle.AI
         }
         #endregion
 
-        #region Move
-        protected virtual void checkMyRoad()
-        {
-
-        }
-
-        #endregion
-
         #region AI Behavior
         protected virtual Action idle
         {
@@ -195,11 +202,17 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    LocationXY next = rta.searchNextLocation(myLocation, target.myLocation);
-                    Vector3 nextPosition = LocationControl.convertLocationToPosition(next).normalized;
+                    
+                    if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
+                    {
+                        next = rta.searchNextLocation(myLocation, target.myLocation);
+                        nextPos = LocationControl.convertLocationToPosition(next);
+                        dir = (nextPos - transform.position).normalized;
+                        Debug.Log(nextPos + " nextPos " + nickName);
+                    }
 
-                    gameObject.transform.LookAt(nextPosition);
-                    gameObject.transform.Translate(Vector3.forward * 0.2f);
+                    transform.LookAt(dir);
+                    gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
             }
         }
@@ -212,11 +225,11 @@ namespace Battle.AI
                 {
                     if(LocationControl.getDistance(target.myLocation, myLocation) <= 1f)
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
-                        return true;
+                        return false;
                     }
                 };
             }
@@ -239,7 +252,6 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("Attack");
                     myAni.SetTrigger("isAttack");
                 };
             }

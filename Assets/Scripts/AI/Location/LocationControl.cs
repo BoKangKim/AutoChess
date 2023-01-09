@@ -6,12 +6,6 @@ namespace Battle.Location
     {
         public int x;
         public int y;
-
-        public void init(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
     }
 
     public static class LocationControl
@@ -24,9 +18,8 @@ namespace Battle.Location
         {
             LocationXY location;
 
-            location.x = (int)(unitPostion.x / tileDistanceX);
-            location.y = (int)(unitPostion.y / tileDistanceY);
-
+            location.x = (int)Mathf.Round((unitPostion.x / tileDistanceX));
+            location.y = (int)Mathf.Round((unitPostion.z / tileDistanceY));
             return location;
         }
 
@@ -35,7 +28,12 @@ namespace Battle.Location
             Vector3 position = Vector3.zero;
 
             position.x = location.x * tileDistanceX;
-            position.y = location.y * tileDistanceY;
+            position.z = location.y * tileDistanceY;
+
+            if (location.y % 2 != 0)
+            {
+                position.x -= 0.6f;
+            }
 
             return position;
         }
@@ -51,12 +49,12 @@ namespace Battle.Location
             return (toPos - fromPos).normalized;
         }
 
-        private static bool isEscapeLocation(LocationXY location,Vector3 unitPosition)
+        public static bool isEscapeLocation(LocationXY location,Vector3 unitPosition)
         {
             Vector3 convertResult = convertLocationToPosition(location);
 
             if (convertResult.x - unitPosition.x >= radius
-                || convertResult.y - unitPosition.y >= radius)
+                || convertResult.z - unitPosition.z >= radius)
             {
                 return true;
             }

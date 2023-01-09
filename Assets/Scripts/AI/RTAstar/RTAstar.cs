@@ -71,8 +71,10 @@ namespace Battle.RTASTAR
                             }
                         }
 
-                        nearLocation.Add(new LocationXY());
-                        nearLocation[nearLocation.Count - 1].init(j, i);
+                        LocationXY locationXY = new LocationXY();
+                        locationXY.x = j;
+                        locationXY.y = i;
+                        nearLocation.Add(locationXY);
                     }
 
                 }
@@ -98,8 +100,8 @@ namespace Battle.RTASTAR
 
         private bool checkLocationArrange(int x, int y)
         {
-            if ((x - 1 >= 0 && x + 1 < weight.GetLength(1))
-                    || (y - 1 >= 0 && y + 1 < weight.GetLength(0)))
+            if ((x >= 0 && x < weight.GetLength(1))
+                    && (y >= 0 && y < weight.GetLength(0)))
             {
                 return true;
             }
