@@ -11,6 +11,7 @@ namespace Battle.RTASTAR
         private float[,] weight = new float[6, 7];
         public Queue<LocationXY> routeHistory = null;
         private ParentBT target = null;
+        private List<LocationXY> closeList = new List<LocationXY>();
 
         public RTAstar()
         {
@@ -50,6 +51,8 @@ namespace Battle.RTASTAR
         {
             List<LocationXY> nearLocation = new List<LocationXY>();
 
+            nearLocation.Clear();
+
             for (int i = unitLocation.y - 1; i <= unitLocation.y + 1; i++)
             {
                 for(int j = unitLocation.x - 1; j <= unitLocation.x + 1; j++)
@@ -60,14 +63,14 @@ namespace Battle.RTASTAR
                         {
                             if (i == unitLocation.x - 1)
                             {
-                                weight[i, j] += 100;
+                                continue;
                             }
                         }
                         else
                         {
                             if (i == unitLocation.x + 1)
                             {
-                                weight[i, j] += 100;
+                                continue; 
                             }
                         }
 
@@ -86,6 +89,11 @@ namespace Battle.RTASTAR
 
             for(int i = 0; i < nearLocation.Count; i++)
             {
+                if (isVisitedNode(nearLocation[i]))
+                {
+                    continue;
+                }
+
                 weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
 
                 if(minWeight > (temp = weight[nearLocation[i].y, nearLocation[i].x]))
@@ -95,6 +103,7 @@ namespace Battle.RTASTAR
                 }
             }
 
+            closeList.Add(nearLocation[index]);
             return nearLocation[index];
         }
 
@@ -109,6 +118,20 @@ namespace Battle.RTASTAR
             {
                 return false;
             }
+        }
+
+        private bool isVisitedNode(LocationXY location)
+        {
+            for(int i = 0; i < closeList.Count; i++)
+            {
+                if(location.x == closeList[i].x
+                    && location.y == closeList[i].y)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
