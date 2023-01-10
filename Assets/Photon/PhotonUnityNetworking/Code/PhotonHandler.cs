@@ -18,7 +18,6 @@ namespace Photon.Pun
     using UnityEngine;
     using UnityEngine.Profiling;
 
-
     /// <summary>
     /// Internal MonoBehaviour that allows Photon to run an Update loop.
     /// </summary>
@@ -44,7 +43,6 @@ namespace Photon.Pun
                 return instance;
             }
         }
-
 
         /// <summary>Limits the number of datagrams that are created in each LateUpdate.</summary>
         /// <remarks>Helps spreading out sending of messages minimally.</remarks>
@@ -269,7 +267,10 @@ namespace Photon.Pun
                 }
             }
         }
-
+        void Update() 
+        {
+            Debug.Log(PhotonNetwork.NetworkClientState);
+        }
         public void OnFriendListUpdate(System.Collections.Generic.List<FriendInfo> friendList) { }
 
         public void OnCreateRoomFailed(short returnCode, string message) { }
