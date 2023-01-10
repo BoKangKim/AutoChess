@@ -39,7 +39,8 @@ namespace Battle.AI
         {
             InitializingRootNode();
             initializingSpecialRootNode();
-            rta = new RTAstar();
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
+            rta = new RTAstar(myLocation);
             myType = initializingMytype();
         }
 
@@ -47,14 +48,13 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             // Object 받을 예정
             // 일단 내가 찾고 나중에 원혁이형이 완성되면
             // 수정
             findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
             searchingTarget();
 
-            next = rta.searchNextLocation(myLocation, target.myLocation);
+            next = (LocationXY)rta.searchNextLocation(myLocation, target.myLocation);
             nextPos = LocationControl.convertLocationToPosition(next);
             dir = (nextPos - transform.position).normalized;
         }

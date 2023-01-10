@@ -9,13 +9,15 @@ namespace Battle.RTASTAR
     {
 
         private float[,] weight = new float[6, 8];
-        public Queue<LocationXY> routeHistory = null;
         private ParentBT target = null;
         private List<LocationXY> closeList = new List<LocationXY>();
+        private LocationXY startLocation;
+        private LocationXY preLocation;
 
-        public RTAstar()
+        public RTAstar(LocationXY startLocation)
         {
-            routeHistory = new Queue<LocationXY>();
+            this.startLocation = startLocation;
+            preLocation = startLocation;
         }
 
         private void initWeight()
@@ -97,8 +99,7 @@ namespace Battle.RTASTAR
                 }
 
                 weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
-
-                Debug.Log(nearLocation[i].ToString() + " Weight : " + weight[nearLocation[i].y, nearLocation[i].x]);
+                weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(startLocation,unitLocation);
 
                 if(minWeight >= (temp = weight[nearLocation[i].y, nearLocation[i].x]))
                 {
@@ -108,9 +109,15 @@ namespace Battle.RTASTAR
 
             }
 
+            if (minWeight >= 1000)
+            {
+                return preLocation;
+            }
+
             if (closeList.Contains(nearLocation[index]) == false)
             {
                 closeList.Add(nearLocation[index]);
+                preLocation = nearLocation[index];
             }
 
             return nearLocation[index];
