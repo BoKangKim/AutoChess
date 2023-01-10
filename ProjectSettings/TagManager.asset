@@ -3,16 +3,14 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-  - drag
+  tags: []
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Unit
+  - 
   - Water
   - UI
-  - Space
   - 
   - 
   - 
@@ -35,9 +33,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
+  - SellButton
+  - BattleSpace
+  - SafetySpace
+  - Unit
   m_SortingLayers:
   - name: Default
     uniqueID: 0
