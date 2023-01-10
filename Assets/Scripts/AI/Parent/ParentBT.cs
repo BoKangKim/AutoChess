@@ -35,6 +35,11 @@ namespace Battle.AI
             return myLocation;
         }
 
+        public LocationXY getNextLocation()
+        {
+            return next;
+        }
+
         private void Awake()
         {
             InitializingRootNode();
@@ -63,7 +68,7 @@ namespace Battle.AI
         {
             root.Run();
 
-            if(LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
+            if (LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
             {
                 myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             }
@@ -98,6 +103,8 @@ namespace Battle.AI
         #region Searching Enemy
         protected void findEnemyFuncOnStart(ParentBT[] fieldAIObejects)
         {
+            rta.initAllUnits(fieldAIObejects);
+
             switch (myType)
             {
                 case "Unit":
@@ -154,11 +161,13 @@ namespace Battle.AI
         protected virtual void searchingTarget()
         {
             float minDistance = 100000f;
+            float temp = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (Vector3.Distance(enemies[i].transform.position, gameObject.transform.position) < minDistance)
+                if ((temp = LocationControl.getDistance(myLocation, enemies[i].getMyLocation())) < minDistance)
                 {
+                    minDistance = temp;
                     target = enemies[i];
                 }
             }
@@ -202,10 +211,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
-                        myLocation = LocationControl.convertPositionToLocation(transform.position);
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
