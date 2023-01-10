@@ -11,6 +11,9 @@ namespace UnitStats
         public static float abilityPower; //주문력-> 롤에서 말하는 ap가 줄임말임
         public static float attackSpeed;
         public static float grade;
+        public static float equipmnet01; //장착할 장비 3개
+        public static float equipmnet02;
+        public static float equipmnet03;
 
         public static void GetUnitStats() // csv or scriptableObject에서 데이터 받아올때
         {

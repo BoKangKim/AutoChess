@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: rangedealer
   m_EditorClassIdentifier: 
   synergeclass: rangedealer
+  attackRange: 0
+  mpRecovery: 4
+  atkPercentage: 0
+  hpPercentage: 0
+  skillDamagePercentage: 0
+  attackSpeed: 0

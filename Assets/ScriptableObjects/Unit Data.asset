@@ -13,12 +13,19 @@ MonoBehaviour:
   m_Name: Unit Data
   m_EditorClassIdentifier: 
   unitName: Test
-  hp: 100
-  mp: 50
+  maxHp: 100
+  maxMp: 50
   grade: 1
-  damage: 10
-  ablityPower: 0
+  atk: 10
+  attackSpeed: 1
   attackRange: 1
+  spellPower: 0
   moveSpeed: 1
-  unitclass: {fileID: 0}
-  unitSpecies: {fileID: 0}
+  magicCastingTime: 1
+  crowdControlTime: 0
+  tenacity: 0
+  unitClass: {fileID: 0}
+  unitSpecies: {fileID: 11400000, guid: c4444b9816ba5324eb2b8a69f3c01661, type: 2}
+  unitequipment01: {fileID: 0}
+  unitequipment02: {fileID: 0}
+  unitequipment03: {fileID: 0}

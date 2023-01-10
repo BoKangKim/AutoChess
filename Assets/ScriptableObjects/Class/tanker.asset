@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: tanker
   m_EditorClassIdentifier: 
   synergeclass: tanker
+  attackRange: 0
+  mpRecovery: 3
+  atkPercentage: 0
+  hpPercentage: 0
+  skillDamagePercentage: 0
+  attackSpeed: 0

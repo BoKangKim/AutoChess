@@ -9,13 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22a8f2c6c566b1049ae20633181b17a7, type: 3}
-  m_Name: warrior
+  m_Script: {fileID: 11500000, guid: f260eb2b8a8b0a54f8269dcd1d03939e, type: 3}
+  m_Name: Equipment03
   m_EditorClassIdentifier: 
-  synergeclass: warrior
-  attackRange: 0
-  mpRecovery: 5
-  atkPercentage: 0
-  hpPercentage: 0
-  skillDamagePercentage: 0
-  attackSpeed: 0
+  equipmentName: Bow
+  equipmentDamage: 0
+  equipmentAttackSpeed: 1
+  equipmentMp: 0
+  equipmentHp: 0

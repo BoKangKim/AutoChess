@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8002274128534423466}
   - component: {fileID: 8002274128534423467}
   - component: {fileID: 8002274128534423476}
-  - component: {fileID: 7397657735655647899}
+  - component: {fileID: 3970775710772494838}
   m_Layer: 31
   m_Name: Cube
   m_TagString: Untagged
@@ -98,7 +98,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7397657735655647899
+--- !u!114 &3970775710772494838
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,6 +107,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 8002274128534423478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0346fc8cf3a64b4385d8c4333ed596f, type: 3}
+  m_Script: {fileID: 11500000, guid: 35bc73a65eaea2741a5afd22891595e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitData: {fileID: 11400000, guid: 3dd4b372eae138c43955e20df3c58d23, type: 2}
+  ClassData: {fileID: 11400000, guid: d6bf13efe10483d4da07675ae1f3e970, type: 2}
+  SpeciesData: {fileID: 11400000, guid: c4444b9816ba5324eb2b8a69f3c01661, type: 2}
+  Equipment01Data: {fileID: 11400000, guid: d06f07bdfe3ec4d43b7c0e69ef416b64, type: 2}
+  Equipment02Data: {fileID: 11400000, guid: b6acdf165bb88a84ea15f42b692e7686, type: 2}
+  Equipment03Data: {fileID: 11400000, guid: 132a9e31eaf8c1049946a68aa68a7335, type: 2}

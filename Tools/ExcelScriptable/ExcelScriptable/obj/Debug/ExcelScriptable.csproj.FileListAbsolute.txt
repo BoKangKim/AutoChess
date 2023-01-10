@@ -1,0 +1,8 @@
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Debug\ExcelScriptable.exe.config
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Debug\ExcelScriptable.exe
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Debug\ExcelScriptable.pdb
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Debug\ExcelScriptable.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Debug\ExcelScriptable.csproj.SuggestedBindingRedirects.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Debug\ExcelScriptable.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Debug\ExcelScriptable.exe
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Debug\ExcelScriptable.pdb
