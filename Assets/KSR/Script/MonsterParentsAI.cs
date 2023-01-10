@@ -11,19 +11,28 @@ public abstract class MonsterParentsAI : MonoBehaviour
     // 나의 애니메이션 가져오기
     protected Animator myAni;
 
+    // 무기
+    public Wepon wepon;
+
+    // 드롭 아이템
+    public GameObject Item;
+
     private void Awake()
     {
         root = GetComponent<INode>();
-        InitRootNode();
 
     }
     private void Start()
     {
         myAni = GetComponent<Animator>();
+        InitRootNode();
+        wepon = FindObjectOfType<Wepon>();
+        Item.SetActive(false);
     }
 
     private void Update()
     {
+
         root.Run();
     }
 
@@ -31,27 +40,15 @@ public abstract class MonsterParentsAI : MonoBehaviour
     {
         Debug.Log("이닛");
         root = Selector
-            (                
-                IF(IsFind),               
-                IfElseAction(IsArrange, IsMove, IsAttack)
-                // 공격받았을 때 타격 애니메이션
+            (
+                IF(IsFind),
+                IfElseAction(IsArrange, IsMove, IsAttack),
 
+                 Sequence
+                (
+                     IfElseAction(IsDead, IsHit, IsDrop)                  
+                )
             );
-
-    }
-
-    // 데미지를 받았을 때 체크하려면
-    // 어떤 상태에서도 공격받을 수 있음
-    protected virtual Func<bool> ColiderCheck 
-    { 
-        get
-        {
-            return () =>
-            {
-                Debug.Log("맞음");
-                return true;
-            };
-        }
 
     }
 
@@ -64,7 +61,7 @@ public abstract class MonsterParentsAI : MonoBehaviour
             return () =>
             {
                 Debug.Log("대기");
-                myAni.SetBool("IsMove", false);                
+                myAni.SetBool("IsMove", false);
             };
         }
     }
@@ -76,12 +73,12 @@ public abstract class MonsterParentsAI : MonoBehaviour
             return () =>
             {
                 Debug.Log("타겟 찾기");
-                
+
                 return true;
             };
         }
     }
-    
+
 
     protected virtual Action IsMove
     {
@@ -107,37 +104,49 @@ public abstract class MonsterParentsAI : MonoBehaviour
     }
     protected virtual Action IsAttack
     {
-        get 
+        get
         {
             return () =>
             {
                 Debug.Log("공격");
                 myAni.SetBool("IsAttack", true);
-                
+
             };
         }
     }
     protected virtual Action IsHit
     {
-        get 
+        get
         {
             return () =>
             {
                 Debug.Log("맞는다");
                 myAni.SetTrigger("IsHit");
-                
+
             };
         }
     }
-    protected virtual Func<bool> IsDead 
+    protected virtual Func<bool> IsDead
     {
-        get 
+        get
         {
             return () =>
             {
                 Debug.Log("죽음");
-                return false;                
+                return false;
             };
         }
     }
+    // 죽음 - 맞는다 -> 
+    protected virtual Action IsDrop
+    {
+        get
+        {
+            return () =>
+            {
+                Debug.Log("드롭");
+            };
+        }
+    }
+
 }

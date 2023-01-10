@@ -267,10 +267,10 @@ namespace Photon.Pun
                 }
             }
         }
-        void Update() 
+        /*void Update() 
         {
             Debug.Log(PhotonNetwork.NetworkClientState);
-        }
+        }*/
         public void OnFriendListUpdate(System.Collections.Generic.List<FriendInfo> friendList) { }
 
         public void OnCreateRoomFailed(short returnCode, string message) { }

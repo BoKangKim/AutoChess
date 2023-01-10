@@ -6,7 +6,7 @@ using UnityEngine;
 public class MonsterAI : MonsterParentsAI
 {
     // 체력
-    float hp = 100;
+    [SerializeField] float hp = 100;
     float speed = 2f;
 
     // 타겟
@@ -15,7 +15,12 @@ public class MonsterAI : MonsterParentsAI
     GameObject[] enermies;
 
     float attackRange = 1f;
+    float moveRange = 10f;
 
+
+    private void Awake()
+    {
+    }
 
     protected override Action IsIdle
     {
@@ -111,30 +116,44 @@ public class MonsterAI : MonsterParentsAI
             {
                 Debug.Log("맞는다");
                 myAni.SetTrigger("IsHit");
-                // 데미지 받을 때 콜라이더로 체크하려면
+                hp -= wepon.damage;
+                if (hp <= 0) 
+                { 
+                    hp = 0;
+                }
             };
         }
     }
-    protected override Func<bool> IsDead // 체력이 0일때 판정
+   
+    protected virtual Func<bool> IsDead
     {
         get
         {
             return () =>
             {
-
                 if (hp <= 0)
                 {
                     Debug.Log("죽음");
                     return true;
-                    myAni.SetBool("IsDead", true);
                 }
-                else 
+                else
                 {
                     return false;
-                    myAni.SetBool("IsDead", false);
                 }
-                
-                
+            };
+        }
+    }
+    protected override Action IsDrop // 죽으면 아이템 드롭
+    {
+        get
+        {
+            return () =>
+            {
+                Debug.Log("드롭");
+                myAni.SetBool("IsDead", true);
+                Item.SetActive(true);
+                //this.gameObject.SetActive(false);
+
             };
         }
     }
