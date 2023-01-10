@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.4440221, g: 0.49316514, b: 0.5722316, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -330,6 +330,7 @@ GameObject:
   m_Component:
   - component: {fileID: 140292624}
   - component: {fileID: 140292623}
+  - component: {fileID: 140292625}
   m_Layer: 0
   m_Name: Directional Light
   m_TagString: Untagged
@@ -414,6 +415,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &140292625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 140292622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1001 &165512305
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -621,7 +642,7 @@ GameObject:
   - component: {fileID: 193689869}
   - component: {fileID: 193689868}
   - component: {fileID: 193689867}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: SellButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1546,7 +1567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 603852911}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: BattleZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1744,7 +1765,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 816405328}
-  m_Layer: 0
+  m_Layer: 30
   m_Name: SafetyZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2309,7 +2330,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
@@ -2818,8 +2839,8 @@ RectTransform:
   m_GameObject: {fileID: 1790001780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 0}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 771480270}
   m_Father: {fileID: 1229874730}
@@ -2827,7 +2848,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 478.8, y: 177.6}
+  m_AnchoredPosition: {x: 99.18, y: 177.6}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1790001782
@@ -3007,7 +3028,7 @@ GameObject:
   - component: {fileID: 1914487380}
   - component: {fileID: 1914487382}
   - component: {fileID: 1914487381}
-  m_Layer: 0
+  m_Layer: 28
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3190,7 +3211,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b71808e93abb740a4291dcaa389741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab: {fileID: 8002274128534423478, guid: 7ea94162a84684d40b520bbe001aaf8e, type: 3}
+  UnitPrefab: {fileID: 6400343184192605420, guid: 434046cca75bc1d46b87b4d5ae232f05, type: 3}
 --- !u!1001 &1945753790
 PrefabInstance:
   m_ObjectHideFlags: 0
