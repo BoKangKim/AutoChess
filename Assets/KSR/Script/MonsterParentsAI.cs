@@ -137,7 +137,7 @@ public abstract class MonsterParentsAI : MonoBehaviour
             };
         }
     }
-    // Á×À½ - ¸Â´Â´Ù -> 
+    
     protected virtual Action IsDrop
     {
         get

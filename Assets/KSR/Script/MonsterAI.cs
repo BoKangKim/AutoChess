@@ -151,8 +151,7 @@ public class MonsterAI : MonsterParentsAI
             {
                 Debug.Log("ตๅทำ");
                 myAni.SetBool("IsDead", true);
-                Item.SetActive(true);
-                //this.gameObject.SetActive(false);
+                Item.SetActive(true);                
 
             };
         }

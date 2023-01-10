@@ -13,23 +13,25 @@ public class DropItem : MonoBehaviour
     private void Start()
     {       
         myRb = GetComponent<Rigidbody>();
-        forcePower = new Vector3(Random.Range(-1, 2), 5, Random.Range(-1, 2));
+        forcePower = new Vector3(Random.Range(-1, 2), 5, Random.Range(-1, 2));        
     }    
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0)) 
         {
-            Bounce();                      
+            Bounce();
         }
-        if (transform.position.y >=6f)
-        {
-            Drop();            
-        }        
+        if (transform.position.y >= 5f)
+        {            
+            Drop();
+        }
+        
         if (Input.GetMouseButtonDown(1)) 
         {
-            SceneManager.LoadScene("Balltest");
+            SceneManager.LoadScene("Droptest");
         }
     }
+    // 상대방 공격에 맞아서 튕겨나가는 문제 
     private void Bounce()
     {
         myPrefab.myRb.useGravity = false;
