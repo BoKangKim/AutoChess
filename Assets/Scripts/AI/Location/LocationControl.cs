@@ -6,6 +6,11 @@ namespace Battle.Location
     {
         public int x;
         public int y;
+
+        public override string ToString()
+        {
+            return "( " + x + " , " + y + " )";
+        }
     }
 
     public static class LocationControl
@@ -32,7 +37,7 @@ namespace Battle.Location
 
             if (location.y % 2 != 0)
             {
-                position.x -= 0.6f;
+                position.x += 0.6f;
             }
 
             return position;

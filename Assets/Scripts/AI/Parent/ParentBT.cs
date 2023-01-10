@@ -197,7 +197,7 @@ namespace Battle.AI
         }
 
         protected virtual Action move
-        {
+        {                                                                                                                         
             get
             {
                 return () =>
@@ -205,10 +205,10 @@ namespace Battle.AI
                     
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
-                        next = rta.searchNextLocation(myLocation, target.myLocation);
+                        myLocation = LocationControl.convertPositionToLocation(transform.position);
+                        next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
-                        Debug.Log(nextPos + " nextPos " + nickName);
                     }
 
                     transform.LookAt(dir);
@@ -223,7 +223,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(LocationControl.getDistance(target.myLocation, myLocation) <= 1f)
+                    if(LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
                     {
                         return true;
                     }

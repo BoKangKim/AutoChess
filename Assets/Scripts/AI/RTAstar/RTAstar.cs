@@ -8,7 +8,7 @@ namespace Battle.RTASTAR
     public class RTAstar
     {
 
-        private float[,] weight = new float[6, 7];
+        private float[,] weight = new float[6, 8];
         public Queue<LocationXY> routeHistory = null;
         private ParentBT target = null;
         private List<LocationXY> closeList = new List<LocationXY>();
@@ -35,7 +35,7 @@ namespace Battle.RTASTAR
 
             for(int i = 0; i < allUnits.Length; i++)
             {
-                weight[allUnits[i].getMyLocation().y, allUnits[i].getMyLocation().y] += 1000;
+                weight[allUnits[i].getMyLocation().y, allUnits[i].getMyLocation().x] += 1000;
             }
         }
 
@@ -43,35 +43,36 @@ namespace Battle.RTASTAR
         {
             initWeight();
             updateWeight();
-            
+
             return calcLocationWeight(unitLocation, target);
         }
 
         private LocationXY calcLocationWeight(LocationXY unitLocation, LocationXY target)
         {
             List<LocationXY> nearLocation = new List<LocationXY>();
-
             nearLocation.Clear();
+
+            if(closeList.Count == 0)
+            {
+                closeList.Add(unitLocation);
+            }
 
             for (int i = unitLocation.y - 1; i <= unitLocation.y + 1; i++)
             {
                 for(int j = unitLocation.x - 1; j <= unitLocation.x + 1; j++)
                 {
+
                     if (checkLocationArrange(j, i))
                     {
-                        if (unitLocation.y % 2 == 0)
+                        if (unitLocation.y % 2 != 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
+                            && j == unitLocation.x -1)
                         {
-                            if (i == unitLocation.x - 1)
-                            {
-                                continue;
-                            }
+                            continue;
                         }
-                        else
+                        else if(unitLocation.y % 2 == 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
+                            && j == unitLocation.x + 1)
                         {
-                            if (i == unitLocation.x + 1)
-                            {
-                                continue; 
-                            }
+                            continue;
                         }
 
                         LocationXY locationXY = new LocationXY();
@@ -85,10 +86,11 @@ namespace Battle.RTASTAR
 
             float minWeight = 10000f;
             float temp = 0f;
-            int index = 0;
+            int index = -1;
 
-            for(int i = 0; i < nearLocation.Count; i++)
+            for (int i = 0; i < nearLocation.Count; i++)
             {
+
                 if (isVisitedNode(nearLocation[i]))
                 {
                     continue;
@@ -96,14 +98,21 @@ namespace Battle.RTASTAR
 
                 weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
 
-                if(minWeight > (temp = weight[nearLocation[i].y, nearLocation[i].x]))
+                Debug.Log(nearLocation[i].ToString() + " Weight : " + weight[nearLocation[i].y, nearLocation[i].x]);
+
+                if(minWeight >= (temp = weight[nearLocation[i].y, nearLocation[i].x]))
                 {
                     minWeight = temp;
                     index = i;
                 }
+
             }
 
-            closeList.Add(nearLocation[index]);
+            if (closeList.Contains(nearLocation[index]) == false)
+            {
+                closeList.Add(nearLocation[index]);
+            }
+
             return nearLocation[index];
         }
 
