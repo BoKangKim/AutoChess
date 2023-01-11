@@ -9,15 +9,24 @@ public class DropItem : MonoBehaviour
     
     Vector3 forcePower;    
 
-    Rigidbody myRb;    
+    Rigidbody myRb;
+
+    MonsterAI myMonsterAI;
+
     private void Start()
     {       
         myRb = GetComponent<Rigidbody>();
-        forcePower = new Vector3(Random.Range(-1, 2), 5, Random.Range(-1, 2));        
+        forcePower = new Vector3(Random.Range(-1, 2), 5, Random.Range(-1, 2));
+        myMonsterAI = FindObjectOfType<MonsterAI>();
     }    
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0)) 
+        // 죽었으면 아이템 생성
+        /*if (myMonsterAI.IsDie == true)
+        {
+            Bounce();
+        }*/
+        if (Input.GetMouseButtonDown(0))
         {
             Bounce();
         }
@@ -31,7 +40,7 @@ public class DropItem : MonoBehaviour
             SceneManager.LoadScene("Droptest");
         }
     }
-    // 상대방 공격에 맞아서 튕겨나가는 문제 
+
     private void Bounce()
     {
         myPrefab.myRb.useGravity = false;
@@ -41,6 +50,5 @@ public class DropItem : MonoBehaviour
     {        
         myPrefab.myRb.useGravity = true;        
     }
-    
     
 }

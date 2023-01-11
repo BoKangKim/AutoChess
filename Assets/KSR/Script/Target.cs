@@ -5,8 +5,6 @@ using UnityEngine;
 public class Target : MonoBehaviour
 {
     float RotateSpeed;
-
-
     private void Start()
     {
         RotateSpeed = 1000f;

@@ -1,6 +1,6 @@
-
 using UnityEngine;
 using System;
+using System.Collections.Generic;
 using BehaviorTree;
 using static BehaviorTree.BehaviorTreeMan;
 
@@ -17,23 +17,26 @@ public abstract class MonsterParentsAI : MonoBehaviour
     // 드롭 아이템
     public GameObject Item;
 
+    public bool IsDie { get; set; }
     private void Awake()
     {
         root = GetComponent<INode>();
+        IsDie = false;
 
     }
     private void Start()
     {
-        myAni = GetComponent<Animator>();
         InitRootNode();
+        myAni = GetComponent<Animator>();
         wepon = FindObjectOfType<Wepon>();
         Item.SetActive(false);
-    }
 
+    }
     private void Update()
     {
-
+       
         root.Run();
+
     }
 
     private void InitRootNode()  // 몬스터 AI 기본 행동 로직
@@ -46,7 +49,7 @@ public abstract class MonsterParentsAI : MonoBehaviour
 
                  Sequence
                 (
-                     IfElseAction(IsDead, IsHit, IsDrop)                  
+                     IfElseAction(IsDead, IsHit, IsDrop)
                 )
             );
 
@@ -133,11 +136,12 @@ public abstract class MonsterParentsAI : MonoBehaviour
             return () =>
             {
                 Debug.Log("죽음");
+                IsDie = true;
                 return false;
             };
         }
     }
-    
+
     protected virtual Action IsDrop
     {
         get
