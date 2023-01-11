@@ -1,6 +1,5 @@
 using UnityEngine;
 
-
 namespace UnitClass
 {
     public class Player

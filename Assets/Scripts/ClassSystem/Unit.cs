@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField] private TestForScriptableUnit UnitData = null;
-    [SerializeField] private TestForScriptableClass[] ClassData = null;
-    [SerializeField] private TestForScriptableSpecies[] SpeciesData = null;
-    [SerializeField] private TestForScriptableEquipment[] Equipment01Data = null;
-    [SerializeField] private TestForScriptableEquipment[] Equipment02Data = null;
-    [SerializeField] private TestForScriptableEquipment[] Equipment03Data = null;
+    [SerializeField] private ScriptableUnit UnitData = null;
+    [SerializeField] private ScriptableClass[] ClassData = null;
+    [SerializeField] private ScriptableSpecies[] SpeciesData = null;
+    [SerializeField] private ScriptableEquipment[] Equipment01Data = null;
+    [SerializeField] private ScriptableEquipment[] Equipment02Data = null;
+    [SerializeField] private ScriptableEquipment[] Equipment03Data = null;
 
 
     private float grade;

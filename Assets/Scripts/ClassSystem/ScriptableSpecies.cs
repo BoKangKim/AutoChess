@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Species", menuName = "Scriptable Object/Species", order = int.MaxValue)]
-public class TestForScriptableSpecies : ScriptableObject
+public class ScriptableSpecies : ScriptableObject
 {
     [SerializeField] private string species;
     public string GetSpecies { get { return species; } }
