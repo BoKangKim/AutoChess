@@ -6,20 +6,35 @@ namespace ZoneSystem
 {
     public class MapController : MonoBehaviour
     {
-        public GameObject[,] safetyZoneObject;
-        public GameObject[,] battleZoneObject;
+        public GameObject[,] safetyObject;
+        public GameObject[,] battleObject;
 
+        public int battleUnitCount = 0;
         [SerializeField]
-        public GameObject UnitPrefab;
+        GameObject UnitPrefab;
 
 
         void Start()
         {
-            safetyZoneObject = new GameObject[2, 7];
-            battleZoneObject = new GameObject[3, 7];
+            safetyObject = new GameObject[2, 7];
+            battleObject = new GameObject[3, 7];
         }
 
-
+        public int BattlezoneChack()
+        {
+            for (int z = 0; z < 3; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (battleObject[z, x] != null)
+                    {
+                        ++battleUnitCount;
+                        Debug.Log($"{z},{x}");
+                    }
+                }
+            }
+            return battleUnitCount;
+        }
 
         public void OnClick_UnitInst()
         {
@@ -27,9 +42,9 @@ namespace ZoneSystem
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyZoneObject[z, x] == null)
+                    if (safetyObject[z, x] == null)
                     {
-                        safetyZoneObject[z, x] = Instantiate(UnitPrefab, new Vector3(x, 0.25f, z), Quaternion.identity);
+                        safetyObject[z, x] = Instantiate(UnitPrefab, new Vector3(x, 0.25f, z), Quaternion.identity);
                         return;
                     }
                 }
