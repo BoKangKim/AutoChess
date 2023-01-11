@@ -38,8 +38,9 @@ namespace Battle.RTASTAR
         {
             for(int i = 0; i < allUnits.Length; i++)
             {
+                LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 weight[allUnits[i].getMyLocation().y, allUnits[i].getMyLocation().x] += 1000;
-                weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
+                //weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
             }
         }
 
@@ -71,16 +72,16 @@ namespace Battle.RTASTAR
                 {
                     if (checkLocationArrange(j, i))
                     {
-                        if (unitLocation.y % 2 != 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
-                            && j == unitLocation.x -1)
-                        {
-                            continue;
-                        }
-                        else if(unitLocation.y % 2 == 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
-                            && j == unitLocation.x + 1)
-                        {
-                            continue;
-                        }
+                        //if (unitLocation.y % 2 == 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
+                        //    && j == unitLocation.x -1)
+                        //{
+                        //    continue;
+                        //}
+                        //else if(unitLocation.y % 2 != 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
+                        //    && j == unitLocation.x + 1)
+                        //{
+                        //    continue;
+                        //}
 
                         LocationXY locationXY = new LocationXY();
                         locationXY.x = j;
@@ -103,7 +104,7 @@ namespace Battle.RTASTAR
                     continue;
                 }
 
-                weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
+                //weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
                 weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(target));
 
                 if (minWeight >= (temp = weight[nearLocation[i].y, nearLocation[i].x]))
@@ -113,7 +114,7 @@ namespace Battle.RTASTAR
                 }
 
                 Debug.Log(nearLocation[i].ToString() + " " + weight[nearLocation[i].y, nearLocation[i].x] + " " + myNickName);
-                Debug.Log(target.ToString() + " " + myNickName) ;
+                Debug.Log(target.ToString() + " " + myNickName);
             }
 
             if (closeList.Contains(nearLocation[index]) == false)

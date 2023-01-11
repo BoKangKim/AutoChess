@@ -227,6 +227,7 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
                     {
                         return true;
