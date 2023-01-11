@@ -14,10 +14,13 @@ namespace Battle.RTASTAR
         private LocationXY startLocation;
         private LocationXY preLocation;
 
-        public RTAstar(LocationXY startLocation)
+        private string myNickName = "";
+
+        public RTAstar(LocationXY startLocation, string myNickName)
         {
             this.startLocation = startLocation;
             preLocation = startLocation;
+            this.myNickName = myNickName;
         }
 
         private void initWeight()
@@ -102,10 +105,10 @@ namespace Battle.RTASTAR
                     continue;
                 }
 
-                //weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
+                weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
                 //weight[nearLocation[i].y, nearLocation[i].x] -= LocationControl.getDistance(startLocation, nearLocation[i]);
-                weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
-                weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]),LocationControl.convertLocationToPosition(target));
+                //weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
+                weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(target));
 
                 if (minWeight >= (temp = weight[nearLocation[i].y, nearLocation[i].x]))
                 {
@@ -125,6 +128,8 @@ namespace Battle.RTASTAR
                 closeList.Add(nearLocation[index]);
                 preLocation = nearLocation[index];
             }
+
+            Debug.Log(nearLocation[index].ToString() + " " + weight[nearLocation[index].y, nearLocation[index].x] + " " + myNickName);
 
             return nearLocation[index];
         }

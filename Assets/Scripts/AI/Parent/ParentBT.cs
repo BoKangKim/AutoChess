@@ -30,6 +30,11 @@ namespace Battle.AI
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
 
+        public string getMyNickName()
+        {
+            return nickName;
+        }
+
         public LocationXY getMyLocation()
         {
             return myLocation;
@@ -45,7 +50,7 @@ namespace Battle.AI
             InitializingRootNode();
             initializingSpecialRootNode();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            rta = new RTAstar(myLocation);
+            rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
         }
 
@@ -67,11 +72,6 @@ namespace Battle.AI
         private void Update()
         {
             root.Run();
-
-            if (LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
-            {
-                myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            }
 
             if (specialRoot == null)
             {
@@ -160,18 +160,19 @@ namespace Battle.AI
 
         protected virtual void searchingTarget()
         {
-            float minDistance = 100000f;
+            float maxDistance = -100f;
             float temp = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((temp = LocationControl.getDistance(myLocation, enemies[i].getMyLocation())) < minDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) > maxDistance)
                 {
-                    minDistance = temp;
+                    maxDistance = temp;
                     target = enemies[i];
+
+                    
                 }
             }
-
         }
         #endregion
 
@@ -195,12 +196,29 @@ namespace Battle.AI
                     searchingTarget();
                     if (target == null)
                     {
+                        Debug.Log("TEST");
                         return false;
                     }
                     else
                     {
                         return true;
                     }
+                };
+            }
+        }
+
+        protected virtual Func<bool> isCenter 
+        {
+            get
+            {
+                return () =>
+                {
+                    if(Vector3.Distance(LocationControl.convertLocationToPosition(myLocation), transform.position) <= 0.2f)
+                    {
+                        return true;
+                    }
+
+                    return false;
                 };
             }
         }
@@ -231,14 +249,15 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
+                    for(int i = 0; i < enemies.Count; i++)
                     {
-                        return true;
+                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= 1.58f)
+                        {
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 };
             }
         }

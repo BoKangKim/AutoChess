@@ -17,7 +17,7 @@ namespace Battle.Location
     {
         private const float radius = 0.65f;
         private const float tileDistanceX = 1.3f;
-        private const float tileDistanceY = 1.1f;
+        private const float tileDistanceY = 1.3f;
 
         public static LocationXY convertPositionToLocation(Vector3 unitPostion)
         {
