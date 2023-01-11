@@ -64,7 +64,7 @@ namespace Battle.AI
             findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
             searchingTarget();
 
-            next = (LocationXY)rta.searchNextLocation(myLocation, target.myLocation);
+            next = rta.searchNextLocation(myLocation, target.myLocation);
             nextPos = LocationControl.convertLocationToPosition(next);
             dir = (nextPos - transform.position).normalized;
         }
@@ -72,7 +72,7 @@ namespace Battle.AI
         private void Update()
         {
             root.Run();
-
+            myLocation = LocationControl.convertPositionToLocation(transform.position);
             if (specialRoot == null)
             {
                 return;
@@ -93,7 +93,8 @@ namespace Battle.AI
                         NotIf(findEnemy)
                     ),
 
-                    IfElseAction(isArangeIn, attack, move)
+                    //IfAction(isCenter,attack),
+                    IfElseAction(isArangeIn, moveCenter, move)
                 );
         }
 
@@ -160,17 +161,15 @@ namespace Battle.AI
 
         protected virtual void searchingTarget()
         {
-            float maxDistance = -100f;
+            float minDistance = 100000f;
             float temp = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) > maxDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) < minDistance)
                 {
-                    maxDistance = temp;
+                    minDistance = temp;
                     target = enemies[i];
-
-                    
                 }
             }
         }
@@ -193,10 +192,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    searchingTarget();
                     if (target == null)
                     {
-                        Debug.Log("TEST");
+                        searchingTarget();
                         return false;
                     }
                     else
@@ -207,18 +205,36 @@ namespace Battle.AI
             }
         }
 
-        protected virtual Func<bool> isCenter 
+        protected virtual Action moveCenter
         {
             get
             {
                 return () =>
                 {
-                    if(Vector3.Distance(LocationControl.convertLocationToPosition(myLocation), transform.position) <= 0.2f)
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    dir = (centerPosition - transform.position).normalized;
+
+                    transform.LookAt(dir);
+                    gameObject.transform.Translate(dir * 1f * Time.deltaTime, Space.World);
+                };
+            }
+        }
+
+        protected virtual Func<bool> isCenter
+        {
+            get
+            {
+                return () =>
+                {
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
                     {
                         return true;
                     }
-
-                    return false;
+                    else
+                    {
+                        return false;
+                    }
                 };
             }
         }
@@ -251,8 +267,11 @@ namespace Battle.AI
                 {
                     for(int i = 0; i < enemies.Count; i++)
                     {
-                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= 1.58f)
+                        if (LocationControl.getDistance(myLocation,target.getMyLocation()) < 1.6f)
                         {
+                            myLocation = LocationControl.convertPositionToLocation(transform.position);
+                            //next = myLocation;
+
                             return true;
                         }
                     }

@@ -41,7 +41,6 @@ namespace Battle.RTASTAR
                 weight[allUnits[i].getMyLocation().y, allUnits[i].getMyLocation().x] += 1000;
                 weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
             }
-
         }
 
         public void initAllUnits(ParentBT[] allUnits)
@@ -70,7 +69,6 @@ namespace Battle.RTASTAR
             {
                 for(int j = unitLocation.x - 1; j <= unitLocation.x + 1; j++)
                 {
-
                     if (checkLocationArrange(j, i))
                     {
                         if (unitLocation.y % 2 != 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
@@ -105,9 +103,7 @@ namespace Battle.RTASTAR
                     continue;
                 }
 
-                weight[nearLocation[i].y, nearLocation[i].x] += LocationControl.getDistance(nearLocation[i],target);
-                //weight[nearLocation[i].y, nearLocation[i].x] -= LocationControl.getDistance(startLocation, nearLocation[i]);
-                //weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
+                weight[nearLocation[i].y, nearLocation[i].x] -= Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
                 weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(target));
 
                 if (minWeight >= (temp = weight[nearLocation[i].y, nearLocation[i].x]))
@@ -116,20 +112,14 @@ namespace Battle.RTASTAR
                     index = i;
                 }
 
-            }
-
-            if (minWeight >= 1000)
-            {
-                return unitLocation;
+                Debug.Log(nearLocation[i].ToString() + " " + weight[nearLocation[i].y, nearLocation[i].x] + " " + myNickName);
+                Debug.Log(target.ToString() + " " + myNickName) ;
             }
 
             if (closeList.Contains(nearLocation[index]) == false)
             {
                 closeList.Add(nearLocation[index]);
-                preLocation = nearLocation[index];
             }
-
-            Debug.Log(nearLocation[index].ToString() + " " + weight[nearLocation[index].y, nearLocation[index].x] + " " + myNickName);
 
             return nearLocation[index];
         }
