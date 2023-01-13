@@ -12,9 +12,11 @@ namespace ZoneSystem
         MapController mapController;
         public GameObject selectedObject { get; private set; }
         Camera cam;
-        int unitLayer;
+        int ObjectLayer;
         int battleSpaceLayer;
         int safetySpaceLayer;
+        int itemLayer;
+
 
         Vector3 beforePos;
         Vector3 beforelocalPos;
@@ -31,149 +33,78 @@ namespace ZoneSystem
             cam = Camera.main;
             safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace");
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
-            unitLayer = 1 << LayerMask.NameToLayer("Unit");
+            ObjectLayer = 1 << LayerMask.NameToLayer("Object");
+            itemLayer = 1 << LayerMask.NameToLayer("Item");
+
+
         }
         private void Update()
         {
             #region ∏πŸ¿œøÎ
-            //if (Input.touchCount == 1)
-            //{
-
-            //    if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            //    {
-
-            //        if (selectedObject == null)
-            //        {
-            //            CastRay(unitLayer);
-            //            if (CastRay(unitLayer).collider != null)
-            //            {
-            //                selectedObject = CastRay(unitLayer).collider.gameObject;
-
-
-            //                int x = (int)selectedObject.transform.position.x;
-            //                int z = (int)selectedObject.transform.position.z;
-
-            //                mapController.safetyZoneObject[z, x] = null;
-
-
-            //                if (CastRay(safetySpaceLayer).collider != null)
-            //                {
-            //                    beforePoint = CastRay(safetySpaceLayer).collider.gameObject.transform.position;
-            //                }
-            //                else if (CastRay(battleSpaceLayer).collider != null)
-            //                {
-            //                    beforePoint = CastRay(battleSpaceLayer).collider.gameObject.transform.position;
-
-            //                }
-            //            }
-            //        }
-
-            //        else
-            //        {
-            //            if (UIManager.Inst.RaycastUI<Button>(1) != null)
-            //            {
-            //                buySellButton = UIManager.Inst.RaycastUI<Button>(1);
-
-            //                storeButtonChange(Color.white, Color.black, false, "¿Ø¥÷ ∆«∏≈");
-
-            //            }
-            //            else
-            //            {
-            //                if (buySellButton != null)
-            //                {
-            //                    storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
-
-            //                    buySellButton = null;
-            //                }
-            //            }
-            //            Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.WorldToScreenPoint(selectedObject.transform.position).z);
-            //            Vector3 worldPosition = cam.ScreenToWorldPoint(position);
-
-            //            selectedObject.transform.position = new Vector3(worldPosition.x, 1f, worldPosition.z);
-            //        }
-            //    }
-            //    //Drop
-            //    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            //    {
-
-            //        if (buySellButton)
-            //        {
-
-            //            storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
-            //            buySellButton = null;
-
-            //            Destroy(selectedObject);
-            //        }
-
-            //        if (EventSystem.current.IsPointerOverGameObject()) return;
-
-            //        UIManager.Inst.OnBuyButton();
-            //        if (CastRay(safetySpaceLayer).collider != null)
-            //        {
-            //            Vector3 worldPosition = CastRay(safetySpaceLayer).collider.gameObject.transform.position;
-            //            mapController.safetyZoneObject[(int)worldPosition.z, (int)worldPosition.x] = selectedObject;
-            //            selectedObject.transform.position = new Vector3(worldPosition.x, 0.5f, worldPosition.z);
-
-            //            selectedObject = null;
-            //        }
-            //        else if (CastRay(battleSpaceLayer).collider != null)
-            //        {
-            //            Vector3 worldPosition = CastRay(battleSpaceLayer).collider.gameObject.transform.position;
-            //            mapController.safetyZoneObject[(int)worldPosition.z, (int)worldPosition.x] = selectedObject;
-            //            selectedObject.transform.position = new Vector3(worldPosition.x, 0.5f, worldPosition.z);
-
-            //            selectedObject = null;
-            //        }
-            //        else
-            //        {
-            //            selectedObject.transform.position = new Vector3(beforePoint.x, 0.5f, beforePoint.z);
-            //            mapController.safetyZoneObject[(int)beforePoint.z, (int)beforePoint.x] = selectedObject;
-            //            selectedObject = null;
-
-            //        }
-            //    }
-            //}
-            #endregion
-
-            #region PCøÎ
-            if (Input.GetMouseButtonDown(0))
+            if (Input.touchCount == 1)
             {
-                if (selectedObject == null)
+                if (Input.GetTouch(0).phase == TouchPhase.Began)
                 {
-                    //CastRay(unitLayer);
-                    if (CastRay(unitLayer).collider != null)
+                    if (CastRay(itemLayer).collider != null)
                     {
-                        selectedObject = CastRay(unitLayer).collider.gameObject;
-                        Vector3 vec;
+                        mapController.itemGain(CastRay(itemLayer).collider.gameObject);
+                        return;
+                    }
 
-                        if (CastRay(safetySpaceLayer).collider != null)
+                    if (selectedObject == null)
+                    {
+                        if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
                         {
-                            vec = selectedObject.transform.position;
-                            mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-                            beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+                            selectedObject = CastRay(ObjectLayer).collider.gameObject;
+                            Vector3 vec;
+
+                            if (CastRay(safetySpaceLayer).collider != null)
+                            {
+                                vec = selectedObject.transform.position;
+                                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+                                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+                            }
+                            else if (CastRay(battleSpaceLayer).collider != null)
+                            {
+                                vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
+                                mapController.battleObject[(int)vec.z, (int)vec.x] = null;
+
+                                beforePos = CastRay(battleSpaceLayer).collider.transform.position;
+                                beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+                            }
                         }
-                        else if (CastRay(battleSpaceLayer).collider != null)
+                        else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
                         {
-                            vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
+                            Vector3 vec;
+                            selectedObject = CastRay(ObjectLayer).collider.gameObject;
 
-                            mapController.battleObject[(int)vec.z, (int)vec.x] = null;
-                            beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-
-                            beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+                            if (CastRay(safetySpaceLayer).collider != null)
+                            {
+                                vec = selectedObject.transform.position;
+                                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+                                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+                            }
                         }
                     }
                 }
-                //Drop
-                else
-                {
-                    // ¿Ø¥÷ ∆«∏≈
-                    if (buySellButton)
-                    {
-                        storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
-                        buySellButton = null;
+                //Drag
 
-                        Destroy(selectedObject);
+                else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+                {
+                    //Drag
+                    if(selectedObject != null)
+                    {
+                        buttonChange();
+                        Drag();
                     }
+                }
+
+                //Drop
+                else if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                {
+                    if (selectedObject == null) return;
+                    //¿Ø¥÷ ∆«∏≈
+                    sellUnit();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -187,49 +118,84 @@ namespace ZoneSystem
                     }
                     else
                     {
-                        if ((int)beforePos.z < 2)
-                        {
-                            mapController.safetyObject[(int)beforePos.z, (int)beforePos.x] = selectedObject;
-                        }
-                        else
-                        {
-                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = selectedObject;
-                        }
-
-
-                        selectedObject.transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
-                        selectedObject = null;
-
-                    }
-
-                }
-            }
-            //Drag
-            if (selectedObject != null)
-            {
-
-                if (UIManager.Inst.RaycastUI<Button>(1) != null)
-                {
-                    buySellButton = UIManager.Inst.RaycastUI<Button>(1);
-
-                    storeButtonChange(Color.white, Color.black, false, "¿Ø¥÷ ∆«∏≈");
-
-                }
-                else
-                {
-                    if (buySellButton != null)
-                    {
-                        storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
-
-                        buySellButton = null;
+                        outRange();
                     }
                 }
-
-                Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.WorldToScreenPoint(selectedObject.transform.position).z);
-                Vector3 worldPosition = cam.ScreenToWorldPoint(position);
-
-                selectedObject.transform.position = new Vector3(worldPosition.x, 1f, worldPosition.z);
             }
+            #endregion
+
+            #region PCøÎ
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            //    if (CastRay(itemLayer).collider != null)
+            //    {
+            //        mapController.itemGain(CastRay(itemLayer).collider.gameObject);
+            //        return;
+            //    }
+
+            //    if (selectedObject == null)
+            //    {
+            //        if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
+            //        {
+            //            selectedObject = CastRay(ObjectLayer).collider.gameObject;
+            //            Vector3 vec;
+
+            //            if (CastRay(safetySpaceLayer).collider != null)
+            //            {
+            //                vec = selectedObject.transform.position;
+            //                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+            //                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+            //            }
+            //            else if (CastRay(battleSpaceLayer).collider != null)
+            //            {
+            //                vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
+            //                mapController.battleObject[(int)vec.z, (int)vec.x] = null;
+
+            //                beforePos = CastRay(battleSpaceLayer).collider.transform.position;
+            //                beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+            //            }
+            //        }
+            //        else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+            //        {
+            //            Vector3 vec;
+            //            selectedObject = CastRay(ObjectLayer).collider.gameObject;
+
+            //            if (CastRay(safetySpaceLayer).collider != null)
+            //            {
+            //                vec = selectedObject.transform.position;
+            //                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+            //                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+            //            }
+            //        }
+            //    }
+            //    //Drop
+            //    else
+            //    {
+            //        // ¿Ø¥÷ ∆«∏≈
+            //        sellUnit();
+
+            //        if (EventSystem.current.IsPointerOverGameObject()) return;
+
+            //        if (CastRay(safetySpaceLayer).collider != null)
+            //        {
+            //            DropPosition(safetySpaceLayer);
+            //        }
+            //        else if (CastRay(battleSpaceLayer).collider != null)
+            //        {
+            //            DropPosition(battleSpaceLayer);
+            //        }
+            //        else
+            //        {
+            //            outRange();
+            //        }
+            //    }
+            //}
+            ////Drag
+            //if (selectedObject != null)
+            //{
+            //    buttonChange();
+            //    Drag();
+            //}
             #endregion
         }
 
@@ -247,16 +213,76 @@ namespace ZoneSystem
         #endregion
 
 
+
+        void outRange()
+        {
+            if ((int)beforePos.z < 2)
+            {
+                mapController.safetyObject[(int)beforePos.z, (int)beforePos.x] = selectedObject;
+            }
+            else
+            {
+                mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = selectedObject;
+            }
+            selectedObject.transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+            selectedObject = null;
+        }
+
+        void sellUnit()
+        {
+            if (buySellButton && selectedObject.GetComponent<testscript>() != null)
+            {
+                storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
+                buySellButton = null;
+
+                Destroy(selectedObject);
+            }
+        }
+        void buttonChange()
+        {
+
+            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<testscript>() != null)
+            {
+                buySellButton = UIManager.Inst.RaycastUI<Button>(1);
+
+                storeButtonChange(Color.white, Color.black, false, "¿Ø¥÷ ∆«∏≈");
+
+            }
+            else
+            {
+                if (buySellButton != null)
+                {
+                    storeButtonChange(Color.black, Color.white, true, "¿Ø¥÷ º“»Ø");
+
+                    buySellButton = null;
+                }
+            }
+        }
+        private void Drag()
+        {
+            Vector3 position = new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.WorldToScreenPoint(selectedObject.transform.position).z);
+            Vector3 worldPosition = cam.ScreenToWorldPoint(position);
+
+            selectedObject.transform.position = new Vector3(worldPosition.x, 1f, worldPosition.z);
+
+        }
+
+
         #region DropPos
         void DropPosition(int Layer)
         {
             Vector3 worldPosition = CastRay(Layer).collider.transform.position;
+            int worldPosX = (int)worldPosition.x;
+            int worldPosZ = (int)worldPosition.z;
+            int beforePosX = (int)beforePos.x;
+            int beforePosZ = (int)beforePos.z;
+
 
             if (Layer == safetySpaceLayer)
             {
-                if (mapController.safetyObject[(int)worldPosition.z, (int)worldPosition.x] == null)
+                if (mapController.safetyObject[worldPosZ, worldPosX] == null)
                 {
-                    mapController.safetyObject[(int)worldPosition.z, (int)worldPosition.x] = selectedObject;
+                    mapController.safetyObject[worldPosZ, worldPosX] = selectedObject;
                     selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     mapController.BattlezoneChack();
                     selectedObject = null;
@@ -265,23 +291,47 @@ namespace ZoneSystem
                 {
                     if ((int)beforePos.z < 2)
                     {
-                        mapController.safetyObject[(int)beforePos.z, (int)beforePos.x] = mapController.safetyObject[(int)worldPosition.z, (int)worldPosition.x];
-                        mapController.safetyObject[(int)beforePos.z, (int)beforePos.x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+
+                        if (Merge(selectedObject, mapController.safetyObject[worldPosZ, worldPosX]))
+                        {
+                            mapController.safetyObject[beforePosZ, beforePosX] = null;
+                        }
+
+                        else
+                        {
+                            mapController.safetyObject[beforePosZ, beforePosX] = mapController.safetyObject[worldPosZ, worldPosX];
+                            mapController.safetyObject[beforePosZ, beforePosX].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[worldPosZ, worldPosX] = selectedObject;
+                            selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                        }
                     }
                     else
                     {
-                        mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = mapController.safetyObject[(int)worldPosition.z, (int)worldPosition.x];
-                        mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                        if (Merge(selectedObject, mapController.safetyObject[worldPosZ, worldPosX]))
+                        {
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = null;
+                        }
+                        else
+                        {
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = mapController.safetyObject[worldPosZ, worldPosX];
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[worldPosZ, worldPosX] = selectedObject;
+                            selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                        }
                     }
-                    mapController.safetyObject[(int)worldPosition.z, (int)worldPosition.x] = selectedObject;
 
-                    selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     selectedObject = null;
                 }
             }
 
             else if (Layer == battleSpaceLayer)
             {
+                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                {
+                    selectedObject.transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                    selectedObject = null;
+                    return;
+                }
 
                 Vector3 vec = PosToIndex(CastRay(Layer).collider.transform.localPosition);
                 if (mapController.battleObject[(int)vec.z, (int)vec.x] == null)
@@ -293,25 +343,41 @@ namespace ZoneSystem
                 }
                 else
                 {
-                    Debug.Log(beforePos.z);
                     if ((int)beforePos.z < 2)
                     {
-                        mapController.safetyObject[(int)beforePos.z, (int)beforePos.x] = mapController.battleObject[(int)vec.z, (int)vec.x];
-                        mapController.safetyObject[(int)beforePos.z, (int)beforePos.x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                        if (Merge(selectedObject, mapController.battleObject[(int)vec.z, (int)vec.x]))
+                        {
+                            mapController.safetyObject[beforePosZ, beforePosX] = null;
+                        }
+                        else
+                        {
+                            mapController.safetyObject[beforePosZ, beforePosX] = mapController.battleObject[(int)vec.z, (int)vec.x];
+                            mapController.safetyObject[beforePosZ, beforePosX].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[(int)vec.z, (int)vec.x] = selectedObject;
+
+                            selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                        }
                     }
                     else
                     {
-                        mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = mapController.battleObject[(int)vec.z, (int)vec.x];
-                        mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                        if (Merge(selectedObject, mapController.battleObject[(int)vec.z, (int)vec.x]))
+                        {
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = null;
+
+                        }
+                        else
+                        {
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x] = mapController.battleObject[(int)vec.z, (int)vec.x];
+                            mapController.battleObject[(int)PosToIndex(beforelocalPos).z, (int)PosToIndex(beforelocalPos).x].transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[(int)vec.z, (int)vec.x] = selectedObject;
+
+                            selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+
+                        }
                     }
-
-                    mapController.battleObject[(int)vec.z, (int)vec.x] = selectedObject;
-
-                    selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     selectedObject = null;
                 }
             }
-
         }
         #endregion
 
@@ -327,6 +393,7 @@ namespace ZoneSystem
         }
         #endregion
 
+        //πË∆≤¡∏ ¡¬«•∏¶ ¿Œµ¶Ω∫ ∞™¿∏∑Œ ∫Ø»Ø
         Vector3 PosToIndex(Vector3 localVec)
         {
             localVec.x /= 1.3f;
@@ -334,6 +401,36 @@ namespace ZoneSystem
             return localVec;
         }
 
+        //¿Ø¥÷ æ∆¿Ã≈€ ∏”¡ˆ
+        public bool Merge(GameObject selectedUnit, GameObject stayUnit)
+        {
+
+            if (selectedObject == null || stayUnit == null) return false;
+
+            if (selectedObject.GetComponent<testscript>() != null && stayUnit.GetComponent<testscript>() != null)
+            {
+                if (selectedUnit.GetComponent<testscript>().unintnum == stayUnit.GetComponent<testscript>().unintnum)
+                {
+                    Destroy(selectedUnit.gameObject);
+                    ++stayUnit.GetComponent<testscript>().unintnum;
+
+                    stayUnit.GetComponent<MeshRenderer>().material.color = Color.red;
+                    return true;
+                }
+            }
+            else if(selectedObject.GetComponent<testItem>() != null && stayUnit.GetComponent<testItem>() != null)
+            {
+                if (selectedUnit.GetComponent<testItem>().itemNum == stayUnit.GetComponent<testItem>().itemNum)
+                {
+                    Destroy(selectedUnit.gameObject);
+                    ++stayUnit.GetComponent<testItem>().itemNum;
+
+                    stayUnit.GetComponent<MeshRenderer>().material.color = Color.red;
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 }
