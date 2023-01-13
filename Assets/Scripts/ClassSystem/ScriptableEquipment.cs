@@ -6,8 +6,8 @@ public class ScriptableEquipment : ScriptableObject
     [SerializeField] private string equipmentName;
     public string GetEquipmentName { get { return equipmentName; } }
 
-    [SerializeField] private int equipmentDamage;
-    public int GetEquipmentDamage { get { return equipmentDamage; } }
+    [SerializeField] private int equipmentAtk;
+    public int GetEquipmentAtk { get { return equipmentAtk; } }
 
     [SerializeField] private int equipmentAttackSpeed;
     public int GetEquipmentAttackSpeed { get { return equipmentAttackSpeed; } }

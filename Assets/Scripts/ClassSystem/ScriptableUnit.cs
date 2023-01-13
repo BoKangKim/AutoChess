@@ -25,19 +25,13 @@ public class ScriptableUnit : ScriptableObject
     public float GetAttackRange { get { return attackRange; } }
 
     [SerializeField] private int spellPower;
-    public int GetSpellPPower { get { return spellPower; } }
+    public int GetSpellPower { get { return spellPower; } }
 
     [SerializeField] private float moveSpeed;
     public float GetMoveSpeed { get { return moveSpeed; } }
 
     [SerializeField] private float magicCastingTime;
     public float GetMagicCastingTime { get { return magicCastingTime; } }
-
-    [SerializeField] private float crowdControlTime;
-    public float GetCrowdControlTime { get { return crowdControlTime; } }
-
-    [SerializeField] private float tenacity;
-    public float GetTenacity { get { return tenacity; } }
 
     [SerializeField] private ScriptableObject unitClass;
     public ScriptableObject GetUnitClass { get { return unitClass; } }

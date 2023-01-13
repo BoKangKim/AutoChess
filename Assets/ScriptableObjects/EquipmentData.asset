@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50e2f5ba12bec9340932ebab30ac3e4f, type: 3}
   m_Name: EquipmentData
   m_EditorClassIdentifier: 
-  equipmentName: 
-  equipmentDamage: 0
+  equipmentName: shield
+  equipmentAtk: 0
   equipmentAttackSpeed: 0
   equipmentMp: 0
-  equipmentHp: 0
+  equipmentHp: 50

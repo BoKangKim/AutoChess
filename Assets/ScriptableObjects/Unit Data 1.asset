@@ -12,18 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60d3182776600654d8876539302885e6, type: 3}
   m_Name: Unit Data 1
   m_EditorClassIdentifier: 
-  unitName: 
-  maxHp: 0
-  maxMp: 0
-  grade: 0
-  atk: 0
-  attackSpeed: 0
-  attackRange: 0
+  unitName: Test
+  maxHp: 100
+  maxMp: 50
+  grade: 1
+  atk: 10
+  attackSpeed: 1
+  attackRange: 2
   spellPower: 0
-  moveSpeed: 0
-  magicCastingTime: 0
-  crowdControlTime: 0
-  tenacity: 0
+  moveSpeed: 1
+  magicCastingTime: 1
   unitClass: {fileID: 0}
   unitSpecies: {fileID: 0}
   unitequipment01: {fileID: 0}

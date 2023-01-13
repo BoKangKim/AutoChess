@@ -2931,8 +2931,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b71808e93abb740a4291dcaa389741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitPrefab: {fileID: 8002274128534423478, guid: 7ea94162a84684d40b520bbe001aaf8e, type: 3}
-  Unit: {fileID: 11400000, guid: 3dd4b372eae138c43955e20df3c58d23, type: 2}
+  UnitPrefab: {fileID: 7156501485292659843, guid: 7ea94162a84684d40b520bbe001aaf8e, type: 3}
+  Unit: {fileID: 11400000, guid: 6b964e8b02f346042828d1f7122cfed0, type: 2}
   SpeciesType:
   - {fileID: 11400000, guid: c4444b9816ba5324eb2b8a69f3c01661, type: 2}
   - {fileID: 11400000, guid: 86d748a7e4f9adc40bb54307b9c3fd08, type: 2}

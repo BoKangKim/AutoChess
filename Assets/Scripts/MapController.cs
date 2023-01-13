@@ -1,5 +1,4 @@
 using UnityEngine;
-using static UnitClass.GetSafetyZoneUnitCount;
 using System.Collections.Generic;
 
 namespace ZoneSystem
@@ -28,12 +27,10 @@ namespace ZoneSystem
 
         [SerializeField] private List<ScriptableObject> ClassType = null;
 
-
         void Start()
         {
             safetyZoneObject = new GameObject[2, 7];
             battleZoneObject = new GameObject[3, 7];
-
         }
 
         public void OnClick_UnitInst()

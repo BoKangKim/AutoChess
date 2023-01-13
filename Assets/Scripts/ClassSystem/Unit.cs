@@ -1,16 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
     [SerializeField] private ScriptableUnit UnitData = null;
-    [SerializeField] private ScriptableClass[] ClassData = null;
-    [SerializeField] private ScriptableSpecies[] SpeciesData = null;
-    [SerializeField] private ScriptableEquipment[] Equipment01Data = null;
-    [SerializeField] private ScriptableEquipment[] Equipment02Data = null;
-    [SerializeField] private ScriptableEquipment[] Equipment03Data = null;
-
+    [SerializeField] private ScriptableClass ClassData = null;
+    [SerializeField] private ScriptableSpecies SpeciesData = null;
+    [SerializeField] private GameObject Equipment01 = null;
+    [SerializeField] private GameObject Equipment02 = null;
+    [SerializeField] private GameObject Equipment03 = null;
 
     private float grade;
     private float maxHp;
@@ -33,23 +30,29 @@ public class Unit : MonoBehaviour
     private float blindnessTime; //실명 시간(CC기)
     private float weakness; //허약 시간(CC기)
 
-    //텔레포트때 쓸지 안쓸지는 몰라서 일단 vector3는 선언 안했습니다.
-
-
-    //지역변수들 전부 기획서에 맞게 변경 할 것
-
-
     private void Awake()
     {
-        //hp = UnitData.GetHp + Equipment01Data.GetEquipmentHp + Equipment02Data.GetEquipmentHp + Equipment03Data.GetEquipmentHp;
-        //attackSpeed = UnitData.GetAttackSpeed + Equipment01Data.GetEquipmentAttackSpeed + Equipment02Data.GetEquipmentAttackSpeed + Equipment03Data.GetEquipmentAttackSpeed;
-        //Debug.Log("계산된 hp값은 : " + hp);
-        //Debug.Log("계산된 공속값은 : " + attackSpeed);
+        //grade = UnitData.GetGrade;
+        //maxHp = UnitData.GetMaxHp;
+        curHp = UnitData.GetMaxHp;
+        //maxMp = UnitData.GetMaxMp;
+        curMp = UnitData.GetMaxMp;
+        //moveSpeed = UnitData.GetMoveSpeed;
+        //atk = UnitData.GetAtk;
+        //attackRange = UnitData.GetAttackRange;
+        //attackSpeed = UnitData.GetAttackSpeed;
+        //spellPower = UnitData.GetSpellPower;
+        //magicDamage = 0;
+        //magicCastingTime = UnitData.GetMagicCastingTime;
+        //crowdControlTime = 0;
+        //tenacity = 0;
+        //attackTarget = 1;
+        //barrier = 0;
+        //stunTime = 0;
+        //blindnessTime = 0;
+        //weakness = 0;
+
+        //0선언은 왜했냐 그냥 냅두면 원래 0인디 ㅋㅋ
     }
-
-    //장착 아이템은 해당 놈만 하고
-
-    // 새로 배치시에는 시너지 검사 해서 
-    
 
 }
