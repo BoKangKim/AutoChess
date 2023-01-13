@@ -188,8 +188,6 @@ namespace Battle.AI
                 if (allUnits[i].Equals(this))
                     continue;
                 unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
-                Debug.Log(unitLocation.ToString() + " other " + allUnits[i].gameObject.name);
-                Debug.Log(myLocation.ToString() + " My " + allUnits[i].gameObject.name);
                 if (unitLocation.CompareTo(myLocation) == true)
                 {
                     return true;
