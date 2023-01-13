@@ -18,6 +18,7 @@ namespace Battle.AI
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
+        private ParentBT[] allUnits = null;
 
         protected string myType = null;
         [SerializeField] private string nickName = "";
@@ -61,7 +62,7 @@ namespace Battle.AI
             // Object 받을 예정
             // 일단 내가 찾고 나중에 원혁이형이 완성되면
             // 수정
-            findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
+            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
             next = rta.searchNextLocation(myLocation, target.myLocation);
@@ -94,7 +95,11 @@ namespace Battle.AI
                     ),
 
                     //IfAction(isCenter,attack),
-                    IfElseAction(isArangeIn, moveCenter, move)
+                    Sequence
+                    (
+                        IfElseAction(isArangeIn, moveCenter, move),
+                        IfAction(isCenter,attack)
+                    )
                 );
         }
 
@@ -166,12 +171,32 @@ namespace Battle.AI
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) < minDistance)
+                if ((temp = LocationControl.getDistance(enemies[i].getMyLocation(),myLocation)) < minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
                 }
             }
+
+        }
+
+        private bool checkIsOverlapUnits()
+        {
+            LocationXY unitLocation;
+            for (int i = 0; i < allUnits.Length; i++)
+            {
+                if (allUnits[i].Equals(this))
+                    continue;
+                unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
+                Debug.Log(unitLocation.ToString() + " other " + allUnits[i].gameObject.name);
+                Debug.Log(myLocation.ToString() + " My " + allUnits[i].gameObject.name);
+                if (unitLocation.CompareTo(myLocation) == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         #endregion
 
@@ -192,9 +217,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    searchingTarget();
                     if (target == null)
                     {
-                        searchingTarget();
                         return false;
                     }
                     else
@@ -212,6 +237,9 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                        return;
+
                     dir = (centerPosition - transform.position).normalized;
 
                     transform.LookAt(dir);
@@ -227,7 +255,6 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
                     {
                         return true;
@@ -266,12 +293,15 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    for(int i = 0; i < enemies.Count; i++)
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
+                    LocationXY enemyLocation;
+                    
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.5f)
+                        enemyLocation = LocationControl.convertPositionToLocation(enemies[i].gameObject.transform.position);
+                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.7f
+                        && checkIsOverlapUnits() == false)
                         {
-                            myLocation = LocationControl.convertPositionToLocation(transform.position);
-
                             return true;
                         }
                     }
@@ -324,7 +354,6 @@ namespace Battle.AI
                 };
             }
         }
-
 
         #endregion
     }

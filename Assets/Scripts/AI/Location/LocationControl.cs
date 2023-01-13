@@ -11,6 +11,18 @@ namespace Battle.Location
         {
             return "( " + x + " , " + y + " )";
         }
+
+        public bool CompareTo(LocationXY location)
+        {
+            if (x == location.x && y == location.y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 
     public static class LocationControl
