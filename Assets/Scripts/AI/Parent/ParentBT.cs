@@ -29,6 +29,16 @@ namespace Battle.AI
 
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
+        // 체력
+        private float hp = 100;
+
+        // 무기
+        // public Wepon wepon;
+
+        // 드롭 아이템
+        public GameObject Item;
+        // 확률
+        private int per;
 
         public LocationXY getMyLocation()
         {
@@ -173,6 +183,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("대기");
+                    myAni.SetBool("isMove",false);
                 };
             }
         }
@@ -183,13 +195,16 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("타겟 찾기");
                     searchingTarget();
                     if (target == null)
                     {
+                        Debug.Log("못찾아");
                         return false;
                     }
                     else
                     {
+                        Debug.Log("찾아");
                         return true;
                     }
                 };
@@ -202,7 +217,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    
+                    myAni.SetBool("isMove", true);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
                         myLocation = LocationControl.convertPositionToLocation(transform.position);
@@ -211,7 +226,7 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    transform.LookAt(dir);
+                    gameObject.transform.LookAt(dir);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
             }
@@ -223,8 +238,10 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
+                    Debug.Log("범위 내에 있음");
+                    if (LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
                     {
+                        Debug.Log("공격범위 내에 있음");
                         return true;
                     }
                     else
@@ -252,11 +269,30 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("공격");
                     myAni.SetTrigger("isAttack");
                 };
             }
         }
-
+        
+        protected virtual Action IsHit
+        {
+            get
+            {
+                return () =>
+                {
+                    Debug.Log("맞는다");
+                    Debug.Log(hp);
+                    myAni.SetTrigger("isHit");
+                    // hp -= wepon.damage;
+                    
+                    if (hp <= 0)
+                    {
+                        hp = 0;
+                    }
+                };
+            }
+        }
         protected virtual Func<bool> isDeath
         {
             get
@@ -274,11 +310,40 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("죽음");
+                    
+                    myAni.SetBool("IsDeath", true);
 
+                    if (ItemCount == 0)
+                    {
+                        Debug.Log("드롭");
+                        per = 0; // 100퍼 떨굼
+                        DropItem();
+                    }
                 };
             }
         }
 
+
+        int ItemCount = 0;
+        private void DropItem()
+        {
+            //per = UnityEngine.Random.Range(0, 2);   
+            switch (per)
+            {
+                case 0:
+                    Debug.Log("0");
+                    Item.SetActive(true);
+                    ItemCount = 1;
+                    break;
+                case 1:
+                    Debug.Log("1");
+                    Item.SetActive(false);
+                    ItemCount = 1;
+                    break;
+
+            }
+        }
 
         #endregion
     }
