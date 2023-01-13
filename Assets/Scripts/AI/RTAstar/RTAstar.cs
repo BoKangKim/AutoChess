@@ -20,7 +20,7 @@ namespace Battle.RTASTAR
             preLocation = startLocation;
         }
 
-        private void initWeight()
+        private void initWeight() // 가중치 x, y 좌표별로 넣음
         {
             for(int i = 0; i < weight.GetLength(0); i++)
             {
@@ -31,9 +31,10 @@ namespace Battle.RTASTAR
             }
         }
 
+        // 이 스크립트를 달고있는 애들 배열에 담기
         private void updateWeight()
         {
-            ParentBT[] allUnits = MonoBehaviour.FindObjectsOfType<ParentBT>();
+            ParentBT[] allUnits = MonoBehaviour.FindObjectsOfType<ParentBT>(); 
 
             for(int i = 0; i < allUnits.Length; i++)
             {
@@ -41,7 +42,7 @@ namespace Battle.RTASTAR
             }
         }
 
-        public LocationXY searchNextLocation(LocationXY unitLocation,LocationXY target)
+        public LocationXY searchNextLocation(LocationXY unitLocation,LocationXY target) // 내 위치랑 타겟위치 받아와서 계산
         {
             initWeight();
             updateWeight();

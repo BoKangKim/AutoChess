@@ -226,7 +226,7 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    gameObject.transform.LookAt(dir);
+                    transform.LookAt(dir);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
             }
