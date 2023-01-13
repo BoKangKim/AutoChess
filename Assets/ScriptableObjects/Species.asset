@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd7fdc8d2d72eae4b92fc708330d83ff, type: 3}
   m_Name: Species
   m_EditorClassIdentifier: 
-  species: 
+  species: Orc
   attackSpeedPercentage: 0
   barrierPercentage: 0
   atkPercentage: 0
