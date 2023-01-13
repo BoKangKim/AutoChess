@@ -71,14 +71,14 @@ namespace Battle.AI
 
         private void Update()
         {
-            root.Run();
-            myLocation = LocationControl.convertPositionToLocation(transform.position);
-            if (specialRoot == null)
+            if(specialRoot != null 
+                && specialRoot.Run() == true)
             {
                 return;
             }
 
-            specialRoot.Run();
+            root.Run();
+            myLocation = LocationControl.convertPositionToLocation(transform.position);
         }
 
         private void InitializingRootNode()
@@ -268,10 +268,9 @@ namespace Battle.AI
                 {
                     for(int i = 0; i < enemies.Count; i++)
                     {
-                        if (LocationControl.getDistance(myLocation,target.getMyLocation()) < 1.6f)
+                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.5f)
                         {
                             myLocation = LocationControl.convertPositionToLocation(transform.position);
-                            //next = myLocation;
 
                             return true;
                         }

@@ -39,8 +39,8 @@ namespace Battle.RTASTAR
             for(int i = 0; i < allUnits.Length; i++)
             {
                 LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
-                weight[allUnits[i].getMyLocation().y, allUnits[i].getMyLocation().x] += 1000;
-                //weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
+                weight[unitLocation.y, unitLocation.x] += 1000;
+                weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
             }
         }
 
@@ -72,17 +72,6 @@ namespace Battle.RTASTAR
                 {
                     if (checkLocationArrange(j, i))
                     {
-                        //if (unitLocation.y % 2 == 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
-                        //    && j == unitLocation.x -1)
-                        //{
-                        //    continue;
-                        //}
-                        //else if(unitLocation.y % 2 != 0 && (i == unitLocation.y + 1 || i == unitLocation.y - 1)
-                        //    && j == unitLocation.x + 1)
-                        //{
-                        //    continue;
-                        //}
-
                         LocationXY locationXY = new LocationXY();
                         locationXY.x = j;
                         locationXY.y = i;
