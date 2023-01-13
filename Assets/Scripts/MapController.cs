@@ -1,9 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace ZoneSystem
 {
+    enum SpeciesType
+    {
+        Dwarf, Undead, Scorpion, Orc, Mecha
+    }
+
+    enum ClassType
+    {
+        Warrior, Tanker, Magician, RangeDealer, Assassin
+    }
     public class MapController : MonoBehaviour
     {
         public GameObject[,] safetyObject;
