@@ -41,137 +41,69 @@ namespace ZoneSystem
         private void Update()
         {
             #region 모바일용
-            if (Input.touchCount == 1)
-            {
-                if (Input.GetTouch(0).phase == TouchPhase.Began)
-                {
-                    if (CastRay(itemLayer).collider != null)
-                    {
-                        mapController.itemGain(CastRay(itemLayer).collider.gameObject);
-                        return;
-                    }
-
-                    if (selectedObject == null)
-                    {
-                        if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
-                        {
-                            selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                            Vector3 vec;
-
-                            if (CastRay(safetySpaceLayer).collider != null)
-                            {
-                                vec = selectedObject.transform.position;
-                                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-                                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
-                            }
-                            else if (CastRay(battleSpaceLayer).collider != null)
-                            {
-                                vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
-                                mapController.battleObject[(int)vec.z, (int)vec.x] = null;
-
-                                beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-                                beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
-                            }
-                        }
-                        else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
-                        {
-                            Vector3 vec;
-                            selectedObject = CastRay(ObjectLayer).collider.gameObject;
-
-                            if (CastRay(safetySpaceLayer).collider != null)
-                            {
-                                vec = selectedObject.transform.position;
-                                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-                                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
-                            }
-                        }
-                    }
-                }
-                //Drag
-
-                else if (Input.GetTouch(0).phase == TouchPhase.Moved)
-                {
-                    //Drag
-                    if(selectedObject != null)
-                    {
-                        buttonChange();
-                        Drag();
-                    }
-                }
-
-                //Drop
-                else if (Input.GetTouch(0).phase == TouchPhase.Ended)
-                {
-                    if (selectedObject == null) return;
-                    //유닛 판매
-                    sellUnit();
-
-                    if (EventSystem.current.IsPointerOverGameObject()) return;
-
-                    if (CastRay(safetySpaceLayer).collider != null)
-                    {
-                        DropPosition(safetySpaceLayer);
-                    }
-                    else if (CastRay(battleSpaceLayer).collider != null)
-                    {
-                        DropPosition(battleSpaceLayer);
-                    }
-                    else
-                    {
-                        outRange();
-                    }
-                }
-            }
-            #endregion
-
-            #region PC용
-            //if (Input.GetMouseButtonDown(0))
+            //if (Input.touchCount == 1)
             //{
-            //    if (CastRay(itemLayer).collider != null)
+            //    if (Input.GetTouch(0).phase == TouchPhase.Began)
             //    {
-            //        mapController.itemGain(CastRay(itemLayer).collider.gameObject);
-            //        return;
-            //    }
-
-            //    if (selectedObject == null)
-            //    {
-            //        if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
+            //        if (CastRay(itemLayer).collider != null)
             //        {
-            //            selectedObject = CastRay(ObjectLayer).collider.gameObject;
-            //            Vector3 vec;
+            //            mapController.itemGain(CastRay(itemLayer).collider.gameObject);
+            //            return;
+            //        }
 
-            //            if (CastRay(safetySpaceLayer).collider != null)
+            //        if (selectedObject == null)
+            //        {
+            //            if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
             //            {
-            //                vec = selectedObject.transform.position;
-            //                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-            //                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+            //                selectedObject = CastRay(ObjectLayer).collider.gameObject;
+            //                Vector3 vec;
+
+            //                if (CastRay(safetySpaceLayer).collider != null)
+            //                {
+            //                    vec = selectedObject.transform.position;
+            //                    mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+            //                    beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+            //                }
+            //                else if (CastRay(battleSpaceLayer).collider != null)
+            //                {
+            //                    vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
+            //                    mapController.battleObject[(int)vec.z, (int)vec.x] = null;
+
+            //                    beforePos = CastRay(battleSpaceLayer).collider.transform.position;
+            //                    beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+            //                }
             //            }
-            //            else if (CastRay(battleSpaceLayer).collider != null)
+            //            else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
             //            {
-            //                vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
-            //                mapController.battleObject[(int)vec.z, (int)vec.x] = null;
+            //                Vector3 vec;
+            //                selectedObject = CastRay(ObjectLayer).collider.gameObject;
 
-            //                beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-            //                beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+            //                if (CastRay(safetySpaceLayer).collider != null)
+            //                {
+            //                    vec = selectedObject.transform.position;
+            //                    mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+            //                    beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+            //                }
             //            }
             //        }
-            //        else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
-            //        {
-            //            Vector3 vec;
-            //            selectedObject = CastRay(ObjectLayer).collider.gameObject;
+            //    }
+            //    //Drag
 
-            //            if (CastRay(safetySpaceLayer).collider != null)
-            //            {
-            //                vec = selectedObject.transform.position;
-            //                mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-            //                beforePos = CastRay(safetySpaceLayer).collider.transform.position;
-            //            }
+            //    else if (Input.GetTouch(0).phase == TouchPhase.Moved)
+            //    {
+            //        //Drag
+            //        if(selectedObject != null)
+            //        {
+            //            buttonChange();
+            //            Drag();
             //        }
             //    }
+
             //    //Drop
-            //    else
+            //    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
             //    {
-            //        // 유닛 판매
+            //        if (selectedObject == null) return;
+            //        //유닛 판매
             //        sellUnit();
 
             //        if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -190,12 +122,80 @@ namespace ZoneSystem
             //        }
             //    }
             //}
-            ////Drag
-            //if (selectedObject != null)
-            //{
-            //    buttonChange();
-            //    Drag();
-            //}
+            #endregion
+
+            #region PC용
+            if (Input.GetMouseButtonDown(0))
+            {
+                if (CastRay(itemLayer).collider != null)
+                {
+                    mapController.itemGain(CastRay(itemLayer).collider.gameObject);
+                    return;
+                }
+
+                if (selectedObject == null)
+                {
+                    if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
+                    {
+                        selectedObject = CastRay(ObjectLayer).collider.gameObject;
+                        Vector3 vec;
+
+                        if (CastRay(safetySpaceLayer).collider != null)
+                        {
+                            vec = selectedObject.transform.position;
+                            mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+                            beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+                        }
+                        else if (CastRay(battleSpaceLayer).collider != null)
+                        {
+                            vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
+                            mapController.battleObject[(int)vec.z, (int)vec.x] = null;
+
+                            beforePos = CastRay(battleSpaceLayer).collider.transform.position;
+                            beforelocalPos = CastRay(battleSpaceLayer).collider.transform.localPosition;
+                        }
+                    }
+                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                    {
+                        Vector3 vec;
+                        selectedObject = CastRay(ObjectLayer).collider.gameObject;
+
+                        if (CastRay(safetySpaceLayer).collider != null)
+                        {
+                            vec = selectedObject.transform.position;
+                            mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
+                            beforePos = CastRay(safetySpaceLayer).collider.transform.position;
+                        }
+                    }
+                }
+                //Drop
+                else
+                {
+                    // 유닛 판매
+                    sellUnit();
+
+                    if (EventSystem.current.IsPointerOverGameObject()) return;
+
+                    if (CastRay(safetySpaceLayer).collider != null)
+                    {
+                        DropPosition(safetySpaceLayer);
+                    }
+                    else if (CastRay(battleSpaceLayer).collider != null)
+                    {
+                        DropPosition(battleSpaceLayer);
+                    }
+                    else
+                    {
+                        outRange();
+                    }
+                }
+            }
+            //Drag
+            if (selectedObject != null)
+            {
+                buttonChange();
+                Drag();
+            }
             #endregion
         }
 

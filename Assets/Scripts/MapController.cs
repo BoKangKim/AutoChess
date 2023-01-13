@@ -1,4 +1,4 @@
-using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine.UI;
@@ -6,6 +6,15 @@ using UnityEngine;
 
 namespace ZoneSystem
 {
+    enum SpeciesType
+    {
+        Dwarf, Undead, Scorpion, Orc, Mecha
+    }
+
+    enum ClassType
+    {
+        Warrior, Tanker, Magician, RangeDealer, Assassin
+    }
     public class MapController : MonoBehaviour
     {
         public GameObject[,] safetyObject;
@@ -60,7 +69,7 @@ namespace ZoneSystem
             }
         }
 
-        //¾ÆÀÌÅÛ È¹µæ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¹ï¿½ï¿½
         public void itemGain(GameObject getItem)
         {
             for (int z = 0; z < 2; z++)
