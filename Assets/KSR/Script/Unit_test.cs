@@ -9,8 +9,8 @@ public class Unit_test : MonoBehaviour
 
     [SerializeField] private float curHp;
     [SerializeField] private float curMp;
-    private float maxHp = 100f;
-    private float maxMp = 100f;
+    [SerializeField] private float maxHp = 100f;
+    [SerializeField] private float maxMp = 100f;
 
     [SerializeField] private bool IsDead;
     public bool IsSpecial; // 특수스킬인지 확인
@@ -80,6 +80,13 @@ public class Unit_test : MonoBehaviour
             //abnormalState = false;
             Debug.Log("상태정상");
         }
+
+        if (hp <= 0)
+        {
+            hp = 0;
+            isDead = true;
+            Dead();
+        }
     }
     public void Idle()
     {
@@ -91,6 +98,7 @@ public class Unit_test : MonoBehaviour
     }
     public void Dead()
     {
+        // 모든 행동 제어
         Debug.Log("죽음");
     }
 

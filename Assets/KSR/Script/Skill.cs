@@ -35,53 +35,59 @@ public class Skill : MonoBehaviour
     bool availableSkill; // 스킬사용 가능한지 체크 - true일때 스킬 사용 가능
     bool usingSkill; // 스킬 사용 중임 체크 
     bool abnormalState; // 상태이상 체크 - true 일때 행동제어 
+    bool specialAbnormalState; // 제어 상태이상 체크
     
     private void Awake()
     {
         unit = FindObjectOfType<Unit_test>();
     }
     private void Start()
-    {
-        if (unit.isDead) return;
+    {       
         availableSkill = true;
         usingSkill = false;
-        abnormalState = false;        
-        
+        abnormalState = false;                
     }
 
     private void Update()
     {
-
+        
+        if (unit.isDead==true)
+        {
+            Debug.Log("죽음");
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
+            CalculateMP(unit.mp, 10f);
+            Debug.Log("UNIT MP : " + unit.mp);
             UseSkill();
         }
-
+        if (usingSkill)
+        {
+            Timer();
+        }
     }
     public void Timer()
     {
         skillTime -= Time.deltaTime;
-
         coolTime -= Time.deltaTime;
-
     }
 
 
     // 스킬 사용
     public void UseSkill()
     {
-
-        // 예외처리 - 죽음, 시간 체크
         if (unit.isDead) return;
-        // 스킬 사용가능이면 스킬 시작
+
         if (availableSkill)
         {
-            Debug.Log("스킬씀");
+            Debug.Log("스킬 사용");
             StartSkill();
         }
         if (!availableSkill)
         {
-            Debug.Log("스킬안씀");
+            Debug.Log("마나 없음");
+            Debug.Log("UNIT MP : " + unit.mp);
         }
     }
 
@@ -89,59 +95,48 @@ public class Skill : MonoBehaviour
     // 스킬 사용 시작
     public void StartSkill()
     {
-        // 애니메이션 및 이펙트 출력
-        Debug.Log("스킬 시작");
-        // 스킬 시작과 동시에 시간이 흐르도록 할 것
-        // 현재 스킬 사용 중
+        Debug.Log("스킬 이펙트 출력");        
         if (skillTime >= 0)
         {
-            usingSkill = true; // 스킬 사용중 체크
-            CalculateMP(unit.mp,10f); // 마나 차감 - 사용되는 마나 나중에 데이터 받기
+            usingSkill = true; // 스킬 사용중
+            
             CCTime(coolTime); // 쿨타임 체크
-            if (usingSkill) // 스킬 사용중일때
-            { 
-                // 상태이상(기절) 시간을 체크하고 난 다음 
-                CCTime(stunTime);
+            if (usingSkill)
+            {                 
+                CCTime(stunTime); // 기절 시간 체크
 
                 if (unit.IsHit) // 공격을 받았을 때
                 {
                     // 상태이상인 경우 -> 유닛에서 확인가능
                     if (abnormalState)
                     {
-                        // 대기 상태 - 진행중인 모든 상태 해제
-                        unit.Idle();
-                        // 스킬 사용 불가
-                        availableSkill = false;
+                        AbnormalState();
                     }
-                    else // 상태이상이 아닌 경우
+                    // 행동 제어 상태이상에 걸렸을 경우
+                    if (specialAbnormalState)
                     {
-                        // 스킬 사용 가능
-                        availableSkill = true;
+                        // 플레이어 대기 상태 - 진행중인 모든 상태 해제                        
+                        SpecialAbnormalState();
                     }
-
                 }
                 
             }
         }
-        /*else
-        {
-            usingSkill = false;
-        }*/
     }
 
-    // 스킬 사용 시 마나 차감
-    // 현재 유닛의 마나 - 사용되는 마나량
     public void CalculateMP(float mp, float useMp)
     {
+            Debug.Log("UNIT MP : "+unit.mp);
         mp -= useMp;
+        Debug.Log("UNIT MP : " + unit.mp);
         if (mp <= minMp)
         {
-            Debug.Log("스킬사용불가");
+            Debug.Log("마나 부족");
             availableSkill = false;
         }
         else
         {
-            Debug.Log("스킬사용가능");
+            Debug.Log("마나 충분");
             availableSkill = true;
         }
     }
@@ -151,20 +146,32 @@ public class Skill : MonoBehaviour
     #region exception handling
 
 
-    // 쿨타임 및 스킬 제어상태 시간이 아직 돌고있으면 스킬 사용 불가능
+    // 쿨타임 및 스킬 적용 시간이 아직 돌고있으면 스킬 사용 불가능
     // coolTime, stunTime
     public void CCTime(float time)
     {
         if (time <= 0)
         {
-            availableSkill = true; // 스킬 사용 가능
+            availableSkill = true;
         }
         else
         {
-            // 만약 상태이상에 걸렸어도 제어스킬이 아닌 경우 
-
             availableSkill = false;
         }
+    }
+
+    public void AbnormalState() 
+    {
+        // 스킬 사용 불가, 일반 공격 가능
+        Debug.Log("상태 이상 효과 적용");
+        availableSkill = false;
+    }
+    public void SpecialAbnormalState() 
+    {
+        // 스킬 사용 불가, 모든 행동 제어
+        Debug.Log("행동 제어 & 상태 이상 효과 적용");
+        unit.Idle();
+        availableSkill = false;
     }
     
     #endregion
