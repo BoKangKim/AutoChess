@@ -4,13 +4,15 @@ namespace UnitClass
     public class Unit : MonoBehaviour
     {
         [SerializeField] private ScriptableUnit UnitData = null;
-        [SerializeField] private ScriptableClass ClassData = null;
-        [SerializeField] private ScriptableSpecies SpeciesData = null;
+        //[SerializeField] private ScriptableClass ClassData = null;
+        //[SerializeField] private ScriptableSpecies SpeciesData = null;
+        [SerializeField] private ScriptableUnitType type01 = null;
+        [SerializeField] private ScriptableUnitType type02 = null;
         [SerializeField] private GameObject Equipment01 = null;
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
 
-        [SerializeField] private string unitName;
+        [SerializeField] private string unitName; // test¡ﬂ
         private float grade;
         private float maxHp;
         private float curHp;
@@ -37,10 +39,15 @@ namespace UnitClass
         public string GetSpeciesName { get { return speciesName; } }
         public string GetClassName { get { return className; } }
 
+        public ScriptableUnitType GetUnitType01 { get { return type01; } }
+        public ScriptableUnitType GetUnitType02 { get { return type02; } }
+
+        //public ScriptableUnit GetUnitData { get { return UnitData; } }
+
         private void Awake()
         {
-            speciesName = SpeciesData.GetSpecies;
-            className = ClassData.GetSynergeClass;
+            //speciesName = SpeciesData.GetSpecies;
+            //className = ClassData.GetSynergeClass;
 
             unitName = speciesName + className;
             grade = UnitData.GetGrade;

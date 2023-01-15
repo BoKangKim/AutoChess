@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace ZoneSystem
@@ -18,6 +19,9 @@ namespace ZoneSystem
         private string[,] Class = null;
         private string[,] species = null;
 
+        public Dictionary<ScriptableUnitType, int> unitTypeCount; //스크립터블 딕셔너리로 
+        
+
         public int battleUnitCount = 0;
         [SerializeField]
         GameObject UnitPrefab;
@@ -37,16 +41,55 @@ namespace ZoneSystem
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (battleObject[z, x] != null)
+                    if (battleObject[z, x] != null) //근데 무기일경우에는 null이 뜰거임
                     {
-                        ++battleUnitCount;
+                        ++battleUnitCount; //이거 왜케 증가량이 많은거같지?
                         Debug.Log($"{z},{x}");
 
                         //이 시점에 시너지 계산 싸고 뒤처리중
-                        Class[z, x] = battleObject[z, x].GetComponent<UnitClass.Unit>().GetClassName;
-                        species[z, x] = battleObject[z, x].GetComponent<UnitClass.Unit>().GetSpeciesName;
+                        //Class[z, x] = battleObject[z, x].GetComponent<UnitClass.Unit>().GetClassName;
+                        //species[z, x] = battleObject[z, x].GetComponent<UnitClass.Unit>().GetSpeciesName; //클래스와 시너지 전부 받아왔음 
 
-                        //계산된 시너지를 유닛에 getcomponent로 전달해주기
+                        //시너지 계산
+                        unitTypeCount = new Dictionary<ScriptableUnitType, int>();
+
+                        UnitClass.Unit Test = battleObject[z, x].GetComponent<UnitClass.Unit>();
+
+                        if (unitTypeCount.ContainsKey(Test.GetUnitType01))
+                        {
+                            int unitCount = 0;
+                            unitTypeCount.TryGetValue(Test.GetUnitType01, out unitCount);
+
+                            unitCount++;
+
+                            unitTypeCount[Test.GetUnitType01] = unitCount;
+                            Debug.Log(Test.GetUnitType01 + "추가성공");
+
+                        }
+                        else
+                        {
+                            unitTypeCount.Add(Test.GetUnitType01, 1);
+                            Debug.Log(Test.GetUnitType01 + "가 이미 존재");
+                        }
+
+                        if(unitTypeCount.ContainsKey(Test.GetUnitType02))
+                        {
+                            int unitCount = 0;
+                            unitTypeCount.TryGetValue(Test.GetUnitType02, out unitCount);
+
+                            unitCount++;
+
+                            unitTypeCount[Test.GetUnitType02] = unitCount;
+                            Debug.Log(Test.GetUnitType02 + "추가성공");
+                        }
+                        else
+                        {
+                            unitTypeCount.Add(Test.GetUnitType02, 1);
+                            Debug.Log(Test.GetUnitType02 + "가 이미 존재");
+                        }
+
+                        
+                        //이제 타입 검사해서 받아가지고 적용시키는 정적 클래스 짜야함
 
                     }
                 }
