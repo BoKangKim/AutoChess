@@ -14,7 +14,7 @@ namespace BehaviorTree
 
         public override bool Run()
         {
-            bool result = Condition();
+            bool result = !Condition();
             if (result == true)
             {
                 action();

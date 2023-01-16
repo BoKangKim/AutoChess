@@ -18,6 +18,7 @@ namespace Battle.AI
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
+        private ParentBT[] allUnits = null;
 
         protected string myType = null;
         [SerializeField] private string nickName = "";
@@ -30,9 +31,27 @@ namespace Battle.AI
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
 
+        private float currentHP = 100f;
+        protected bool ishit = false;
+
+        public void setIsHit(bool ishit)
+        {
+            this.ishit = ishit;
+        }
+
+        public string getMyNickName()
+        {
+            return nickName;
+        }
+
         public LocationXY getMyLocation()
         {
             return myLocation;
+        }
+
+        public LocationXY getNextLocation()
+        {
+            return next;
         }
 
         private void Awake()
@@ -40,7 +59,7 @@ namespace Battle.AI
             InitializingRootNode();
             initializingSpecialRootNode();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            rta = new RTAstar(myLocation);
+            rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
         }
 
@@ -51,44 +70,44 @@ namespace Battle.AI
             // Object 받을 예정
             // 일단 내가 찾고 나중에 원혁이형이 완성되면
             // 수정
-            findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
+            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
-            next = (LocationXY)rta.searchNextLocation(myLocation, target.myLocation);
+            next = rta.searchNextLocation(myLocation, target.myLocation);
             nextPos = LocationControl.convertLocationToPosition(next);
             dir = (nextPos - transform.position).normalized;
         }
 
         private void Update()
         {
-            root.Run();
-
-            if(LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
-            {
-                myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            }
-
-            if (specialRoot == null)
+            if(specialRoot != null 
+                && specialRoot.Run() == true)
             {
                 return;
             }
 
-            specialRoot.Run();
+            root.Run();
+            myLocation = LocationControl.convertPositionToLocation(transform.position);
         }
 
         private void InitializingRootNode()
         {
             root = Selector
                 (
-                    IfAction(isDeath, death),
-
+                    //IfAction(isDeath, death),
+                    //IfAction(isHit,hit),
                     Sequence
                     (
                         ActionN(idle),
                         NotIf(findEnemy)
                     ),
 
-                    IfElseAction(isArangeIn, attack, move)
+                    //IfAction(isCenter,attack),
+                    Sequence
+                    (
+                        IfElseAction(isArangeIn, moveCenter, move),
+                        IfAction(isCenter,attack)
+                    )
                 );
         }
 
@@ -98,6 +117,8 @@ namespace Battle.AI
         #region Searching Enemy
         protected void findEnemyFuncOnStart(ParentBT[] fieldAIObejects)
         {
+            rta.initAllUnits(fieldAIObejects);
+
             switch (myType)
             {
                 case "Unit":
@@ -154,15 +175,39 @@ namespace Battle.AI
         protected virtual void searchingTarget()
         {
             float minDistance = 100000f;
+            float temp = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (Vector3.Distance(enemies[i].transform.position, gameObject.transform.position) < minDistance)
+                if ((temp = LocationControl.getDistance(enemies[i].getMyLocation(),myLocation)) < minDistance)
                 {
+                    minDistance = temp;
                     target = enemies[i];
                 }
             }
 
+        }
+
+        private bool checkIsOverlapUnits()
+        {
+            LocationXY unitLocation;
+            for (int i = 0; i < allUnits.Length; i++)
+            {
+                if (allUnits[i].Equals(this))
+                    continue;
+                unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
+                if (unitLocation.CompareTo(myLocation) == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Damage(float damage)
+        {
+            currentHP -= damage;
         }
         #endregion
 
@@ -196,16 +241,52 @@ namespace Battle.AI
             }
         }
 
+        protected virtual Action moveCenter
+        {
+            get
+            {
+                return () =>
+                {
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                        return;
+
+                    dir = (centerPosition - transform.position).normalized;
+
+                    transform.LookAt(dir);
+                    gameObject.transform.Translate(dir * 1f * Time.deltaTime, Space.World);
+                };
+            }
+        }
+
+        protected virtual Func<bool> isCenter
+        {
+            get
+            {
+                return () =>
+                {
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                };
+            }
+        }
+
         protected virtual Action move
         {                                                                                                                         
             get
             {
                 return () =>
                 {
-                    
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
-                        myLocation = LocationControl.convertPositionToLocation(transform.position);
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
@@ -223,14 +304,20 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
+                    LocationXY enemyLocation;
+                    
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        return true;
+                        enemyLocation = LocationControl.convertPositionToLocation(enemies[i].gameObject.transform.position);
+                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.7f
+                        && checkIsOverlapUnits() == false)
+                        {
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 };
             }
         }
@@ -252,6 +339,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    target.setIsHit(true);
+                    // 데이터 받아와서 넣으면 됨(데미지)
+                    target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
@@ -263,7 +353,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    return false;
+                    return currentHP <= 0;
                 };
             }
         }
@@ -274,11 +364,34 @@ namespace Battle.AI
             {
                 return () =>
                 {
-
+                    myAni.SetTrigger("isDeath");
                 };
             }
         }
 
+        protected virtual Action hit 
+        {
+            get 
+            {
+                return () =>
+                {
+                    myAni.SetTrigger("hit");
+                };
+            }
+        }
+
+        protected virtual Func<bool> isHit 
+        {
+            get 
+            {
+                return () =>
+                {
+                    bool temp = ishit;
+                    ishit = false;
+                    return temp;
+                };
+            }
+        }
 
         #endregion
     }
