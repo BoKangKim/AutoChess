@@ -22,7 +22,7 @@ namespace ZoneSystem
         public Dictionary<ScriptableUnitType, int> unitTypeCount; //스크립터블 딕셔너리로 
         
 
-        public int battleUnitCount = 0;
+        public int battleUnitCount;
         [SerializeField]
         GameObject UnitPrefab;
 
@@ -63,13 +63,13 @@ namespace ZoneSystem
                             unitCount++;
 
                             unitTypeCount[Test.GetUnitType01] = unitCount;
-                            Debug.Log(Test.GetUnitType01 + "추가성공");
+                            Debug.Log(Test.GetUnitType01 + "이미 등록되어있습니다");
 
                         }
                         else
                         {
                             unitTypeCount.Add(Test.GetUnitType01, 1);
-                            Debug.Log(Test.GetUnitType01 + "가 이미 존재");
+                            Debug.Log(Test.GetUnitType01 + "추가성공");
                         }
 
                         if(unitTypeCount.ContainsKey(Test.GetUnitType02))
@@ -80,12 +80,12 @@ namespace ZoneSystem
                             unitCount++;
 
                             unitTypeCount[Test.GetUnitType02] = unitCount;
-                            Debug.Log(Test.GetUnitType02 + "추가성공");
+                            Debug.Log(Test.GetUnitType02 + "등록되어있습니다");
                         }
                         else
                         {
                             unitTypeCount.Add(Test.GetUnitType02, 1);
-                            Debug.Log(Test.GetUnitType02 + "가 이미 존재");
+                            Debug.Log(Test.GetUnitType02 + "추가성공");
                         }
 
                         
