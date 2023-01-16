@@ -12,8 +12,10 @@ namespace UnitClass
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
 
-        [SerializeField] private string unitName; // testÁß
+        [SerializeField] private string unitName; // testï¿½ï¿½
         private float grade;
+        private string unitName = "aa";
+        public float grade;
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -25,14 +27,14 @@ namespace UnitClass
         private float attackSpeed;
         private float spellPower;
         private float magicDamage;
-        private float magicCastingTime; //½ºÅ³À» Ä³½ºÆÃ ÇÏ´Â ½Ã°£
-        private float crowdControlTime; //CC(±ºÁßÁ¦¾î = »óÅÂÀÌ»ó)½Ã°£
-        private float tenacity; //°­ÀÎÇÔ -> ·Ñ¿¡¼­ CC±â¸¦ ÁÙ¿©ÁÖ´Â ºñÀ² 100%
-        private float attackTarget; //°ø°Ý°¡´ÉÇÑ Å¸°Ù ¼ö
-        private float barrier; //Ã¼·Â´ë½Å µ¥¹ÌÁö¸¦ ÀÔÀ» º¸È£¸·
-        private float stunTime; //±âÀý ½Ã°£(CC±â)
-        private float blindnessTime; //½Ç¸í ½Ã°£(CC±â)
-        private float weakness; //Çã¾à ½Ã°£(CC±â)
+        private float magicCastingTime; //ï¿½ï¿½Å³ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´ï¿½ ï¿½Ã°ï¿½
+        private float crowdControlTime; //CC(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½ï¿½Ì»ï¿½)ï¿½Ã°ï¿½
+        private float tenacity; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ -> ï¿½Ñ¿ï¿½ï¿½ï¿½ CCï¿½â¸¦ ï¿½Ù¿ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ 100%
+        private float attackTarget; //ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½
+        private float barrier; //Ã¼ï¿½Â´ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½ï¿½
+        private float stunTime; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½(CCï¿½ï¿½)
+        private float blindnessTime; //ï¿½Ç¸ï¿½ ï¿½Ã°ï¿½(CCï¿½ï¿½)
+        private float weakness; //ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½(CCï¿½ï¿½)
         private string speciesName;
         private string className;
 
@@ -43,6 +45,12 @@ namespace UnitClass
         public ScriptableUnitType GetUnitType02 { get { return type02; } }
 
         //public ScriptableUnit GetUnitData { get { return UnitData; } }
+        private string speciesName;
+        private string className;
+        
+
+        public string GetSpeciesName { get { return speciesName; } }
+        public string GetClassName { get { return className; } }
 
         private void Awake()
         {
@@ -50,6 +58,10 @@ namespace UnitClass
             //className = ClassData.GetSynergeClass;
 
             unitName = speciesName + className;
+            grade = UnitData.GetGrade;
+            speciesName = SpeciesData.GetSpecies;
+            className = ClassData.GetSynergeClass;
+            unitName += grade.ToString() + "" + "";
             grade = UnitData.GetGrade;
             //maxHp = UnitData.GetMaxHp;
             curHp = UnitData.GetMaxHp;
@@ -69,16 +81,19 @@ namespace UnitClass
             //stunTime = 0;
             //blindnessTime = 0;
             //weakness = 0;
-
-            //0¼±¾ðÀº ¿ÖÇß³Ä ±×³É ³ÀµÎ¸é ¿ø·¡ 0ÀÎµð ¤»¤»
+            //0ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ß³ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ 0ï¿½Îµï¿½ ï¿½ï¿½ï¿½ï¿½
             //this.transform.name = grade.ToString() + "_" + speciesName + "_" + className;
         }
 
-        public void test(string species) //½Ã³ÊÁö Àü´Þ¹ÞÀ» ¿¹Á¤ Àü´Þ¹ÞÀº ½Ã³ÊÁö¿¡ ¸Â°Ô Ã¼·ÂÀ» º¯°æ
+        public void test(string species) //ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        {
+
+        }
+
+        public void test(string species, string Job) //ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Þ¹ï¿½ï¿½ï¿½ ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Â°ï¿½ Ã¼ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
 
         }
 
     }
 }
-

@@ -51,10 +51,10 @@ namespace Photon.Realtime
     /// more regions get pinged.
     /// Not all regions will be pinged. As soon as the results are final, the client will connect to the best region,
     /// so you can check the ping results when connected to the Master Server.
-    /// 
+    ///
     /// Regions gets pinged 5 times (RegionPinger.Attempts).
     /// Out of those, the worst rtt is discarded and the best will be counted two times for a weighted average.
-    /// 
+    ///
     /// Usually UDP will be used to ping the Master Servers. In WebGL, WSS is used instead.
     ///
     /// It makes sense to make clients "sticky" to a region when one gets selected.
@@ -179,13 +179,14 @@ namespace Photon.Realtime
             this.availableRegionCodes = string.Join(",", regions);
         }
 
-        private List<RegionPinger> pingerList = new List<RegionPinger>();
+        private readonly List<RegionPinger> pingerList = new List<RegionPinger>();
         private Action<RegionHandler> onCompleteCall;
         private int previousPing;
         public bool IsPinging { get; private set; }
         private string previousSummaryProvided;
 
         protected internal static ushort PortToPingOverride;
+        public bool Aborted { get; private set; }
 
 
         public RegionHandler(ushort masterServerPortOverride = 0)
@@ -210,6 +211,7 @@ namespace Photon.Realtime
                 return false;
             }
 
+            this.Aborted = false;
             this.IsPinging = true;
             this.onCompleteCall = onCompleteCallback;
             this.previousSummaryProvided = previousSummary;
@@ -267,6 +269,25 @@ namespace Photon.Realtime
 
             singlePinger.Start();
             return true;
+        }
+
+        /// <summary>Calling this will stop pinging the regions and suppress the onComplete callback.</summary>
+        public void Abort()
+        {
+            if (this.Aborted)
+            {
+                return;
+            }
+
+            this.Aborted = true;
+            lock (this.pingerList)
+            {
+                foreach (RegionPinger pinger in this.pingerList)
+                {
+                    pinger.Abort();
+                }
+            }
+
         }
 
         private void OnPreferredRegionPinged(Region preferredRegion)
@@ -331,7 +352,10 @@ namespace Photon.Realtime
                 this.IsPinging = false;
             }
 
-            this.onCompleteCall(this);
+            if (!this.Aborted)
+            {
+                this.onCompleteCall(this);
+            }
             #if PING_VIA_COROUTINE
             MonoBehaviourEmpty.SelfDestroy();
             #endif
@@ -354,6 +378,8 @@ namespace Photon.Realtime
         private PhotonPing ping;
 
         private List<int> rttResults;
+
+        public bool Aborted { get; internal set; }
 
         public RegionPinger(Region region, Action<Region> onDoneCallback)
         {
@@ -412,7 +438,7 @@ namespace Photon.Realtime
         /// Pinging runs in a ThreadPool worker item or (if needed) in a Thread.
         /// WebGL runs pinging on the Main Thread as coroutine.
         /// </remarks>
-        /// <returns>Always true.</returns>
+        /// <returns>True unless Aborted.</returns>
         public bool Start()
         {
             // all addresses for Photon region servers will contain a :port ending. this needs to be removed first.
@@ -433,6 +459,10 @@ namespace Photon.Realtime
             this.CurrentAttempt = 0;
             this.rttResults = new List<int>(Attempts);
 
+            if (this.Aborted)
+            {
+                return false;
+            }
 
             #if PING_VIA_COROUTINE
             MonoBehaviourEmpty.Instance.StartCoroutine(this.RegionPingCoroutine());
@@ -457,7 +487,16 @@ namespace Photon.Realtime
 
             return true;
         }
-        
+
+        protected internal void Abort()
+        {
+            this.Aborted = true;
+            if (this.ping != null)
+            {
+                this.ping.Dispose();
+            }
+        }
+
 
         protected internal bool RegionPingThreaded()
         {
@@ -470,6 +509,11 @@ namespace Photon.Realtime
             Stopwatch sw = new Stopwatch();
             for (this.CurrentAttempt = 0; this.CurrentAttempt < Attempts; this.CurrentAttempt++)
             {
+                if (this.Aborted)
+                {
+                    break;
+                }
+
                 bool overtime = false;
                 sw.Reset();
                 sw.Start();
@@ -526,7 +570,7 @@ namespace Photon.Realtime
             int worstRtt = this.rttResults.Max();
             int weighedRttSum = rttSum - worstRtt + bestRtt;
             this.region.Ping = (int)(weighedRttSum / replyCount);   // now, we can create a weighted ping value
-    
+
             this.onDoneCall(this.region);
             return false;
         }
@@ -548,6 +592,11 @@ namespace Photon.Realtime
             Stopwatch sw = new Stopwatch();
             for (this.CurrentAttempt = 0; this.CurrentAttempt < Attempts; this.CurrentAttempt++)
             {
+                if (this.Aborted)
+                {
+                    yield return null;
+                }
+
                 bool overtime = false;
                 sw.Reset();
                 sw.Start();

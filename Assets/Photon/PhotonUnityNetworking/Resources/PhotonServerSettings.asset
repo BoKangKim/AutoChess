@@ -15,20 +15,20 @@ MonoBehaviour:
   AppSettings:
     AppIdRealtime: 7b0a57b8-170e-447e-b94c-16f9f98dc723
     AppIdFusion: 
-    AppIdChat: 
+    AppIdChat: a51bb116-d3a9-4e75-bd20-1e94de017865
     AppIdVoice: 
     AppVersion: 
-    UseNameServer: 0
+    UseNameServer: 1
     FixedRegion: 
-    Server: 43.201.54.138
-    Port: 5055
+    Server: 
+    Port: 0
     ProxyServer: 
     Protocol: 0
     EnableProtocolFallback: 0
     AuthMode: 0
     EnableLobbyStatistics: 0
     NetworkLogging: 1
-  DevRegion: 
+  DevRegion: kr
   PunLogging: 0
   EnableSupportLogger: 0
   RunInBackground: 1
@@ -41,4 +41,4 @@ MonoBehaviour:
   - RespawnSpaceship
   DisableAutoOpenWizard: 1
   ShowSettings: 1
-  DevRegionSetOnce: 0
+  DevRegionSetOnce: 1
