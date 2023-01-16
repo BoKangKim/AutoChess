@@ -3,7 +3,12 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Monster
+  - Target
+  - Wepon
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -33,10 +38,10 @@ TagManager:
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
+  - SellButton
+  - BattleSpace
+  - SafetySpace
+  - Unit
   m_SortingLayers:
   - name: Default
     uniqueID: 0

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 639aac516ce9a2344bcbaf8acbe08e17, type: 3}
+  m_Name: Nature
+  m_EditorClassIdentifier: 
+  displayName: Nature
+  icon: {fileID: 21300000, guid: 2935f6269b94d0b4c8e6d4ea02b9682f, type: 3}
+  championBonus:
+    championCount: 4
+    championBonusType: 3
+    bonusTarget: 0
+    bonusValue: 2
+    duration: 1
+    effectPrefab: {fileID: 8205487118361164332, guid: 50be24449be05a14a83ac83bd78be2da,
+      type: 3}
