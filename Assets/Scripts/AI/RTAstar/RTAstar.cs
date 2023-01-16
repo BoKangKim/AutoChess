@@ -16,6 +16,8 @@ namespace Battle.RTASTAR
 
         private string myNickName = "";
 
+        public bool isStop = false;
+
         public RTAstar(LocationXY startLocation, string myNickName)
         {
             this.startLocation = startLocation;
@@ -61,6 +63,8 @@ namespace Battle.RTASTAR
         {
             List<LocationXY> nearLocation = new List<LocationXY>();
             nearLocation.Clear();
+            isStop = false;
+
             if(closeList.Count == 0)
             {
                 closeList.Add(unitLocation);
@@ -93,7 +97,6 @@ namespace Battle.RTASTAR
                     continue;
                 }
 
-                //weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
                 weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(target));
                 weight[nearLocation[i].y, nearLocation[i].x] += (Mathf.Abs(target.x - unitLocation.x) + Mathf.Abs(target.y - unitLocation.y));
 
@@ -104,7 +107,15 @@ namespace Battle.RTASTAR
                 }
             }
 
-            if (closeList.Contains(nearLocation[index]) == false)
+            if(index == -1)
+            {
+                closeList.Clear();
+                isStop = true;
+                return unitLocation;
+            }
+
+            if (nearLocation.Count != 0 &&
+                closeList.Contains(nearLocation[index]) == false)
             {
                 closeList.Add(nearLocation[index]);
             }

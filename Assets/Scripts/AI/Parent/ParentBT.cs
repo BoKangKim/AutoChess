@@ -94,19 +94,24 @@ namespace Battle.AI
         {
             root = Selector
                 (
-                    //IfAction(isDeath, death),
-                    //IfAction(isHit,hit),
+                    Sequence
+                    (
+                        IfAction(isHit,hit),
+                        IfAction(isDeath, death)
+                    ),
+
                     Sequence
                     (
                         ActionN(idle),
                         NotIf(findEnemy)
                     ),
 
-                    //IfAction(isCenter,attack),
+                    IfAction(isStop,idle),
+
                     Sequence
                     (
                         IfElseAction(isArangeIn, moveCenter, move),
-                        IfAction(isCenter,attack)
+                        IfElseAction(isCenter,attack,moveCenter)
                     )
                 );
         }
@@ -179,7 +184,8 @@ namespace Battle.AI
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((temp = LocationControl.getDistance(enemies[i].getMyLocation(),myLocation)) < minDistance)
+                LocationXY enemyLocation = enemies[i].getMyLocation();
+                if ((temp = LocationControl.getDistance(enemyLocation,myLocation)) < minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
@@ -248,7 +254,7 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.1f)
                         return;
 
                     dir = (centerPosition - transform.position).normalized;
@@ -305,14 +311,12 @@ namespace Battle.AI
                 return () =>
                 {
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
-                    LocationXY enemyLocation;
-                    
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        enemyLocation = LocationControl.convertPositionToLocation(enemies[i].gameObject.transform.position);
-                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.7f
+                        if ((double)Vector3.Distance(enemies[i].transform.position, transform.position) <= LocationControl.radius
                         && checkIsOverlapUnits() == false)
                         {
+                            next = myLocation;
                             return true;
                         }
                     }
@@ -375,7 +379,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myAni.SetTrigger("hit");
+                    //myAni.SetTrigger("hit");
                 };
             }
         }
@@ -389,6 +393,17 @@ namespace Battle.AI
                     bool temp = ishit;
                     ishit = false;
                     return temp;
+                };
+            }
+        }
+
+        protected virtual Func<bool> isStop 
+        {
+            get
+            {
+                return () =>
+                {
+                    return rta.isStop;
                 };
             }
         }
