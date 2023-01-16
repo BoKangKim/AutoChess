@@ -359,14 +359,9 @@ namespace Battle.AI
                 return () =>
                 {
                     Debug.Log("�´´�");
-                    Debug.Log(hp);
-                    myAni.SetTrigger("isHit");
-                    // hp -= wepon.damage;
                     
-                    if (hp <= 0)
-                    {
-                        hp = 0;
-                    }
+                    myAni.SetTrigger("isHit");
+                    
                 };
             }
         }
