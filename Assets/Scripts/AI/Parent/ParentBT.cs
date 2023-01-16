@@ -31,6 +31,14 @@ namespace Battle.AI
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
 
+        private float currentHP = 100f;
+        protected bool ishit = false;
+
+        public void setIsHit(bool ishit)
+        {
+            this.ishit = ishit;
+        }
+
         public string getMyNickName()
         {
             return nickName;
@@ -86,8 +94,8 @@ namespace Battle.AI
         {
             root = Selector
                 (
-                    IfAction(isDeath, death),
-
+                    //IfAction(isDeath, death),
+                    //IfAction(isHit,hit),
                     Sequence
                     (
                         ActionN(idle),
@@ -195,6 +203,11 @@ namespace Battle.AI
             }
 
             return false;
+        }
+
+        public void Damage(float damage)
+        {
+            currentHP -= damage;
         }
         #endregion
 
@@ -326,6 +339,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    target.setIsHit(true);
+                    // 데이터 받아와서 넣으면 됨(데미지)
+                    target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
@@ -337,7 +353,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    return false;
+                    return currentHP <= 0;
                 };
             }
         }
@@ -348,7 +364,31 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    myAni.SetTrigger("isDeath");
+                };
+            }
+        }
 
+        protected virtual Action hit 
+        {
+            get 
+            {
+                return () =>
+                {
+                    myAni.SetTrigger("hit");
+                };
+            }
+        }
+
+        protected virtual Func<bool> isHit 
+        {
+            get 
+            {
+                return () =>
+                {
+                    bool temp = ishit;
+                    ishit = false;
+                    return temp;
                 };
             }
         }
