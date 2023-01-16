@@ -18,6 +18,7 @@ namespace Battle.AI
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
+        private ParentBT[] allUnits = null;
 
         protected string myType = null;
         [SerializeField] private string nickName = "";
@@ -29,20 +30,28 @@ namespace Battle.AI
 
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
-        // Ã¼·Â
-        private float hp = 100;
 
-        // ¹«±â
-        // public Wepon wepon;
+        private float currentHP = 100f;
+        protected bool ishit = false;
 
-        // µå·Ó ¾ÆÀÌÅÛ
-        public GameObject Item;
-        // È®·ü
-        private int per;
+        public void setIsHit(bool ishit)
+        {
+            this.ishit = ishit;
+        }
+
+        public string getMyNickName()
+        {
+            return nickName;
+        }
 
         public LocationXY getMyLocation()
         {
             return myLocation;
+        }
+
+        public LocationXY getNextLocation()
+        {
+            return next;
         }
 
         private void Awake()
@@ -50,7 +59,7 @@ namespace Battle.AI
             InitializingRootNode();
             initializingSpecialRootNode();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            rta = new RTAstar(myLocation);
+            rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
         }
 
@@ -58,47 +67,47 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            // Object ¹ÞÀ» ¿¹Á¤
-            // ÀÏ´Ü ³»°¡ Ã£°í ³ªÁß¿¡ ¿øÇõÀÌÇüÀÌ ¿Ï¼ºµÇ¸é
-            // ¼öÁ¤
-            findEnemyFuncOnStart(FindObjectsOfType<ParentBT>());
+            // Object ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¼ï¿½ï¿½Ç¸ï¿½
+            // ï¿½ï¿½ï¿½ï¿½
+            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
-            next = (LocationXY)rta.searchNextLocation(myLocation, target.myLocation);
+            next = rta.searchNextLocation(myLocation, target.myLocation);
             nextPos = LocationControl.convertLocationToPosition(next);
             dir = (nextPos - transform.position).normalized;
         }
 
         private void Update()
         {
-            root.Run();
-
-            if(LocationControl.isEscapeLocation(myLocation, gameObject.transform.position))
-            {
-                myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-            }
-
-            if (specialRoot == null)
+            if(specialRoot != null 
+                && specialRoot.Run() == true)
             {
                 return;
             }
 
-            specialRoot.Run();
+            root.Run();
+            myLocation = LocationControl.convertPositionToLocation(transform.position);
         }
 
         private void InitializingRootNode()
         {
             root = Selector
                 (
-                    IfAction(isDeath, death),
-
+                    //IfAction(isDeath, death),
+                    //IfAction(isHit,hit),
                     Sequence
                     (
                         ActionN(idle),
                         NotIf(findEnemy)
                     ),
 
-                    IfElseAction(isArangeIn, attack, move)
+                    //IfAction(isCenter,attack),
+                    Sequence
+                    (
+                        IfElseAction(isArangeIn, moveCenter, move),
+                        IfAction(isCenter,attack)
+                    )
                 );
         }
 
@@ -108,6 +117,8 @@ namespace Battle.AI
         #region Searching Enemy
         protected void findEnemyFuncOnStart(ParentBT[] fieldAIObejects)
         {
+            rta.initAllUnits(fieldAIObejects);
+
             switch (myType)
             {
                 case "Unit":
@@ -164,15 +175,39 @@ namespace Battle.AI
         protected virtual void searchingTarget()
         {
             float minDistance = 100000f;
+            float temp = 0f;
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if (Vector3.Distance(enemies[i].transform.position, gameObject.transform.position) < minDistance)
+                if ((temp = LocationControl.getDistance(enemies[i].getMyLocation(),myLocation)) < minDistance)
                 {
+                    minDistance = temp;
                     target = enemies[i];
                 }
             }
 
+        }
+
+        private bool checkIsOverlapUnits()
+        {
+            LocationXY unitLocation;
+            for (int i = 0; i < allUnits.Length; i++)
+            {
+                if (allUnits[i].Equals(this))
+                    continue;
+                unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
+                if (unitLocation.CompareTo(myLocation) == true)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void Damage(float damage)
+        {
+            currentHP -= damage;
         }
         #endregion
 
@@ -183,7 +218,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("´ë±â");
+                    Debug.Log("ï¿½ï¿½ï¿½");
                     myAni.SetBool("isMove",false);
                 };
             }
@@ -195,17 +230,54 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("Å¸°Ù Ã£±â");
+                    Debug.Log("Å¸ï¿½ï¿½ Ã£ï¿½ï¿½");
                     searchingTarget();
                     if (target == null)
                     {
-                        Debug.Log("¸øÃ£¾Æ");
+                        Debug.Log("ï¿½ï¿½Ã£ï¿½ï¿½");
                         return false;
                     }
                     else
                     {
-                        Debug.Log("Ã£¾Æ");
+                        Debug.Log("Ã£ï¿½ï¿½");
                         return true;
+                    }
+                };
+            }
+        }
+
+        protected virtual Action moveCenter
+        {
+            get
+            {
+                return () =>
+                {
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                        return;
+
+                    dir = (centerPosition - transform.position).normalized;
+
+                    transform.LookAt(dir);
+                    gameObject.transform.Translate(dir * 1f * Time.deltaTime, Space.World);
+                };
+            }
+        }
+
+        protected virtual Func<bool> isCenter
+        {
+            get
+            {
+                return () =>
+                {
+                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
                     }
                 };
             }
@@ -217,10 +289,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myAni.SetBool("isMove", true);
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
-                        myLocation = LocationControl.convertPositionToLocation(transform.position);
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
@@ -238,16 +309,20 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("¹üÀ§ ³»¿¡ ÀÖÀ½");
-                    if (LocationControl.getDistance(target.getMyLocation(), myLocation) <= 1f)
+                    myLocation = LocationControl.convertPositionToLocation(transform.position);
+                    LocationXY enemyLocation;
+                    
+                    for (int i = 0; i < enemies.Count; i++)
                     {
-                        Debug.Log("°ø°Ý¹üÀ§ ³»¿¡ ÀÖÀ½");
-                        return true;
+                        enemyLocation = LocationControl.convertPositionToLocation(enemies[i].gameObject.transform.position);
+                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.7f
+                        && checkIsOverlapUnits() == false)
+                        {
+                            return true;
+                        }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 };
             }
         }
@@ -269,7 +344,9 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("°ø°Ý");
+                    target.setIsHit(true);
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+                    target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
@@ -281,7 +358,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("¸Â´Â´Ù");
+                    Debug.Log("ï¿½Â´Â´ï¿½");
                     Debug.Log(hp);
                     myAni.SetTrigger("isHit");
                     // hp -= wepon.damage;
@@ -299,7 +376,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    return false;
+                    return currentHP <= 0;
                 };
             }
         }
@@ -310,38 +387,32 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("Á×À½");
-                    
-                    myAni.SetBool("IsDeath", true);
-
-                    if (ItemCount == 0)
-                    {
-                        Debug.Log("µå·Ó");
-                        per = 0; // 100ÆÛ ¶³±À
-                        DropItem();
-                    }
+                    myAni.SetTrigger("isDeath");
                 };
             }
         }
 
-
-        int ItemCount = 0;
-        private void DropItem()
+        protected virtual Action hit 
         {
-            //per = UnityEngine.Random.Range(0, 2);   
-            switch (per)
+            get 
             {
-                case 0:
-                    Debug.Log("0");
-                    Item.SetActive(true);
-                    ItemCount = 1;
-                    break;
-                case 1:
-                    Debug.Log("1");
-                    Item.SetActive(false);
-                    ItemCount = 1;
-                    break;
+                return () =>
+                {
+                    myAni.SetTrigger("hit");
+                };
+            }
+        }
 
+        protected virtual Func<bool> isHit 
+        {
+            get 
+            {
+                return () =>
+                {
+                    bool temp = ishit;
+                    ishit = false;
+                    return temp;
+                };
             }
         }
 

@@ -1,0 +1,16 @@
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.exe.config
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.exe
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.pdb
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.SuggestedBindingRedirects.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.exe
+C:\Users\User\Desktop\WorkSpace\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.pdb
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.exe.config
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.exe
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\bin\Release\ExcelScriptable.pdb
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.AssemblyReference.cache
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.SuggestedBindingRedirects.cache
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.csproj.CoreCompileInputs.cache
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.exe
+D:\MiniGame\MiniGame\Tools\ExcelScriptable\ExcelScriptable\obj\Release\ExcelScriptable.pdb
