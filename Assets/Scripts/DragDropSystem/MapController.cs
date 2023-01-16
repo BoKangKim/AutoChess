@@ -67,6 +67,7 @@ namespace ZoneSystem
                     }
                 }
             }
+            debug.text = "세이프티존이 꽉차서 유닛을 소환할 수 없습니다.";
         }
 
         //������ ȹ��
@@ -86,6 +87,7 @@ namespace ZoneSystem
                     }
                 }
             }
+            debug.text = "세이프티존이 꽉차서 아이템을 습득할 수 없습니다.";
         }
 
 

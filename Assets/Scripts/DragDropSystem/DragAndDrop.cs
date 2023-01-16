@@ -10,13 +10,12 @@ namespace ZoneSystem
     public class DragAndDrop : MonoBehaviour
     {
         MapController mapController;
-        public GameObject selectedObject { get; private set; }
+        GameObject selectedObject;
         Camera cam;
         int ObjectLayer;
         int battleSpaceLayer;
         int safetySpaceLayer;
         int itemLayer;
-
 
         Vector3 beforePos;
         Vector3 beforelocalPos;
@@ -29,14 +28,11 @@ namespace ZoneSystem
         }
         private void Start()
         {
-
             cam = Camera.main;
             safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace");
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
-
-
         }
         private void Update()
         {
@@ -135,7 +131,7 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
-                    if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testscript>() != null)
+                    if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
                         Vector3 vec;
@@ -230,7 +226,7 @@ namespace ZoneSystem
 
         void sellUnit()
         {
-            if (buySellButton && selectedObject.GetComponent<testscript>() != null)
+            if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 storeButtonChange(Color.black, Color.white, true, "유닛 소환");
                 buySellButton = null;
@@ -241,7 +237,7 @@ namespace ZoneSystem
         void buttonChange()
         {
 
-            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<testscript>() != null)
+            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 buySellButton = UIManager.Inst.RaycastUI<Button>(1);
 
@@ -264,7 +260,6 @@ namespace ZoneSystem
             Vector3 worldPosition = cam.ScreenToWorldPoint(position);
 
             selectedObject.transform.position = new Vector3(worldPosition.x, 1f, worldPosition.z);
-
         }
 
 
@@ -401,36 +396,59 @@ namespace ZoneSystem
             return localVec;
         }
 
-        //유닛 아이템 머지
-        public bool Merge(GameObject selectedUnit, GameObject stayUnit)
+        //유닛 + 아이템 머지
+        public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
 
-            if (selectedObject == null || stayUnit == null) return false;
-
-            if (selectedObject.GetComponent<testscript>() != null && stayUnit.GetComponent<testscript>() != null)
+            if (selectedObject == null || stayObject == null) return false;
+            //유닛 머지
+            if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                if (selectedUnit.GetComponent<testscript>().unintnum == stayUnit.GetComponent<testscript>().unintnum)
+                UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
+                UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
+
+                if (stayUnit.grade > 2) return false;
+
+                if (selectedUnit.grade == stayUnit.grade)
                 {
                     Destroy(selectedUnit.gameObject);
-                    ++stayUnit.GetComponent<testscript>().unintnum;
+                    ++stayUnit.grade;
 
-                    stayUnit.GetComponent<MeshRenderer>().material.color = Color.red;
+                    stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
-            else if(selectedObject.GetComponent<testItem>() != null && stayUnit.GetComponent<testItem>() != null)
+            //장비 머지
+            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<testItem>() != null)
             {
-                if (selectedUnit.GetComponent<testItem>().itemNum == stayUnit.GetComponent<testItem>().itemNum)
-                {
-                    Destroy(selectedUnit.gameObject);
-                    ++stayUnit.GetComponent<testItem>().itemNum;
+                testItem selectedItem = selectedObject.GetComponent<testItem>();
+                testItem stayItem = stayObject.GetComponent<testItem>();
 
-                    stayUnit.GetComponent<MeshRenderer>().material.color = Color.red;
+                if (stayItem.itemNum > 2) return false;
+
+                if (selectedItem.itemNum == stayItem.itemNum)
+                {
+                    Destroy(selectedItem.gameObject);
+                    ++stayItem.itemNum;
+
+                    stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
+            }
+            //장비 장착
+            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
+            {
+                
+                    Destroy(selectedObject.gameObject);
+                    stayObject.gameObject.name = "Item_Equip";
+
+                    stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    return true;
+                
             }
             return false;
         }
-
     }
+
+    
 }

@@ -5027,8 +5027,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -184.69, y: 141.46}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: -6.1, y: 141.46}
+  m_SizeDelta: {x: 704.35, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1824227562
 MonoBehaviour:
@@ -5052,8 +5052,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a429f4e1a52bee34e9eb20fd3c9b465e, type: 2}
+  m_sharedMaterial: {fileID: -6519958832246023505, guid: a429f4e1a52bee34e9eb20fd3c9b465e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5391,7 +5391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   debug: {fileID: 1824227562}
   battleUnitCount: 0
-  UnitPrefab: {fileID: 6400343184192605420, guid: 434046cca75bc1d46b87b4d5ae232f05, type: 3}
+  UnitPrefab: {fileID: 7156501485292659843, guid: 91ed305375f37c044b2d9d1717b35a25, type: 3}
 --- !u!1001 &1945753790
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5487,7 +5487,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
       propertyPath: m_LocalPosition.z

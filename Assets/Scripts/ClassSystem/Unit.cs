@@ -10,7 +10,8 @@ namespace UnitClass
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
 
-        private float grade;
+        private string unitName = "aa";
+        public float grade;
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -30,10 +31,19 @@ namespace UnitClass
         private float stunTime; //기절 시간(CC기)
         private float blindnessTime; //실명 시간(CC기)
         private float weakness; //허약 시간(CC기)
+        private string speciesName;
+        private string className;
+        
+
+        public string GetSpeciesName { get { return speciesName; } }
+        public string GetClassName { get { return className; } }
 
         private void Awake()
         {
-            //grade = UnitData.GetGrade;
+            speciesName = SpeciesData.GetSpecies;
+            className = ClassData.GetSynergeClass;
+            unitName += grade.ToString() + "" + "";
+            grade = UnitData.GetGrade;
             //maxHp = UnitData.GetMaxHp;
             curHp = UnitData.GetMaxHp;
             //maxMp = UnitData.GetMaxMp;
@@ -52,10 +62,13 @@ namespace UnitClass
             //stunTime = 0;
             //blindnessTime = 0;
             //weakness = 0;
-
             //0선언은 왜했냐 그냥 냅두면 원래 0인디 ㅋㅋ
+        }
+
+        public void test(string species, string Job) //시너지 전달받을 예정 전달받은 시너지에 맞게 체력을 변경
+        {
+
         }
 
     }
 }
-
