@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 
 namespace Battle.Location
 {
@@ -27,9 +28,17 @@ namespace Battle.Location
 
     public static class LocationControl
     {
-        private const float radius = 0.65f;
         private const float tileDistanceX = 1.3f;
         private const float tileDistanceY = 1.1f;
+        public static double radius 
+        {
+            get 
+            {
+                return Math.Abs(((tileDistanceX / 2) / Math.Sin((Math.PI / 180) * 60)) * 2) ;
+                //return (2 * Math.Sqrt((4 / 3) * Math.Pow((tileDistanceX / 2), 2))) + 0.2f;
+            }
+        }
+
 
         public static LocationXY convertPositionToLocation(Vector3 unitPostion)
         {

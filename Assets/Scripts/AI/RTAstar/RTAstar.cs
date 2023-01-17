@@ -41,7 +41,6 @@ namespace Battle.RTASTAR
             {
                 LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 weight[unitLocation.y, unitLocation.x] += 5000;
-                //weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
             }
         }
 
@@ -62,7 +61,8 @@ namespace Battle.RTASTAR
         {
             List<LocationXY> nearLocation = new List<LocationXY>();
             nearLocation.Clear();
-            if(closeList.Count == 0)
+
+            if (closeList.Count == 0)
             {
                 closeList.Add(unitLocation);
             }
@@ -94,7 +94,6 @@ namespace Battle.RTASTAR
                     continue;
                 }
 
-                //weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(startLocation));
                 weight[nearLocation[i].y, nearLocation[i].x] += Vector3.Distance(LocationControl.convertLocationToPosition(nearLocation[i]), LocationControl.convertLocationToPosition(target));
                 weight[nearLocation[i].y, nearLocation[i].x] += (Mathf.Abs(target.x - unitLocation.x) + Mathf.Abs(target.y - unitLocation.y));
 
@@ -105,7 +104,14 @@ namespace Battle.RTASTAR
                 }
             }
 
-            if (closeList.Contains(nearLocation[index]) == false)
+            if (index == -1)
+            {
+                closeList.Clear();
+                return unitLocation;
+            }
+
+            if (nearLocation.Count != 0 &&
+                closeList.Contains(nearLocation[index]) == false)
             {
                 closeList.Add(nearLocation[index]);
             }
