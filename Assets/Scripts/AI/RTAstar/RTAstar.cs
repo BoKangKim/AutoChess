@@ -16,8 +16,6 @@ namespace Battle.RTASTAR
 
         private string myNickName = "";
 
-        public bool isStop = false;
-
         public RTAstar(LocationXY startLocation, string myNickName)
         {
             this.startLocation = startLocation;
@@ -42,7 +40,6 @@ namespace Battle.RTASTAR
             {
                 LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 weight[unitLocation.y, unitLocation.x] += 5000;
-                //weight[allUnits[i].getNextLocation().y, allUnits[i].getNextLocation().x] += 1000;
             }
         }
 
@@ -63,9 +60,8 @@ namespace Battle.RTASTAR
         {
             List<LocationXY> nearLocation = new List<LocationXY>();
             nearLocation.Clear();
-            isStop = false;
 
-            if(closeList.Count == 0)
+            if (closeList.Count == 0)
             {
                 closeList.Add(unitLocation);
             }
@@ -107,10 +103,9 @@ namespace Battle.RTASTAR
                 }
             }
 
-            if(index == -1)
+            if (index == -1)
             {
                 closeList.Clear();
-                isStop = true;
                 return unitLocation;
             }
 

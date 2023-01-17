@@ -34,6 +34,15 @@ namespace Battle.AI
         private float currentHP = 100f;
         protected bool ishit = false;
 
+        private ScriptableUnit unitData;
+
+        #region GET,SET
+
+        public ScriptableUnit getUnitData()
+        {
+            return unitData;
+        }
+
         public void setIsHit(bool ishit)
         {
             this.ishit = ishit;
@@ -53,6 +62,7 @@ namespace Battle.AI
         {
             return next;
         }
+        #endregion
 
         private void Awake()
         {
@@ -106,12 +116,10 @@ namespace Battle.AI
                         NotIf(findEnemy)
                     ),
 
-                    IfAction(isStop,idle),
-
                     Sequence
                     (
                         IfElseAction(isArangeIn, moveCenter, move),
-                        IfElseAction(isCenter,attack,moveCenter)
+                        IfAction(isCenter,attack)
                     )
                 );
         }
@@ -184,8 +192,7 @@ namespace Battle.AI
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                LocationXY enemyLocation = enemies[i].getMyLocation();
-                if ((temp = LocationControl.getDistance(enemyLocation,myLocation)) < minDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
@@ -254,13 +261,11 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.1f)
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                         return;
-
-                    dir = (centerPosition - transform.position).normalized;
-
-                    transform.LookAt(dir);
-                    gameObject.transform.Translate(dir * 1f * Time.deltaTime, Space.World);
+                    Vector3 cDir = (centerPosition - transform.position).normalized;
+                    transform.LookAt(cDir);
+                    gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
                 };
             }
         }
@@ -272,7 +277,7 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                     {
                         return true;
                     }
@@ -313,7 +318,7 @@ namespace Battle.AI
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        if ((double)Vector3.Distance(enemies[i].transform.position, transform.position) <= LocationControl.radius
+                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= LocationControl.radius
                         && checkIsOverlapUnits() == false)
                         {
                             next = myLocation;
@@ -321,17 +326,6 @@ namespace Battle.AI
                         }
                     }
 
-                    return false;
-                };
-            }
-        }
-
-        protected virtual Func<bool> isAttackAble
-        {
-            get
-            {
-                return () =>
-                {
                     return false;
                 };
             }
@@ -397,16 +391,7 @@ namespace Battle.AI
             }
         }
 
-        protected virtual Func<bool> isStop 
-        {
-            get
-            {
-                return () =>
-                {
-                    return rta.isStop;
-                };
-            }
-        }
+        
 
         #endregion
     }
