@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
-using ZoneSystem;
 using TMPro;
 namespace ZoneSystem
 {
@@ -399,7 +398,6 @@ namespace ZoneSystem
         //유닛 + 아이템 머지
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
-
             if (selectedObject == null || stayObject == null) return false;
             //유닛 머지
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)

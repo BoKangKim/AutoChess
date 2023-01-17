@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/KCS_Scene.unity
     guid: fdfb0ed517f4bda4eaa2e5c6df35cb4d
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/KSR/Scene/Balltest.unity
+    path: Assets/Scene_test/MonsterAI/Ball_test.unity
     guid: 6fd08a8340d715649af10bce46592029
   m_configObjects: {}
