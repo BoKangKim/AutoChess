@@ -77,9 +77,9 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            // Object ¹ÞÀ» ¿¹Á¤
-            // ÀÏ´Ü ³»°¡ Ã£°í ³ªÁß¿¡ ¿øÇõÀÌÇüÀÌ ¿Ï¼ºµÇ¸é
-            // ¼öÁ¤
+            // Object ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+            // ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï¼ï¿½ï¿½Ç¸ï¿½
+            // ï¿½ï¿½ï¿½ï¿½
             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
@@ -231,6 +231,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("ï¿½ï¿½ï¿½");
+                    myAni.SetBool("isMove",false);
                 };
             }
         }
@@ -241,13 +243,16 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log("Å¸ï¿½ï¿½ Ã£ï¿½ï¿½");
                     searchingTarget();
                     if (target == null)
                     {
+                        Debug.Log("ï¿½ï¿½Ã£ï¿½ï¿½");
                         return false;
                     }
                     else
                     {
+                        Debug.Log("Ã£ï¿½ï¿½");
                         return true;
                     }
                 };
@@ -338,13 +343,26 @@ namespace Battle.AI
                 return () =>
                 {
                     target.setIsHit(true);
-                    // µ¥ÀÌÅÍ ¹Þ¾Æ¿Í¼­ ³ÖÀ¸¸é µÊ(µ¥¹ÌÁö)
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ¾Æ¿Í¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
                     target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
         }
-
+        
+        protected virtual Action IsHit
+        {
+            get
+            {
+                return () =>
+                {
+                    Debug.Log("ï¿½Â´Â´ï¿½");
+                    
+                    myAni.SetTrigger("isHit");
+                    
+                };
+            }
+        }
         protected virtual Func<bool> isDeath
         {
             get

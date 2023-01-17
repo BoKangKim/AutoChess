@@ -4,16 +4,13 @@ namespace UnitClass
     public class Unit : MonoBehaviour
     {
         [SerializeField] private ScriptableUnit UnitData = null;
-        //[SerializeField] private ScriptableClass ClassData = null;
-        //[SerializeField] private ScriptableSpecies SpeciesData = null;
-        [SerializeField] private ScriptableUnitType type01 = null;
-        [SerializeField] private ScriptableUnitType type02 = null;
+        [SerializeField] private ScriptableClass ClassData = null;
+        [SerializeField] private ScriptableSpecies SpeciesData = null;
         [SerializeField] private GameObject Equipment01 = null;
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
-
-        [SerializeField] private string unitName; // testÁß
-        private float grade;
+        private string unitName;
+        public float grade;
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -25,27 +22,33 @@ namespace UnitClass
         private float attackSpeed;
         private float spellPower;
         private float magicDamage;
-        private float magicCastingTime; //½ºÅ³À» Ä³½ºÆÃ ÇÏ´Â ½Ã°£
-        private float crowdControlTime; //CC(±ºÁßÁ¦¾î = »óÅÂÀÌ»ó)½Ã°£
-        private float tenacity; //°­ÀÎÇÔ -> ·Ñ¿¡¼­ CC±â¸¦ ÁÙ¿©ÁÖ´Â ºñÀ² 100%
-        private float attackTarget; //°ø°İ°¡´ÉÇÑ Å¸°Ù ¼ö
-        private float barrier; //Ã¼·Â´ë½Å µ¥¹ÌÁö¸¦ ÀÔÀ» º¸È£¸·
-        private float stunTime; //±âÀı ½Ã°£(CC±â)
-        private float blindnessTime; //½Ç¸í ½Ã°£(CC±â)
-        private float weakness; //Çã¾à ½Ã°£(CC±â)
+        private float magicCastingTime; //ìŠ¤í‚¬ì„ ìºìŠ¤íŒ… í•˜ëŠ” ì‹œê°„
+        private float crowdControlTime; //CC(êµ°ì¤‘ì œì–´ = ìƒíƒœì´ìƒ)ì‹œê°„
+        private float tenacity; //ê°•ì¸í•¨ -> ë¡¤ì—ì„œ CCê¸°ë¥¼ ì¤„ì—¬ì£¼ëŠ” ë¹„ìœ¨ 100%
+        private float attackTarget; //ê³µê²©ê°€ëŠ¥í•œ íƒ€ê²Ÿ ìˆ˜
+        private float barrier; //ì²´ë ¥ëŒ€ì‹  ë°ë¯¸ì§€ë¥¼ ì…ì„ ë³´í˜¸ë§‰
+        private float stunTime; //ê¸°ì ˆ ì‹œê°„(CCê¸°)
+        private float blindnessTime; //ì‹¤ëª… ì‹œê°„(CCê¸°)
+        private float weakness; //í—ˆì•½ ì‹œê°„(CCê¸°)
         private string speciesName;
         private string className;
 
+        private string synergyName;
+
         public string GetSpeciesName { get { return speciesName; } }
         public string GetClassName { get { return className; } }
+        public ScriptableUnit GetUnitData { get { return UnitData; } }
 
-        public ScriptableUnitType GetUnitType01 { get { return type01; } }
-        public ScriptableUnitType GetUnitType02 { get { return type02; } }
-
-        //public ScriptableUnit GetUnitData { get { return UnitData; } }
+        public string GetSynergyName { get { return synergyName; } }
 
         private void Awake()
         {
+            synergyName = speciesName + " " + className;
+            Debug.Log(synergyName);
+            //ì—¬ê¸°ì„œ ì‹œë¦¬ì–¼ë¼ì´ì¦ˆí•„ë“œëœê±° ì´ˆê¸°í™” í•´ì¤˜ì•¼í•¨
+
+
+
             //speciesName = SpeciesData.GetSpecies;
             //className = ClassData.GetSynergeClass;
 
@@ -70,15 +73,13 @@ namespace UnitClass
             //blindnessTime = 0;
             //weakness = 0;
 
-            //0¼±¾ğÀº ¿ÖÇß³Ä ±×³É ³ÀµÎ¸é ¿ø·¡ 0ÀÎµğ ¤»¤»
+            //0ì„ ì–¸ì€ ì™œí–ˆëƒ ê·¸ëƒ¥ ëƒ…ë‘ë©´ ì›ë˜ 0ì¸ë”” ã…‹ã…‹
             //this.transform.name = grade.ToString() + "_" + speciesName + "_" + className;
         }
 
-        public void test(string species) //½Ã³ÊÁö Àü´Ş¹ŞÀ» ¿¹Á¤ Àü´Ş¹ŞÀº ½Ã³ÊÁö¿¡ ¸Â°Ô Ã¼·ÂÀ» º¯°æ
+        public float GetAttackSpeed()
         {
-
+            return attackSpeed * SpeciesData.GetAttackSpeedPercentage;
         }
-
     }
 }
-

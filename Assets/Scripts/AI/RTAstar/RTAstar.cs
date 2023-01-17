@@ -23,7 +23,7 @@ namespace Battle.RTASTAR
             this.myNickName = myNickName;
         }
 
-        private void initWeight()
+        private void initWeight() // ����ġ x, y ��ǥ���� ����
         {
             for(int i = 0; i < weight.GetLength(0); i++)
             {
@@ -34,6 +34,7 @@ namespace Battle.RTASTAR
             }
         }
 
+        // �� ��ũ��Ʈ�� �ް��ִ� �ֵ� �迭�� ���
         private void updateWeight()
         {
             for(int i = 0; i < allUnits.Length; i++)
