@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8730572716232530200}
   - component: {fileID: -5298676453645215583}
   m_Layer: 31
-  m_Name: Unit
+  m_Name: Unit_Scorpion Tanker(TEST)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: 6b964e8b02f346042828d1f7122cfed0, type: 2}
-  ClassData: {fileID: 11400000, guid: 68ca29bee11bf024ba4e3e057ef6a492, type: 2}
-  SpeciesData: {fileID: 11400000, guid: 5e330af4f2ed5d4449f8b4eb6ef4077c, type: 2}
+  ClassData: {fileID: 11400000, guid: bc4fd2e3ce85a7c46a7802e59ad1b744, type: 2}
+  SpeciesData: {fileID: 11400000, guid: 86fa45a4c8f16264682e3efb6f47eca4, type: 2}
   Equipment01: {fileID: 2039538674309082093, guid: 09d5880ce0967504f9b330388830d4a7, type: 3}
   Equipment02: {fileID: 0}
   Equipment03: {fileID: 0}

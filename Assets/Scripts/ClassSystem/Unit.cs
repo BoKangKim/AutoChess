@@ -1,6 +1,7 @@
 using UnityEngine;
 namespace UnitClass
 {
+
     public class Unit : MonoBehaviour
     {
         [SerializeField] private ScriptableUnit UnitData = null;
@@ -43,8 +44,7 @@ namespace UnitClass
 
         private void Awake()
         {
-            synergyName = speciesName + " " + className;
-            Debug.Log(synergyName);
+            synergyName = SpeciesData.GetSpecies + " " + ClassData.GetSynergeClass;
             //여기서 시리얼라이즈필드된거 초기화 해줘야함
 
 

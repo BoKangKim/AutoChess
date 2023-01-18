@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.4440221, g: 0.49316514, b: 0.5722316, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -709,63 +709,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2.2, y: 0, z: 2}
   m_Center: {x: 0, y: 0.28316528, z: 0.00000011920929}
---- !u!1001 &674799928
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3352002375562622980, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_Name
-      value: TestItem (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_RootOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.47
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 4.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,7 +1566,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 960851284}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: BattleZone1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2204,7 +2147,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1267216796}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: row (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2905,7 +2848,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1712261502}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: row
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3859,70 +3802,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b71808e93abb740a4291dcaa389741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  synergyList: []
+  orcSynergyCount: 0
+  dwarfSynergyCount: 0
+  scorpionSynergyCount: 0
+  mechaSynergyCount: 0
+  undeadSynergyCount: 0
+  warriorSynergyCount: 0
+  tankerSynergyCount: 0
+  magicianSynergyCount: 0
+  assassinSynergyCount: 0
+  rangeDealerSynergyCount: 0
   debug: {fileID: 1824227562}
   battleUnitCount: 0
   UnitPrefab: {fileID: 7156501485292659843, guid: 91ed305375f37c044b2d9d1717b35a25, type: 3}
---- !u!1001 &1981737731
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3352002375562622980, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_Name
-      value: TestItem
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622980, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_Layer
-      value: 27
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_RootOrder
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 3.81
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3352002375562622984, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: dfd0b65ae5bc6e24fa70e67bfbdaa3ed, type: 3}
+  battleZoneTile: {fileID: 0}
 --- !u!1 &2002050829
 GameObject:
   m_ObjectHideFlags: 0
@@ -3989,7 +3883,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2004395841
 PrefabInstance:
@@ -4092,7 +3986,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2037961563}
-  m_Layer: 0
+  m_Layer: 29
   m_Name: row (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

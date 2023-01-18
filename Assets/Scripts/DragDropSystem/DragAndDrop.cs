@@ -278,7 +278,7 @@ namespace ZoneSystem
                 {
                     mapController.safetyObject[worldPosZ, worldPosX] = selectedObject;
                     selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattlezoneChack();
+                    mapController.BattleZoneCheck();
                     selectedObject = null;
                 }
                 else
@@ -332,7 +332,7 @@ namespace ZoneSystem
                 {
                     mapController.battleObject[(int)vec.z, (int)vec.x] = selectedObject;
                     selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattlezoneChack();
+                    mapController.BattleZoneCheck();
                     selectedObject = null;
                 }
                 else

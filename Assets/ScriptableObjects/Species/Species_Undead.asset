@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26f35f1b86f661d4d9faed579dfbf7fa, type: 3}
-  m_Name: UnitTypeData 1
+  m_Script: {fileID: 11500000, guid: dd7fdc8d2d72eae4b92fc708330d83ff, type: 3}
+  m_Name: Species_Undead
   m_EditorClassIdentifier: 
-  typeName: Orc
+  species: Undead
+  attackSpeedPercentage: 0
+  barrierPercentage: 0
+  atkPercentage: 0
+  bonusatkPercentage: 0

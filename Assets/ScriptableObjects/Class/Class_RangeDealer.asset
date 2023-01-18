@@ -9,7 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26f35f1b86f661d4d9faed579dfbf7fa, type: 3}
-  m_Name: UnitTypeData
+  m_Script: {fileID: 11500000, guid: 6b63133805f9f7344ae056c0c1dcc9ea, type: 3}
+  m_Name: Class_RangeDealer
   m_EditorClassIdentifier: 
-  typeName: Warrior
+  synergeclass: RangeDealer
+  attackRange: 0
+  mpRecovery: -2
+  atkPercentage: 0
+  hpPercentage: 0
+  skillDamagePercentage: 0
+  attackSpeed: 0
