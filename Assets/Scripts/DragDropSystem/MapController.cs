@@ -11,6 +11,7 @@ namespace ZoneSystem
         public GameObject[,] battleObject;
         public Dictionary<string, int> unitCount;
         public List<string> synergyList = new List<string>();
+        public List<string> activeSynergyList = new List<string>();
 
         [Header("종족 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int orcSynergyCount;
@@ -74,7 +75,7 @@ namespace ZoneSystem
                 {
                     if (battleObject[z, x] != null)
                     {
-                        
+
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
@@ -92,7 +93,7 @@ namespace ZoneSystem
                             synergyList.Add(str[1]);
                             for (int i = 0; i < synergyList.Count; i++)
                             {
-                                switch (synergyList[i])
+                                switch (synergyList[i]) //이거 무조건 고칠예정
                                 {
                                     case "Warrior":
                                         warriorSynergyCount++;
@@ -129,12 +130,97 @@ namespace ZoneSystem
                             }
                             //이안에서 시너지 계산 다끝내고 
                             //종족(species)은 3,5 직업(class)은 2,4마리에서 각각 1,2단계가 활성화됨
+                            if (warriorSynergyCount == 2)
+                            {
+                                activeSynergyList.Add("Warrior");
+                                Debug.Log("1단계 워리어 달성");
+                            }
+                            if (warriorSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Warrior");
+                                activeSynergyList.Add("Warrior2");
+                                Debug.Log("2단계 워리어 달성");
+                            }
+
+                            if (tankerSynergyCount == 2) activeSynergyList.Add("Tanker");
+                            if (warriorSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Tanker");
+                                activeSynergyList.Add("Tanker2");
+                            }
+
+                            if (assassinSynergyCount == 2) activeSynergyList.Add("Assassin");
+                            if(assassinSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Assassin");
+                                activeSynergyList.Add("Assassin2");
+                            }
+
+                            if (magicianSynergyCount == 2) activeSynergyList.Add("Magician");
+                            if (magicianSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Magician");
+                                activeSynergyList.Add("Magician2");
+                            }
+
+                            if (rangeDealerSynergyCount == 2) activeSynergyList.Add("RangeDealer");
+                            if (rangeDealerSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("RangeDealer");
+                                activeSynergyList.Add("RangeDealer2");
+                            }
+
+                            if (dwarfSynergyCount == 2) activeSynergyList.Add("Dwarf");
+                            if (dwarfSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Dwarf");
+                                activeSynergyList.Add("Dwarf2");
+                            }
+
+                            if (orcSynergyCount == 2) activeSynergyList.Add("Orc");
+                            if (orcSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Orc");
+                                activeSynergyList.Add("Orc2");
+                            }
+
+                            if (mechaSynergyCount == 2) activeSynergyList.Add("Mecha");
+                            if (mechaSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Mecha");
+                                activeSynergyList.Add("Mecha2");
+                            }
+
+                            if (scorpionSynergyCount == 2) activeSynergyList.Add("Scorpion");
+                            if (scorpionSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Scorpion");
+                                activeSynergyList.Add("Scorpion2");
+                            }
+
+                            if (undeadSynergyCount == 2) activeSynergyList.Add("Undead");
+                            if (undeadSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Undead");
+                                activeSynergyList.Add("Undead2");
+                            }
+
+
+
+
                         }
                         synergyList.Clear();
                     }
                 }
             }
+
             //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
+            for(int i = 0; i < activeSynergyList.Count; i++)
+            {
+                Debug.Log(activeSynergyList[i]);
+            }
+
+            activeSynergyList.Clear();
             return battleUnitCount;
         }
 
@@ -187,7 +273,7 @@ namespace ZoneSystem
                 for (int x = 0; x < 7; x++)
                 {
                     float newPosX = (float)x * 1.5f;
-                    float newPosZ = (float)(z * 1.3f); 
+                    float newPosZ = (float)(z * 1.3f);
 
                     if (z % 2 == 0) { }
 
@@ -197,8 +283,8 @@ namespace ZoneSystem
                     }
 
                     Vector3 tilePos = new Vector3(newPosX, 0, newPosZ);
-                    GameObject newTile = Instantiate(battleZoneTile,tilePos,Quaternion.identity);
-                   
+                    GameObject newTile = Instantiate(battleZoneTile, tilePos, Quaternion.identity);
+
                 }
             }
         }

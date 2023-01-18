@@ -11,7 +11,7 @@ namespace UnitClass
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
         private string unitName;
-        public float grade;
+        [SerializeField] private float grade;
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -39,12 +39,13 @@ namespace UnitClass
         public string GetSpeciesName { get { return speciesName; } }
         public string GetClassName { get { return className; } }
         public ScriptableUnit GetUnitData { get { return UnitData; } }
-
         public string GetSynergyName { get { return synergyName; } }
+        public float GetGrade { get { return grade; } }
 
         private void Awake()
         {
             synergyName = SpeciesData.GetSpecies + " " + ClassData.GetSynergeClass;
+            grade = UnitData.GetGrade;
             //여기서 시리얼라이즈필드된거 초기화 해줘야함
 
 
@@ -53,7 +54,7 @@ namespace UnitClass
             //className = ClassData.GetSynergeClass;
 
             unitName = speciesName + className;
-            grade = UnitData.GetGrade;
+            
             //maxHp = UnitData.GetMaxHp;
             curHp = UnitData.GetMaxHp;
             //maxMp = UnitData.GetMaxMp;
@@ -80,6 +81,11 @@ namespace UnitClass
         public float GetAttackSpeed()
         {
             return attackSpeed * SpeciesData.GetAttackSpeedPercentage;
+        }
+
+        public float Upgrade() //일단은 머지시 두배씩 증가함 - > 추후 변경사항
+        {
+            return grade++;
         }
 
     }
