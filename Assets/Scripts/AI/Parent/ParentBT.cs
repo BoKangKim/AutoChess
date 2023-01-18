@@ -9,8 +9,6 @@ using Battle.RTASTAR;
 
 namespace Battle.AI
 {
-    
-
     public abstract class ParentBT : MonoBehaviour
     {
         private INode root = null;
@@ -80,8 +78,8 @@ namespace Battle.AI
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
 
-            StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage = changeStage;
+            //StageControl sc = FindObjectOfType<StageControl>();
+            //sc.changeStage = changeStage;
 
             // Object ���� ����
             // �ϴ� ���� ã�� ���߿� ���������� �ϼ��Ǹ�
@@ -96,10 +94,10 @@ namespace Battle.AI
 
         private void Update()
         {
-            if(stageType == STAGETYPE.PREPARE)
-            {
-                return;
-            }
+            //if(stageType == STAGETYPE.PREPARE)
+            //{
+            //    return;
+            //}
 
             if(specialRoot != null 
                 && specialRoot.Run() == true)
@@ -129,8 +127,8 @@ namespace Battle.AI
 
                     Sequence
                     (
-                        IfElseAction(isArangeIn, moveCenter, move),
-                        IfAction(isCenter,attack)
+                        IfElseAction(isArangeIn, attack, move)
+                        //IfAction(isCenter,attack)
                     )
                 );
         }

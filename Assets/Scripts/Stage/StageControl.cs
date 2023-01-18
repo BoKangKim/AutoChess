@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 namespace Battle.Stage 
 {
+    // Timer <-> Stage => AI
+    // 
     public enum STAGETYPE
     {
         PVP,
@@ -24,6 +26,7 @@ namespace Battle.Stage
 
         private void Awake()
         {
+            // 네트워크
             if(TryGetComponent<Timer>(out timer) == false)
             {
                 timer = new GameObject("Timer").AddComponent<Timer>();
@@ -41,8 +44,16 @@ namespace Battle.Stage
 
                 if (stageIndex.col >= stages.GetLength(0))
                 {
-                    stageIndex.col = 0;
+                    stageIndex.row = -1;
+                    stageIndex.col = -1;
                 }
+            }
+
+            if(stageIndex.row == -1
+                || stageIndex.col == -1)
+            {
+                changeStage(STAGETYPE.PVP);
+                return;
             }
 
             changeStage(stages[stageIndex.col,stageIndex.row]);

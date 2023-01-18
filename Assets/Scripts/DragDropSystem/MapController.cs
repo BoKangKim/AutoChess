@@ -112,7 +112,7 @@ namespace ZoneSystem
                     }
 
                     Vector3 tilePos = new Vector3(newPosX, 0, newPosZ);
-                    GameObject newTile = Instantiate();
+                    //GameObject newTile = Instantiate();
                     
 
                 }

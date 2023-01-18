@@ -88,7 +88,6 @@ namespace Battle.RTASTAR
 
             for (int i = 0; i < nearLocation.Count; i++)
             {
-
                 if (isVisitedNode(nearLocation[i]))
                 {
                     continue;
