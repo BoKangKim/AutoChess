@@ -81,5 +81,6 @@ namespace UnitClass
         {
             return attackSpeed * SpeciesData.GetAttackSpeedPercentage;
         }
+
     }
 }

@@ -34,6 +34,15 @@ namespace Battle.AI
         private float currentHP = 100f;
         protected bool ishit = false;
 
+        private ScriptableUnit unitData;
+
+        #region GET,SET
+
+        public ScriptableUnit getUnitData()
+        {
+            return unitData;
+        }
+
         public void setIsHit(bool ishit)
         {
             this.ishit = ishit;
@@ -53,6 +62,7 @@ namespace Battle.AI
         {
             return next;
         }
+        #endregion
 
         private void Awake()
         {
@@ -94,15 +104,18 @@ namespace Battle.AI
         {
             root = Selector
                 (
-                    //IfAction(isDeath, death),
-                    //IfAction(isHit,hit),
+                    Sequence
+                    (
+                        IfAction(isHit,hit),
+                        IfAction(isDeath, death)
+                    ),
+
                     Sequence
                     (
                         ActionN(idle),
                         NotIf(findEnemy)
                     ),
 
-                    //IfAction(isCenter,attack),
                     Sequence
                     (
                         IfElseAction(isArangeIn, moveCenter, move),
@@ -179,7 +192,7 @@ namespace Battle.AI
 
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((temp = LocationControl.getDistance(enemies[i].getMyLocation(),myLocation)) < minDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
@@ -253,13 +266,11 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                         return;
-
-                    dir = (centerPosition - transform.position).normalized;
-
-                    transform.LookAt(dir);
-                    gameObject.transform.Translate(dir * 1f * Time.deltaTime, Space.World);
+                    Vector3 cDir = (centerPosition - transform.position).normalized;
+                    transform.LookAt(cDir);
+                    gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
                 };
             }
         }
@@ -271,7 +282,7 @@ namespace Battle.AI
                 return () =>
                 {
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.2f)
+                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                     {
                         return true;
                     }
@@ -310,29 +321,16 @@ namespace Battle.AI
                 return () =>
                 {
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
-                    LocationXY enemyLocation;
-                    
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        enemyLocation = LocationControl.convertPositionToLocation(enemies[i].gameObject.transform.position);
-                        if (LocationControl.getDistance(myLocation, enemies[i].getMyLocation()) < 1.7f
+                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= LocationControl.radius
                         && checkIsOverlapUnits() == false)
                         {
+                            next = myLocation;
                             return true;
                         }
                     }
 
-                    return false;
-                };
-            }
-        }
-
-        protected virtual Func<bool> isAttackAble
-        {
-            get
-            {
-                return () =>
-                {
                     return false;
                 };
             }
@@ -393,7 +391,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myAni.SetTrigger("hit");
+                    //myAni.SetTrigger("hit");
                 };
             }
         }
@@ -411,7 +409,17 @@ namespace Battle.AI
             }
         }
 
+        
+
         #endregion
     }
 
 }
+
+
+
+
+
+
+
+
