@@ -15,33 +15,40 @@ public class Timer : MonoBehaviourPunCallbacks
 
     float MaxTime = 30;
     float CurTime;
+    private bool isTimeOver = false;
+
+    public bool getIsTimeOver()
+    {
+        return isTimeOver;
+    }
+
+    public void setIsTimerOver()
+    {
+        isTimeOver = false;
+    }
 
     void Start()
     {
         CurTime = MaxTime;        
         timerImage.fillAmount = MaxTime;
     }
+
     void Update()
     {
         //photonView.RPC(nameof(TimeFlow), RpcTarget.AllBuffered); // nameof 참조중인지 확인하기 위함
-        CurTime -= 1 * Time.deltaTime;
-        timerImage.fillAmount = (CurTime / MaxTime);
-        if (CurTime <= 0)
+        if(isTimeOver == true)
         {
-            CurTime = 0;
+            return;
         }
-        timer.text = Mathf.Floor(CurTime).ToString();
-    }
 
-    //[PunRPC]
-    public void TimeFlow()
-    {
         CurTime -= 1 * Time.deltaTime;
         timerImage.fillAmount = (CurTime / MaxTime);
         if (CurTime <= 0)
         {
+            isTimeOver = true;
             CurTime = 0;
         }
         timer.text = Mathf.Floor(CurTime).ToString();
     }
+    
 }
