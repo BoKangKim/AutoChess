@@ -9,11 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd7fdc8d2d72eae4b92fc708330d83ff, type: 3}
-  m_Name: Species
+  m_Script: {fileID: 11500000, guid: 6b63133805f9f7344ae056c0c1dcc9ea, type: 3}
+  m_Name: Class_Warrior
   m_EditorClassIdentifier: 
-  species: Orc
-  attackSpeedPercentage: 0
-  barrierPercentage: 0
+  synergeclass: Warrior
+  attackRange: 0
+  mpRecovery: -2
   atkPercentage: 0
-  bonusatkPercentage: 0
+  hpPercentage: 0
+  skillDamagePercentage: 0
+  attackSpeed: 0
