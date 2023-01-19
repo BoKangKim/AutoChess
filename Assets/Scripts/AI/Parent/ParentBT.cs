@@ -21,7 +21,7 @@ namespace Battle.AI
         private ParentBT[] allUnits = null;
 
         protected string myType = null;
-        [SerializeField] private string nickName = "";
+        [SerializeField] protected string nickName = "";
         [SerializeField] protected GameObject effect = null;
 
         protected LocationXY myLocation;

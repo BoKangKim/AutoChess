@@ -15,6 +15,7 @@ public class ExampleAI_2 : ParentBT, Unit
     public override void StartEffect()
     {
         Instantiate<GameObject>(effect, target.transform.position, Quaternion.LookRotation(transform.forward));
+
     }
 }
 
