@@ -34,7 +34,7 @@ namespace Battle.Location
         {
             get 
             {
-                return Math.Abs(((tileDistanceX / 2) / Math.Sin((Math.PI / 180) * 60)) * 2) / 2;
+                return Math.Abs(((tileDistanceX / 2) / Math.Sin((Math.PI / 180) * 60)) * 2);
                 //return (2 * Math.Sqrt((4 / 3) * Math.Pow((tileDistanceX / 2), 2))) + 0.2f;
             }
         }
