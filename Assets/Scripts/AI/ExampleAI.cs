@@ -20,6 +20,4 @@ public class ExampleAI : ParentBT, Unit
         _effect.setDirection((target.transform.position - transform.position).normalized);
         _effect.gameObject.transform.LookAt(target.transform.position);
     }
-
-    
 }
