@@ -14,14 +14,14 @@ namespace Battle.AI
         private INode root = null;
         private INode specialRoot = null;
         protected ParentBT target = null;
-        protected STAGETYPE stageType = STAGETYPE.PVP;
+        protected STAGETYPE stageType = STAGETYPE.PREPARE;
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
         private ParentBT[] allUnits = null;
 
         protected string myType = null;
-        [SerializeField] protected string nickName = "";
+        [SerializeField] protected string nickName = null;
         [SerializeField] protected GameObject effect = null;
 
         protected LocationXY myLocation;
@@ -39,6 +39,11 @@ namespace Battle.AI
 
         protected float attackRange;
         #region GET,SET
+
+        public void SetState(STAGETYPE state)
+        {
+            this.stageType = state;
+        }
 
         public ScriptableUnit getUnitData()
         {
@@ -83,9 +88,6 @@ namespace Battle.AI
             //StageControl sc = FindObjectOfType<StageControl>();
             //sc.changeStage = changeStage;
 
-            // Object ���� ����
-            // �ϴ� ���� ã�� ���߿� ���������� �ϼ��Ǹ�
-            // ����
             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
@@ -96,12 +98,12 @@ namespace Battle.AI
 
         private void Update()
         {
-            //if(stageType == STAGETYPE.PREPARE)
-            //{
-            //    return;
-            //}
+            if (stageType == STAGETYPE.PREPARE)
+            {
+                return;
+            }
 
-            if(specialRoot != null 
+            if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
                 return;
@@ -178,7 +180,8 @@ namespace Battle.AI
         private void addEnemyList(ParentBT[] fieldAIObejects)
         {
             if (stageType == STAGETYPE.PVP
-                || stageType == STAGETYPE.CLONE)
+                || stageType == STAGETYPE.CLONE
+                || stageType == STAGETYPE.PREPARE)
             {
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
@@ -246,7 +249,6 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("���");
                     //myAni.SetBool("isMove",false);
                 };
             }
