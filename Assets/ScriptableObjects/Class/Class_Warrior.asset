@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b63133805f9f7344ae056c0c1dcc9ea, type: 3}
   m_Name: Class_Warrior
   m_EditorClassIdentifier: 
-  synergeclass: Warrior
+  Class: Warrior
   attackRange: 0
   mpRecovery: -2
   atkPercentage: 0
