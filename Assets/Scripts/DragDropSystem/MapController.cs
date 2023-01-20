@@ -16,8 +16,11 @@ namespace ZoneSystem
     }
     public class MapController : MonoBehaviour
     {
+
+        
         public GameObject[,] safetyObject;
         public GameObject[,] battleObject;
+
 
         public TextMeshProUGUI debug;
 
@@ -41,14 +44,6 @@ namespace ZoneSystem
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
         }
-        private void Start()
-        {
-            //transforms[0]
-       
-
-            MapCreate();
-
-        }
 
         public int BattlezoneChack()
         {
@@ -59,6 +54,9 @@ namespace ZoneSystem
                     if (battleObject[z, x] != null)
                     {
                         ++battleUnitCount;
+                        battleObject[z, x].GetComponent<Battle.AI.ParentBT>().enabled = true;
+
+                        Debug.Log($"x {x} z {z} Pos{battleObject[z, x].transform.position}");
                     }
                 }
             }
@@ -74,7 +72,10 @@ namespace ZoneSystem
                 {
                     if (safetyObject[z, x] == null)
                     {
-                        safetyObject[z, x] = Instantiate(UnitPrefab, new Vector3(x, 0.25f, z - 2), Quaternion.identity);
+                        int PosX = (x * 3) + 1;
+                        int PosZ = (z * 3) - 7;
+
+                        safetyObject[z, x] = Instantiate(UnitPrefab, new Vector3(PosX, 0.25f, PosZ), Quaternion.identity);
                         return;
                     }
                 }
@@ -82,7 +83,6 @@ namespace ZoneSystem
             debug.text = "세이프티존이 꽉차서 유닛을 소환할 수 없습니다.";
         }
 
-        //������ ȹ��
         public void itemGain(GameObject getItem)
         {
             
@@ -92,10 +92,13 @@ namespace ZoneSystem
                 {
                     if (safetyObject[z, x] == null)
                     {
+                        int PosX = (x * 3) + 1;
+                        int PosZ = (z * 3) - 7;
+
                         Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
-                        safetyObject[z, x].transform.position = new Vector3(x, 0.25f, z - 2);
+                        safetyObject[z, x].transform.position = new Vector3(PosX, 0.25f, PosZ);
                         safetyObject[z, x].transform.rotation = Quaternion.identity;
                         safetyObject[z, x].layer = 31;
                         return;
@@ -106,29 +109,7 @@ namespace ZoneSystem
         }
 
 
-        //맵생성
-        public void MapCreate()
-        {
-            for (int z = 0; z < 3; z++)
-            {
-                for (int x = 0; x < 7; x++)
-                {
-                    float newPosX = (float)x * 1.5f;
-                    float newPosZ = (float)(z * 1.3f); 
 
-                    if (z % 2 == 0) { }
-
-                    else
-                    {
-                        newPosX += 0.65f;
-                    }
-
-                    Vector3 tilePos = new Vector3(newPosX, 0, newPosZ);
-                    GameObject newTile = Instantiate(battleZoneTile,tilePos,Quaternion.identity);
-                   
-                }
-            }
-        }
 
     }
 }

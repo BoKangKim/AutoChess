@@ -35,11 +35,14 @@ namespace ZoneSystem
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
 
+
+
         private void Awake()
         {
             graphicRaycaster = GetComponent<GraphicRaycaster>();
             pointerEventData = new PointerEventData(EventSystem.current);
             rrList = new List<RaycastResult>();
+
         }
 
         private void Update()

@@ -326,7 +326,6 @@ public class AIopponent : MonoBehaviour
                 //there is a champion
                 if (gridChampionsArray[x, z] != null)
                 {
-                    
                     //get champion
                     Champion c = gridChampionsArray[x, z].GetComponent<ChampionController>().champion;
 
