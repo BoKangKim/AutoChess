@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8730572716232530200}
   - component: {fileID: -5298676453645215583}
   m_Layer: 31
-  m_Name: Unit_Undead Warrior(TEST)
+  m_Name: MechaRangeDealer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: 6b964e8b02f346042828d1f7122cfed0, type: 2}
-  ClassData: {fileID: 11400000, guid: 68ca29bee11bf024ba4e3e057ef6a492, type: 2}
-  SpeciesData: {fileID: 11400000, guid: f1fe548f8eb08df4b918db4268941101, type: 2}
+  ClassData: {fileID: 11400000, guid: f3fa8229adc4ef74aa4eb896e8748eae, type: 2}
+  SpeciesData: {fileID: 11400000, guid: 401e11d1eeb536c4a880708dae1ec69a, type: 2}
   Equipment01: {fileID: 2039538674309082093, guid: 09d5880ce0967504f9b330388830d4a7, type: 3}
   Equipment02: {fileID: 0}
   Equipment03: {fileID: 0}

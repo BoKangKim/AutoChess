@@ -124,7 +124,7 @@ namespace ZoneSystem
             #region PC용
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log(CastRay(battleSpaceLayer).transform);
+                //Debug.Log(CastRay(battleSpaceLayer).transform);
                 if (CastRay(itemLayer).collider != null)
                 {
                     mapController.itemGain(CastRay(itemLayer).collider.gameObject);
@@ -415,14 +415,14 @@ namespace ZoneSystem
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
-                if (stayUnit.grade > 2) return false;
+                if (stayUnit.GetGrade > 3) return false;
 
-                if (selectedUnit.grade == stayUnit.grade)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade)
                 {
                     Destroy(selectedUnit.gameObject);
-                    ++stayUnit.grade;
+                    stayUnit.Upgrade(); //업그레이드 전달 방식 변경(2023.01.18 15:08-이원혁)
 
-                    stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }

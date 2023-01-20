@@ -1,10 +1,10 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SynergeClass", menuName = "Scriptable Object/SynergeClass", order = int.MaxValue)]
+[CreateAssetMenu(fileName = "Class", menuName = "Scriptable Object/Class", order = int.MaxValue)]
 public class ScriptableClass : ScriptableObject
 {
-    [SerializeField] private string synergeclass;
-    public string GetSynergeClass { get { return synergeclass; } }
+    [SerializeField] private string Class;
+    public string GetClass { get { return Class; } }
 
     [SerializeField] private float attackRange;
     public float GetAttackRange { get { return attackRange; } }

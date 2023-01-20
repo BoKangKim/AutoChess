@@ -11,6 +11,7 @@ namespace ZoneSystem
         public GameObject[,] battleObject;
         public Dictionary<string, int> unitCount;
         public List<string> synergyList = new List<string>();
+        public List<string> activeSynergyList = new List<string>();
 
         [Header("종족 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int orcSynergyCount;
@@ -56,6 +57,7 @@ namespace ZoneSystem
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
+            //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
@@ -74,7 +76,7 @@ namespace ZoneSystem
                 {
                     if (battleObject[z, x] != null)
                     {
-                        
+
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
@@ -92,7 +94,7 @@ namespace ZoneSystem
                             synergyList.Add(str[1]);
                             for (int i = 0; i < synergyList.Count; i++)
                             {
-                                switch (synergyList[i])
+                                switch (synergyList[i]) //이거 무조건 고칠예정
                                 {
                                     case "Warrior":
                                         warriorSynergyCount++;
@@ -129,18 +131,105 @@ namespace ZoneSystem
                             }
                             //이안에서 시너지 계산 다끝내고 
                             //종족(species)은 3,5 직업(class)은 2,4마리에서 각각 1,2단계가 활성화됨
+
+                            //이거 무조건 고쳐야함 뇌뽑고 구현만했는데 말안됨
+                            if (warriorSynergyCount == 2)
+                            {
+                                activeSynergyList.Add("Warrior");
+                                //Debug.Log("1단계 워리어 달성");
+                            }
+                            if (warriorSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Warrior");
+                                activeSynergyList.Add("Warrior2");
+                                //Debug.Log("2단계 워리어 달성");
+                            }
+
+                            if (tankerSynergyCount == 2) activeSynergyList.Add("Tanker");
+                            if (tankerSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Tanker");
+                                activeSynergyList.Add("Tanker2");
+                            }
+
+                            if (assassinSynergyCount == 2) activeSynergyList.Add("Assassin");
+                            if (assassinSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Assassin");
+                                activeSynergyList.Add("Assassin2");
+                            }
+
+                            if (magicianSynergyCount == 2) activeSynergyList.Add("Magician");
+                            if (magicianSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("Magician");
+                                activeSynergyList.Add("Magician2");
+                            }
+
+                            if (rangeDealerSynergyCount == 2) activeSynergyList.Add("RangeDealer");
+                            if (rangeDealerSynergyCount == 4)
+                            {
+                                activeSynergyList.Remove("RangeDealer");
+                                activeSynergyList.Add("RangeDealer2");
+                            }
+
+                            if (dwarfSynergyCount == 3) activeSynergyList.Add("Dwarf");
+                            if (dwarfSynergyCount == 5)
+                            {
+                                activeSynergyList.Remove("Dwarf");
+                                activeSynergyList.Add("Dwarf2");
+                            }
+
+                            if (orcSynergyCount == 3) activeSynergyList.Add("Orc");
+                            if (orcSynergyCount == 5)
+                            {
+                                activeSynergyList.Remove("Orc");
+                                activeSynergyList.Add("Orc2");
+                            }
+
+                            if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
+                            if (mechaSynergyCount == 5)
+                            {
+                                activeSynergyList.Remove("Mecha");
+                                activeSynergyList.Add("Mecha2");
+                            }
+
+                            if (scorpionSynergyCount == 3) activeSynergyList.Add("Scorpion");
+                            if (scorpionSynergyCount == 5)
+                            {
+                                activeSynergyList.Remove("Scorpion");
+                                activeSynergyList.Add("Scorpion2");
+                            }
+
+                            if (undeadSynergyCount == 3) activeSynergyList.Add("Undead");
+                            if (undeadSynergyCount == 5)
+                            {
+                                activeSynergyList.Remove("Undead");
+                                activeSynergyList.Add("Undead2");
+                            }
+                            //Debug.Log(assassinSynergyCount);
                         }
                         synergyList.Clear();
                     }
                 }
             }
+
             //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
+            Debug.Log("액티브 시너지 리스트 카운트"+activeSynergyList.Count);
+            for(int i = 0; i<activeSynergyList.Count;i++)
+            {
+                Debug.Log("현재 활성화 된 시너지 " + activeSynergyList[i]);
+            }
+            
+            UIManager.Inst.SynergyText(null);
+            //activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
+
+            activeSynergyList.Clear();
             return battleUnitCount;
         }
 
         public void OnClick_UnitInst()
         {
-
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -187,7 +276,7 @@ namespace ZoneSystem
                 for (int x = 0; x < 7; x++)
                 {
                     float newPosX = (float)x * 1.5f;
-                    float newPosZ = (float)(z * 1.3f); 
+                    float newPosZ = (float)(z * 1.3f);
 
                     if (z % 2 == 0) { }
 
@@ -197,8 +286,8 @@ namespace ZoneSystem
                     }
 
                     Vector3 tilePos = new Vector3(newPosX, 0, newPosZ);
-                    GameObject newTile = Instantiate(battleZoneTile,tilePos,Quaternion.identity);
-                   
+                    GameObject newTile = Instantiate(battleZoneTile, tilePos, Quaternion.identity);
+
                 }
             }
         }
