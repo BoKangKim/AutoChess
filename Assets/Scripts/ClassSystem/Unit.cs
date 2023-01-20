@@ -1,16 +1,23 @@
 using UnityEngine;
 namespace UnitClass
 {
+
     public class Unit : MonoBehaviour
     {
+        #region SerializeField
+        [Header("유닛에 장착할 데이터")]
         [SerializeField] private ScriptableUnit UnitData = null;
         [SerializeField] private ScriptableClass ClassData = null;
         [SerializeField] private ScriptableSpecies SpeciesData = null;
         [SerializeField] private GameObject Equipment01 = null;
         [SerializeField] private GameObject Equipment02 = null;
         [SerializeField] private GameObject Equipment03 = null;
+
+        #endregion
+
+        #region 유닛 지역변수
+        private int grade;
         private string unitName;
-        public float grade;
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -32,54 +39,54 @@ namespace UnitClass
         private float weakness; //허약 시간(CC기)
         private string speciesName;
         private string className;
-
         private string synergyName;
+        #endregion
 
+        #region 프로퍼티
         public string GetSpeciesName { get { return speciesName; } }
         public string GetClassName { get { return className; } }
         public ScriptableUnit GetUnitData { get { return UnitData; } }
-
         public string GetSynergyName { get { return synergyName; } }
+        public float GetGrade { get { return grade; } }
 
+        #endregion
         private void Awake()
         {
-            synergyName = speciesName + " " + className;
-            Debug.Log(synergyName);
+            synergyName = SpeciesData.GetSpecies + " " + ClassData.GetClass;
+            grade = UnitData.GetGrade;
             //여기서 시리얼라이즈필드된거 초기화 해줘야함
-
-
-
             //speciesName = SpeciesData.GetSpecies;
             //className = ClassData.GetSynergeClass;
-
             unitName = speciesName + className;
-            grade = UnitData.GetGrade;
-            //maxHp = UnitData.GetMaxHp;
             curHp = UnitData.GetMaxHp;
-            //maxMp = UnitData.GetMaxMp;
             curMp = UnitData.GetMaxMp;
+            //maxHp = UnitData.GetMaxHp;
+            //maxMp = UnitData.GetMaxMp;
             //moveSpeed = UnitData.GetMoveSpeed;
             //atk = UnitData.GetAtk;
             //attackRange = UnitData.GetAttackRange;
             //attackSpeed = UnitData.GetAttackSpeed;
             //spellPower = UnitData.GetSpellPower;
-            //magicDamage = 0;
+            //magicDamage;
             //magicCastingTime = UnitData.GetMagicCastingTime;
-            //crowdControlTime = 0;
-            //tenacity = 0;
+            //crowdControlTime;
+            //tenacity;
             //attackTarget = 1;
-            //barrier = 0;
-            //stunTime = 0;
-            //blindnessTime = 0;
-            //weakness = 0;
-
-            //0선언은 왜했냐 그냥 냅두면 원래 0인디 ㅋㅋ
-            //this.transform.name = grade.ToString() + "_" + speciesName + "_" + className;
+            //barrier;
+            //stunTime;
+            //blindnessTime;
+            //weakness;
         }
 
         public float GetAttackSpeed()
         {
             return attackSpeed * SpeciesData.GetAttackSpeedPercentage;
         }
+
+        public int Upgrade() //일단은 머지시 두배씩 증가함 - >
+        {
+            return grade++;
+        }
+
     }
 }

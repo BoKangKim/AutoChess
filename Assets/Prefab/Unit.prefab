@@ -111,8 +111,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UnitData: {fileID: 11400000, guid: 6b964e8b02f346042828d1f7122cfed0, type: 2}
-  type01: {fileID: 11400000, guid: 98a6bbc673fd0464b8469700053c3d78, type: 2}
-  type02: {fileID: 11400000, guid: acc5b26a042640e4a909e267414090f7, type: 2}
+  ClassData: {fileID: 11400000, guid: 68ca29bee11bf024ba4e3e057ef6a492, type: 2}
+  SpeciesData: {fileID: 11400000, guid: 5e330af4f2ed5d4449f8b4eb6ef4077c, type: 2}
   Equipment01: {fileID: 2039538674309082093, guid: 09d5880ce0967504f9b330388830d4a7, type: 3}
   Equipment02: {fileID: 0}
   Equipment03: {fileID: 0}

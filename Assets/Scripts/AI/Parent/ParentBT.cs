@@ -14,14 +14,15 @@ namespace Battle.AI
         private INode root = null;
         private INode specialRoot = null;
         protected ParentBT target = null;
-        protected STAGETYPE stageType = STAGETYPE.PVP;
+        protected STAGETYPE stageType = STAGETYPE.PREPARE;
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
         private ParentBT[] allUnits = null;
 
         protected string myType = null;
-        [SerializeField] private string nickName = "";
+        [SerializeField] protected string nickName = null;
+        [SerializeField] protected GameObject effect = null;
 
         protected LocationXY myLocation;
         protected LocationXY next;
@@ -36,7 +37,13 @@ namespace Battle.AI
 
         private ScriptableUnit unitData;
 
+        protected float attackRange;
         #region GET,SET
+
+        public void SetState(STAGETYPE state)
+        {
+            this.stageType = state;
+        }
 
         public ScriptableUnit getUnitData()
         {
@@ -77,9 +84,10 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            // Object ���� ����
-            // �ϴ� ���� ã�� ���߿� ���������� �ϼ��Ǹ�
-            // ����
+
+            //StageControl sc = FindObjectOfType<StageControl>();
+            //sc.changeStage = changeStage;
+
             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
@@ -90,7 +98,12 @@ namespace Battle.AI
 
         private void Update()
         {
-            if(specialRoot != null 
+            if (stageType == STAGETYPE.PREPARE)
+            {
+                return;
+            }
+
+            if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
                 return;
@@ -106,7 +119,6 @@ namespace Battle.AI
                 (
                     Sequence
                     (
-                        IfAction(isHit,hit),
                         IfAction(isDeath, death)
                     ),
 
@@ -118,14 +130,19 @@ namespace Battle.AI
 
                     Sequence
                     (
-                        IfElseAction(isArangeIn, moveCenter, move),
-                        IfAction(isCenter,attack)
+                        IfElseAction(isArangeIn, attack, move)
+                        //IfAction(isCenter,attack)
                     )
                 );
         }
 
         protected virtual void initializingSpecialRootNode() { }
         protected abstract string initializingMytype();
+
+        public void changeStage(STAGETYPE stageType)
+        {
+            this.stageType = stageType;
+        }
 
         #region Searching Enemy
         protected void findEnemyFuncOnStart(ParentBT[] fieldAIObejects)
@@ -163,7 +180,8 @@ namespace Battle.AI
         private void addEnemyList(ParentBT[] fieldAIObejects)
         {
             if (stageType == STAGETYPE.PVP
-                || stageType == STAGETYPE.CLONE)
+                || stageType == STAGETYPE.CLONE
+                || stageType == STAGETYPE.PREPARE)
             {
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
@@ -231,8 +249,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("���");
-                    myAni.SetBool("isMove",false);
+                    //myAni.SetBool("isMove",false);
                 };
             }
         }
@@ -243,16 +260,13 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("Ÿ�� ã��");
                     searchingTarget();
                     if (target == null)
                     {
-                        Debug.Log("��ã��");
                         return false;
                     }
                     else
                     {
-                        Debug.Log("ã��");
                         return true;
                     }
                 };
@@ -269,7 +283,7 @@ namespace Battle.AI
                     if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                         return;
                     Vector3 cDir = (centerPosition - transform.position).normalized;
-                    transform.LookAt(cDir);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cDir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
                 };
             }
@@ -300,6 +314,10 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    if(myAni.GetBool("isMove") == false)
+                    {
+                        myAni.SetBool("isMove",true);
+                    }
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
@@ -308,7 +326,7 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    transform.LookAt(dir);
+                    transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
             }
@@ -323,7 +341,7 @@ namespace Battle.AI
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
-                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= LocationControl.radius
+                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
                             next = myLocation;
@@ -342,27 +360,15 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    target.setIsHit(true);
-                    // ������ �޾ƿͼ� ������ ��(������)
-                    target.Damage(1f);
+                    this.transform.LookAt(target.transform.position);
+                    myAni.SetBool("isMove",false);
+                    //target.setIsHit(true);
+                    //target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
         }
         
-        protected virtual Action IsHit
-        {
-            get
-            {
-                return () =>
-                {
-                    Debug.Log("�´´�");
-                    
-                    myAni.SetTrigger("isHit");
-                    
-                };
-            }
-        }
         protected virtual Func<bool> isDeath
         {
             get
@@ -380,7 +386,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myAni.SetTrigger("isDeath");
+                    //myAni.SetTrigger("isDeath");
                 };
             }
         }
@@ -391,27 +397,19 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    //myAni.SetTrigger("hit");
                 };
             }
         }
 
-        protected virtual Func<bool> isHit 
+        #endregion
+
+        public virtual void StartEffect()
         {
-            get 
-            {
-                return () =>
-                {
-                    bool temp = ishit;
-                    ishit = false;
-                    return temp;
-                };
-            }
+            GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
+            //_effect.transform.localScale *= LocationControl.getDistance(myLocation,target.getMyLocation());
         }
 
         
-
-        #endregion
     }
 
 }

@@ -4040,6 +4040,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buyButton: {fileID: 1790001782}
   sellButton: {fileID: 1790001782}
+  SynergyInfo: {fileID: 0}
 --- !u!1 &1237344821
 GameObject:
   m_ObjectHideFlags: 0
@@ -6996,7 +6997,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 99.18, y: 177.6}
+  m_AnchoredPosition: {x: 99.18, y: 262}
   m_SizeDelta: {x: 200, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1790001782
@@ -8022,9 +8023,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b71808e93abb740a4291dcaa389741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  synergyList: []
+  activeSynergyList: []
+  orcSynergyCount: 0
+  dwarfSynergyCount: 0
+  scorpionSynergyCount: 0
+  mechaSynergyCount: 0
+  undeadSynergyCount: 0
+  warriorSynergyCount: 0
+  tankerSynergyCount: 0
+  magicianSynergyCount: 0
+  assassinSynergyCount: 0
+  rangeDealerSynergyCount: 0
   debug: {fileID: 1824227562}
   battleUnitCount: 0
-  UnitPrefab: {fileID: 1438169871030806, guid: c9bc790a133e19c40b64d6db4cfb7a22, type: 3}
+  UnitPrefab: {fileID: 7156501485292659843, guid: 91ed305375f37c044b2d9d1717b35a25, type: 3}
   battleZoneTile: {fileID: 2470284800984316709, guid: f0453bd20ecc5fe44be16adacfc38715, type: 3}
 --- !u!1 &1944281581
 GameObject:

@@ -9,7 +9,7 @@ namespace ZoneSystem
     public class DragAndDrop : MonoBehaviour
     {
 
-        // ÁÂÇ¥ 
+        // ï¿½ï¿½Ç¥ 
         MapController mapController;
         GameObject selectedObject;
         Camera cam;
@@ -44,7 +44,7 @@ namespace ZoneSystem
         }
         private void Update()
         {
-            #region ¸ð¹ÙÀÏ¿ë
+            #region ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½
             //if (Input.touchCount == 1)
             //{
             //    if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -107,7 +107,7 @@ namespace ZoneSystem
             //    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
             //    {
             //        if (selectedObject == null) return;
-            //        //À¯´Ö ÆÇ¸Å
+            //        //ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½
             //        sellUnit();
 
             //        if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -128,10 +128,10 @@ namespace ZoneSystem
             //}
             #endregion
 
-            #region PC¿ë
+            #region PCï¿½ï¿½
             if (Input.GetMouseButtonDown(0))
             {
-                Debug.Log(CastRay(battleSpaceLayer).transform);
+                //Debug.Log(CastRay(battleSpaceLayer).transform);
                 if (CastRay(itemLayer).collider != null)
                 {
                     mapController.itemGain(CastRay(itemLayer).collider.gameObject);
@@ -184,7 +184,7 @@ namespace ZoneSystem
                 //Drop
                 else
                 {
-                    // À¯´Ö ÆÇ¸Å
+                    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½
                     sellUnit();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
@@ -250,7 +250,7 @@ namespace ZoneSystem
         {
             if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                storeButtonChange(Color.black, Color.white, true, "À¯´Ö ¼ÒÈ¯");
+                storeButtonChange(Color.black, Color.white, true, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯");
                 buySellButton = null;
 
                 Destroy(selectedObject);
@@ -266,14 +266,14 @@ namespace ZoneSystem
             {
                 buySellButton = UIManager.Inst.RaycastUI<Button>(1);
 
-                storeButtonChange(Color.white, Color.black, false, "À¯´Ö ÆÇ¸Å");
+                storeButtonChange(Color.white, Color.black, false, "ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½");
 
             }
             else
             {
                 if (buySellButton != null)
                 {
-                    storeButtonChange(Color.black, Color.white, true, "À¯´Ö ¼ÒÈ¯");
+                    storeButtonChange(Color.black, Color.white, true, "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯");
 
                     buySellButton = null;
                 }
@@ -308,7 +308,7 @@ namespace ZoneSystem
                 {
                     mapController.safetyObject[(int)safetyPosToIndex(worldPosition).z, (int)safetyPosToIndex(worldPosition).x] = selectedObject;
                     selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattlezoneChack();
+                    mapController.BattleZoneCheck();
                     selectedObject = null;
                 }
                 else
@@ -364,7 +364,7 @@ namespace ZoneSystem
                 {
                     mapController.battleObject[(int)vec.z, (int)vec.x] = selectedObject;
                     selectedObject.transform.position = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattlezoneChack();
+                    mapController.BattleZoneCheck();
                     selectedObject = null;
                 }
                 else
@@ -412,7 +412,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region µå·¡±×½Ã Å¸ÀÏ »ö»ó º¯°æ
+        #region ï¿½å·¡ï¿½×½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         void tileChangeColor()
         {
             if (CastRay(safetySpaceLayer).collider != null)
@@ -458,7 +458,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ¹öÆ°Ã¼ÀÎÁö
+        #region ï¿½ï¿½Æ°Ã¼ï¿½ï¿½ï¿½ï¿½
         void storeButtonChange(Color text, Color button, bool enabled, string unitStatus)
         {
 
@@ -470,9 +470,9 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ÁÂÇ¥¸¦ ÀÎµ¦½º·Î º¯È¯
+        #region ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 
-        //¹èÆ²Á¸ ÁÂÇ¥¸¦ ÀÎµ¦½º °ªÀ¸·Î º¯È¯
+        //ï¿½ï¿½Æ²ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
         Vector3 battlePosToIndex(Vector3 Vec)
         {
             Debug.Log($"pos + {Vec}");
@@ -497,31 +497,31 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ¸ÓÁö
-        //À¯´Ö + ¾ÆÀÌÅÛ ¸ÓÁö
+        #region ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
 
             if (selectedObject == null || stayObject == null) return false;
-            //À¯´Ö ¸ÓÁö
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
-                if (stayUnit.grade > 2) return false;
+                if (stayUnit.GetGrade > 3) return false;
 
-                if (selectedUnit.grade == stayUnit.grade)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade)
                 {
 
                     Destroy(selectedUnit.gameObject);
-                    ++stayUnit.grade;
+                    stayUnit.Upgrade(); //ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(2023.01.18 15:08-ï¿½Ì¿ï¿½ï¿½ï¿½)
 
                    // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
-            //Àåºñ ¸ÓÁö
+            //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<testItem>() != null)
             {
                 testItem selectedItem = selectedObject.GetComponent<testItem>();
@@ -538,12 +538,13 @@ namespace ZoneSystem
                     return true;
                 }
             }
-            //Àåºñ ÀåÂø
+            //ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                     Destroy(selectedObject.gameObject);
                     stayObject.gameObject.name = "Item_Equip";
 
+                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
             }
