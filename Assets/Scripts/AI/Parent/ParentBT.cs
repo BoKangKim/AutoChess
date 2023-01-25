@@ -83,9 +83,6 @@ namespace Battle.AI
             //StageControl sc = FindObjectOfType<StageControl>();
             //sc.changeStage = changeStage;
 
-            // Object ���� ����
-            // �ϴ� ���� ã�� ���߿� ���������� �ϼ��Ǹ�
-            // ����
             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
@@ -96,11 +93,6 @@ namespace Battle.AI
 
         private void Update()
         {
-            //if(stageType == STAGETYPE.PREPARE)
-            //{
-            //    return;
-            //}
-
             if(specialRoot != null 
                 && specialRoot.Run() == true)
             {
@@ -190,14 +182,12 @@ namespace Battle.AI
                     enemies.Add(fieldAIObejects[i]);
                 }
             }
-            else if (stageType == STAGETYPE.MONSTER)
+            else
             {
                 addEnemyList(fieldAIObejects, "Monster");
             }
-            else if (stageType == STAGETYPE.BOSS)
-            {
-                addEnemyList(fieldAIObejects, "Boss");
-            }
+            
+            
         }
 
         protected virtual void searchingTarget()
@@ -223,6 +213,7 @@ namespace Battle.AI
             {
                 if (allUnits[i].Equals(this))
                     continue;
+
                 unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 if (unitLocation.CompareTo(myLocation) == true)
                 {
@@ -246,7 +237,6 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log("���");
                     //myAni.SetBool("isMove",false);
                 };
             }
@@ -280,6 +270,7 @@ namespace Battle.AI
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
                     if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                         return;
+
                     Vector3 cDir = (centerPosition - transform.position).normalized;
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cDir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
