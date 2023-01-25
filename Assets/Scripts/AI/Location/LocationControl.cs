@@ -28,8 +28,8 @@ namespace Battle.Location
 
     public static class LocationControl
     {
-        private const float tileDistanceX = 1.3f;
-        private const float tileDistanceY = 1.1f;
+        private const float tileDistanceX = 3f;
+        private const float tileDistanceY = 1.5f;
         public static double radius 
         {
             get 

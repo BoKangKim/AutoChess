@@ -91,6 +91,7 @@ namespace Battle.AI
             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
             searchingTarget();
 
+            Debug.Log("T" + target);
             next = rta.searchNextLocation(myLocation, target.myLocation);
             nextPos = LocationControl.convertLocationToPosition(next);
             dir = (nextPos - transform.position).normalized;
@@ -213,6 +214,7 @@ namespace Battle.AI
                 if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
                 {
                     minDistance = temp;
+                    Debug.Log(enemies[i]);
                     target = enemies[i];
                 }
             }
