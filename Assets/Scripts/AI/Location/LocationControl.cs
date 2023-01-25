@@ -29,7 +29,7 @@ namespace Battle.Location
     public static class LocationControl
     {
         private const float tileDistanceX = 3f;
-        private const float tileDistanceY = 1.5f;
+        private const float tileDistanceY = 2.5f;
         public static double radius 
         {
             get 
@@ -46,6 +46,7 @@ namespace Battle.Location
 
             location.x = (int)Mathf.Round((unitPostion.x / tileDistanceX));
             location.y = (int)Mathf.Round((unitPostion.z / tileDistanceY));
+            
             return location;
         }
 
@@ -56,9 +57,9 @@ namespace Battle.Location
             position.x = location.x * tileDistanceX;
             position.z = location.y * tileDistanceY;
 
-            if (location.y % 2 != 0)
+            if (location.y % 2 == 0)
             {
-                position.x += 0.6f;
+                position.x += 1.5f;
             }
 
             return position;

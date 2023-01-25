@@ -7,7 +7,7 @@ namespace Battle.RTASTAR
 {
     public class RTAstar
     {
-        private float[,] weight = new float[6, 8];
+        private float[,] weight = new float[6, 7];
         private ParentBT target = null;
         private ParentBT[] allUnits = null;
         private List<LocationXY> closeList = new List<LocationXY>();
@@ -40,6 +40,8 @@ namespace Battle.RTASTAR
             for(int i = 0; i < allUnits.Length; i++)
             {
                 LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
+                if (checkLocationArrange(unitLocation.x, unitLocation.y) == false)
+                    continue;
                 weight[unitLocation.y, unitLocation.x] += 5000;
             }
         }
@@ -51,6 +53,9 @@ namespace Battle.RTASTAR
 
         public LocationXY searchNextLocation(LocationXY unitLocation, LocationXY target)
         {
+            if (checkLocationArrange(target.x, target.y) == false)
+                return unitLocation;
+
             initWeight();
             updateWeight();
 
