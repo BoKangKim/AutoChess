@@ -250,7 +250,7 @@ namespace ZoneSystem
         {
             if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                storeButtonChange(Color.black, Color.white, true, "���� ��ȯ");
+                storeButtonChange(Color.black, Color.white, true, "유닛 구매");
                 buySellButton = null;
 
                 Destroy(selectedObject);
@@ -266,14 +266,14 @@ namespace ZoneSystem
             {
                 buySellButton = UIManager.Inst.RaycastUI<Button>(1);
 
-                storeButtonChange(Color.white, Color.black, false, "���� �Ǹ�");
+                storeButtonChange(Color.white, Color.black, false, "유닛 판매");
 
             }
             else
             {
                 if (buySellButton != null)
                 {
-                    storeButtonChange(Color.black, Color.white, true, "���� ��ȯ");
+                    storeButtonChange(Color.black, Color.white, true, "유닛 구매");
 
                     buySellButton = null;
                 }

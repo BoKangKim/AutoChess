@@ -84,16 +84,12 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-
             //StageControl sc = FindObjectOfType<StageControl>();
             //sc.changeStage = changeStage;
 
-            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
-            searchingTarget();
-
-            next = rta.searchNextLocation(myLocation, target.myLocation);
-            nextPos = LocationControl.convertLocationToPosition(next);
-            dir = (nextPos - transform.position).normalized;
+            //next = rta.searchNextLocation(myLocation, target.getMyLocation());
+            //nextPos = LocationControl.convertLocationToPosition(next);
+            //dir = (nextPos - transform.position).normalized;
         }
 
         private void Update()
@@ -180,8 +176,7 @@ namespace Battle.AI
         private void addEnemyList(ParentBT[] fieldAIObejects)
         {
             if (stageType == STAGETYPE.PVP
-                || stageType == STAGETYPE.CLONE
-                || stageType == STAGETYPE.PREPARE)
+                || stageType == STAGETYPE.CLONE)
             {
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
@@ -207,9 +202,14 @@ namespace Battle.AI
         {
             float minDistance = 100000f;
             float temp = 0f;
-
+        
             for (int i = 0; i < enemies.Count; i++)
             {
+                if ((enemies[i].transform.position.y < 0 || enemies[i].transform.position.y > 7.5f))
+                {
+                    continue;
+                }
+
                 if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
                 {
                     minDistance = temp;
@@ -249,7 +249,22 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    //myAni.SetBool("isMove",false);
+                    myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
+                    
+                    if (enemies.Count == 0)
+                    {
+                        findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
+                        searchingTarget();
+
+                        next = rta.searchNextLocation(myLocation, target.getMyLocation());
+                        nextPos = LocationControl.convertLocationToPosition(next);
+                        dir = (nextPos - transform.position).normalized;
+
+                        if (gameObject.name.CompareTo("Defender (2)") == 0)
+                        {
+                            Debug.Log(next.ToString() + " T " + target.getMyLocation().ToString());
+                        }
+                    }
                 };
             }
         }
@@ -318,6 +333,7 @@ namespace Battle.AI
                     {
                         myAni.SetBool("isMove",true);
                     }
+
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
@@ -326,6 +342,7 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
+                    
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
@@ -344,6 +361,7 @@ namespace Battle.AI
                         if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
+                            target = enemies[i];
                             next = myLocation;
                             return true;
                         }

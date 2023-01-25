@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Battle.AI;
 
 namespace ZoneSystem
 {
@@ -81,6 +82,8 @@ namespace ZoneSystem
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
+
+                        battleObject[z, x].GetComponent<ParentBT>().enabled = true;
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
@@ -188,7 +191,7 @@ namespace ZoneSystem
                                 activeSynergyList.Add("Orc2");
                             }
 
-                            if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
+                            if (mechaSynergyCount == 2) activeSynergyList.Add("Mecha");
                             if (mechaSynergyCount == 5)
                             {
                                 activeSynergyList.Remove("Mecha");
@@ -217,9 +220,11 @@ namespace ZoneSystem
 
             //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
             Debug.Log("액티브 시너지 리스트 카운트"+activeSynergyList.Count);
+            debug.text = "";
             for(int i = 0; i<activeSynergyList.Count;i++)
             {
                 Debug.Log("현재 활성화 된 시너지 " + activeSynergyList[i]);
+                debug.text += activeSynergyList[i] + "\n";
             }
             
             //UIManager.Inst.SynergyText(null);
