@@ -4,6 +4,8 @@ using UnityEngine;
 using Photon.Pun;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Realtime;
+
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("LoginPanel")]
@@ -13,6 +15,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("LobbyPanel")]
     public Image lobbyPanel;
     public Button matchPanelButton;
+    public Button nomalMatchButton;
     public Image matchButtonPanel;
     public TextMeshProUGUI myNickName;
     public Image userIcon;
@@ -21,13 +24,30 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public Button settingsCloseButton;
     public Button settingsPanelButton;
 
+    [Header("LoadingPanel")]
+    public Image loadingPanel;
+    public Image loadingImg;
+    public Image[] loadingPepleImg;
+    public TextMeshProUGUI metchingText;
+    public TextMeshProUGUI metchingSecText;
+    public TextMeshProUGUI metchingCurPlyaerText;
+
+
 
     public TextMeshProUGUI statusText;
-    
+
+    PhotonView PV;
+    RoomOptions room;
+
+    public TMP_InputField ChatInput;
+    public TextMeshProUGUI[] ChatText;
+
+    public ChatManager chatmanager = null;
+
 
     private void Awake()
     {
-        
+        room = new RoomOptions();
     }
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
@@ -38,16 +58,92 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedLobby()
     {
         lobbyPanel.gameObject.SetActive(true);
+
+        myNickName.text = nickNameField.GetComponent<TMP_InputField>().text;
+        PhotonNetwork.NickName = myNickName.text;
+
         logingPanel.gameObject.SetActive(false);
+
+        chatmanager.enabled = true;
+
+        PV = photonView;
+
         PhotonNetwork.LocalPlayer.NickName = nickNameField.text;
     }
 
+    public void JoinRandomOrCreateRoom()
+    {
+        nomalMatchButton.interactable = false;
+        room.MaxPlayers = 4;
 
 
+        if (PhotonNetwork.IsConnected)
+        {
+            statusText.text = "Connecting to Random Room...";
+            room.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
+
+            PhotonNetwork.JoinRandomOrCreateRoom(
+                expectedCustomRoomProperties: new ExitGames.Client.Photon.Hashtable(), expectedMaxPlayers: room.MaxPlayers, // 참가할 때의 기준.
+                roomOptions: room // 생성할 때의 기준.
+                );
+
+        }
+        else
+        {
+            statusText.text = "offline : Connetion Disabled - Try reconnecting...";
+            PhotonNetwork.ConnectUsingSettings();
+        }
+    }
+
+
+    public override void OnCreatedRoom()
+    {
+        statusText.text = ($"metching + {PhotonNetwork.CurrentRoom.PlayerCount}");
+        Debug.Log("들어왔니?");
+
+    }
+    public override void OnJoinedRoom()
+    {
+        UpdatePlayerCounts();
+    }
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        UpdatePlayerCounts();
+
+        if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
+        {
+            statusText.text = "다들어옴";
+        }
+    }
+    public override void OnPlayerLeftRoom(Player otherPlayer)
+    {
+        UpdatePlayerCounts();
+    }
+    private void UpdatePlayerCounts()
+    {
+        loadingPanel.gameObject.SetActive(true);
+        for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
+        {
+            loadingPepleImg[i].color = Color.black;
+        }
+        metchingCurPlyaerText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}";
+    }
+    float time = 0f;
 
     void Update()
     {
-        statusText.text = PhotonNetwork.NetworkClientState.ToString();
+        time += Time.deltaTime;
+        if (loadingPanel.gameObject.activeSelf)
+        {
+            loadingImg.transform.Rotate(new Vector3(0, 0, 80f * Time.deltaTime));
+            if (time > 1f) metchingSecText.text = ((int)time).ToString();
+        }
+        else
+        {
+            time = 0;
+        }
+
+        //loadingImg
     }
 
     public void OnClick_MatchPanel()
@@ -73,5 +169,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
             settingsPanel.gameObject.SetActive(false);
         }
     }
+
+
 
 }

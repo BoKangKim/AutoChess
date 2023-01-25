@@ -9,6 +9,9 @@ public class ScriptableEquipment : ScriptableObject
     [SerializeField] private int equipmentAtk;
     public int GetEquipmentAtk { get { return equipmentAtk; } }
 
+    [SerializeField] private int equipmentSpellPower;
+    public int GetEquipmentSpellPower { get { return equipmentSpellPower; } }
+
     [SerializeField] private int equipmentAttackSpeed;
     public int GetEquipmentAttackSpeed { get { return equipmentAttackSpeed; } }
 

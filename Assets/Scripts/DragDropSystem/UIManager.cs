@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
+using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace ZoneSystem
 {
@@ -34,12 +33,16 @@ namespace ZoneSystem
         GraphicRaycaster graphicRaycaster = null;
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
+        [SerializeField] private TextMeshProUGUI SynergyInfo = null;
+
+
 
         private void Awake()
         {
             graphicRaycaster = GetComponent<GraphicRaycaster>();
             pointerEventData = new PointerEventData(EventSystem.current);
             rrList = new List<RaycastResult>();
+
         }
 
         private void Update()
@@ -61,6 +64,19 @@ namespace ZoneSystem
 
 
             return rrList[num].gameObject.GetComponent<T>();
+        }
+
+        public void SynergyText(string text)
+        {
+            Debug.Log(text);
+            if (text == null)
+            {
+                //SynergyInfo.text = "";
+            }
+            else
+            {
+                SynergyInfo.text += "\n" + text;
+            }
         }
 
     }

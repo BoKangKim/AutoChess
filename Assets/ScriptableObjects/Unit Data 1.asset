@@ -18,12 +18,12 @@ MonoBehaviour:
   grade: 1
   atk: 10
   attackSpeed: 1
-  attackRange: 2
+  attackRange: 3
   spellPower: 0
   moveSpeed: 1
   magicCastingTime: 1
-  unitClass: {fileID: 0}
-  unitSpecies: {fileID: 0}
+  unitClass: {fileID: 11400000, guid: f3fa8229adc4ef74aa4eb896e8748eae, type: 2}
+  unitSpecies: {fileID: 11400000, guid: 401e11d1eeb536c4a880708dae1ec69a, type: 2}
   unitequipment01: {fileID: 0}
   unitequipment02: {fileID: 0}
   unitequipment03: {fileID: 0}

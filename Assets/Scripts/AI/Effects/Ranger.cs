@@ -52,11 +52,8 @@ namespace Battle.AI.Effect
             ParentBT ai = null;
             if (other.transform.TryGetComponent<ParentBT>(out ai) == true)
             {
-                Debug.Log("TEST");
-                if (ai.getMyNickName().Equals(ownerNickName) == false)
+                if (ai.getMyNickName().CompareTo(ownerNickName) != 0)
                 {
-                    Debug.Log(ai.getMyNickName() + " Collision");
-                    Debug.Log(ownerNickName + " Owner");
 
                     Destroy(this.gameObject);
                     instHitEffect(ai.transform.position);
