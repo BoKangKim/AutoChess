@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle.EFFECT;
 
-public class Hit : Effect
+public class Flash : Effect
 {
     protected override float setDestroyTime()
     {
@@ -12,7 +12,7 @@ public class Hit : Effect
 
     protected override bool setIsNonAttackEffect()
     {
-        return false;
+        return true;
     }
 
     protected override float setSpeed()

@@ -1,10 +1,11 @@
 using Battle.AI;
 using UnityEngine;
-using Battle.AI.Effect;
+using Battle.EFFECT;
 
 public class ExampleAI : ParentBT, Unit
 {
     [SerializeField] Transform effectStartPos = null;
+    [SerializeField] Effect projectile = null;
 
     protected override string initializingMytype()
     {
@@ -14,10 +15,13 @@ public class ExampleAI : ParentBT, Unit
 
     public override void StartEffect()
     {
-        Ranger _effect = Instantiate<GameObject>(effect,effectStartPos.position,Quaternion.identity).GetComponent<Ranger>();
+        Effect flash = null;
+        Effect project = null;
+        Instantiate(standardAttackEffect.gameObject, effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash);
+        flash.setOwnerName(nickName);
 
-        _effect.setNickName(nickName);
-        _effect.setDirection((target.transform.position - transform.position).normalized);
-        _effect.gameObject.transform.LookAt(target.transform.position);
+        Instantiate(projectile.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
+        project.setOwnerName(nickName);
+        project.setDirection(target.transform.position);
     }
 }

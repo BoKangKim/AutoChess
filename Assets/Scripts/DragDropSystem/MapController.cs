@@ -191,7 +191,7 @@ namespace ZoneSystem
                                 activeSynergyList.Add("Orc2");
                             }
 
-                            if (mechaSynergyCount == 2) activeSynergyList.Add("Mecha");
+                            if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
                             if (mechaSynergyCount == 5)
                             {
                                 activeSynergyList.Remove("Mecha");

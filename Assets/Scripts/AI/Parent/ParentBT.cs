@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Battle.Stage;
 using Battle.Location;
 using Battle.RTASTAR;
+using Battle.EFFECT;
 
 namespace Battle.AI
 {
@@ -22,7 +23,7 @@ namespace Battle.AI
 
         protected string myType = null;
         [SerializeField] protected string nickName = null;
-        [SerializeField] protected GameObject effect = null;
+        [SerializeField] protected Effect standardAttackEffect = null;
 
         protected LocationXY myLocation;
         protected LocationXY next;
@@ -86,10 +87,6 @@ namespace Battle.AI
             enemies = new List<ParentBT>();
             //StageControl sc = FindObjectOfType<StageControl>();
             //sc.changeStage = changeStage;
-
-            //next = rta.searchNextLocation(myLocation, target.getMyLocation());
-            //nextPos = LocationControl.convertLocationToPosition(next);
-            //dir = (nextPos - transform.position).normalized;
         }
 
         private void Update()
@@ -203,7 +200,7 @@ namespace Battle.AI
         
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((enemies[i].transform.position.y < 0 || enemies[i].transform.position.y > 7.5f))
+                if ((enemies[i].transform.position.z < 0 || enemies[i].transform.position.z > 12.5f))
                 {
                     continue;
                 }
@@ -258,11 +255,6 @@ namespace Battle.AI
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
-
-                        if (gameObject.name.CompareTo("Defender (2)") == 0)
-                        {
-                            Debug.Log(next.ToString() + " T " + target.getMyLocation().ToString());
-                        }
                     }
                 };
             }
@@ -329,11 +321,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(myAni.GetBool("isMove") == false)
-                    {
-                        myAni.SetBool("isMove",true);
-                    }
-
+                    myAni.SetBool("isMove",true);
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
@@ -342,7 +330,7 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    
+                    Debug.Log("Move");
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
@@ -355,6 +343,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
@@ -378,10 +367,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    this.transform.LookAt(target.transform.position);
+                    this.transform.LookAt(target.transform);
                     myAni.SetBool("isMove",false);
-                    //target.setIsHit(true);
-                    //target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
@@ -423,8 +410,7 @@ namespace Battle.AI
 
         public virtual void StartEffect()
         {
-            GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
-            //_effect.transform.localScale *= LocationControl.getDistance(myLocation,target.getMyLocation());
+            //GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
         }
 
         
