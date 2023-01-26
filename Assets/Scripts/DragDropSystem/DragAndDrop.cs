@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviour
@@ -40,7 +39,7 @@ namespace ZoneSystem
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
-            tileColor = new Color( 51/255f,83/255f,113/255f,1);
+            tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
         }
         private void Update()
         {
@@ -140,11 +139,11 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
-                    
+
                     if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        Vector3 vec ;
+                        Vector3 vec;
 
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
@@ -165,7 +164,7 @@ namespace ZoneSystem
 
                         }
                     }
-                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
                         Vector3 vec;
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
@@ -256,7 +255,7 @@ namespace ZoneSystem
                 Destroy(selectedObject);
             }
         }
-#endregion
+        #endregion
 
         #region buttonChange
         void buttonChange()
@@ -351,7 +350,7 @@ namespace ZoneSystem
 
             else if (Layer == battleSpaceLayer)
             {
-                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
                     selectedObject.transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
                     selectedObject = null;
@@ -475,23 +474,23 @@ namespace ZoneSystem
         //��Ʋ�� ��ǥ�� �ε��� ������ ��ȯ
         Vector3 battlePosToIndex(Vector3 Vec)
         {
-            Debug.Log($"pos + {Vec}");
+            //Debug.Log($"pos + {Vec}");
 
             Vec.z = (Vec.z / 2.5f);
 
             if (Vec.z % 2 == 0) { Vec.x -= 1.5f; }
 
-            else{}
+            else { }
 
             Vec.x /= 3f;
-            Debug.Log($"index + {Vec}");
+            //Debug.Log($"index + {Vec}");
             return Vec;
         }
         Vector3 safetyPosToIndex(Vector3 Vec)
         {
             Vec.x = (Vec.x - 1) / 3;
             Vec.z = (Vec.z + 7) / 3;
-       
+
 
             return Vec;
         }
@@ -517,36 +516,36 @@ namespace ZoneSystem
                     Destroy(selectedUnit.gameObject);
                     stayUnit.Upgrade(); //���׷��̵� ���� ��� ����(2023.01.18 15:08-�̿���)
 
-                   // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<testItem>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
             {
-                testItem selectedItem = selectedObject.GetComponent<testItem>();
-                testItem stayItem = stayObject.GetComponent<testItem>();
+                Equipment selectedItem = selectedObject.GetComponent<Equipment>();
+                Equipment stayItem = stayObject.GetComponent<Equipment>();
 
-                if (stayItem.itemNum > 2) return false;
+                if (stayItem.GetEquipmentGrade > 2) return false;
 
-                if (selectedItem.itemNum == stayItem.itemNum)
+                if (selectedItem.GetEquipmentGrade == stayItem.GetEquipmentGrade && selectedItem.GetEquipmentName == stayItem.GetEquipmentName)
                 {
                     Destroy(selectedItem.gameObject);
-                    ++stayItem.itemNum;
+                    stayItem.Upgrade();
 
                     //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                    Destroy(selectedObject.gameObject);
-                    stayObject.gameObject.name = "Item_Equip";
+                Destroy(selectedObject.gameObject);
+                stayObject.gameObject.name = "Item_Equip";
 
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    return true;
+                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                return true;
             }
             return false;
         }

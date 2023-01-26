@@ -8,20 +8,21 @@ public class Equipment : MonoBehaviour
     //}
     [SerializeField] ScriptableEquipment equipmentData = null;
 
-    [SerializeField] private string equipmentName; //인스펙터 창에서 데이터 들어왔나 보려고 [SerializeField]함
-
+    [SerializeField] private string equipmentName;
+    [SerializeField] private int equipmentGrade = 1;
     [SerializeField] private int equipmentAtk;
     [SerializeField] private int equipmentSpellPower; //주문력
     [SerializeField] private int equipmentAttackSpeed;
     [SerializeField] private int equipmentHp;
     [SerializeField] private int equipmentMp;
 
-    public string EQUIPMENTNAME { get { return equipmentName; } }
-    public int EQUIPMENTATK { get { return equipmentAtk; } }
-    public int EQUIPMENTSPELLPOWER { get { return equipmentSpellPower; } }
-    public int EQUIPMNETATTACKSPEED { get { return equipmentAttackSpeed; } }
-    public int EQUIPMENTHP { get { return equipmentHp; } }
-    public int EQUIPMENTMP { get { return equipmentMp; } }
+    public string GetEquipmentName { get { return equipmentName; } }
+    public int GetEquipmentAtk { get { return equipmentAtk; } }
+    public int GetEquipmentSpellPower { get { return equipmentSpellPower; } }
+    public int GetEquipmentAttackSpeed { get { return equipmentAttackSpeed; } }
+    public int GetEquipmentHp { get { return equipmentHp; } }
+    public int GetEquipmentMp { get { return equipmentMp; } }
+    public int GetEquipmentGrade { get { return equipmentGrade; } }
 
     private void Awake()
     {
@@ -31,6 +32,11 @@ public class Equipment : MonoBehaviour
         equipmentHp = equipmentData.GetEquipmentHp;
         equipmentMp = equipmentData.GetEquipmentMp;
         equipmentSpellPower = equipmentData.GetEquipmentSpellPower;
+    }
+
+    public void Upgrade()
+    {
+        equipmentGrade++;
     }
 
 }

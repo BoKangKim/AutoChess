@@ -47,8 +47,7 @@ namespace ZoneSystem
 
         private void Update()
         {
-            pointerEventData.position = Input.mousePosition;
-
+            //pointerEventData.position = Input.mousePosition;
         }
 
 
@@ -68,15 +67,16 @@ namespace ZoneSystem
 
         public void SynergyText(string text)
         {
-            Debug.Log(text);
-            if (text == null)
+            if (text == null) 
             {
-                //SynergyInfo.text = "";
+                SynergyInfo.text = "";
             }
             else
             {
-                SynergyInfo.text += "\n" + text;
+                SynergyInfo.text += text + "\n";
             }
+
+            Debug.Log(text);
         }
 
     }
