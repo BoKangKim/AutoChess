@@ -8369,6 +8369,10 @@ PrefabInstance:
       propertyPath: nickName
       value: a
       objectReference: {fileID: 0}
+    - target: {fileID: 2507074545953913935, guid: fe02d664ab900d74381e6cf5cb142ff9, type: 3}
+      propertyPath: skillEffect
+      value: 
+      objectReference: {fileID: 3777072753010055983, guid: 74f428ddaea42f8488c5902bf0702b81, type: 3}
     - target: {fileID: 6771540340825938600, guid: fe02d664ab900d74381e6cf5cb142ff9, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -8416,6 +8420,10 @@ PrefabInstance:
     - target: {fileID: 6771540340826424968, guid: fe02d664ab900d74381e6cf5cb142ff9, type: 3}
       propertyPath: m_Name
       value: Dwarf_Range
+      objectReference: {fileID: 0}
+    - target: {fileID: 6771540340826424968, guid: fe02d664ab900d74381e6cf5cb142ff9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6771540340835865726, guid: fe02d664ab900d74381e6cf5cb142ff9, type: 3}
       propertyPath: m_ApplyRootMotion

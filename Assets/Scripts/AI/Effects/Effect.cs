@@ -7,10 +7,10 @@ namespace Battle.EFFECT
 {
     public abstract class Effect : MonoBehaviour
     {
-        [SerializeField] private GameObject HitEffect = null;
+        [SerializeField] protected GameObject HitEffect = null;
         private float time = 0;
         private float destroyTime = 2f;
-        private float speed = 0f;
+        protected float speed = 0f;
         protected string ownerName = null;
         protected Vector3 direction = Vector3.zero;
         protected bool isNonAttackEffect = false;
@@ -29,13 +29,14 @@ namespace Battle.EFFECT
             {
                 Destroy(gameObject);
             }
+            
+            specialLogic();
 
             if(speed == 0f
                 || direction == Vector3.zero)
             {
                 return;
             }
-
             gameObject.transform.Translate(direction * Time.deltaTime * speed,Space.World);
         }
 
@@ -43,6 +44,7 @@ namespace Battle.EFFECT
         protected abstract float setDestroyTime();
         protected abstract float setSpeed();
         protected abstract bool setIsNonAttackEffect();
+        protected virtual void specialLogic() { }
 
         public virtual void setOwnerName(string nickName)
         {

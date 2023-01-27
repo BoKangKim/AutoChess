@@ -24,6 +24,7 @@ namespace Battle.AI
         protected string myType = null;
         [SerializeField] protected string nickName = null;
         [SerializeField] protected Effect standardAttackEffect = null;
+        [SerializeField] protected SkillEffect skillEffect = null;
 
         protected LocationXY myLocation;
         protected LocationXY next;
@@ -75,10 +76,11 @@ namespace Battle.AI
         private void Awake()
         {
             InitializingRootNode();
-            initializingSpecialRootNode();
+            specialRoot = initializingSpecialRootNode();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
+            attackRange = setAttackRange();
         }
 
         private void Start()
@@ -99,6 +101,7 @@ namespace Battle.AI
             if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
+                Debug.Log("Special");
                 return;
             }
 
@@ -129,9 +132,9 @@ namespace Battle.AI
                 );
         }
 
-        protected virtual void initializingSpecialRootNode() { }
+        protected virtual INode initializingSpecialRootNode() { return null; }
         protected abstract string initializingMytype();
-
+        protected abstract float setAttackRange();
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
@@ -144,7 +147,7 @@ namespace Battle.AI
 
             switch (myType)
             {
-                case "Unit":
+                case "UnitAI":
                     addEnemyList(fieldAIObejects);
                     break;
                 case "Monster":
@@ -330,7 +333,6 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    Debug.Log("Move");
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
                 };
@@ -413,7 +415,10 @@ namespace Battle.AI
             //GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
         }
 
-        
+        public virtual void StartSkillEffect()
+        {
+            
+        }
     }
 
 }
