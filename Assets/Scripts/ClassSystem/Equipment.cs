@@ -39,4 +39,9 @@ public class Equipment : MonoBehaviour
         equipmentGrade++;
     }
 
+    public void Equip()
+    {
+
+    }
+
 }

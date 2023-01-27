@@ -47,7 +47,7 @@ namespace ZoneSystem
 
         private void Update()
         {
-            //pointerEventData.position = Input.mousePosition;
+            pointerEventData.position = Input.mousePosition;
         }
 
 

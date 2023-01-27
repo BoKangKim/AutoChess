@@ -36,10 +36,9 @@ namespace ZoneSystem
 
         public int battleUnitCount = 0;
 
-        [SerializeField]
-        GameObject UnitPrefab;
-        [SerializeField]
-        GameObject battleZoneTile;
+        [SerializeField] private GameObject UnitPrefab;
+        [SerializeField] private GameObject ItemPrefab;
+        [SerializeField] private GameObject battleZoneTile;
 
         Transform[] transforms;
 
@@ -291,7 +290,7 @@ namespace ZoneSystem
 
                             if (undeadSynergyCount > 2 && undeadSynergyCount < 5)
                             {
-                                if(!activeSynergyList.Contains("Undead")) activeSynergyList.Add("Undead");
+                                if (!activeSynergyList.Contains("Undead")) activeSynergyList.Add("Undead");
                             }
                             if (undeadSynergyCount >= 5)
                             {
@@ -329,7 +328,7 @@ namespace ZoneSystem
             return battleUnitCount;
         }
 
-        public void OnClick_UnitInst()
+        public void OnClick_UnitInst() //유닛 구매
         {
             for (int z = 0; z < 2; z++)
             {
@@ -346,6 +345,27 @@ namespace ZoneSystem
                 }
             }
             debug.text = "세이프티존이 꽉차서 유닛을 소환할 수 없습니다.";
+        }
+
+        public void OnClick_ItemInst()
+        {
+            for (int z = 0; z < 2; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (safetyObject[z, x] == null)
+                    {
+                        int PosX = (x * 3) + 1;
+                        int PosZ = (z * 3) - 7;
+
+                        safetyObject[z, x] = Instantiate(ItemPrefab, new Vector3(PosX, 0.25f, PosZ), Quaternion.identity);
+                        safetyObject[z, x].layer = 31;
+
+                        return;
+                    }
+                }
+            }
+            debug.text = "세이프티존이 꽉차서 장비를 소환할 수 없습니다.";
         }
 
 

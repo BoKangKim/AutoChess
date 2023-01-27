@@ -49,6 +49,8 @@ namespace UnitClass
         public string GetSynergyName { get { return synergyName; } }
         public float GetGrade { get { return grade; } }
 
+        public GameObject GetEquipment01 { get { return Equipment01; } }
+
         #endregion
         private void Awake()
         {
@@ -86,6 +88,20 @@ namespace UnitClass
         public int Upgrade() //일단은 머지시 두배씩 증가함 - >
         {
             return grade++;
+        }
+
+        //public string GetEquipmentScriptable(string name)
+        //{
+        //    return
+        //}
+
+        public void GetEquipmentData(string _name, int _atk, int _spellPower, float _attackSpeed, int _mp, int _hp)
+        {
+            maxHp += _hp;
+            atk += _atk;
+            spellPower += _spellPower;
+            attackSpeed += _attackSpeed;
+            maxMp += _mp;
         }
 
     }

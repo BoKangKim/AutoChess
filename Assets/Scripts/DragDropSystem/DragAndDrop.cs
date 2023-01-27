@@ -266,7 +266,6 @@ namespace ZoneSystem
                 buySellButton = UIManager.Inst.RaycastUI<Button>(1);
 
                 storeButtonChange(Color.white, Color.black, false, "유닛 판매");
-
             }
             else
             {
@@ -540,9 +539,9 @@ namespace ZoneSystem
             //��� ����
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                Destroy(selectedObject.gameObject);
-                stayObject.gameObject.name = "Item_Equip";
-
+                selectedObject.transform.parent = stayObject.transform;
+                selectedObject.SetActive(false);
+                //stayObject.GetComponent<UnitClass.Unit>().
                 //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                 //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                 return true;
