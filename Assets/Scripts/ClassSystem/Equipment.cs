@@ -2,16 +2,13 @@ using UnityEngine;
 
 public class Equipment : MonoBehaviour
 {
-    //enum EQUIPMENTDATA
-    //{
-    //    sword, shield, dagger, robe, wand
-    //}
+
     [SerializeField] ScriptableEquipment equipmentData = null;
 
     [SerializeField] private string equipmentName;
     [SerializeField] private int equipmentGrade = 1;
     [SerializeField] private int equipmentAtk;
-    [SerializeField] private int equipmentSpellPower; //ÁÖ¹®·Â
+    [SerializeField] private int equipmentSpellPower;
     [SerializeField] private int equipmentAttackSpeed;
     [SerializeField] private int equipmentHp;
     [SerializeField] private int equipmentMp;
@@ -23,6 +20,8 @@ public class Equipment : MonoBehaviour
     public int GetEquipmentHp { get { return equipmentHp; } }
     public int GetEquipmentMp { get { return equipmentMp; } }
     public int GetEquipmentGrade { get { return equipmentGrade; } }
+
+    
 
     private void Awake()
     {
@@ -39,7 +38,7 @@ public class Equipment : MonoBehaviour
         equipmentGrade++;
     }
 
-    public void Equip()
+    public void SetData()
     {
 
     }

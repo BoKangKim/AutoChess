@@ -9,9 +9,11 @@ namespace UnitClass
         [SerializeField] private ScriptableUnit UnitData = null;
         [SerializeField] private ScriptableClass ClassData = null;
         [SerializeField] private ScriptableSpecies SpeciesData = null;
-        [SerializeField] private GameObject Equipment01 = null;
-        [SerializeField] private GameObject Equipment02 = null;
-        [SerializeField] private GameObject Equipment03 = null;
+        [SerializeField] private GameObject equipment01 = null;
+        [SerializeField] private GameObject equipment02 = null;
+        [SerializeField] private GameObject equipment03 = null;
+        [Header("장착한 아이템 갯수")]
+        [SerializeField] private int equipmentCount;
 
         #endregion
 
@@ -48,8 +50,7 @@ namespace UnitClass
         public ScriptableUnit GetUnitData { get { return UnitData; } }
         public string GetSynergyName { get { return synergyName; } }
         public float GetGrade { get { return grade; } }
-
-        public GameObject GetEquipment01 { get { return Equipment01; } }
+        public int GetEquipmentCount { get { return equipmentCount; } }
 
         #endregion
         private void Awake()
@@ -90,18 +91,45 @@ namespace UnitClass
             return grade++;
         }
 
-        //public string GetEquipmentScriptable(string name)
-        //{
-        //    return
-        //}
-
-        public void GetEquipmentData(string _name, int _atk, int _spellPower, float _attackSpeed, int _mp, int _hp)
+        public int EquipCount()
         {
-            maxHp += _hp;
-            atk += _atk;
-            spellPower += _spellPower;
-            attackSpeed += _attackSpeed;
-            maxMp += _mp;
+            return equipmentCount++;
+        }
+
+        public void EquipItem(int equipmentCount)
+        {
+            switch (equipmentCount)
+            {
+                case 0:
+                    equipment01 = transform.GetChild(equipmentCount).gameObject;
+                    EquipCount();
+                    break;
+                case 1:
+                    equipment02 = transform.GetChild(equipmentCount).gameObject;
+                    EquipCount();
+                    break;
+                case 2:
+                    equipment03 = transform.GetChild(equipmentCount).gameObject;
+                    EquipCount();
+                    break;
+            }
+        }
+
+        public void GetItemStat()
+        {
+            for (int i = 0; i < equipmentCount; i++) // 이거 공통된부분 캐싱해서 쓰는걸로 바꿔야함
+            {
+                this.atk += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentAtk;
+                this.spellPower += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentSpellPower;
+                this.attackSpeed += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentAttackSpeed;
+                this.maxHp += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentHp;
+                this.maxMp -= transform.GetChild(i).GetComponent<Equipment>().GetEquipmentMp;
+            }
+        }
+
+        public void GetSynergyData()
+        {
+            
         }
 
     }

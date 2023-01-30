@@ -311,16 +311,11 @@ namespace ZoneSystem
             }
 
             //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
-            //if (activeSynergyList != null)
-            //{
-            //    foreach (var dict in activeSynergyList)
-            //    {
-            //        Debug.Log(dict);
-            //    }
-            //}
+            //뱉는 시점은 여기인데 각각 객체 접근하려면 또 이중 for문 돌려야 하는데 그러긴 싫고
+            //스크립트에 접근하자니 추후 포톤뷰 체크도 해야하고
+            //나중에 거울모드 뽑을때 데이터 가져가는거 생각까지 해야해서 생각보다 어려움
 
-
-
+            //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();

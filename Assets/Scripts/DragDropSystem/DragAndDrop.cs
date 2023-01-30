@@ -540,8 +540,16 @@ namespace ZoneSystem
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                 selectedObject.transform.parent = stayObject.transform;
+                int eqcount = stayObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
+                if (eqcount > 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                }
                 selectedObject.SetActive(false);
-                //stayObject.GetComponent<UnitClass.Unit>().
                 //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                 //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                 return true;

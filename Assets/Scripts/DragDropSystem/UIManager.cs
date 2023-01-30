@@ -75,8 +75,6 @@ namespace ZoneSystem
             {
                 SynergyInfo.text += text + "\n";
             }
-
-            Debug.Log(text);
         }
 
     }
