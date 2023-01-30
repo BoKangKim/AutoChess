@@ -101,7 +101,6 @@ namespace Battle.AI
             if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
-                Debug.Log("Special");
                 return;
             }
 
@@ -334,7 +333,7 @@ namespace Battle.AI
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
-                    gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
+                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.World);
                 };
             }
         }

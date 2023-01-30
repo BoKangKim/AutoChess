@@ -2,7 +2,7 @@ using Battle.AI;
 using UnityEngine;
 using Battle.EFFECT;
 
-public class ExampleAI : UnitAI
+public class RangeAI : UnitAI
 {
     [SerializeField] Transform effectStartPos = null;
     [SerializeField] Effect projectile = null;
@@ -23,12 +23,14 @@ public class ExampleAI : UnitAI
         Instantiate(projectile.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
         project.setOwnerName(nickName);
         project.setDirection(target.transform.position);
-
-        
     }
 
     public override void StartSkillEffect()
     {
+        if(myAni.GetParameter(2).name.CompareTo("activeSkill") == 0)
+        {
+            myAni.SetTrigger("activeSkill");
+        }
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
         skill.setOwnerName(nickName);

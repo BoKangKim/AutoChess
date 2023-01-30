@@ -4,7 +4,7 @@ using UnityEngine;
 using Battle.AI;
 using Battle.EFFECT;
 
-public class ExampleAI_2 : UnitAI
+public class MeleeAI : UnitAI
 {
 
     public override void StartEffect()
