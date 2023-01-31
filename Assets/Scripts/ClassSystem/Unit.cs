@@ -19,11 +19,11 @@ namespace UnitClass
 
         #region 유닛 지역변수
         private int grade;
-        private string unitName;
         private float maxHp;
         private float curHp;
         private float maxMp;
         private float curMp;
+        private float mpRecovery;
         private float moveSpeed;
         private float atk;
         private float attackRange;
@@ -47,8 +47,8 @@ namespace UnitClass
         #region 프로퍼티
         public string GetSpeciesName { get { return speciesName; } }
         public string GetClassName { get { return className; } }
-        public ScriptableUnit GetUnitData { get { return UnitData; } }
         public string GetSynergyName { get { return synergyName; } }
+        public ScriptableUnit GetUnitData { get { return UnitData; } }
         public float GetGrade { get { return grade; } }
         public int GetEquipmentCount { get { return equipmentCount; } }
 
@@ -60,7 +60,6 @@ namespace UnitClass
             //여기서 시리얼라이즈필드된거 초기화 해줘야함
             //speciesName = SpeciesData.GetSpecies;
             //className = ClassData.GetSynergeClass;
-            unitName = speciesName + className;
             curHp = UnitData.GetMaxHp;
             curMp = UnitData.GetMaxMp;
             //maxHp = UnitData.GetMaxHp;
@@ -80,6 +79,17 @@ namespace UnitClass
             //blindnessTime;
             //weakness;
         }
+
+        //private void Update()
+        //{
+        //    //데이터 잘 들어왔나 확인용
+        //    Debug.Log("Atkspeed : " + attackSpeed + " hp : " + maxHp + " mp : " + mpRecovery);
+
+        //    if(Input.GetKeyDown(KeyCode.T))
+        //    {
+        //        GetItemStat();
+        //    }
+        //}
 
         public float GetAttackSpeed()
         {
@@ -123,7 +133,7 @@ namespace UnitClass
                 this.spellPower += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentSpellPower;
                 this.attackSpeed += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentAttackSpeed;
                 this.maxHp += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentHp;
-                this.maxMp -= transform.GetChild(i).GetComponent<Equipment>().GetEquipmentMp;
+                this.mpRecovery += transform.GetChild(i).GetComponent<Equipment>().GetEquipmentMpRecovery;
             }
         }
 

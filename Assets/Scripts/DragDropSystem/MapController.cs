@@ -389,6 +389,27 @@ namespace ZoneSystem
             debug.text = "세이프티존이 꽉차서 아이템을 습득할 수 없습니다.";
         }
 
+        public void SellUnitOutItem(GameObject Item)
+        {
+            
+            for (int z = 0; z < 2; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (safetyObject[z, x] == null)
+                    {
+                        int PosX = (x * 3) + 1;
+                        int PosZ = (z * 3) - 7;
+                        safetyObject[z, x] = Item;
+                        safetyObject[z, x].transform.position = new Vector3(PosX, 0.25f, PosZ);
+                        safetyObject[z, x].transform.rotation = Quaternion.identity;
+                        safetyObject[z, x].layer = 31;
+                        return;
+                    }
+                }
+            }
+        }
+
 
 
 

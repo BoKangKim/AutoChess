@@ -9,13 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b63133805f9f7344ae056c0c1dcc9ea, type: 3}
-  m_Name: Class_RangeDealer
+  m_Script: {fileID: 11500000, guid: 50e2f5ba12bec9340932ebab30ac3e4f, type: 3}
+  m_Name: Robe
   m_EditorClassIdentifier: 
-  Class: RangeDealer
-  attackRange: 2
-  mpRecovery: -1
-  atkPercentage: 0
-  hpPercentage: 0
-  skillDamagePercentage: 0
-  attackSpeed: 0
+  equipmentName: robe
+  equipmentAtk: 0
+  equipmentSpellPower: 0
+  equipmentAttackSpeed: 0
+  equipmentMpRecovery: 5
+  equipmentHp: 0
