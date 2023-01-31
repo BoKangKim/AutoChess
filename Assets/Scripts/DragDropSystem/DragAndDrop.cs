@@ -252,7 +252,7 @@ namespace ZoneSystem
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
                 if (count != 0) // 판매시 장비 뱉는 로직
                 {
-                    for(int i = 0; i< count;i++)
+                    for (int i = 0; i < count; i++)
                     {
                         mapController.SellUnitOutItem(selectedObject.transform.GetChild(i).gameObject);
                         selectedObject.transform.GetChild(i).gameObject.SetActive(true);
@@ -519,19 +519,24 @@ namespace ZoneSystem
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
+                int stayEqCount = stayUnit.GetEquipmentCount;
+                int selectEqCount = selectedUnit.GetEquipmentCount;
                 if (stayUnit.GetGrade > 3) return false;
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade&&selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
                 {
-                    //장비끼리 우선 머지 시도 이후 갯수에 따라?
-
-                    //아니면 갯수끼리 나눈다음 행동
 
 
-                    if(stayUnit.GetEquipmentCount + selectedUnit.GetEquipmentCount <4) // 그냥 머지(한 캐릭에 몰아주기)
+                    if (stayEqCount + selectEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
                     {
-
+                        for (int i = selectEqCount; i < 0; i--)
+                        {
+                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
+                        }
+                        stayUnit.EquipItem(selectEqCount + stayEqCount);
                     }
+
+
 
                     else // 아이템이 4개 이상이라서 확인이 필요->
                     {

@@ -106,7 +106,7 @@ namespace UnitClass
             return equipmentCount++;
         }
 
-        public void EquipItem(int equipmentCount)
+        public void EquipItem(int equipmentCount) // 속보 이거 기존 구조 이상함 수정 요함
         {
             switch (equipmentCount)
             {
