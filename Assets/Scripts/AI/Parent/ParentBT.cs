@@ -41,6 +41,20 @@ namespace Battle.AI
 
         protected float attackRange;
         #region GET,SET
+        public float getAttackRange()
+        {
+            return attackRange;
+        }
+
+        public void setAttackRange(float attackRange)
+        {
+            if(attackRange > 10f)
+            {
+                return;
+            }
+
+            this.attackRange = attackRange;
+        }
 
         public void SetState(STAGETYPE state)
         {

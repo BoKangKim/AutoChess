@@ -4,12 +4,12 @@ using Battle.EFFECT;
 
 public class RangeAI : UnitAI
 {
-    [SerializeField] Transform effectStartPos = null;
-    [SerializeField] Effect projectile = null;
+    [SerializeField] protected Transform effectStartPos = null;
+    [SerializeField] protected Effect projectile = null;
 
     public override void StartEffect()
     {
-        mana += 5f;
+        mana += 3f;
         if (mana > maxMana)
         {
             return;

@@ -37,7 +37,7 @@ namespace Battle.EFFECT
             {
                 return;
             }
-            gameObject.transform.Translate(direction * Time.deltaTime * speed,Space.World);
+            gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.World);
         }
 
         public virtual void setDirection(Vector3 targetPosition) { }
@@ -68,7 +68,7 @@ namespace Battle.EFFECT
 
             if(collision.transform.TryGetComponent<ParentBT>(out target) == true)
             {
-                if(target.getMyNickName().CompareTo(ownerName) != 0)
+                if (target.getMyNickName().CompareTo(ownerName) != 0)
                 {
                     if(HitEffect != null)
                     {
