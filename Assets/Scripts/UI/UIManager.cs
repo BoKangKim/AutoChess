@@ -9,27 +9,36 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
+
+    ScriptableUnit unitData;
+
     [SerializeField] TextMeshProUGUI userID;
     [SerializeField] string playerID;
 
-    [SerializeField] Button roundInfoOn;
-    [SerializeField] Button roundInfoOff;
     [SerializeField] GameObject roundInfoUI;
-    [SerializeField] Button settingExitUI;
     [SerializeField] GameObject settingWindow;
-    [SerializeField] Button synergyUI;
     [SerializeField] GameObject synergyContents;
-    [SerializeField] Button rankingUI;
     [SerializeField] GameObject rankingContents;
-    [SerializeField] TextMeshProUGUI prossessionGold;
+
+    [SerializeField] TextMeshProUGUI RoundInfoNum;
+    [SerializeField] TextMeshProUGUI RoundStepNum;
+    [SerializeField] TextMeshProUGUI expansionGold;
+    [SerializeField] TextMeshProUGUI userGold;
+    [SerializeField] TextMeshProUGUI gachaWeponGold;
+    [SerializeField] TextMeshProUGUI gachaUnitGold;
 
     protected int gold;
-    protected int gachaWeponGold;
-    protected int gachaUnitGold;
+    protected int gachaWeponGoldValue;
+    protected int gachaUnitGoldValue;
+    protected int expansionGoldValue;
+    protected int expansionLV;
+    protected int deployedUnit;
+    protected int roundStepNumber;
+    protected int roundNumber;
     protected bool IsESC { get; set; }
     protected bool IsSynergy { get; set; }
     protected bool IsRanking { get; set; }
- 
+
 
     protected void Awake()
     {
@@ -37,26 +46,50 @@ public class UIManager : MonoBehaviour
     }
     protected void Start()
     {
-        userID.text = "User".ToString(); // user data
+        unitData = FindObjectOfType<ScriptableUnit>();
+        //userID.text = unitData.GetUnitName; // user data
+        userID.text = playerID;
         playerID = userID.text; // save user id
-        gold = 1000; // user data
+        gold = 100; // user data
+
+        // °íÁ¤ ÁöºÒ ºñ¿ë
+        expansionGoldValue = 10;
+        gachaWeponGoldValue = 3;
+        gachaUnitGoldValue = 4;
+        gachaWeponGold.text = (gachaWeponGoldValue + " G").ToString();
+        gachaUnitGold.text = (gachaUnitGoldValue + " G").ToString();
+        expansionGold.text = (expansionGoldValue + " G").ToString();
 
         IsESC = false;
         IsSynergy = false;
         IsRanking = false;
-        
+
+        // data ¹Þ¾Æ¿Ã °Í
+        expansionLV = 1;
+        deployedUnit = 3;
+        roundStepNumber = 3;
+        roundNumber = 1;
+
 
     }
     protected void Update()
     {
-        // Prossession Gold        
         if (gold <= 0) gold = 0;
-        prossessionGold.text = (gold + " G").ToString();
+        userGold.text = (gold + " G").ToString();
 
         // Game Setting
         if (Input.GetKeyDown(KeyCode.Escape)) SettingMenuESC();
-       
+
+        SynergyContents();
+        RankingContents();
+        Debug.Log("local Position X : " + synergyContents.transform.localPosition.x);
+        Debug.Log("Position X : " + synergyContents.transform.position.x);
+
+        // Round Info
+        RoundInfoNum.text = (expansionLV + " / " + deployedUnit).ToString();
+        RoundStepNum.text = (roundNumber + "-" + roundStepNumber).ToString();
     }
+
 
     // Setting Menu
     #region Setting Menu
@@ -80,6 +113,10 @@ public class UIManager : MonoBehaviour
             IsESC = false;
             OffSettingMenu();
         }
+    }
+    public void Surrender()
+    {
+        Debug.Log("Ç×º¹");
     }
     #endregion
     protected bool IsRound;
@@ -109,70 +146,196 @@ public class UIManager : MonoBehaviour
     #endregion
 
     // Synergy Contents UI
-    #region Synergy Contents UI
-    public void OnSynergyContents()
-    {
-        if (synergyUI.transform.position.x >= 180f) return;
-        synergyUI.transform.position = Vector2.Lerp(synergyUI.transform.position, new Vector2(180f, 100f), Time.deltaTime * 3f);
-    }
-    public void OffSynergyContents()
-    {
-        if (synergyUI.transform.position.x <= -150f) return;
-        synergyUI.transform.position = Vector2.Lerp(synergyUI.transform.position, new Vector2(-150f, 100f), Time.deltaTime * 3f);
-    }
+    #region Synergy Contents UI   
     protected void SynergyContents()
     {
-        if (!IsSynergy)
+        if (IsSynergy)
         {
-            IsSynergy = true;
-            OnSynergyContents();
+            if (synergyContents.transform.position.x >= -7f) return;
+            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x + 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 50f);
+
         }
         else
         {
+            if (synergyContents.transform.position.x <= -10.2f) return;
+            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x - 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 50f);
+        }
+    }
+    public void OnOffSynergyContents()
+    {
+        if (IsSynergy)
+        {
             IsSynergy = false;
-            OffSynergyContents();
+        }
+        else
+        {
+            IsSynergy = true;
         }
     }
     #endregion
 
     // Ranking Contesnt UI
-    #region Ranking Contesnt UI
-    public void OnRankContents()
-    {
-        if (rankingUI.transform.position.x <= -180f) return;
-        rankingUI.transform.position = Vector2.Lerp(rankingUI.transform.position, new Vector2(-180f, 100f), Time.deltaTime * 3f);
-    }
-    public void OffRankContents()
-    {
-        if (rankingUI.transform.position.x >= 150f) return;
-        rankingUI.transform.position = Vector2.Lerp(rankingUI.transform.position, new Vector2(150f, 100f), Time.deltaTime * 3f);
-    }
+    #region Ranking Contesnt UI   
+
     protected void RankingContents()
     {
-        if (!IsRanking)
+        if (IsRanking)
         {
-            IsRanking = true;
-            OnRankContents();
+            if (rankingContents.transform.position.x <= 7f) return;
+            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x - 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 50f);
         }
         else
         {
-            IsRanking = false;
-            OffRankContents();
+            if (rankingContents.transform.position.x >= 10.2f) return;
+            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x + 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 50f);
         }
     }
+
+    public void OnOffRankingContents()
+    {
+        if (IsRanking)
+        {
+            IsRanking = false;
+        }
+        else
+        {
+            IsRanking = true;
+        }
+    }
+    // À¯ÀúÀÇ ¶óÀÌÇÁ ¹Þ¾Æ¿Í¼­ ³ôÀº ¼ø¼­´ë·Î Á¤·Ä
+    // ÀÌ¹ÌÁö fill mode
     #endregion
 
     // Gacha Wepon UI
+    protected int MixRandomWepon;
     public void OnWeponGacha()
     {
-        gachaWeponGold = 10;
-        gold -= gachaWeponGold;
+        if (gold <= gachaWeponGoldValue) return;
+        MixRandomWepon = Random.Range(0, 4);
+        gold -= gachaWeponGoldValue;
     }
     // Gacha Unit UI
+    protected int MixRandomUnit;
     public void OnUnitGacha()
-    {
-        gachaUnitGold = 100;
-        gold -= gachaUnitGold;
+    {        
+        if (gold <= gachaUnitGoldValue) return;
+        MixRandomUnit = Random.Range(0, 21); // »ÌÀ» ¶§¸¶´Ù È®·ü ·£´ý
+        gold -= gachaUnitGoldValue;
     }
 
+    // Faction Expansion UI
+    public void OnFactionExpansion()
+    {
+        if (gold <= expansionGoldValue) return;
+        gold -= expansionGoldValue;
+    }
+
+    protected void WeponRandomCalculation()
+    {
+        // 25%
+        // 1¼º 4Á¾
+        // safety zone ¿¡ ¹èÄ¡
+        // ¿¹¿ÜÃ³¸® : ¿©À¯ °ø°£ ¾øÀ½
+        // ¸Ê ½ºÅ©¸³Æ® Âü°í
+    }
+    protected void UnitRandomCalculation()
+    {
+        // »ÌÀº À¯´ÖÀº »Ì±â È®·ü¿¡¼­ Á¦¿Ü
+        // 1¹ø »Ì°í ³ª¸é maxValue - 1
+        // ÆÇ¸Å µÈ À¯´Ö -> »Ì±â È®·ü¿¡ Ãß°¡
+        // 2¼º ¿ÀÅ© ÇÏ³ª ÆÇ¸Å -> 1¼º ¿ÀÅ© 2°³ Áõ°¡
+        // gachaUnit/maxUnit
+        
+        
+        int[] RadomUnitList;
+
+
+        // ÇØ´ç µ¥ÀÌÅÍ¿¡ ¸Â´Â ¹øÈ£ÀÇ À¯´Ö Á¦°ø
+        int GetRandomUnit = Random.Range(0, 22);
+        // ÀÌ¹Ì »ÌÀº À¯´Ö Áßº¹ X -> »ÌÀº À¯´Ö »èÁ¦
+
+        switch (GetRandomUnit)
+        {            
+            case 1:
+                Debug.Log("À¯´Ö »Ì±â - 1");
+                break;
+            case 2:
+                Debug.Log("À¯´Ö »Ì±â - 2");
+                break;
+            case 3:
+                Debug.Log("À¯´Ö »Ì±â - 3");
+                break;
+            case 4:
+                Debug.Log("À¯´Ö »Ì±â - 4");
+                break;
+            case 5:
+                Debug.Log("À¯´Ö »Ì±â - 5");
+                break;
+            case 6:
+                Debug.Log("À¯´Ö »Ì±â - 6");
+                break;
+            case 7:
+                Debug.Log("À¯´Ö »Ì±â - 7");
+                break;
+            case 8:
+                Debug.Log("À¯´Ö »Ì±â - 8");
+                break;
+            case 9:
+                Debug.Log("À¯´Ö »Ì±â - 9");
+                break;
+            case 10:
+                Debug.Log("À¯´Ö »Ì±â - 10");
+                break;
+            case 11:
+                Debug.Log("À¯´Ö »Ì±â - 11");
+                break;
+            case 12:
+                Debug.Log("À¯´Ö »Ì±â - 12");
+                break;
+            case 13:
+                Debug.Log("À¯´Ö »Ì±â - 13");
+                break;
+            case 14:
+                Debug.Log("À¯´Ö »Ì±â - 14");
+                break;
+            case 15:
+                Debug.Log("À¯´Ö »Ì±â - 15");
+                break;
+            case 16:
+                Debug.Log("À¯´Ö »Ì±â - 16");
+                break;
+            case 17:
+                Debug.Log("À¯´Ö »Ì±â - 17");
+                break;
+            case 18:
+                Debug.Log("À¯´Ö »Ì±â - 18");
+                break;
+            case 19:
+                Debug.Log("À¯´Ö »Ì±â - 19");
+                break;
+            case 20:
+                Debug.Log("À¯´Ö »Ì±â - 20");
+                break;
+            case 21:
+                Debug.Log("À¯´Ö »Ì±â - 21");
+
+                break;
+        }
+    }
+
+    // Áø¿µ Exp °¡ max ¸é Áø¿µ level up
+    protected Slider FactionExp;
+    protected int FactionExpValue;
+    protected TextMeshProUGUI FactionLeveltext;
+    protected int FactionLevelValue;
+    protected void FactionLevel()
+    {
+        FactionExp.value = FactionExpValue;
+    }
+
+    // Game Quit
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
 }

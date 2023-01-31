@@ -21,15 +21,15 @@ namespace Battle.Stage
     {
         private STAGETYPE[,] stages = new STAGETYPE[9,4];
         private (int col, int row) stageIndex = (0, 0);
-        private Timer timer = null;
+        private TimeManager timer = null;
         public ChangeStage changeStage = null;
 
         private void Awake()
         {
             // 네트워크
-            if(TryGetComponent<Timer>(out timer) == false)
+            if(TryGetComponent<TimeManager>(out timer) == false)
             {
-                timer = new GameObject("Timer").AddComponent<Timer>();
+                timer = new GameObject("Timer").AddComponent<TimeManager>();
             }
         }
 
