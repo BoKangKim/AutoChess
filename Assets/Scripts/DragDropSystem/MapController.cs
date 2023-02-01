@@ -243,6 +243,14 @@ namespace ZoneSystem
         {
             if (!photonView.IsMine) return;
 
+            if (UIManager.Inst.PlayerGold < 5)
+            {
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+          
+            
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

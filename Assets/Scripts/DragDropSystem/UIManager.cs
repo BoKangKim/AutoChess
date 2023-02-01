@@ -35,6 +35,8 @@ namespace ZoneSystem
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
+        public int PlayerGold = 500;
+
 
         public Action UnitInstButton;
 
@@ -58,12 +60,7 @@ namespace ZoneSystem
         {
             rrList.Clear();
             graphicRaycaster.Raycast(pointerEventData, rrList);
-
-            if (rrList.Count == 0)
-                return null;
-
-
-
+            if (rrList.Count == 0) return null;
             return rrList[num].gameObject.GetComponent<T>();
         }
 

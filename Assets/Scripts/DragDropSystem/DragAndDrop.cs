@@ -43,7 +43,7 @@ namespace ZoneSystem
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
-            tileColor = new Color( 51/255f,83/255f,113/255f,1);
+            tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
         }
         private void Update()
         {
@@ -147,13 +147,13 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
-                    
+
                     if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
                         selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
 
-                        
+
 
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
@@ -179,7 +179,7 @@ namespace ZoneSystem
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
                         selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
-                        
+
 
                         safetyZoneTile.gameObject.SetActive(true);
 
@@ -267,7 +267,7 @@ namespace ZoneSystem
                 Destroy(selectedObject);
             }
         }
-#endregion
+        #endregion
 
         #region buttonChange
         void buttonChange()
@@ -309,7 +309,7 @@ namespace ZoneSystem
             var safetyPos = safetyPosToIndex(worldPosition);
             var battlePos = battlePosToIndex(worldPosition);
             var beforePos = safetyPosToIndex(this.beforePos);
-            
+
 
 
             if (Layer == safetySpaceLayer)
@@ -319,7 +319,6 @@ namespace ZoneSystem
                     mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     mapController.BattleZoneCheck();
-                    selectedObject = null;
                 }
                 else
                 {
@@ -356,7 +355,6 @@ namespace ZoneSystem
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
-                    selectedObject = null;
                 }
             }
 
@@ -375,7 +373,6 @@ namespace ZoneSystem
                     mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     mapController.BattleZoneCheck();
-                    selectedObject = null;
                 }
                 else
                 {
@@ -409,7 +406,7 @@ namespace ZoneSystem
                         }
                         else
                         {
-                           
+
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
                             mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
@@ -418,10 +415,11 @@ namespace ZoneSystem
 
                         }
                     }
-                    selectedObject = null;
 
                 }
+
             }
+                selectedObject = null;
         }
         #endregion
 
@@ -471,7 +469,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ��ưü����
+        #region 스토어 버튼체인지
         void storeButtonChange(Color text, Color button, bool enabled, string unitStatus)
         {
 
@@ -483,35 +481,32 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ��ǥ�� �ε����� ��ȯ
-
-        //��Ʋ�� ��ǥ�� �ε��� ������ ��ȯ
+        #region 좌표변환
+        int safetyInterval = 3;
+        Vector3 battleInterval = new Vector3(1.5f, 0 , 2.5f);
         (int x , int z) battlePosToIndex(Vector3 Vec)
         {
-            Debug.Log($"pos + {Vec}");
 
-            Vec.z = (Vec.z / 2.5f);
+            Vec.z = (Vec.z / battleInterval.z);
 
-            if (Vec.z % 2 == 0) { Vec.x -= 1.5f; }
+            if (Vec.z % 2 == 0) { Vec.x -= battleInterval.x; }
 
             else{}
 
             Vec.x /= 3f;
-            Debug.Log($"index + {Vec}");
             return ((int)Vec.x,(int)Vec.z);
         }
         (int x, int z) safetyPosToIndex(Vector3 Vec)
         {
-            Vec.x = (Vec.x - 1) / 3;
-            Vec.z = (Vec.z + 7) / 3;
+            Vec.x = (Vec.x - 1) / safetyInterval;
+            Vec.z = (Vec.z + 7) / safetyInterval;
        
 
             return ((int)Vec.x, (int)Vec.z);
         }
         #endregion
 
-        #region ����
-        //���� + ������ ����
+        #region 머지시스템
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
 
