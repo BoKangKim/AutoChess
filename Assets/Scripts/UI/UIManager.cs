@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI playerHP; 
     [SerializeField] TextMeshProUGUI gachaWeponGold;
     [SerializeField] TextMeshProUGUI gachaUnitGold;
+    [SerializeField] TextMeshProUGUI synergy; // 시너지 
     [SerializeField] Slider expansionEXPSlider; //
     [SerializeField] Slider playerHPSlider; //
 
@@ -73,6 +74,9 @@ public class UIManager : MonoBehaviour
     protected int roundTextColor;
     protected int RoundRewardGold = 10;
     protected float RoundRewardEXP = 4f;
+
+    protected int synergyCount; // 시너지 카운트
+    
     protected bool IsESC { get; set; }
     protected bool IsSynergy { get; set; }
     protected bool IsRanking { get; set; }
@@ -164,9 +168,14 @@ public class UIManager : MonoBehaviour
         playerHPSlider.value = (playerHPValue * 0.1f);
         playerHPSlider.value = (playerMaxHPValue * 0.1f);
         // 다른 플레이어와 비교했을 때 가장 높은 HP일 경우 상위 노출
+        // gameobject (player 정보가 담긴 화면)
+        // 1등.transform.position = -4, 175
+        // 2등.transform.position = -4, 60
+        // 3등.transform.position = -4, -55
+        // 4등.transform.position = -4, -170
         
     }
-   
+
     // Round Detail Info
     #region Round Detail Info
     protected void RoundDetailInfo()
