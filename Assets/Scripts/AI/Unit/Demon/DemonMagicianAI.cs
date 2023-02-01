@@ -6,11 +6,6 @@ public class DemonMagicianAI : RangeAI
 {
     public override void StartSkillEffect()
     {
-        if (myAni.GetParameter(2).name.CompareTo("activeSkill") == 0)
-        {
-            myAni.SetTrigger("activeSkill");
-        }
-
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject, target.transform.position + Vector3.up, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwnerName(nickName);
