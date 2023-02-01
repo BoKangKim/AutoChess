@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Class_Assassin
   m_EditorClassIdentifier: 
   Class: Assassin
-  attackRange: 0
-  mpRecovery: -2
+  attackRange: 1
+  mpRecovery: -1
   atkPercentage: 0
   hpPercentage: 0
   skillDamagePercentage: 0
