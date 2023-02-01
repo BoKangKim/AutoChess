@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using TMPro;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 
