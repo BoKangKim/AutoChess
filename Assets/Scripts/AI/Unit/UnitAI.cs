@@ -55,7 +55,7 @@ namespace Battle.AI
                 return () =>
                 {
                     mana = 0f;
-                    myAni.SetTrigger("isAttack");
+                    myAni.SetTrigger("activeSkill");
                     StartSkillEffect();
                 };
             }

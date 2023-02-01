@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd7fdc8d2d72eae4b92fc708330d83ff, type: 3}
-  m_Name: Species_Undead
+  m_Name: Species_Demon
   m_EditorClassIdentifier: 
-  species: Undead
+  species: Demon
   attackSpeedPercentage: 0
   barrierPercentage: 0
   atkPercentage: 0
