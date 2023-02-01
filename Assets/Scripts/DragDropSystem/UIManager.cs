@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 namespace ZoneSystem
 {
@@ -35,7 +36,7 @@ namespace ZoneSystem
         List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
 
-
+        public Action UnitInstButton;
 
         private void Awake()
         {
@@ -65,6 +66,10 @@ namespace ZoneSystem
 
             return rrList[num].gameObject.GetComponent<T>();
         }
+
+        public void unitInstButton() => UnitInstButton();
+   
+
 
         public void SynergyText(string text)
         {

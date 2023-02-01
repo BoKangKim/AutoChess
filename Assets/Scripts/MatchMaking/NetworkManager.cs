@@ -10,7 +10,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("LoginPanel")]
     public Image logingPanel;
-    public TMP_InputField nickNameField;
+
 
     [Header("LobbyPanel")]
     public Image lobbyPanel;
@@ -32,12 +32,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI metchingSecText;
     public TextMeshProUGUI metchingCurPlyaerText;
 
-
-
+    
     public TextMeshProUGUI statusText;
 
     PhotonView PV;
     RoomOptions room;
+    private string gameScene;
 
     public TMP_InputField ChatInput;
     public TextMeshProUGUI[] ChatText;
@@ -47,7 +47,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
+        gameScene = "KCS_MainGameScene";
     }
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
@@ -57,18 +59,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
+        //되긴하는데 맘에안드는 코드 
+        if (Database.Instance.userInfo.NickName == null || Database.Instance.userInfo.PhoneNumber == null) return;
+     
         lobbyPanel.gameObject.SetActive(true);
-
-        myNickName.text = nickNameField.GetComponent<TMP_InputField>().text;
-        PhotonNetwork.NickName = myNickName.text;
-
         logingPanel.gameObject.SetActive(false);
-
+        myNickName.text = Database.Instance.userInfo.NickName;
+        PhotonNetwork.NickName = myNickName.text;
         chatmanager.enabled = true;
-
         PV = photonView;
-
-        PhotonNetwork.LocalPlayer.NickName = nickNameField.text;
+        PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
     }
 
     public void JoinRandomOrCreateRoom()
@@ -102,24 +102,41 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("들어왔니?");
 
     }
+
+
     public override void OnJoinedRoom()
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
+
+
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+      
+                PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"] = i;
+
+                PhotonNetwork.PlayerList[i].SetCustomProperties(PhotonNetwork.LocalPlayer.CustomProperties);
+
+                break;
+            }
+        }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {
-            statusText.text = "다들어옴";
+            PhotonNetwork.LoadLevel(gameScene);
         }
     }
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
     }
-    private void UpdatePlayerCounts()
+    private void UpdatePlayerCount()
     {
         loadingPanel.gameObject.SetActive(true);
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
@@ -128,6 +145,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         metchingCurPlyaerText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
+
+    
     float time = 0f;
 
     void Update()
