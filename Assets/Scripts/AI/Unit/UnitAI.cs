@@ -55,7 +55,10 @@ namespace Battle.AI
                 return () =>
                 {
                     mana = 0f;
-                    myAni.SetTrigger("activeSkill");
+                    if (myAni.GetParameter(2).name.CompareTo("activeSkill") == 0)
+                    {
+                        myAni.SetTrigger("activeSkill");
+                    }
                     StartSkillEffect();
                 };
             }
