@@ -39,6 +39,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] GameObject settingWindow;
     [SerializeField] GameObject synergyContents;
     [SerializeField] GameObject rankingContents;
+    [SerializeField] GameObject chattingWindow;
 
     [SerializeField] TextMeshProUGUI RoundInfoNum;
     [SerializeField] TextMeshProUGUI RoundStageNum;
@@ -48,17 +49,20 @@ public class UIManager : MonoBehaviour
     [SerializeField] TextMeshProUGUI RoundDetailStepNum3;
     [SerializeField] TextMeshProUGUI RoundDetailStepNum4;
     [SerializeField] TextMeshProUGUI expansionGold; // 확장 시 사용하는 골드
+    [SerializeField] TextMeshProUGUI expensionLV; 
     [SerializeField] TextMeshProUGUI playerLV; 
     [SerializeField] TextMeshProUGUI playerGold; // 플레이어가 소지한 골드
     [SerializeField] TextMeshProUGUI playerHP; 
     [SerializeField] TextMeshProUGUI gachaWeponGold;
     [SerializeField] TextMeshProUGUI gachaUnitGold;
-    [SerializeField] TextMeshProUGUI synergy; // 시너지 
-    [SerializeField] Slider expansionEXPSlider; //
-    [SerializeField] Slider playerHPSlider; //
+    // 컨텐츠 박스안에 담길 정보 : 종족 이름, 종족 카운트 수
+    [SerializeField] Image synergyIcon;
+    [SerializeField] TextMeshProUGUI synergyName; 
+    [SerializeField] TextMeshProUGUI synergyNum; 
+    [SerializeField] Slider expansionEXPSlider;
+    [SerializeField] Slider playerHPSlider;
 
     protected int playerGoldValue;
-    protected int playerLevelValue;
     protected float playerEXPValue;
     protected float playerHPValue;
     protected int playerMaxHPValue;
@@ -68,6 +72,7 @@ public class UIManager : MonoBehaviour
     protected int gachaUnitGoldValue;
     protected int expansionGoldValue;
     protected int expansionMaxEXPValue;
+    protected int expensionLevelValue;
 
     protected int roundStepNumber1 = 1;
     protected int roundStepNumber2 = 1;
@@ -80,6 +85,7 @@ public class UIManager : MonoBehaviour
     protected bool IsESC { get; set; }
     protected bool IsSynergy { get; set; }
     protected bool IsRanking { get; set; }
+    protected bool IsChatting { get; set; }
     //protected bool IsCurRound { get; set; }
 
     TimeManager timeManager;
@@ -106,13 +112,14 @@ public class UIManager : MonoBehaviour
         IsESC = false;
         IsSynergy = false;
         IsRanking = false;
+        IsChatting = false;
         //IsCurRound = true;
 
         // data 받아올 것
         playerGoldValue = 1000;//player.GetGold;
-        playerLevelValue = 1;//player.GetLevel;
+        expensionLevelValue = 1;//player.GetLevel;
         playerEXPValue = 0;//player.GetEXP;
-        playerLV.text = playerLevelValue.ToString(); // 레벨 텍스트
+        playerLV.text = expensionLevelValue.ToString(); // 레벨 텍스트
         expansionEXPSlider.value = playerEXPValue; // 슬라이더
         
         expansionMaxEXPValue = 32; // 임시 - 데이터 받아오기
@@ -139,7 +146,7 @@ public class UIManager : MonoBehaviour
         RankingContents();
        
         // Round Info
-        RoundInfoNum.text = (playerLevelValue + " / " + deployedUnit).ToString();
+        RoundInfoNum.text = (expensionLevelValue + " / " + deployedUnit).ToString();
         // timer = 0 -> Next Round
         if (timeManager.currentTime<=0f)
         {
@@ -283,13 +290,13 @@ public class UIManager : MonoBehaviour
         if (IsSynergy)
         {
             if (synergyContents.transform.position.x >= -7f) return;
-            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x + 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 50f);
+            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x + 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 100f);
 
         }
         else
         {
             if (synergyContents.transform.position.x <= -10.2f) return;
-            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x - 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 50f);
+            synergyContents.transform.localPosition = Vector2.Lerp(synergyContents.transform.localPosition, new Vector2(synergyContents.transform.localPosition.x - 10f, synergyContents.transform.localPosition.y), Time.deltaTime * 100f);
         }
     }
     public void OnOffSynergyContents()
@@ -313,12 +320,12 @@ public class UIManager : MonoBehaviour
         if (IsRanking)
         {
             if (rankingContents.transform.position.x <= 7f) return;
-            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x - 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 50f);
+            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x - 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 100f);
         }
         else
         {
             if (rankingContents.transform.position.x >= 10.2f) return;
-            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x + 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 50f);
+            rankingContents.transform.localPosition = Vector2.Lerp(rankingContents.transform.localPosition, new Vector2(rankingContents.transform.localPosition.x + 10f, rankingContents.transform.localPosition.y), Time.deltaTime * 100f);
         }
     }
 
@@ -348,8 +355,7 @@ public class UIManager : MonoBehaviour
     protected int MixRandomUnit;
     public void OnUnitGacha()
     {        
-        if (playerGoldValue <= gachaUnitGoldValue) return;
-        
+        if (playerGoldValue <= gachaUnitGoldValue) return;        
         playerGoldValue -= gachaUnitGoldValue;
     }
 
@@ -359,8 +365,8 @@ public class UIManager : MonoBehaviour
         if (playerGoldValue <= expansionGoldValue) return;
         if (playerEXPValue >= expansionMaxEXPValue)
         {
-            playerLevelValue += 1;
-            playerLV.text = playerLevelValue.ToString();
+            expensionLevelValue += 1;
+            playerLV.text = expensionLevelValue.ToString();
             playerEXPValue = playerEXPValue - expansionMaxEXPValue;
             // 
         }        
@@ -369,11 +375,35 @@ public class UIManager : MonoBehaviour
             playerEXPValue += RoundRewardEXP;
        
         playerGold.text = playerGoldValue.ToString();
-        playerLV.text = playerLevelValue.ToString(); //
+        playerLV.text = expensionLevelValue.ToString(); //
         expansionEXPSlider.value = (playerEXPValue * 0.1f); // 슬라이더 값 조절 필요
         expansionEXPSlider.maxValue = (expansionMaxEXPValue * 0.1f);
         Debug.Log("playerEXPValue : " + playerEXPValue);        
     }
+
+    #region Setting Menu
+    public void OnChattingUI()
+    {
+        chattingWindow.gameObject.SetActive(true);
+    }
+    public void OffChattingUI()
+    {
+        chattingWindow.gameObject.SetActive(false);
+    }
+    protected void Chatting()
+    {
+        if (!IsChatting)
+        {
+            IsChatting = true;
+            OnChattingUI();
+        }
+        else
+        {
+            IsChatting = false;
+            OffChattingUI();
+        }
+    }
+    #endregion
 
     protected void WeponRandomCalculation()
     {
