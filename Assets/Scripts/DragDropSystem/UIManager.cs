@@ -28,12 +28,12 @@ namespace ZoneSystem
             }
         }
         #endregion
-
+        
         [SerializeField]
-        Button buyButton, sellButton = null;
-        GraphicRaycaster graphicRaycaster = null;
-        PointerEventData pointerEventData = null;
-        List<RaycastResult> rrList = null;
+        public Button unitBuyButton, equipmentBuyButton, sellButton = null;
+        private GraphicRaycaster graphicRaycaster = null;
+        private PointerEventData pointerEventData = null;
+        private List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
         public int PlayerGold = 500;
 
@@ -51,7 +51,6 @@ namespace ZoneSystem
         private void Update()
         {
             pointerEventData.position = Input.mousePosition;
-
         }
 
 
@@ -65,19 +64,16 @@ namespace ZoneSystem
         }
 
         public void unitInstButton() => UnitInstButton();
-   
-
 
         public void SynergyText(string text)
         {
-            Debug.Log(text);
-            if (text == null)
+            if (text == null) 
             {
-                //SynergyInfo.text = "";
+                SynergyInfo.text = "";
             }
             else
             {
-                SynergyInfo.text += "\n" + text;
+                SynergyInfo.text += text + "\n";
             }
         }
 

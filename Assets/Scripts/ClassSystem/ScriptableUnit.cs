@@ -21,9 +21,6 @@ public class ScriptableUnit : ScriptableObject
     [SerializeField] private int attackSpeed;
     public int GetAttackSpeed { get { return attackSpeed; } }
 
-    [SerializeField] private float attackRange;
-    public float GetAttackRange { get { return attackRange; } }
-
     [SerializeField] private int spellPower;
     public int GetSpellPower { get { return spellPower; } }
 
