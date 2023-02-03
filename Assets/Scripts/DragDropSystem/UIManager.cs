@@ -28,8 +28,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        [SerializeField]
-        Button buyButton, sellButton = null;
+        public Button unitBuyButton, equipmentBuyButton, sellButton = null;
         GraphicRaycaster graphicRaycaster = null;
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
@@ -48,7 +47,6 @@ namespace ZoneSystem
         private void Update()
         {
             pointerEventData.position = Input.mousePosition;
-
         }
 
 
@@ -68,14 +66,13 @@ namespace ZoneSystem
 
         public void SynergyText(string text)
         {
-            Debug.Log(text);
-            if (text == null)
+            if (text == null) 
             {
-                //SynergyInfo.text = "";
+                SynergyInfo.text = "";
             }
             else
             {
-                SynergyInfo.text += "\n" + text;
+                SynergyInfo.text += text + "\n";
             }
         }
 

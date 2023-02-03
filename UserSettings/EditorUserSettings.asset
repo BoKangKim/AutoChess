@@ -17,6 +17,7 @@ EditorUserSettings:
     RecentlyUsedSceneGuid-3:
       value: 515003555d535d0c590f097345215b4442151b297b2e70652c2c4e67b0b8633c
       flags: 0
+<<<<<<< HEAD
     RecentlyUsedSceneGuid-4:
       value: 07080c075d075b0a080c0f7a12700f44134e4f29747e72327879486bb0b0643e
       flags: 0
@@ -31,6 +32,10 @@ EditorUserSettings:
       flags: 0
     RecentlyUsedSceneGuid-8:
       value: 54550c025d050f5e09595c77147009444f154a7a7b7c7067792b486be3b66039
+=======
+    RecentlyUsedSceneGuid-6:
+      value: 0506510303545c0e080a5c7043765b44154f4d7b747023637c781e64b6b36669
+>>>>>>> origin/feature_Synergy
       flags: 0
     vcSharedLogLevel:
       value: 0d5e400f0650

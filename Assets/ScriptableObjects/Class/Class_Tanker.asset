@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Class_Tanker
   m_EditorClassIdentifier: 
   Class: Tanker
-  attackRange: 0
+  attackRange: 1
   mpRecovery: -2
   atkPercentage: 0
   hpPercentage: 0

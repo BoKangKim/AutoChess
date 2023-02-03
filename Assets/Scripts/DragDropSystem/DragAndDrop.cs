@@ -1,9 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviour
@@ -26,7 +25,7 @@ namespace ZoneSystem
 
         Vector3 beforePos;
 
-        Button buySellButton = null;
+        Button posCheckButton = null;
 
         private void Awake()
         {
@@ -40,7 +39,7 @@ namespace ZoneSystem
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
-            tileColor = new Color( 51/255f,83/255f,113/255f,1);
+            tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
         }
         private void Update()
         {
@@ -140,11 +139,11 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
-                    
+
                     if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        Vector3 vec ;
+                        Vector3 vec;
 
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
@@ -165,7 +164,7 @@ namespace ZoneSystem
 
                         }
                     }
-                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
                         Vector3 vec;
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
@@ -185,7 +184,7 @@ namespace ZoneSystem
                 else
                 {
                     // ���� �Ǹ�
-                    sellUnit();
+                    sellObject();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -205,12 +204,14 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
+                storeButtonChange();
+
             }
             //Drag
             if (selectedObject != null)
             {
                 tileChangeColor();
-                buttonChange();
+                buttonPosCheck();
                 Drag();
             }
             #endregion
@@ -246,36 +247,49 @@ namespace ZoneSystem
         #endregion
 
         #region sellUnit
-        void sellUnit()
+        void sellObject()
         {
-            if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
+            if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                storeButtonChange(Color.black, Color.white, true, "유닛 구매");
-                buySellButton = null;
-
-                Destroy(selectedObject);
+                int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
+                if (count != 0) // 판매시 장비 뱉는 로직
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        mapController.SellUnitOutItem(selectedObject.transform.GetChild(i).gameObject);
+                        selectedObject.transform.GetChild(i).gameObject.SetActive(true);
+                        selectedObject.transform.GetChild(i).transform.parent = null;
+                        count--;
+                        i--;
+                    }
+                }
+               
             }
+            posCheckButton = null;
+
+            Destroy(selectedObject);
+            selectedObject = null;
+            storeButtonChange();
+            battleZoneTile.gameObject.SetActive(false);
+            safetyZoneTile.gameObject.SetActive(false);
         }
-#endregion
+        #endregion
 
         #region buttonChange
-        void buttonChange()
+        void buttonPosCheck()
         {
 
             if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                buySellButton = UIManager.Inst.RaycastUI<Button>(1);
-
-                storeButtonChange(Color.white, Color.black, false, "유닛 판매");
+                posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
 
             }
             else
             {
-                if (buySellButton != null)
+                if (posCheckButton != null)
                 {
-                    storeButtonChange(Color.black, Color.white, true, "유닛 구매");
 
-                    buySellButton = null;
+                    posCheckButton = null;
                 }
             }
         }
@@ -351,7 +365,7 @@ namespace ZoneSystem
 
             else if (Layer == battleSpaceLayer)
             {
-                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
                     selectedObject.transform.position = new Vector3(beforePos.x, 0.25f, beforePos.z);
                     selectedObject = null;
@@ -459,14 +473,23 @@ namespace ZoneSystem
         #endregion
 
         #region ��ưü����
-        void storeButtonChange(Color text, Color button, bool enabled, string unitStatus)
+        void storeButtonChange()
         {
+            if (selectedObject == null)
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.sellButton.gameObject.SetActive(false);
 
-            buySellButton.image.color = button;
-            TextMeshProUGUI buttonText = buySellButton.GetComponentInChildren<TextMeshProUGUI>();
-            buySellButton.enabled = enabled;
-            buttonText.text = unitStatus;
-            buttonText.color = text;
+            }
+            else
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.sellButton.gameObject.SetActive(true);
+            }
+
+            
         }
         #endregion
 
@@ -475,23 +498,23 @@ namespace ZoneSystem
         //��Ʋ�� ��ǥ�� �ε��� ������ ��ȯ
         Vector3 battlePosToIndex(Vector3 Vec)
         {
-            Debug.Log($"pos + {Vec}");
+            //Debug.Log($"pos + {Vec}");
 
             Vec.z = (Vec.z / 2.5f);
 
             if (Vec.z % 2 == 0) { Vec.x -= 1.5f; }
 
-            else{}
+            else { }
 
             Vec.x /= 3f;
-            Debug.Log($"index + {Vec}");
+            //Debug.Log($"index + {Vec}");
             return Vec;
         }
         Vector3 safetyPosToIndex(Vector3 Vec)
         {
             Vec.x = (Vec.x - 1) / 3;
             Vec.z = (Vec.z + 7) / 3;
-       
+
 
             return Vec;
         }
@@ -509,44 +532,70 @@ namespace ZoneSystem
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
+                int stayEqCount = stayUnit.GetEquipmentCount;
+                int selectEqCount = selectedUnit.GetEquipmentCount;
                 if (stayUnit.GetGrade > 3) return false;
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
                 {
 
+
+                    if (stayEqCount + selectEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
+                    {
+                        for (int i = selectEqCount; i < 0; i--)
+                        {
+                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
+                        }
+                        stayUnit.EquipItem(selectEqCount + stayEqCount);
+                    }
+
+
+
+                    else // 아이템이 4개 이상이라서 확인이 필요->
+                    {
+
+                    }
                     Destroy(selectedUnit.gameObject);
                     stayUnit.Upgrade(); //���׷��̵� ���� ��� ����(2023.01.18 15:08-�̿���)
 
-                   // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                    // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<testItem>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
             {
-                testItem selectedItem = selectedObject.GetComponent<testItem>();
-                testItem stayItem = stayObject.GetComponent<testItem>();
+                Equipment selectedItem = selectedObject.GetComponent<Equipment>();
+                Equipment stayItem = stayObject.GetComponent<Equipment>();
 
-                if (stayItem.itemNum > 2) return false;
+                if (stayItem.GetEquipmentGrade > 2) return false;
 
-                if (selectedItem.itemNum == stayItem.itemNum)
+                if (selectedItem.GetEquipmentGrade == stayItem.GetEquipmentGrade && selectedItem.GetEquipmentName == stayItem.GetEquipmentName)
                 {
                     Destroy(selectedItem.gameObject);
-                    ++stayItem.itemNum;
+                    stayItem.Upgrade();
 
                     //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                    Destroy(selectedObject.gameObject);
-                    stayObject.gameObject.name = "Item_Equip";
-
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    return true;
+                int eqcount = stayObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
+                if (eqcount > 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    selectedObject.transform.parent = stayObject.transform;
+                    stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                }
+                selectedObject.SetActive(false);
+                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+                return true;
             }
             return false;
         }
