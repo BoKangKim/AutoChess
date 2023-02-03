@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Battle.Stage;
 using Battle.Location;
 using Battle.RTASTAR;
+using Battle.EFFECT;
 
 namespace Battle.AI
 {
@@ -22,7 +23,8 @@ namespace Battle.AI
 
         protected string myType = null;
         [SerializeField] protected string nickName = null;
-        [SerializeField] protected GameObject effect = null;
+        [SerializeField] protected Effect standardAttackEffect = null;
+        [SerializeField] protected SkillEffect skillEffect = null;
 
         protected LocationXY myLocation;
         protected LocationXY next;
@@ -39,6 +41,20 @@ namespace Battle.AI
 
         protected float attackRange;
         #region GET,SET
+        public float getAttackRange()
+        {
+            return attackRange;
+        }
+
+        public void setAttackRange(float attackRange)
+        {
+            if(attackRange > 10f)
+            {
+                return;
+            }
+
+            this.attackRange = attackRange;
+        }
 
         public void SetState(STAGETYPE state)
         {
@@ -74,16 +90,18 @@ namespace Battle.AI
         private void Awake()
         {
             InitializingRootNode();
-            initializingSpecialRootNode();
+            specialRoot = initializingSpecialRootNode();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
+            attackRange = setAttackRange();
         }
 
         private void Start()
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
+
             StageControl sc = FindObjectOfType<StageControl>();
             sc.changeStage = changeStage;
         }
@@ -128,9 +146,9 @@ namespace Battle.AI
                 );
         }
 
-        protected virtual void initializingSpecialRootNode() { }
+        protected virtual INode initializingSpecialRootNode() { return null; }
         protected abstract string initializingMytype();
-
+        protected abstract float setAttackRange();
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
@@ -143,7 +161,7 @@ namespace Battle.AI
 
             switch (myType)
             {
-                case "Unit":
+                case "UnitAI":
                     addEnemyList(fieldAIObejects);
                     break;
                 case "Monster":
@@ -184,14 +202,12 @@ namespace Battle.AI
                     enemies.Add(fieldAIObejects[i]);
                 }
             }
-            else if (stageType == STAGETYPE.MONSTER)
+            else
             {
                 addEnemyList(fieldAIObejects, "Monster");
             }
-            else if (stageType == STAGETYPE.BOSS)
-            {
-                addEnemyList(fieldAIObejects, "Boss");
-            }
+            
+            
         }
 
         protected virtual void searchingTarget()
@@ -201,7 +217,7 @@ namespace Battle.AI
         
             for (int i = 0; i < enemies.Count; i++)
             {
-                if ((enemies[i].transform.position.y < 0 || enemies[i].transform.position.y > 7.5f))
+                if ((enemies[i].transform.position.z < 0 || enemies[i].transform.position.z > 12.5f))
                 {
                     continue;
                 }
@@ -222,6 +238,7 @@ namespace Battle.AI
             {
                 if (allUnits[i].Equals(this))
                     continue;
+
                 unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 if (unitLocation.CompareTo(myLocation) == true)
                 {
@@ -255,11 +272,6 @@ namespace Battle.AI
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
                         dir = (nextPos - transform.position).normalized;
-
-                        if (gameObject.name.CompareTo("Defender (2)") == 0)
-                        {
-                            Debug.Log(next.ToString() + " T " + target.getMyLocation().ToString());
-                        }
                     }
                 };
             }
@@ -293,6 +305,7 @@ namespace Battle.AI
                     Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
                     if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
                         return;
+
                     Vector3 cDir = (centerPosition - transform.position).normalized;
                     transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cDir), Time.deltaTime * 10f);
                     gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
@@ -325,11 +338,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(myAni.GetBool("isMove") == false)
-                    {
-                        myAni.SetBool("isMove",true);
-                    }
-
+                    myAni.SetBool("isMove",true);
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
@@ -338,9 +347,8 @@ namespace Battle.AI
                         dir = (nextPos - transform.position).normalized;
                     }
 
-                    
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
-                    gameObject.transform.Translate(dir * 1f * Time.deltaTime,Space.World);
+                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.World);
                 };
             }
         }
@@ -351,6 +359,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
@@ -374,10 +383,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    this.transform.LookAt(target.transform.position);
+                    this.transform.LookAt(target.transform);
                     myAni.SetBool("isMove",false);
-                    //target.setIsHit(true);
-                    //target.Damage(1f);
                     myAni.SetTrigger("isAttack");
                 };
             }
@@ -419,11 +426,13 @@ namespace Battle.AI
 
         public virtual void StartEffect()
         {
-            GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
-            //_effect.transform.localScale *= LocationControl.getDistance(myLocation,target.getMyLocation());
+            //GameObject _effect = Instantiate<GameObject>(effect,transform.position,Quaternion.LookRotation(transform.forward));
         }
 
-        
+        public virtual void StartSkillEffect()
+        {
+            
+        }
     }
 
 }

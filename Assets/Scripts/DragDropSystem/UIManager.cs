@@ -9,7 +9,7 @@ namespace ZoneSystem
 {
     public class UIManager : MonoBehaviour
     {
-        #region ╫л╠шео
+        #region О©╫л╠О©╫О©╫О©╫
         private UIManager() { }
         private static UIManager inst = null;
         public static UIManager Inst
@@ -28,12 +28,11 @@ namespace ZoneSystem
             }
         }
         #endregion
-        
-        [SerializeField]
+
         public Button unitBuyButton, equipmentBuyButton, sellButton = null;
-        private GraphicRaycaster graphicRaycaster = null;
-        private PointerEventData pointerEventData = null;
-        private List<RaycastResult> rrList = null;
+        GraphicRaycaster graphicRaycaster = null;
+        PointerEventData pointerEventData = null;
+        List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
         public int PlayerGold = 500;
 

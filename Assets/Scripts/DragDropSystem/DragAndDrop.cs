@@ -28,7 +28,8 @@ namespace ZoneSystem
 
         private Vector3 beforePos;
 
-        private Button SellButton = null;
+        Button posCheckButton = null;
+
         private void Awake()
         {
             mapController = GetComponent<MapController>();
@@ -196,6 +197,7 @@ namespace ZoneSystem
                 {
                     // ���� �Ǹ�
                     sellObject();
+
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
                     if (CastRay(safetySpaceLayer).collider != null)
@@ -214,14 +216,14 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-
                 storeButtonChange();
+
             }
             //Drag
             if (selectedObject != null)
             {
                 tileChangeColor();
-                sellButtonCheck();
+                buttonPosCheck();
                 Drag();
             }
             #endregion
@@ -257,9 +259,9 @@ namespace ZoneSystem
         #endregion
 
         #region sellUnit
-        private  void sellObject()
+        void sellObject()
         {
-            if (SellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
+            if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
                 if (count != 0) // 판매시 장비 뱉는 로직
@@ -273,37 +275,32 @@ namespace ZoneSystem
                         i--;
                     }
                 }
-                SellButton = null;
-
-                Destroy(selectedObject);
+               
             }
+            posCheckButton = null;
 
-            else if (SellButton && selectedObject.GetComponent<Equipment>() != null)
-            {
-                SellButton = null;
-
-                Destroy(selectedObject);
-            }
-            battleZoneTile.gameObject.SetActive(false);
-            safetyZoneTile.gameObject.SetActive(false);
+            Destroy(selectedObject);
             selectedObject = null;
             storeButtonChange();
-
+            battleZoneTile.gameObject.SetActive(false);
+            safetyZoneTile.gameObject.SetActive(false);
         }
         #endregion
 
-        #region 
-        private void sellButtonCheck()
+        #region buttonChange
+        void buttonPosCheck()
         {
             if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject != null)
             {
-                SellButton = UIManager.Inst.RaycastUI<Button>(1);
+                posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
+
             }
             else
             {
-                if (SellButton != null)
+                if (posCheckButton != null)
                 {
-                    SellButton = null;
+
+                    posCheckButton = null;
                 }
             }
         }
@@ -486,22 +483,24 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region 스토어 버튼체인지
-        private void storeButtonChange()
+        #region ��ưü����
+        void storeButtonChange()
         {
-            if (selectedObject != null)
+            if (selectedObject == null)
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.sellButton.gameObject.SetActive(false);
+
+            }
+            else
             {
                 UIManager.Inst.unitBuyButton.gameObject.SetActive(false);
                 UIManager.Inst.equipmentBuyButton.gameObject.SetActive(false);
                 UIManager.Inst.sellButton.gameObject.SetActive(true);
             }
-            else
-            {
-                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
-                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
-                UIManager.Inst.sellButton.gameObject.SetActive(false);
-            }
-           
+
+            
         }
         #endregion
 

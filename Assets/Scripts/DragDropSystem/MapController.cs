@@ -259,7 +259,12 @@ namespace ZoneSystem
                                 }
                             }
 
+<<<<<<< HEAD
+                            if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
+                            if (mechaSynergyCount == 5)
+=======
                             if (mechaSynergyCount > 2 && mechaSynergyCount < 5)
+>>>>>>> origin/feature_Synergy
                             {
                                 if (!activeSynergyList.Contains("Mecha")) activeSynergyList.Add("Mecha");
                             }
