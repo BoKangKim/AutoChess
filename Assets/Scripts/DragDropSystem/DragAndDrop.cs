@@ -25,7 +25,7 @@ namespace ZoneSystem
 
         Vector3 beforePos;
 
-        Button buySellButton = null;
+        Button posCheckButton = null;
 
         private void Awake()
         {
@@ -184,7 +184,7 @@ namespace ZoneSystem
                 else
                 {
                     // ���� �Ǹ�
-                    sellUnit();
+                    sellObject();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -204,12 +204,14 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
+                storeButtonChange();
+
             }
             //Drag
             if (selectedObject != null)
             {
                 tileChangeColor();
-                buttonChange();
+                buttonPosCheck();
                 Drag();
             }
             #endregion
@@ -245,9 +247,9 @@ namespace ZoneSystem
         #endregion
 
         #region sellUnit
-        void sellUnit()
+        void sellObject()
         {
-            if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
+            if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
                 if (count != 0) // 판매시 장비 뱉는 로직
@@ -261,31 +263,33 @@ namespace ZoneSystem
                         i--;
                     }
                 }
-                storeButtonChange(Color.black, Color.white, true, "유닛 구매");
-                buySellButton = null;
-
-                Destroy(selectedObject);
+               
             }
+            posCheckButton = null;
+
+            Destroy(selectedObject);
+            selectedObject = null;
+            storeButtonChange();
+            battleZoneTile.gameObject.SetActive(false);
+            safetyZoneTile.gameObject.SetActive(false);
         }
         #endregion
 
         #region buttonChange
-        void buttonChange()
+        void buttonPosCheck()
         {
 
             if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                buySellButton = UIManager.Inst.RaycastUI<Button>(1);
+                posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
 
-                storeButtonChange(Color.white, Color.black, false, "유닛 판매");
             }
             else
             {
-                if (buySellButton != null)
+                if (posCheckButton != null)
                 {
-                    storeButtonChange(Color.black, Color.white, true, "유닛 구매");
 
-                    buySellButton = null;
+                    posCheckButton = null;
                 }
             }
         }
@@ -469,14 +473,23 @@ namespace ZoneSystem
         #endregion
 
         #region ��ưü����
-        void storeButtonChange(Color text, Color button, bool enabled, string unitStatus)
+        void storeButtonChange()
         {
+            if (selectedObject == null)
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.sellButton.gameObject.SetActive(false);
 
-            buySellButton.image.color = button;
-            TextMeshProUGUI buttonText = buySellButton.GetComponentInChildren<TextMeshProUGUI>();
-            buySellButton.enabled = enabled;
-            buttonText.text = unitStatus;
-            buttonText.color = text;
+            }
+            else
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.sellButton.gameObject.SetActive(true);
+            }
+
+            
         }
         #endregion
 

@@ -28,8 +28,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        [SerializeField]
-        Button buyButton, sellButton = null;
+        public Button unitBuyButton, equipmentBuyButton, sellButton = null;
         GraphicRaycaster graphicRaycaster = null;
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
