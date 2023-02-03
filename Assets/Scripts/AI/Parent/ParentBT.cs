@@ -44,6 +44,8 @@ namespace Battle.AI
         protected float maxMana = 10f;
         protected float attackRange = 0f;
         protected float manaRecovery = 5f;
+
+        private bool die = false;
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -103,6 +105,11 @@ namespace Battle.AI
 
         private void Update()
         {
+            if(die == true)
+            {
+                return;
+            }
+
             if (stageType == STAGETYPE.PREPARE)
             {
                 return;
@@ -271,7 +278,6 @@ namespace Battle.AI
         public void Damage(float damage)
         {
             currentHP -= damage;
-            Debug.Log(currentHP);
         }
         #endregion
 
@@ -416,6 +422,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    die = true;
                     return currentHP <= 0;
                 };
             }
@@ -428,7 +435,6 @@ namespace Battle.AI
                 return () =>
                 {
                     myAni.SetTrigger("isDeath");
-                    Destroy(this.gameObject);
                 };
             }
         }
