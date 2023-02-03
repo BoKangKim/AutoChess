@@ -84,12 +84,8 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            //StageControl sc = FindObjectOfType<StageControl>();
-            //sc.changeStage = changeStage;
-
-            //next = rta.searchNextLocation(myLocation, target.getMyLocation());
-            //nextPos = LocationControl.convertLocationToPosition(next);
-            //dir = (nextPos - transform.position).normalized;
+            StageControl sc = FindObjectOfType<StageControl>();
+            sc.changeStage = changeStage;
         }
 
         private void Update()
