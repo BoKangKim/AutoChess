@@ -28,13 +28,15 @@ namespace ZoneSystem
             }
         }
         #endregion
-
+        
         [SerializeField]
-        Button buyButton, sellButton = null;
-        GraphicRaycaster graphicRaycaster = null;
-        PointerEventData pointerEventData = null;
-        List<RaycastResult> rrList = null;
+        public Button unitBuyButton, equipmentBuyButton, sellButton = null;
+        private GraphicRaycaster graphicRaycaster = null;
+        private PointerEventData pointerEventData = null;
+        private List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
+        public int PlayerGold = 500;
+
 
         public Action UnitInstButton;
 
@@ -57,18 +59,11 @@ namespace ZoneSystem
         {
             rrList.Clear();
             graphicRaycaster.Raycast(pointerEventData, rrList);
-
-            if (rrList.Count == 0)
-                return null;
-
-
-
+            if (rrList.Count == 0) return null;
             return rrList[num].gameObject.GetComponent<T>();
         }
 
         public void unitInstButton() => UnitInstButton();
-   
-
 
         public void SynergyText(string text)
         {

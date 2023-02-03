@@ -94,7 +94,7 @@ namespace Battle.AI
             {
                 return;
             }
-
+                
             if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
