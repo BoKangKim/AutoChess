@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -159,9 +158,7 @@ namespace ZoneSystem
                         {
                             vec = battlePosToIndex(CastRay(battleSpaceLayer).collider.transform.position);
                             mapController.battleObject[(int)vec.z, (int)vec.x] = null;
-
                             beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-
                         }
                     }
                     else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
@@ -249,6 +246,7 @@ namespace ZoneSystem
         #region sellUnit
         void sellObject()
         {
+
             if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
@@ -263,15 +261,28 @@ namespace ZoneSystem
                         i--;
                     }
                 }
-               
-            }
-            posCheckButton = null;
+                posCheckButton = null;
 
-            Destroy(selectedObject);
-            selectedObject = null;
-            storeButtonChange();
-            battleZoneTile.gameObject.SetActive(false);
-            safetyZoneTile.gameObject.SetActive(false);
+                Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+            }
+            if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
+            {
+                posCheckButton = null;
+
+                Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+
+
+            }
+
+
         }
         #endregion
 
@@ -282,7 +293,7 @@ namespace ZoneSystem
             if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
-
+                Debug.Log(UIManager.Inst.RaycastUI<Button>(0));
             }
             else
             {
@@ -480,7 +491,6 @@ namespace ZoneSystem
                 UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
                 UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
                 UIManager.Inst.sellButton.gameObject.SetActive(false);
-
             }
             else
             {
@@ -489,7 +499,7 @@ namespace ZoneSystem
                 UIManager.Inst.sellButton.gameObject.SetActive(true);
             }
 
-            
+
         }
         #endregion
 
