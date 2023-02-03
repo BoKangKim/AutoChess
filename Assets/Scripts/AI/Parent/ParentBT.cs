@@ -101,8 +101,9 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            //StageControl sc = FindObjectOfType<StageControl>();
-            //sc.changeStage = changeStage;
+
+            StageControl sc = FindObjectOfType<StageControl>();
+            sc.changeStage = changeStage;
         }
 
         private void Update()

@@ -1,10 +1,8 @@
 using UnityEngine;
-using System.Collections.Generic;
+using TMPro;
 
-namespace Battle.Stage 
+namespace Battle.Stage
 {
-    // Timer <-> Stage => AI
-    // 
     public enum STAGETYPE
     {
         PVP,
@@ -13,54 +11,131 @@ namespace Battle.Stage
         BOSS,
         AUCTION,
         PREPARE,
+        NULL,
         MAX
     }
+
     public delegate void ChangeStage(STAGETYPE stageType);
 
     public class StageControl : MonoBehaviour
     {
-        private STAGETYPE[,] stages = new STAGETYPE[9,4];
-        private (int col, int row) stageIndex = (0, 0);
-        private Timer timer = null;
+        [SerializeField] private TextMeshProUGUI STAGE = null;
+
+        private STAGETYPE[,] stages = new STAGETYPE[9, 4];
+        private STAGETYPE nowStage = STAGETYPE.NULL;
+        private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
 
         private void Awake()
         {
-            // 네트워크
-            if(TryGetComponent<Timer>(out timer) == false)
-            {
-                timer = new GameObject("Timer").AddComponent<Timer>();
-            }
+            initializingStageInfo();
+            checkNextStageInfo();
         }
 
-        private void checkNextStageInfo() 
+        public void checkNextStageInfo()
         {
-            stageIndex.row++;
-            
-            if(stageIndex.row >= stages.GetLength(1))
+            if (nowStage != STAGETYPE.PREPARE)
             {
-                stageIndex.row = 0;
-                stageIndex.col++;
-
-                if (stageIndex.col >= stages.GetLength(0))
+                nowStage = STAGETYPE.PREPARE;
+                STAGE.text = nowStage.ToString();
+                if(changeStage != null)
                 {
-                    stageIndex.row = -1;
-                    stageIndex.col = -1;
+                    changeStage(nowStage);
                 }
-            }
-
-            if(stageIndex.row == -1
-                || stageIndex.col == -1)
-            {
-                changeStage(STAGETYPE.PVP);
                 return;
             }
 
-            changeStage(stages[stageIndex.col,stageIndex.row]);
+            stageIndex.col++;
+
+            if (stageIndex.col >= stages.GetLength(1)
+                || stages[stageIndex.row, stageIndex.col] == STAGETYPE.NULL)
+            {
+                stageIndex.col = 0;
+                stageIndex.row++;
+            }
+
+            if (stageIndex.row >= stages.GetLength(0))
+            {
+                stageIndex.col = 5;
+                nowStage = STAGETYPE.PVP;
+            }
+            else
+            {
+                nowStage = stages[stageIndex.row, stageIndex.col];
+            }
+
+            STAGE.text = nowStage.ToString() + "( " + (stageIndex.row + 1) + " - " + (stageIndex.col + 1) + " )";
+            if (changeStage != null)
+            {
+                changeStage(nowStage);
+            }
         }
 
-        private void startNextStage() 
+        private void startNextStage()
         {
+            // 유닛 몬스터 보스 생성 로직
+        }
+
+        private void initializingStageInfo()
+        {
+            // STAGE 1
+            {
+                stages[0, 0] = STAGETYPE.MONSTER;
+                stages[0, 1] = STAGETYPE.MONSTER;
+                stages[0, 2] = STAGETYPE.MONSTER;
+                stages[0, 3] = STAGETYPE.BOSS;
+            }
+
+            // STAGE 2
+            {
+                stages[1, 0] = STAGETYPE.MONSTER;
+                stages[1, 1] = STAGETYPE.PVP;
+                stages[1, 2] = STAGETYPE.BOSS;
+                stages[1, 3] = STAGETYPE.NULL;
+            }
+
+            // STAGE 3
+            {
+                stages[2, 0] = STAGETYPE.MONSTER;
+                stages[2, 1] = STAGETYPE.PVP;
+                stages[2, 2] = STAGETYPE.PVP;
+                stages[2, 3] = STAGETYPE.NULL;
+            }
+
+            // STAGE 4
+            {
+                stages[3, 0] = STAGETYPE.AUCTION;
+                stages[3, 1] = STAGETYPE.PVP;
+                stages[3, 2] = STAGETYPE.BOSS;
+                stages[3, 3] = STAGETYPE.NULL;
+            }
+
+            // STAGE 5
+            {
+                stages[4, 0] = STAGETYPE.MONSTER;
+                stages[4, 1] = STAGETYPE.PVP;
+                stages[4, 2] = STAGETYPE.PVP;
+                stages[4, 3] = STAGETYPE.NULL;
+            }
+
+            // STAGE 6 ~ 8
+            {
+                for (int i = 5; i <= 7; i++)
+                {
+                    stages[i, 0] = STAGETYPE.PVP;
+                    stages[i, 1] = STAGETYPE.PVP;
+                    stages[i, 2] = STAGETYPE.PVP;
+                    stages[i, 3] = STAGETYPE.NULL;
+                }
+            }
+
+            // STAGE 9
+            {
+                stages[8, 0] = STAGETYPE.BOSS;
+                stages[8, 1] = STAGETYPE.MONSTER;
+                stages[8, 2] = STAGETYPE.PVP;
+                stages[8, 3] = STAGETYPE.NULL;
+            }
 
         }
     }
