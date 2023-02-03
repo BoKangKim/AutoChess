@@ -9,7 +9,7 @@ public class RangeAI : UnitAI
 
     public override void StartEffect()
     {
-        mana += 3f;
+        mana += manaRecovery;
         if (mana > maxMana)
         {
             return;
@@ -27,15 +27,9 @@ public class RangeAI : UnitAI
 
     public override void StartSkillEffect()
     {
-        
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
         skill.setOwnerName(nickName);
         skill.setDirection(target.transform.position);
-    }
-
-    protected override float setAttackRange()
-    {
-        return 3f;
     }
 }

@@ -7,13 +7,14 @@ namespace Battle.EFFECT
 {
     public abstract class Effect : MonoBehaviour
     {
-        [SerializeField] protected GameObject HitEffect = null;
+        [SerializeField] protected Hit HitEffect = null;
         private float time = 0;
         private float destroyTime = 2f;
         protected float speed = 0f;
         protected string ownerName = null;
         protected Vector3 direction = Vector3.zero;
         protected bool isNonAttackEffect = false;
+        protected float attackDamage = 0f;
 
         private void Awake()
         {
@@ -38,6 +39,11 @@ namespace Battle.EFFECT
                 return;
             }
             gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.World);
+        }
+
+        public void setAttackDamage(float damage)
+        {
+            attackDamage = damage;
         }
 
         public virtual void setDirection(Vector3 targetPosition) { }
@@ -68,14 +74,27 @@ namespace Battle.EFFECT
 
             if(collision.transform.TryGetComponent<ParentBT>(out target) == true)
             {
+                if(target == null)
+                {
+                    return;
+                }
                 if (target.getMyNickName().CompareTo(ownerName) != 0)
                 {
+                    if(target == null)
+                    {
+                        return;
+                    }
                     if(HitEffect != null)
                     {
                         Instantiate(HitEffect,gameObject.transform.position,Quaternion.identity);
+                        HitEffect.setAttackDamage(attackDamage);
                     }
+                    else
+                    {
+                        target.Damage(attackDamage);
+                    }
+                    
                     Destroy(gameObject);
-                    // Hit Damage Logic
                 }
             }
         }

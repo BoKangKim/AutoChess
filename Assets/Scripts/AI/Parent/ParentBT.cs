@@ -10,8 +10,10 @@ using Battle.EFFECT;
 
 namespace Battle.AI
 {
+    [RequireComponent(typeof(UnitClass.Unit), typeof(Rigidbody), typeof(BoxCollider))]
     public abstract class ParentBT : MonoBehaviour
     {
+        #region MyData
         private INode root = null;
         private INode specialRoot = null;
         protected ParentBT target = null;
@@ -33,37 +35,25 @@ namespace Battle.AI
 
         Vector3 nextLocation = Vector3.zero;
         protected RTAstar rta = null;
+        protected UnitClass.Unit unitData = null;
 
         private float currentHP = 100f;
         protected bool ishit = false;
 
-        private ScriptableUnit unitData;
-
-        protected float attackRange;
+        protected float mana = 0f;
+        protected float maxMana = 10f;
+        protected float attackRange = 0f;
+        protected float manaRecovery = 5f;
+        #endregion
         #region GET,SET
-        public float getAttackRange()
-        {
-            return attackRange;
-        }
-
         public void setAttackRange(float attackRange)
         {
-            if(attackRange > 10f)
-            {
-                return;
-            }
-
             this.attackRange = attackRange;
         }
 
         public void SetState(STAGETYPE state)
         {
             this.stageType = state;
-        }
-
-        public ScriptableUnit getUnitData()
-        {
-            return unitData;
         }
 
         public void setIsHit(bool ishit)
@@ -85,6 +75,11 @@ namespace Battle.AI
         {
             return next;
         }
+
+        public float getAttackDamage()
+        {
+            return unitData.GetUnitData.GetAtk;
+        }
         #endregion
 
         private void Awake()
@@ -94,7 +89,7 @@ namespace Battle.AI
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
-            attackRange = setAttackRange();
+            initializingData();
         }
 
         private void Start()
@@ -102,8 +97,8 @@ namespace Battle.AI
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
 
-            StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage = changeStage;
+            //StageControl sc = FindObjectOfType<StageControl>();
+            //sc.changeStage = changeStage;
         }
 
         private void Update()
@@ -149,6 +144,20 @@ namespace Battle.AI
         protected virtual INode initializingSpecialRootNode() { return null; }
         protected abstract string initializingMytype();
         protected abstract float setAttackRange();
+
+        private void initializingData()
+        {
+            if (TryGetComponent<UnitClass.Unit>(out unitData) == false)
+            {
+                Debug.LogError("Not Found Unit Data");
+            }
+
+            currentHP = unitData.GetUnitData.GetMaxHp;
+            maxMana = unitData.GetUnitData.GetMaxMp;
+            manaRecovery += unitData.GetClassData.GetMpRecovery;
+            attackRange = unitData.GetClassData.GetAttackRange;
+        }
+
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
@@ -217,6 +226,12 @@ namespace Battle.AI
         
             for (int i = 0; i < enemies.Count; i++)
             {
+                if (enemies[i] == null)
+                {
+                    enemies.RemoveAt(i);
+                    continue;
+                }
+
                 if ((enemies[i].transform.position.z < 0 || enemies[i].transform.position.z > 12.5f))
                 {
                     continue;
@@ -238,6 +253,10 @@ namespace Battle.AI
             {
                 if (allUnits[i].Equals(this))
                     continue;
+                if (allUnits[i] == null)
+                {
+                    continue;
+                }
 
                 unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 if (unitLocation.CompareTo(myLocation) == true)
@@ -252,6 +271,7 @@ namespace Battle.AI
         public void Damage(float damage)
         {
             currentHP -= damage;
+            Debug.Log(currentHP);
         }
         #endregion
 
@@ -407,7 +427,8 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    //myAni.SetTrigger("isDeath");
+                    myAni.SetTrigger("isDeath");
+                    Destroy(this.gameObject);
                 };
             }
         }

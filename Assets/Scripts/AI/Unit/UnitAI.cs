@@ -8,8 +8,6 @@ namespace Battle.AI
     public abstract class UnitAI : ParentBT
     {
         protected INode special = null;
-        protected float mana = 0f;
-        protected float maxMana = 10f;
 
         protected override float setAttackRange()
         {
@@ -23,8 +21,6 @@ namespace Battle.AI
 
         protected override INode initializingSpecialRootNode()
         {
-            attackRange = 3f;
-
             special = Selector
                 (
                     IfAction(isFullMana,activeSkill)

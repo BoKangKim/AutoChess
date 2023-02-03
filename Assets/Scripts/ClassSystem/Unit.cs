@@ -51,6 +51,7 @@ namespace UnitClass
         public ScriptableUnit GetUnitData { get { return UnitData; } }
         public float GetGrade { get { return grade; } }
         public int GetEquipmentCount { get { return equipmentCount; } }
+        public ScriptableClass GetClassData { get { return ClassData; } }
 
         #endregion
         private void Awake()

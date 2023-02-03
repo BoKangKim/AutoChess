@@ -40,8 +40,6 @@ namespace ZoneSystem
         //유닛 랜덤뽑기
         private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
-
-
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
@@ -54,7 +52,6 @@ namespace ZoneSystem
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             UIManager.Inst.UnitInstButton = OnClick_UnitInst;
-
         }
 
 
@@ -259,12 +256,9 @@ namespace ZoneSystem
                                 }
                             }
 
-<<<<<<< HEAD
                             if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
                             if (mechaSynergyCount == 5)
-=======
                             if (mechaSynergyCount > 2 && mechaSynergyCount < 5)
->>>>>>> origin/feature_Synergy
                             {
                                 if (!activeSynergyList.Contains("Mecha")) activeSynergyList.Add("Mecha");
                             }
@@ -346,7 +340,7 @@ namespace ZoneSystem
             //랜덤생성로직
             string UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             // 유닛의 최대 수는 15개
-            
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -360,8 +354,7 @@ namespace ZoneSystem
 
                         if (PlayerMapSpawner.Map != null)
                         {
-                        safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
-
+                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX,0.25f,PosZ);
                         return;
