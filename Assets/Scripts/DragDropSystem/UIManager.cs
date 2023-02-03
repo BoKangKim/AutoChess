@@ -3,12 +3,13 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System;
 
 namespace ZoneSystem
 {
     public class UIManager : MonoBehaviour
     {
-        #region ╫л╠шео
+        #region О©╫л╠О©╫О©╫О©╫
         private UIManager() { }
         private static UIManager inst = null;
         public static UIManager Inst
@@ -33,8 +34,10 @@ namespace ZoneSystem
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
+        public int PlayerGold = 500;
 
 
+        public Action UnitInstButton;
 
         private void Awake()
         {
@@ -55,14 +58,11 @@ namespace ZoneSystem
         {
             rrList.Clear();
             graphicRaycaster.Raycast(pointerEventData, rrList);
-
-            if (rrList.Count == 0)
-                return null;
-
-
-
+            if (rrList.Count == 0) return null;
             return rrList[num].gameObject.GetComponent<T>();
         }
+
+        public void unitInstButton() => UnitInstButton();
 
         public void SynergyText(string text)
         {

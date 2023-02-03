@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
+using Battle.AI;
 
 namespace ZoneSystem
 {
 
-    public class MapController : MonoBehaviour
+    public class MapController : MonoBehaviourPun
     {
-
-
         public GameObject[,] safetyObject;
         public GameObject[,] battleObject;
         public Dictionary<string, int> unitCount;
@@ -32,31 +33,34 @@ namespace ZoneSystem
         public TextMeshProUGUI debug;
 
         //아이템 랜뽑 일단은 스트링값으로
-        string[] RandomItem;
+        private string[] RandomItem;
 
         public int battleUnitCount = 0;
 
-        [SerializeField] private GameObject UnitPrefab;
+        //유닛 랜덤뽑기
+        private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
+
+
+
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
-        Transform[] transforms;
-
         private void Awake()
         {
-            transforms = new Transform[5];
-
+            //if (!photonView.IsMine) return;
+      
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
+
+            UIManager.Inst.UnitInstButton = OnClick_UnitInst;
+
         }
 
-        private void Start()
-        {
-        }
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
+
             //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
@@ -70,6 +74,7 @@ namespace ZoneSystem
             magicianSynergyCount = 0;
             assassinSynergyCount = 0;
             rangeDealerSynergyCount = 0;
+
             for (int z = 0; z < 3; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -330,6 +335,18 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
+            //if (!photonView.IsMine) return;
+
+            if (UIManager.Inst.PlayerGold < 5)
+            {
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+
+            //랜덤생성로직
+            string UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
+            // 유닛의 최대 수는 15개
+            
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -339,7 +356,14 @@ namespace ZoneSystem
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
 
-                        safetyObject[z, x] = Instantiate(UnitPrefab, new Vector3(PosX, 0.25f, PosZ), Quaternion.identity);
+                        safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab,Vector3.zero,Quaternion.identity);
+
+                        if (PlayerMapSpawner.Map != null)
+                        {
+                        safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+
+                        }
+                        safetyObject[z, x].transform.localPosition = new Vector3(PosX,0.25f,PosZ);
                         return;
                     }
                 }
@@ -371,6 +395,7 @@ namespace ZoneSystem
 
         public void itemGain(GameObject getItem)
         {
+            //if (!photonView.IsMine) return;
 
             for (int z = 0; z < 2; z++)
             {
@@ -384,7 +409,13 @@ namespace ZoneSystem
                         Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
-                        safetyObject[z, x].transform.position = new Vector3(PosX, 0.25f, PosZ);
+        
+                        if (PlayerMapSpawner.Map != null)
+                        {
+                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+
+                        }
+                        safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         safetyObject[z, x].transform.rotation = Quaternion.identity;
                         safetyObject[z, x].layer = 31;
                         return;
@@ -416,7 +447,7 @@ namespace ZoneSystem
         }
 
 
-
+        
 
 
     }
