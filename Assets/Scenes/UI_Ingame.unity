@@ -181,9 +181,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "(5) \uC804\uD22C \uC2DC\uC791 \uC2DC Orc\uC758 \uD568\uC131 \uC18C\uB9AC\uC640
-    \uD568\uAED8 \uC0C1\uB300 \uC720\uB2DB\uC758 \uACF5\uACA9\uB825\uACFC \uCCB4\uB825\uC744
-    15% \uD558\uB77D\uC2DC\uD0B4"
+  m_text: (5) 456
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1b3fed7a272cf041b8d5dc928600ef4, type: 2}
   m_sharedMaterial: {fileID: 7454536971302965839, guid: b1b3fed7a272cf041b8d5dc928600ef4, type: 2}
@@ -2281,9 +2279,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "(3) \uC804\uD22C \uC2DC\uC791 \uC2DC Orc\uC758 \uD568\uC131\uC18C\uB9AC\uC640
-    \uD568\uAED8 \uC0C1\uB300 \uC720\uB2DB\uC758 \uACF5\uACA9\uB825\uACFC \uCCB4\uB825\uC744
-    5% \uD558\uB77D\uC2DC\uD0B4"
+  m_text: (3) 123
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: b1b3fed7a272cf041b8d5dc928600ef4, type: 2}
   m_sharedMaterial: {fileID: 7454536971302965839, guid: b1b3fed7a272cf041b8d5dc928600ef4, type: 2}
@@ -2603,7 +2599,7 @@ RectTransform:
   m_Children:
   - {fileID: 1922067768}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2891,7 +2887,7 @@ RectTransform:
   m_Children:
   - {fileID: 2018940289}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -6743,7 +6739,7 @@ RectTransform:
   - {fileID: 2992732775968161193}
   - {fileID: 2722486428055281004}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8064,7 +8060,7 @@ GameObject:
   - component: {fileID: 634382460}
   - component: {fileID: 634382459}
   m_Layer: 5
-  m_Name: Result_Panel
+  m_Name: Game_Result_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8085,7 +8081,7 @@ RectTransform:
   - {fileID: 2006624793}
   - {fileID: 1222229481}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10133,7 +10129,7 @@ RectTransform:
   m_Children:
   - {fileID: 1212400271}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -10211,7 +10207,7 @@ RectTransform:
   - {fileID: 713185480}
   - {fileID: 1732945906}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -15879,7 +15875,7 @@ RectTransform:
   - {fileID: 597472101}
   - {fileID: 522708878}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -16577,11 +16573,12 @@ RectTransform:
   m_Children:
   - {fileID: 811791605}
   - {fileID: 1442773920}
+  - {fileID: 1395119199}
+  - {fileID: 1601248668}
   - {fileID: 1769326982}
   - {fileID: 800534332}
   - {fileID: 2034117173}
   - {fileID: 1988310515}
-  - {fileID: 1601248668}
   - {fileID: 634382458}
   - {fileID: 1278937440}
   - {fileID: 155085093}
@@ -16589,7 +16586,6 @@ RectTransform:
   - {fileID: 168903946}
   - {fileID: 795421098}
   - {fileID: 523355014}
-  - {fileID: 1395119199}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17706,7 +17702,7 @@ RectTransform:
   - {fileID: 805657806}
   - {fileID: 2133356731}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -18949,7 +18945,7 @@ RectTransform:
   - {fileID: 1709546241}
   - {fileID: 2012315508}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 14
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -19487,7 +19483,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1442773919}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -19710,11 +19706,26 @@ MonoBehaviour:
   userID: {fileID: 1677063396}
   playerID: 
   roundInfoUI: {fileID: 2138051106}
-  settingWindow: {fileID: 1442773919}
-  synergyContents: {fileID: 1926582151}
-  rankingContents: {fileID: 294255043}
-  chattingWindow: {fileID: 1395119198}
-  synergyExplainWindow: {fileID: 1601248667}
+  settingUI: {fileID: 1442773919}
+  synergyContentsUI: {fileID: 1926582151}
+  rankingContentsUI: {fileID: 294255043}
+  chattingUI: {fileID: 1395119198}
+  synergyExplainUI: {fileID: 1601248667}
+  selectRoundUI: {fileID: 1769326981}
+  AuctionLoadingUI: {fileID: 800534331}
+  AuctionRoundUI: {fileID: 2034117172}
+  AuctionResultUI: {fileID: 1988310514}
+  GameResultUI: {fileID: 634382457}
+  RouletteUI: {fileID: 1278937439}
+  RouletteResultUI: {fileID: 155085092}
+  UnitStatusUI: {fileID: 1136046915}
+  UnitStatusInfoUI: {fileID: 168903945}
+  UnitSkillInfoUI: {fileID: 795421097}
+  rankUserInfo:
+  - {fileID: 1815287473}
+  - {fileID: 1208557404}
+  - {fileID: 854155708}
+  - {fileID: 1752453686}
   RoundInfoNum: {fileID: 962924743}
   RoundStageNum: {fileID: 1391581949}
   RoundDetailStepNum: {fileID: 868554239}
@@ -19722,41 +19733,43 @@ MonoBehaviour:
   RoundDetailStepNum2: {fileID: 1466776950}
   RoundDetailStepNum3: {fileID: 1073531810}
   RoundDetailStepNum4: {fileID: 1270780056}
-  expansionGold: {fileID: 380483943}
-  expensionLV: {fileID: 284262586}
-  playerLV: {fileID: 284262586}
-  playerGold: {fileID: 1731291228}
-  playerHP: {fileID: 698457955}
-  gachaWeponGold: {fileID: 1922349584}
-  gachaUnitGold: {fileID: 724554428}
+  SnergyUnitPopup_Name: {fileID: 1947777025}
+  SnergyUnitPopup_Info:
+  - {fileID: 143072201}
+  - {fileID: 537986}
+  SnergyUnitPopup_Icon:
+  - {fileID: 1902745041}
+  - {fileID: 1060835494}
+  - {fileID: 148700335}
+  - {fileID: 1675775566}
+  - {fileID: 720150020}
   SynergyIcon:
   - {fileID: 1365312080}
   - {fileID: 888941949}
   - {fileID: 1120331725}
   - {fileID: 647120883}
   - {fileID: 1359660046}
-  TribeIcon:
-  - {fileID: 1902745041}
-  - {fileID: 1060835494}
-  - {fileID: 148700335}
-  - {fileID: 1675775566}
-  - {fileID: 720150020}
-  SynergyName:
+  ClassSynergyName: []
+  TribeSynergyName:
   - {fileID: 914932030}
-  - {fileID: 1097953827}
-  - {fileID: 1994365744}
-  - {fileID: 557833600}
-  - {fileID: 1753082689}
   SynergyNum:
   - {fileID: 1275426480}
   - {fileID: 1266517645}
   - {fileID: 693401433}
   - {fileID: 647818883}
   - {fileID: 1100016612}
-  SynergyExplain3: {fileID: 143072201}
-  SynergyExplain5: {fileID: 537986}
+  Mecha_synergyCountNumber: {fileID: 1275426480}
+  expansionGold: {fileID: 380483943}
+  expensionLV: {fileID: 284262586}
   expansionEXPSlider: {fileID: 1405959656}
+  playerLV: {fileID: 284262586}
+  playerGold: {fileID: 1731291228}
+  playerHP: {fileID: 698457955}
   playerHPSlider: {fileID: 1625557883}
+  gachaWeponGold: {fileID: 1922349584}
+  gachaUnitGold: {fileID: 724554428}
+  playerHPValue: 0
+  deployedUnit: 0
 --- !u!4 &1458003482
 Transform:
   m_ObjectHideFlags: 0
@@ -20658,8 +20671,9 @@ GameObject:
   - component: {fileID: 1601248668}
   - component: {fileID: 1601248670}
   - component: {fileID: 1601248669}
+  - component: {fileID: 1601248671}
   m_Layer: 5
-  m_Name: Synergy_Menu_Panel
+  m_Name: Synergy_Explain_Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20679,7 +20693,7 @@ RectTransform:
   m_Children:
   - {fileID: 1863871133}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 6
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -20724,6 +20738,62 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1601248667}
   m_CullTransparentMesh: 1
+--- !u!114 &1601248671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601248667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1601248669}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1458003481}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OffSynergyExplain
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1605080869
 GameObject:
   m_ObjectHideFlags: 0
@@ -23958,7 +24028,7 @@ RectTransform:
   - {fileID: 2086258566}
   - {fileID: 1033058226}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -26072,7 +26142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Orc
+  m_text: Name
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -26416,7 +26486,7 @@ RectTransform:
   - {fileID: 1291638056}
   - {fileID: 109504811}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 5
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -27644,7 +27714,7 @@ RectTransform:
   m_Children:
   - {fileID: 842970112}
   m_Father: {fileID: 1182487929}
-  m_RootOrder: 4
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
