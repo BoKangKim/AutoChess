@@ -9,8 +9,7 @@ public class OrcRangeAI : RangeAI
     {
         OrcRangeSkill skill = null;
         Instantiate(skillEffect.gameObject, effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<OrcRangeSkill>(out skill);
-        skill.setOwnerName(nickName);
-        skill.initOwner(this);
+        skill.setOwner(this);
         skill.initSpeedAndArrange(myAni.speed, base.attackRange);
     }
 }

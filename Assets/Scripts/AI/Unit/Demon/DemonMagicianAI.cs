@@ -8,6 +8,6 @@ public class DemonMagicianAI : RangeAI
     {
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject, target.transform.position + Vector3.up, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
     }
 }

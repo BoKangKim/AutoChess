@@ -44,6 +44,7 @@ namespace Battle.AI
         protected float maxMana = 10f;
         protected float attackRange = 0f;
         protected float manaRecovery = 5f;
+        protected float attackDamage = 0f;
 
         private bool die = false;
         #endregion
@@ -152,6 +153,16 @@ namespace Battle.AI
         protected abstract string initializingMytype();
         protected abstract float setAttackRange();
 
+        public void doDamage()
+        {
+            target.Damage(attackDamage);
+        }
+
+        public void doDamage(float damage)
+        {
+            target.Damage(damage);
+        }
+
         private void initializingData()
         {
             if (TryGetComponent<UnitClass.Unit>(out unitData) == false)
@@ -163,6 +174,8 @@ namespace Battle.AI
             maxMana = unitData.GetUnitData.GetMaxMp;
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
+            attackDamage = unitData.GetUnitData.GetAtk;
+
         }
 
         public void changeStage(STAGETYPE stageType)
@@ -422,8 +435,13 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    die = true;
-                    return currentHP <= 0;
+                    if(currentHP <= 0f)
+                    {
+                        die = true;
+                        return true;
+                    }
+
+                    return false;
                 };
             }
         }

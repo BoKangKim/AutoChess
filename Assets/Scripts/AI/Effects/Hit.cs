@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle.EFFECT;
 
+[RequireComponent(typeof(BoxCollider))]
 public class Hit : Effect
 {
     protected override float setDestroyTime()
