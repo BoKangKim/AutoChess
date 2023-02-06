@@ -4445,8 +4445,8 @@ GameObject:
   - component: {fileID: 9079319243291986209}
   - component: {fileID: 9079319243291986208}
   - component: {fileID: 9079319243291986214}
-  - component: {fileID: 1691588247366929659}
   - component: {fileID: 2827471689788286145}
+  - component: {fileID: -7084195603224471641}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -4514,9 +4514,25 @@ MonoBehaviour:
   rangeDealerSynergyCount: 0
   debug: {fileID: 0}
   battleUnitCount: 0
-  UnitPrefab: {fileID: 7094972498237274206, guid: 0f6b7b7da94040d4bbc1ae12cc8d335d, type: 3}
+  ItemPrefab: {fileID: 0}
   battleZoneTile: {fileID: 2470284800984316709, guid: f0453bd20ecc5fe44be16adacfc38715, type: 3}
---- !u!114 &1691588247366929659
+--- !u!114 &2827471689788286145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9079319243291986211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizePosition: 1
+  m_SynchronizeRotation: 1
+  m_SynchronizeScale: 0
+  m_UseLocal: 1
+--- !u!114 &-7084195603224471641
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4539,22 +4555,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &2827471689788286145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9079319243291986211}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!1 &9079319243293471371
 GameObject:
   m_ObjectHideFlags: 0

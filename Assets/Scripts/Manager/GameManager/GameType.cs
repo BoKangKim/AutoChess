@@ -25,6 +25,11 @@ public class GameType : MonoBehaviour
     }
     #endregion
 
+    private void Awake()
+    {
+        DontDestroyOnLoad(this);
+    }
+
     private GAMETYPE type = GAMETYPE.MAX;
 
     public GAMETYPE getType()

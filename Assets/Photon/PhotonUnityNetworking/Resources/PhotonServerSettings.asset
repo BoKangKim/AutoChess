@@ -40,6 +40,9 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - ChatRPC
+  - RPC_SetTriggerActiveSkill
+  - RPC_SetTriggerAttack
+  - RPC_SetTriggerDeath
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

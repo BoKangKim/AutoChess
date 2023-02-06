@@ -792,9 +792,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe0616745c6b6345946daa8a75250f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buyButton: {fileID: 1790001782}
+  unitBuyButton: {fileID: 0}
+  equipmentBuyButton: {fileID: 0}
   sellButton: {fileID: 1790001782}
   SynergyInfo: {fileID: 0}
+  PlayerGold: 500
 --- !u!1 &1336701804
 GameObject:
   m_ObjectHideFlags: 0
@@ -1797,6 +1799,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -7084195603224471641, guid: e25b6cc006f828d49986f84f4d1af076, type: 3}
+      propertyPath: sceneViewId
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1691588247366929659, guid: e25b6cc006f828d49986f84f4d1af076, type: 3}
       propertyPath: sceneViewId
       value: 1

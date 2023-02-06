@@ -87,6 +87,11 @@ namespace Battle.EFFECT
                         return;
                     }
 
+                    if(target.enabled == false)
+                    {
+                        return;
+                    }
+
                     if (HitEffect != null && isInstHitEffect == false)
                     {
                         isInstHitEffect = true;

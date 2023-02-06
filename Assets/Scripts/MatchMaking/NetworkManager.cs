@@ -92,7 +92,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void JoinRandomOrCreateRoom()
     {
         nomalMatchButton.interactable = false;
-        room.MaxPlayers = 1;
+        room.MaxPlayers = 2;
 
         if (PhotonNetwork.IsConnected)
         {
@@ -137,16 +137,15 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-        PhotonNetwork.LoadLevel(gameScene);
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         UpdatePlayerCount();
 
-        //if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 1)
-        //{
-        //    PhotonNetwork.LoadLevel(gameScene);
-        //}
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        {
+            PhotonNetwork.LoadLevel(gameScene);
+        }
     }
 
     public override void OnPlayerLeftRoom(Player otherPlayer)

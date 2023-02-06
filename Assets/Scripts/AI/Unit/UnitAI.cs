@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using BehaviorTree;
 using static BehaviorTree.BehaviorTreeMan;
+using Photon.Pun;
+using Photon.Realtime;
 
 namespace Battle.AI 
 {
@@ -53,11 +55,17 @@ namespace Battle.AI
                     mana = 0f;
                     if (myAni.GetParameter(2).name.CompareTo("activeSkill") == 0)
                     {
-                        myAni.SetTrigger("activeSkill");
+                        photonView.RPC("RPC_SetTriggerActiveSkill",RpcTarget.All);
                     }
                     StartSkillEffect();
                 };
             }
+        }
+
+        [PunRPC]
+        public void RPC_SetTriggerActiveSkill()
+        {
+            myAni.SetTrigger("activeSkill");
         }
     }
 }

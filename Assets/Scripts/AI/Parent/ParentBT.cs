@@ -7,11 +7,13 @@ using Battle.Stage;
 using Battle.Location;
 using Battle.RTASTAR;
 using Battle.EFFECT;
+using Photon.Pun;
+using Photon.Realtime;
 
 namespace Battle.AI
 {
     [RequireComponent(typeof(UnitClass.Unit), typeof(Rigidbody), typeof(BoxCollider))]
-    public abstract class ParentBT : MonoBehaviour
+    public abstract class ParentBT : MonoBehaviourPun
     {
         #region MyData
         private INode root = null;
@@ -48,6 +50,8 @@ namespace Battle.AI
 
         private bool die = false;
         private bool isInit = false;
+        private string enemyNickName = "";
+
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -99,6 +103,7 @@ namespace Battle.AI
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
+            nickName = PhotonNetwork.NickName;
         }
 
         private void Start()
@@ -112,6 +117,10 @@ namespace Battle.AI
 
         private void Update()
         {
+            if(photonView.IsMine == false)
+            {
+                return;
+            }
             if(die == true)
             {
                 return;
@@ -227,6 +236,7 @@ namespace Battle.AI
             if (stageType == STAGETYPE.PVP
                 || stageType == STAGETYPE.CLONE)
             {
+                Debug.Log(fieldAIObejects.Length);
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
                     if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)
@@ -234,15 +244,22 @@ namespace Battle.AI
                         continue;
                     }
 
-                    enemies.Add(fieldAIObejects[i]);
+                    if (fieldAIObejects[i].enabled == false)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].nickName.CompareTo(enemyNickName) == 0)
+                    {
+                        enemies.Add(fieldAIObejects[i]);
+                    }
+
                 }
             }
             else
             {
-                addEnemyList(fieldAIObejects, "Monster");
+                addEnemyList(fieldAIObejects, "UnitAI");
             }
-            
-            
         }
 
         protected virtual void searchingTarget()
@@ -450,12 +467,17 @@ namespace Battle.AI
                 {
                     this.transform.LookAt(target.transform);
                     myAni.SetBool("isMove",false);
-                    myAni.SetTrigger("isAttack");
-                    
+                    photonView.RPC("RPC_SetTriggerAttack",RpcTarget.All);
                 };
             }
         }
-        
+
+        [PunRPC]
+        public void RPC_SetTriggerAttack()
+        {
+            myAni.SetTrigger("isAttack");
+        }
+
         protected virtual Func<bool> isDeath
         {
             get
@@ -479,9 +501,15 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myAni.SetTrigger("isDeath");
+                    photonView.RPC("RPC_SetTriggerDeath",RpcTarget.All);
                 };
             }
+        }
+
+        [PunRPC]
+        public void RPC_SetTriggerDeath()
+        {
+            myAni.SetTrigger("isDeath");
         }
 
         protected virtual Action hit 

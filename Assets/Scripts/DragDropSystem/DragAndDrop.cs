@@ -47,10 +47,10 @@ namespace ZoneSystem
         }
         private void Update()
         {
-            //if (!photonView.IsMine)
-            //{
-            //    return;
-            //}
+            if (!photonView.IsMine)
+            {
+                return;
+            }
             #region ����Ͽ�
             //if (Input.touchCount == 1)
             //{
@@ -200,6 +200,9 @@ namespace ZoneSystem
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
+                    Debug.Log(CastRay(safetySpaceLayer).collider);
+                    Debug.Log(CastRay(battleSpaceLayer).collider);
+
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
                         DropPosition(safetySpaceLayer);
@@ -261,6 +264,7 @@ namespace ZoneSystem
         #region sellUnit
         void sellObject()
         {
+
             if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
@@ -275,15 +279,26 @@ namespace ZoneSystem
                         i--;
                     }
                 }
-               
-            }
-            posCheckButton = null;
+                posCheckButton = null;
 
-            Destroy(selectedObject);
-            selectedObject = null;
-            storeButtonChange();
-            battleZoneTile.gameObject.SetActive(false);
-            safetyZoneTile.gameObject.SetActive(false);
+                Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+            }
+            if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
+            {
+                posCheckButton = null;
+
+                Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+
+
+            }
         }
         #endregion
 

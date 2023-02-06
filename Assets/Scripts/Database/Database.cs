@@ -59,13 +59,12 @@ public class Database : MonoBehaviour
 
     public UserInfo userInfo;
 
-     public class UserInfo
+    public class UserInfo
     {
         public string PhoneNumber { get; set; }
         public string NickName { get; set; }
         public int UserIconIndex { get; set; }
         public IDictionary<string, List<string>> UnitInventory { get; set; }
-        public int UserUnitCount { get; set; } 
     }
 
     void Start()
@@ -89,7 +88,6 @@ public class Database : MonoBehaviour
         //
         //bsonarray에 콜렉션을 담아서 요소를 나눌수 있음.
         //BsonArray aa = DataFind("01013345678").GetValue("UnitInventory").AsBsonDocument.GetValue("Orc").AsBsonArray;
-       
 
     }
 
@@ -98,7 +96,7 @@ public class Database : MonoBehaviour
     {
         userInfo.PhoneNumber = Input_PhoneNumber.text;
         BsonDocument UserInfo = DataFind(userInfo.PhoneNumber);
-        
+
 
         if (UserInfo == null)
         {
@@ -109,7 +107,10 @@ public class Database : MonoBehaviour
         }
         else
         {
-            InputNickNameDataUpdate();
+            userInfo.PhoneNumber = (string)UserInfo.GetValue("PhoneNumber");
+            userInfo.NickName = UserInfo.GetValue("NickName").ToString();
+            userInfo.UserIconIndex = (int)UserInfo.GetValue("UserIconIndex");
+           // userInfo.UnitInventory = (IDictionary<string, List<string>>)UserInfo.GetValue("UnitInventory");
         }
     }
 
@@ -122,8 +123,8 @@ public class Database : MonoBehaviour
             BsonDocument filter = new BsonDocument { { "PhoneNumber", userInfo.PhoneNumber } };
             UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("NickName", userInfo.NickName);
             collection.FindOneAndUpdate(filter, update);
-
         }
+
         //로비로 이동
     }
 
@@ -131,28 +132,16 @@ public class Database : MonoBehaviour
     //도큐먼트 생성
     void DataInst(string Num)
     {
-        string[] unitTribe = new string[5] { "Orc", "Dwarf", "Golem", "Mecha", "Demon"};
-
         userInfo.PhoneNumber = Num;
         userInfo.NickName = null;
         userInfo.UserIconIndex = 1;
         userInfo.UnitInventory = new Dictionary<string, List<string>>();
         userInfo.UnitInventory.Add("Orc", new List<string>() { "OrcWarrior", "OrcAssassin", "OrcWizard", "OrcTanker", "OrcRangeDealer" });
         userInfo.UnitInventory.Add("Dwarf", new List<string>() { "DwarfWarrior", "DwarfAssassin", "DwarfWizard", "DwarfTanker", "DwarfRangeDealer" });
-        userInfo.UnitInventory.Add("Golem", new List<string>() { "GolemWarrior", "GolemAssassin", "GolemWizard", "GolemTanker", "GolemRangeDealer" }); 
+        userInfo.UnitInventory.Add("Golem", new List<string>() { "GolemWarrior", "GolemAssassin", "GolemWizard", "GolemTanker", "GolemRangeDealer" });
         userInfo.UnitInventory.Add("Mecha", new List<string>() { null, null, null, null, null });
         userInfo.UnitInventory.Add("Demon", new List<string>() { null, null, null, null, null });
 
-        for (int i = 0; i < unitTribe.Length; i++)
-        {
-            for (int j = 0; j < userInfo.UnitInventory[unitTribe[i]].Count; j++)
-            {
-                if (userInfo.UnitInventory[unitTribe[i]][j] != null)
-                {
-                    ++userInfo.UserUnitCount ;
-                }
-            }
-        }
         collection.InsertOne(userInfo.ToBsonDocument());
     }
 
@@ -175,10 +164,10 @@ public class Database : MonoBehaviour
 
     //------------------------------------------------------------------------------------------------------------------
     //특정 도큐먼트의 특정 필드 수정
-    void DataUpdate(string findID,string updataData)
+    void DataUpdate(string findID, string updataData)
     {
         BsonDocument filter = new BsonDocument { { "PhoneNumber", findID } };
-        
+
         UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("NickName", updataData);
         collection.FindOneAndUpdate(filter, update);
         //collection.UpdateOne(filter,update);

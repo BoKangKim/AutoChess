@@ -38,9 +38,10 @@ namespace ZoneSystem
         public int battleUnitCount = 0;
 
         //유닛 랜덤뽑기
-        private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
+        //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
-        private string[] unitsFreenet = new string[15];
+        private int[] freenetUnitIndex = null;
+        private string[] freenetUnits = null;
 
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
@@ -48,12 +49,73 @@ namespace ZoneSystem
         private void Awake()
         {
             //if (!photonView.IsMine) return;
-      
+            freenetUnitIndex = new int[3] { -1, -1, -1 };
+            freenetUnits = new string[25];
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             UIManager.Inst.UnitInstButton = OnClick_UnitInst;
+            initializingUnitName();
+
+            int index = 0;
+            do
+            {
+                bool isContains = false;
+                freenetUnitIndex[index] = Random.Range(0, 5);
+
+                for(int i = 0; i < freenetUnitIndex.Length; i++)
+                {
+                    if(i == index)
+                    {
+                        continue;
+                    }
+
+                    if (freenetUnitIndex[i] == freenetUnitIndex[index])
+                    {
+                        isContains = true;
+                    }
+                }
+
+                if(isContains == true)
+                {
+                    continue;
+                }
+
+                index++;
+            } while (index < freenetUnitIndex.Length);
+        }
+
+        private void initializingUnitName()
+        {
+            string firstName = "";
+            for(int i = 0; i < freenetUnits.Length; i += 5)
+            {
+                switch (i / 5) 
+                {
+                    case 0:
+                        firstName = "Orc_";
+                        break;
+                    case 1:
+                        firstName = "Dwarf_";
+                        break;
+                    case 2:
+                        firstName = "Mecha_";
+                        break;
+                    case 3:
+                        firstName = "Demon_";
+                        break;
+                    case 4:
+                        firstName = "Golem_";
+                        break;
+                }
+
+                freenetUnits[i] = firstName + "Assassin";
+                freenetUnits[i + 1] = firstName + "Magician";
+                freenetUnits[i + 2] = firstName + "Range";
+                freenetUnits[i + 3] = firstName + "Tanker";
+                freenetUnits[i + 4] = firstName + "Warrior";
+            }
         }
 
 
@@ -80,7 +142,11 @@ namespace ZoneSystem
                 {
                     if (battleObject[z, x] != null)
                     {
-
+                        ParentBT bt = null;
+                        if(battleObject[z, x].TryGetComponent<ParentBT>(out bt))
+                        {
+                            bt.enabled = true;
+                        }
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
@@ -332,8 +398,6 @@ namespace ZoneSystem
         public void OnClick_UnitInst() //유닛 구매
         {
 
-            //if (!photonView.IsMine) return;
-
             if (UIManager.Inst.PlayerGold < 5)
             {
                 debug.text = "골드가 부족합니다.";
@@ -341,14 +405,17 @@ namespace ZoneSystem
             }
 
             string UnitPrefab = null;
+            if(GameType.Inst.getType() == GAMETYPE.LIVENET)
             {
-                UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
+                //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            //랜덤생성로직
+            else if(GameType.Inst.getType() == GAMETYPE.FREENET)
+            {
+                int index = freenetUnitIndex[Random.Range(0, 3)];
+                index *= 5;
+                UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
+            }
 
-            {
-                UnitPrefab = unitsFreenet[Random.Range(0, 15)];
-            }
             // 유닛의 최대 수는 15개
             for (int z = 0; z < 2; z++)
             {
