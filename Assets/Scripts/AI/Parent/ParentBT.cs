@@ -47,6 +47,7 @@ namespace Battle.AI
         protected float attackDamage = 0f;
 
         private bool die = false;
+        private bool isInit = false;
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -82,6 +83,11 @@ namespace Battle.AI
         public float getAttackDamage()
         {
             return unitData.GetUnitData.GetAtk;
+        }
+
+        public bool getIsDeath()
+        {
+            return die;
         }
         #endregion
 
@@ -305,12 +311,26 @@ namespace Battle.AI
                     
                     if (enemies.Count == 0)
                     {
-                        findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
-                        searchingTarget();
+                        if(isInit == false)
+                        {
+                            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
+                            searchingTarget();
 
-                        next = rta.searchNextLocation(myLocation, target.getMyLocation());
-                        nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.position).normalized;
+                            next = rta.searchNextLocation(myLocation, target.getMyLocation());
+                            nextPos = LocationControl.convertLocationToPosition(next);
+                            dir = (nextPos - transform.position).normalized;
+                            isInit = true;
+                        }
+                        else
+                        {
+                            // ½Â¸® ·ÎÁ÷
+                            ParentBT[] allUnit = FindObjectsOfType<ParentBT>();
+
+                            for(int i = 0;i < allUnit.Length; i++)
+                            {
+                                Destroy(allUnit[i].gameObject);
+                            }
+                        }
                     }
                 };
             }
@@ -402,9 +422,15 @@ namespace Battle.AI
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
+                        if (enemies[i].getIsDeath() == true) 
+                        {
+                            continue;
+                        }
+
                         if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
+                            rta.initCloseList();
                             target = enemies[i];
                             next = myLocation;
                             return true;
@@ -425,6 +451,7 @@ namespace Battle.AI
                     this.transform.LookAt(target.transform);
                     myAni.SetBool("isMove",false);
                     myAni.SetTrigger("isAttack");
+                    
                 };
             }
         }
@@ -465,6 +492,11 @@ namespace Battle.AI
                 {
                 };
             }
+        }
+
+        protected void DestroyObject()
+        {
+            Destroy(gameObject);
         }
 
         #endregion
