@@ -4677,6 +4677,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Golem_Range
       objectReference: {fileID: 0}
+    - target: {fileID: 1034325184491218, guid: 64a4d40aca3369d4e82285b098d9c029, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4817421608353430, guid: 64a4d40aca3369d4e82285b098d9c029, type: 3}
       propertyPath: m_RootOrder
       value: 25
@@ -13113,6 +13117,10 @@ PrefabInstance:
     - target: {fileID: 1034325184491218, guid: 298452983da80d949a6cdb5dee5720f8, type: 3}
       propertyPath: m_Name
       value: Golem_Magician
+      objectReference: {fileID: 0}
+    - target: {fileID: 1034325184491218, guid: 298452983da80d949a6cdb5dee5720f8, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4817421608353430, guid: 298452983da80d949a6cdb5dee5720f8, type: 3}
       propertyPath: m_RootOrder

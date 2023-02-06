@@ -40,6 +40,8 @@ namespace ZoneSystem
         //유닛 랜덤뽑기
         private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
+        private string[] unitsFreenet = new string[15];
+
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
@@ -329,6 +331,7 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
+
             //if (!photonView.IsMine) return;
 
             if (UIManager.Inst.PlayerGold < 5)
@@ -337,10 +340,16 @@ namespace ZoneSystem
                 return;
             }
 
+            string UnitPrefab = null;
+            {
+                UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
+            }
             //랜덤생성로직
-            string UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
-            // 유닛의 최대 수는 15개
 
+            {
+                UnitPrefab = unitsFreenet[Random.Range(0, 15)];
+            }
+            // 유닛의 최대 수는 15개
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -362,6 +371,7 @@ namespace ZoneSystem
                 }
             }
             debug.text = "세이프티존이 꽉차서 유닛을 소환할 수 없습니다.";
+
         }
 
         public void OnClick_ItemInst()
