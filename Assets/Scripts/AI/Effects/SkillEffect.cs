@@ -23,7 +23,7 @@ public class SkillEffect : Effect
 
     protected override void OnCollisionEnter(Collision collision)
     {
-        if (ownerName == null)
+        if (owner == null)
         {
             Debug.LogError("Please Set OwnerName");
             return;
@@ -33,7 +33,7 @@ public class SkillEffect : Effect
 
         if (collision.transform.TryGetComponent<ParentBT>(out target) == true)
         {
-            if (target.getMyNickName().CompareTo(ownerName) != 0)
+            if (target.getMyNickName().CompareTo(owner.getMyNickName()) != 0)
             {
                 if (HitEffect != null)
                 {

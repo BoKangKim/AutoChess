@@ -18,10 +18,10 @@ public class RangeAI : UnitAI
         Effect flash = null;
         Effect project = null;
         Instantiate(standardAttackEffect.gameObject, effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash);
-        flash.setOwnerName(nickName);
+        flash.setOwner(this);
 
         Instantiate(projectile.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
-        project.setOwnerName(nickName);
+        project.setOwner(this);
         project.setDirection(target.transform.position);
     }
 
@@ -29,7 +29,7 @@ public class RangeAI : UnitAI
     {
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
         skill.setDirection(target.transform.position);
     }
 }

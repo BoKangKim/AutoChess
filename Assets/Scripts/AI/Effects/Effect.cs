@@ -11,10 +11,12 @@ namespace Battle.EFFECT
         private float time = 0;
         private float destroyTime = 2f;
         protected float speed = 0f;
-        protected string ownerName = null;
+        protected ParentBT owner = null;
         protected Vector3 direction = Vector3.zero;
         protected bool isNonAttackEffect = false;
         protected float attackDamage = 0f;
+        private bool isAttacked = false;
+        private bool isInstHitEffect = false;
 
         private void Awake()
         {
@@ -52,16 +54,16 @@ namespace Battle.EFFECT
         protected abstract bool setIsNonAttackEffect();
         protected virtual void specialLogic() { }
 
-        public virtual void setOwnerName(string nickName)
+        public virtual void setOwner(ParentBT owner)
         {
-            this.ownerName = nickName;
+            this.owner = owner;
         }
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
-            if (ownerName == null)
+            if (owner == null)
             {
-                Debug.LogError("Please Set OwnerName");
+                Debug.LogError("Please Set Owner");
                 return;
             }
 
@@ -78,23 +80,26 @@ namespace Battle.EFFECT
                 {
                     return;
                 }
-                if (target.getMyNickName().CompareTo(ownerName) != 0)
+                if (target.getMyNickName().CompareTo(owner.getMyNickName()) != 0)
                 {
                     if(target == null)
                     {
                         return;
                     }
-                    if(HitEffect != null)
+
+                    if (HitEffect != null && isInstHitEffect == false)
                     {
-                        Instantiate(HitEffect,gameObject.transform.position,Quaternion.identity);
-                        HitEffect.setAttackDamage(attackDamage);
+                        isInstHitEffect = true;
+                        Effect hit = Instantiate(HitEffect, gameObject.transform.position, Quaternion.identity);
+                        hit.setOwner(owner);
+                        Destroy(gameObject);
                     }
-                    else
+                    else if(HitEffect == null && isAttacked == false)
                     {
-                        target.Damage(attackDamage);
+                        owner.doDamage();
+                        isAttacked = true;
                     }
                     
-                    Destroy(gameObject);
                 }
             }
         }
