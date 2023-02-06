@@ -85,9 +85,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Slider expansionEXPSlider;
     // Player Info 
     [SerializeField] private TextMeshProUGUI playerLV;
-    [SerializeField] private TextMeshProUGUI playerGold; // 플레이어가 소지한 골드
-    [SerializeField] private TextMeshProUGUI playerHP;
-    [SerializeField] private Slider playerHPSlider;
+    [SerializeField] private TextMeshProUGUI playerGold; // 플레이어가 소지한 골드    
+    [SerializeField] private Image playerHPSlider;
     // Gacha
     [SerializeField] private TextMeshProUGUI gachaWeponGold;
     [SerializeField] private TextMeshProUGUI gachaUnitGold;
@@ -313,9 +312,8 @@ public class UIManager : MonoBehaviour
             //OnFactionExpansion();
         }
         RoundDetailInfo();
-        playerHP.text = playerHPValue.ToString();
-        playerHPSlider.value = (playerHPValue * 0.1f);
-        playerHPSlider.value = (playerMaxHPValue * 0.1f);
+        
+        //playerHPSlider.value = (playerHPValue * 0.1f); // 이미지로 변경        
 
         ChangeRankerPosition(rankUserInfo[0].gameObject.transform.position);
         ChangeRankerPosition(rankUserInfo[1].gameObject.transform.position);
