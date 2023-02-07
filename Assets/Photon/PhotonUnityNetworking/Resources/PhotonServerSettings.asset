@@ -43,6 +43,7 @@ MonoBehaviour:
   - RPC_SetTriggerActiveSkill
   - RPC_SetTriggerAttack
   - RPC_SetTriggerDeath
+  - RPC_EnableThis
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

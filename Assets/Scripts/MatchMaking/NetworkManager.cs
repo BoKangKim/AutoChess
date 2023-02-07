@@ -61,8 +61,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
 
-
-
     public override void OnJoinedLobby()
     {
         //되긴하는데 맘에안드는 코드 
@@ -81,6 +79,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         GameType.Inst.setType(GAMETYPE.FREENET,gameObject);
         JoinRandomOrCreateRoom();
+
     }
 
     public void joinLiveNet()
@@ -124,7 +123,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-
+       
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)

@@ -25,11 +25,26 @@ namespace Battle.Stage
         private STAGETYPE nowStage = STAGETYPE.NULL;
         private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
+        private ZoneSystem.MapController[] maps = null;
+        private ZoneSystem.MapController myMap = null;
 
         private void Awake()
         {
             initializingStageInfo();
             checkNextStageInfo();
+        }
+
+        private void Start()
+        {
+            maps = FindObjectsOfType<ZoneSystem.MapController>();
+            for(int i = 0; i < maps.Length; i++)
+            {
+                if (maps[i].photonView.IsMine == true)
+                {
+                    myMap = maps[i];
+                    return;
+                }
+            }
         }
 
         public void checkNextStageInfo()
@@ -73,7 +88,11 @@ namespace Battle.Stage
 
         private void startNextStage()
         {
-            // 유닛 몬스터 보스 생성 로직
+            if(nowStage == STAGETYPE.PVP)
+            {
+
+            }
+
         }
 
         private void initializingStageInfo()

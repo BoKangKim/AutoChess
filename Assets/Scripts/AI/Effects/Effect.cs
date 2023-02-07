@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.AI;
+using Photon.Pun;
+using Photon.Realtime;
 
 namespace Battle.EFFECT
 {
-    public abstract class Effect : MonoBehaviour
+    public abstract class Effect : MonoBehaviourPun
     {
         [SerializeField] protected Hit HitEffect = null;
         private float time = 0;
@@ -26,11 +28,17 @@ namespace Battle.EFFECT
 
         private void Update()
         {
+            if(photonView.IsMine == false)
+            {
+                return;
+            }
+
             time += Time.deltaTime;
 
             if(time >= destroyTime)
             {
-                Destroy(gameObject);
+                time = 0f;
+                PhotonNetwork.Destroy(gameObject);
             }
             
             specialLogic();
@@ -40,7 +48,14 @@ namespace Battle.EFFECT
             {
                 return;
             }
+
             gameObject.transform.Translate(direction * Time.deltaTime * speed, Space.World);
+        }
+
+        private void OnEnable()
+        {
+            isInstHitEffect = false;
+            isAttacked = false;
         }
 
         public void setAttackDamage(float damage)
@@ -61,6 +76,11 @@ namespace Battle.EFFECT
 
         protected virtual void OnCollisionEnter(Collision collision)
         {
+            if (photonView.IsMine == false)
+            {
+                return;
+            }
+
             if (owner == null)
             {
                 Debug.LogError("Please Set Owner");
@@ -71,7 +91,6 @@ namespace Battle.EFFECT
             {
                 return;
             }
-
             ParentBT target = null;
 
             if(collision.transform.TryGetComponent<ParentBT>(out target) == true)
@@ -80,14 +99,15 @@ namespace Battle.EFFECT
                 {
                     return;
                 }
-                if (target.getMyNickName().CompareTo(owner.getMyNickName()) != 0)
+                if (target.getMyNickName().CompareTo(owner.getMyNickName()) != 0
+                    || target.getMyType().CompareTo(owner.getMyType()) != 0)
                 {
+
                     if(target == null)
                     {
                         return;
                     }
-
-                    if(target.enabled == false)
+                    if (target.enabled == false)
                     {
                         return;
                     }
@@ -95,9 +115,12 @@ namespace Battle.EFFECT
                     if (HitEffect != null && isInstHitEffect == false)
                     {
                         isInstHitEffect = true;
-                        Effect hit = Instantiate(HitEffect, gameObject.transform.position, Quaternion.identity);
+                        Effect hit = null;
+                        PhotonNetwork.Instantiate(HitEffect.name, gameObject.transform.position, Quaternion.identity).TryGetComponent<Effect>(out hit);
                         hit.setOwner(owner);
-                        Destroy(gameObject);
+                        PhotonNetwork.Destroy(gameObject);
+                        Debug.Log("Collision 6");
+
                     }
                     else if(HitEffect == null && isAttacked == false)
                     {

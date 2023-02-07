@@ -65,6 +65,16 @@ namespace Battle.Location
             return position;
         }
 
+        public static LocationXY convertMirrorMode(LocationXY location)
+        {
+            LocationXY mirror;
+
+            mirror.x = 6 - location.x;
+            mirror.y = 5 - location.y;
+
+            return mirror;
+        }
+
         public static Vector3 getFromLocationDirectionVector(LocationXY from, LocationXY to)
         {
             Vector3 fromPos = Vector3.zero;

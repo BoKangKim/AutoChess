@@ -37,6 +37,7 @@ namespace ZoneSystem
 
         public int battleUnitCount = 0;
 
+        
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
@@ -45,6 +46,16 @@ namespace ZoneSystem
 
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
+
+        public GameObject[,] getBattleObjects()
+        {
+            return battleObject;
+        }
+
+        public int getPhotonViewID()
+        {
+            return photonView.ViewID;
+        }
 
         private void Awake()
         {

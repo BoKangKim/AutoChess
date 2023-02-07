@@ -1,11 +1,9 @@
-using UnityEngine;
-using System;
 using BehaviorTree;
-using static BehaviorTree.BehaviorTreeMan;
 using Photon.Pun;
-using Photon.Realtime;
+using System;
+using static BehaviorTree.BehaviorTreeMan;
 
-namespace Battle.AI 
+namespace Battle.AI
 {
     public abstract class UnitAI : ParentBT
     {
@@ -25,7 +23,7 @@ namespace Battle.AI
         {
             special = Selector
                 (
-                    IfAction(isFullMana,activeSkill)
+                     IfAction(isFullMana, activeSkill)
                 );
             return special;
         }
@@ -36,7 +34,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    if(mana > maxMana)
+                    if (mana > maxMana)
                     {
                         return true;
                     }
@@ -46,7 +44,26 @@ namespace Battle.AI
             }
         }
 
-        protected virtual Action activeSkill 
+        protected virtual Func<bool> activeTrigger
+        {
+            get
+            {
+                return () =>
+                {
+                    return false;
+                };
+            }
+        }
+
+        protected virtual Action activeSynergy
+        {
+            get
+            {
+                return () => { };
+            }
+        }
+
+        protected virtual Action activeSkill
         {
             get
             {
@@ -55,7 +72,7 @@ namespace Battle.AI
                     mana = 0f;
                     if (myAni.GetParameter(2).name.CompareTo("activeSkill") == 0)
                     {
-                        photonView.RPC("RPC_SetTriggerActiveSkill",RpcTarget.All);
+                        photonView.RPC("RPC_SetTriggerActiveSkill", RpcTarget.All);
                     }
                     StartSkillEffect();
                 };

@@ -93,6 +93,11 @@ namespace Battle.AI
         {
             return die;
         }
+
+        public string getMyType()
+        {
+            return myType;
+        }
         #endregion
 
         private void Awake()
@@ -108,9 +113,10 @@ namespace Battle.AI
 
         private void Start()
         {
+            Debug.Log("START");
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-
+            
             //StageControl sc = FindObjectOfType<StageControl>();
             //sc.changeStage = changeStage;
         }
@@ -190,7 +196,6 @@ namespace Battle.AI
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
             attackDamage = unitData.GetUnitData.GetAtk;
-
         }
 
         public void changeStage(STAGETYPE stageType)
@@ -325,11 +330,11 @@ namespace Battle.AI
                 return () =>
                 {
                     myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
-                    
                     if (enemies.Count == 0)
                     {
                         if(isInit == false)
                         {
+                            photonView.RPC("RPC_EnableThis",RpcTarget.All);
                             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
                             searchingTarget();
 
@@ -345,11 +350,20 @@ namespace Battle.AI
 
                             for(int i = 0;i < allUnit.Length; i++)
                             {
-                                Destroy(allUnit[i].gameObject);
+                                PhotonNetwork.Destroy(allUnit[i].gameObject);
                             }
                         }
                     }
                 };
+            }
+        }
+
+        [PunRPC]
+        public void RPC_EnableThis()
+        {
+            if(this.enabled == false)
+            {
+                this.enabled = true;
             }
         }
 
