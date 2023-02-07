@@ -33,7 +33,7 @@ namespace ZoneSystem
         private void Start()
         {
             cam = Camera.main;
-            safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace");
+            safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace"); //이거 비트연산자가 더 빠르지 않나?
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
@@ -42,7 +42,7 @@ namespace ZoneSystem
         }
         private void Update()
         {
-            #region ����Ͽ�
+            #region 모바일버전
             //if (Input.touchCount == 1)
             //{
             //    if (Input.GetTouch(0).phase == TouchPhase.Began)
@@ -126,7 +126,7 @@ namespace ZoneSystem
             //}
             #endregion
 
-            #region PC��
+            #region PC버전
             if (Input.GetMouseButtonDown(0))
             {
                 //Debug.Log(CastRay(battleSpaceLayer).transform);
@@ -530,62 +530,47 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ����
-        //���� + ������ ����
+        #region Merge
+
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
 
             if (selectedObject == null || stayObject == null) return false;
-            //���� ����
+
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
+                
+                //셀렉티드 아이템과 스테이 아이템을 전부 받아서 계산하는 로직 작성
 
-                int stayEqCount = stayUnit.GetEquipmentCount;
-                int selectEqCount = selectedUnit.GetEquipmentCount;
-                if (stayUnit.GetGrade > 3) return false;
+                //계산하는 로직은 드래그앤 드롭에서 계산한 로직이 가능(계산하고나서 3개 이하)할시 true 반환
+                //false반환시 2가지를 파악-> 머지가 가능한 장비는 스테이로 옮겨서 merge 진행시키고
+                //머지가 되지않는 경우에는 셀렉티드에 있는 아이템들을 뱉는 구조로...
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
-                {
+                
 
-
-                    if (stayEqCount + selectEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
-                    {
-                        for (int i = selectEqCount; i < 0; i--)
-                        {
-                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
-                        }
-                        stayUnit.EquipItem(selectEqCount + stayEqCount);
-                    }
-
-
-
-                    else // 아이템이 4개 이상이라서 확인이 필요->
-                    {
-
-                    }
-                    Destroy(selectedUnit.gameObject);
-                    stayUnit.Upgrade(); //���׷��̵� ���� ��� ����(2023.01.18 15:08-�̿���)
-
-                    // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    return true;
-                }
+                //if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
+                //{
+                //    Destroy(selectedUnit.gameObject);
+                //    stayUnit.Upgrade();
+                //    return true;
+                //}
             }
-            //��� ����
+
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
             {
                 Equipment selectedItem = selectedObject.GetComponent<Equipment>();
                 Equipment stayItem = stayObject.GetComponent<Equipment>();
 
-                if (stayItem.GetEquipmentGrade > 2) return false;
+                if (stayItem.GetEquipmentGrade > 3) return false;
 
                 if (selectedItem.GetEquipmentGrade == stayItem.GetEquipmentGrade && selectedItem.GetEquipmentName == stayItem.GetEquipmentName)
                 {
                     Destroy(selectedItem.gameObject);
                     stayItem.Upgrade();
 
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+
                     return true;
                 }
             }
@@ -600,11 +585,11 @@ namespace ZoneSystem
                 else
                 {
                     selectedObject.transform.parent = stayObject.transform;
-                    stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                    //stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
                 }
                 selectedObject.SetActive(false);
-                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
+
+
                 return true;
             }
             return false;

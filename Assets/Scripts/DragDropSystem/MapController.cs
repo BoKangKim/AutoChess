@@ -7,8 +7,6 @@ namespace ZoneSystem
 
     public class MapController : MonoBehaviour
     {
-
-
         public GameObject[,] safetyObject;
         public GameObject[,] battleObject;
         public Dictionary<string, int> unitCount;
@@ -18,9 +16,9 @@ namespace ZoneSystem
         [Header("종족 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int orcSynergyCount;
         [SerializeField] private int dwarfSynergyCount;
-        [SerializeField] private int scorpionSynergyCount;
+        [SerializeField] private int golemSynergyCount;
         [SerializeField] private int mechaSynergyCount;
-        [SerializeField] private int undeadSynergyCount;
+        [SerializeField] private int demonSynergyCount;
 
         [Header("직업 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int warriorSynergyCount;
@@ -51,19 +49,15 @@ namespace ZoneSystem
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
         }
 
-        private void Start()
-        {
-        }
-
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
             //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
-            scorpionSynergyCount = 0;
+            golemSynergyCount = 0;
             mechaSynergyCount = 0;
-            undeadSynergyCount = 0;
+            demonSynergyCount = 0;
 
             warriorSynergyCount = 0;
             tankerSynergyCount = 0;
@@ -122,11 +116,11 @@ namespace ZoneSystem
                                     case "Orc":
                                         orcSynergyCount++;
                                         break;
-                                    case "Scorpion":
-                                        scorpionSynergyCount++;
+                                    case "Golem":
+                                        golemSynergyCount++;
                                         break;
-                                    case "Undead":
-                                        undeadSynergyCount++;
+                                    case "Demon":
+                                        demonSynergyCount++;
                                         break;
                                 }
 
@@ -271,37 +265,37 @@ namespace ZoneSystem
                                 }
                             }
 
-                            if (scorpionSynergyCount > 2 && scorpionSynergyCount < 5)
+                            if (golemSynergyCount > 2 && golemSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Scorpion")) activeSynergyList.Add("Scorpion");
+                                if (!activeSynergyList.Contains("Golem")) activeSynergyList.Add("Golem");
                             }
-                            if (scorpionSynergyCount >= 5)
+                            if (golemSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Scorpion"))
+                                if (activeSynergyList.Contains("Golem"))
                                 {
-                                    activeSynergyList.Remove("Scorpion");
+                                    activeSynergyList.Remove("Golem");
                                 }
 
-                                if (!activeSynergyList.Contains("Scorpion2"))
+                                if (!activeSynergyList.Contains("Golem2"))
                                 {
-                                    activeSynergyList.Add("Scorpion2");
+                                    activeSynergyList.Add("Golem2");
                                 }
                             }
 
-                            if (undeadSynergyCount > 2 && undeadSynergyCount < 5)
+                            if (demonSynergyCount > 2 && demonSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Undead")) activeSynergyList.Add("Undead");
+                                if (!activeSynergyList.Contains("Demon")) activeSynergyList.Add("Demon");
                             }
-                            if (undeadSynergyCount >= 5)
+                            if (demonSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Undead"))
+                                if (activeSynergyList.Contains("Demon"))
                                 {
-                                    activeSynergyList.Remove("Undead");
+                                    activeSynergyList.Remove("Demon");
                                 }
 
-                                if (!activeSynergyList.Contains("Undead2"))
+                                if (!activeSynergyList.Contains("Demon2"))
                                 {
-                                    activeSynergyList.Add("Undead2");
+                                    activeSynergyList.Add("Demon2");
                                 }
                             }
                         }
@@ -389,7 +383,7 @@ namespace ZoneSystem
 
         public void SellUnitOutItem(GameObject Item)
         {
-            
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

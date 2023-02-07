@@ -101,28 +101,33 @@ namespace UnitClass
             return grade++;
         }
 
-        public int EquipCount()
-        {
-            return equipmentCount++;
-        }
+        //public int EquipCount()
+        //{
+        //    return equipmentCount++;
+        //}
 
-        public void EquipItem(int equipmentCount) // 속보 이거 기존 구조 이상함 수정 요함
+        //public void EquipItem(int equipmentCount) // 속보 이거 기존 구조 이상함 수정 요함
+        //{
+        //    switch (equipmentCount)
+        //    {
+        //        case 0:
+        //            equipment01 = transform.GetChild(equipmentCount).gameObject;
+        //            EquipCount();
+        //            break;
+        //        case 1:
+        //            equipment02 = transform.GetChild(equipmentCount).gameObject;
+        //            EquipCount();
+        //            break;
+        //        case 2:
+        //            equipment03 = transform.GetChild(equipmentCount).gameObject;
+        //            EquipCount();
+        //            break;
+        //    }
+        //}
+
+        public bool EquipmentCheck()
         {
-            switch (equipmentCount)
-            {
-                case 0:
-                    equipment01 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
-                    break;
-                case 1:
-                    equipment02 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
-                    break;
-                case 2:
-                    equipment03 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
-                    break;
-            }
+            return false;
         }
 
         public void GetItemStat()
