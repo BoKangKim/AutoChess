@@ -38,9 +38,7 @@ public class TimeManager : MonoBehaviour
                 currentTime = 0;
                 if (IsNextRound)
                 {
-                    // 경험치 골드 지급 시점
-                    // user.GetExp += 4;
-                    // user.Getgold += 10;
+                    // 경험치 골드 지급 시점                    
                     currentTime = maximumTime;
                     IsNextRound = false;
                 }

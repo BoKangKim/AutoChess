@@ -9,32 +9,26 @@ using TMPro;
 
 public class UIManager : MonoBehaviour
 {
-    #region Singleton
-    static public UIManager instance;
-    static public UIManager INSTANCE
+    // 시너지 분류 
+    enum ClassSynergy
     {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindObjectOfType<UIManager>();
-                if (instance == null)
-                {
-                    instance = new GameObject("UIManager").AddComponent<UIManager>();
-                }
-
-            }
-            return instance;
-        }
+        Warrior,
+        Assassin,
+        RangeDealer,
+        Tanker,
+        Magician
     }
-    #endregion
+    enum TypeSnergy
+    {
+        Mecha,
+        Golem,
+        Orc,
+        Demon,
+        Dwarf
+    }
 
-    //ScriptableUnit unitData;
-    //Player_test player;
-
-
-    [SerializeField] private TextMeshProUGUI userID;
-    [SerializeField] private string playerID;
+    // [SerializeField] private TextMeshProUGUI userID;
+    // [SerializeField] private string playerID;
 
     [SerializeField] private GameObject roundInfoUI;
     [SerializeField] private GameObject settingUI;
@@ -54,6 +48,8 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject UnitStatusInfoUI;
     [SerializeField] private GameObject UnitSkillInfoUI;
 
+    [SerializeField] private GameObject[] UnitSynergyUI; // 껏다 킬 유닛 시너지 창
+
     //-----------------------------------------------------------------------------------------------------------
 
     // Rank Contents
@@ -69,27 +65,32 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI RoundDetailStepNum4;
 
     // Synergy Contents
-    [SerializeField] private TextMeshProUGUI SnergyUnitPopup_Name;
+    [SerializeField] private TextMeshProUGUI SnergyUnitPopup_Name; // 시너지 팝업창 - 종족 이름
     [SerializeField] private TextMeshProUGUI[] SnergyUnitPopup_Info;
     [SerializeField] private Image[] SnergyUnitPopup_Icon;
     // 컨텐츠 박스안에 담길 정보 : 종족 이름, 종족 카운트 수, 설명글    
     [SerializeField] private Image[] SynergyIcon; // 첫번째 시너지 창 아이콘
     [SerializeField] private TextMeshProUGUI[] ClassSynergyName; // 클래스 시너지 이름
     [SerializeField] private TextMeshProUGUI[] TribeSynergyName; // 종족 시너지 이름
-    [SerializeField] private TextMeshProUGUI[] SynergyNum; // 보유한 유닛 수 비교 카운트 수 -> 배열 데이터로 받아오기 
-    [SerializeField] private TextMeshProUGUI Mecha_synergyCountNumber;
+    [SerializeField] private TextMeshProUGUI SynergyPlus; // 보유한 유닛 수 비교 카운트 수 -> 배열 데이터로 받아오기 
+    [SerializeField] private Image[] SynergyImage;
+    //[SerializeField] private TextMeshProUGUI Mecha_synergyCountNumber;
 
     // Expansion Contents
     [SerializeField] private TextMeshProUGUI expansionGold; // 확장 시 사용하는 골드
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
     // Player Info 
-    [SerializeField] private TextMeshProUGUI playerLV;
+    [SerializeField] private TextMeshProUGUI playerExpensionLV;
+    [SerializeField] private TextMeshProUGUI playerRankingnLV;
     [SerializeField] private TextMeshProUGUI playerGold; // 플레이어가 소지한 골드    
     [SerializeField] private Image playerHPSlider;
     // Gacha
     [SerializeField] private TextMeshProUGUI gachaWeponGold;
     [SerializeField] private TextMeshProUGUI gachaUnitGold;
+
+    // Color
+    private Color popupIconColor;
 
     #region Data 받아오기
     protected void UpdateTribeName()
@@ -122,13 +123,14 @@ public class UIManager : MonoBehaviour
     private string Tanker = "Tanker";
     private string Magician = "Magician";
     #endregion
+    // 
     private string InputInfo1 = "(3) 전투 시작 시 Orc의 함성소리와 함께 상대 유닛의 공격력과 체력을 5% 하락시킴";
     private string InputInfo2 = "(5) 전투 시작 시 Orc의 함성 소리와 함께 상대 유닛의 공격력과 체력을 15% 하락시킴";
 
     private int playerGoldValue;
     private float playerEXPValue;
-    [SerializeField] private float playerHPValue;
-    private int playerMaxHPValue;
+    private float playerMaxHPValue;
+    private float playerHPValue;
 
     [SerializeField] protected int deployedUnit; // 배치된 유닛
     private int gachaWeponGoldValue;
@@ -143,142 +145,113 @@ public class UIManager : MonoBehaviour
     private int RoundRewardGold = 10;
     private float RoundRewardEXP = 4f;
 
-    private int synergyCount;
-
-    private int TypeSynergyAllCount=5; // 공통 전체 수
+    private int TypeSynergyAllCount = 5; // 공통 전체 수
     // 종류 시너지 카운트
     private int mechaSynergyCount; // 보유 수
-    private int golemSynergyCount;
-    private int orcSynergyCount;
-    private int demonSynergyCount;
-    private int dwarfSynergyCount;
-    // 클래스 시너지 카운트
-    private int warriorSynergyCount;
-    private int assassinSynergyCount;
-    private int rangedealerSynergyCount;
-    private int tankerSynergyCount;
-    private int magicianSynergyCount;
+    public void TypeSynergyCount(int num)
+    {
+        // 배치된 유닛에 따른 타입 시너지 계산
+    }
     private int SynergyCount3 = 3;
     private int SynergyCount5 = 5;
-    
+    // 클래스 시너지 카운트
+    public void ClassSynergyCount(int num)
+    {
+        // 배치된 유닛에 따른 클래스 시너지 계산
+    }
     private bool IsESC { get; set; }
     private bool IsSynergy { get; set; }
     private bool IsRanking { get; set; }
     private bool IsChatting { get; set; }
     private bool IsSynergyEX { get; set; }
+    private bool IsDead { get; set; }
 
     // Specie Synergy bool
     #region Specie Synergy bool
-    private bool IsMechaSynergy3 { get; set; }
-    private bool IsMechaSynergy5 { get; set; }
-    private bool IsGolemSynergy3 { get; set; }
-    private bool IsGolemSynergy5 { get; set; }
-    private bool IsOrcSynergy3 { get; set; }
-    private bool IsOrcSynergy5 { get; set; }
-    private bool IsDemonSynergy3 { get; set; }
-    private bool IsDemonSynergy5 { get; set; }
-    private bool IsDwarfSynergy3 { get; set; }
-    private bool IsDwarfSynergy5 { get; set; }
-    #endregion
-    // Class Synergy bool
-    #region Class Synergy bool
-    private bool IsWarriorSynergy3 { get; set; }
-    private bool IsWarriorSynergy5 { get; set; }
-    private bool IsAssassinSynergy3 { get; set; }
-    private bool IsAssassinSynergy5 { get; set; }
-    private bool IsRangeDealerSynergy3 { get; set; }
-    private bool IsRangeDealerSynergy5 { get; set; }
-    private bool IsTankerSynergy3 { get; set; }
-    private bool IsTankerSynergy5 { get; set; }
-    private bool IsMagicianSynergy3 { get; set; }
-    private bool IsMagicianSynergy5 { get; set; }
+    private bool IsSynergy3 { get; set; }
+    private bool IsSynergy5 { get; set; }
+
     #endregion
 
-    //protected bool IsCurRound { get; set; }
-
-    // 보강이가 작업중
-    protected TimeManager timeManager;
-    protected void Awake()
+    protected TimeManager timeManager; // 보강이가 작업중
+    private void Awake()
     {
-        DontDestroyOnLoad(this);
+        // DontDestroyOnLoad(this);
     }
 
-    protected void Count()
+    private void Start()
     {
-        if (TribeName == Mecha) // 받아온 정보가 메카일 경우 해당 데이터에 맞는 정보 불러오기
-        {            
-            SnergyUnitPopup_Name.text = Mecha;
-            // 시너지 글씨 색상 바뀌는지만 확인
-            SnergyUnitPopup_Info[0].text = InputInfo1; // 내용 - 다음주에 데이터 관리 쪽에서 물어볼것
-            SnergyUnitPopup_Info[1].text = InputInfo2;
-            if (IsMechaSynergy3)
-            {
-                ChangeTextColor(SnergyUnitPopup_Info[0]);
-                ChangeTextColorInitiate(SnergyUnitPopup_Info[1]);
-            }
-            if (IsMechaSynergy5)
-            {
-                ChangeTextColor(SnergyUnitPopup_Info[1]);
-                ChangeTextColorInitiate(SnergyUnitPopup_Info[0]);
-            }
-        }
-        // 현재 메카 보유 수에 따라 업데이트 됨
-        Mecha_synergyCountNumber.text = (mechaSynergyCount +" / "+ TypeSynergyAllCount).ToString();
-    }
-    protected void Start()
-    {
-        //unitData = FindObjectOfType<ScriptableUnit>();
-        //player = FindObjectOfType<Player_test>();
-        //userID.text = unitData.GetUnitName; // user data
-        userID.text = playerID;
-        playerID = userID.text; // save user id
-
+        timeManager = FindObjectOfType<TimeManager>();
         // 고정 지불 비용
-        expansionGoldValue = 10;
         gachaWeponGoldValue = 3;
         gachaUnitGoldValue = 4;
-        gachaWeponGold.text = (gachaWeponGoldValue + " G").ToString();
-        gachaUnitGold.text = (gachaUnitGoldValue + " G").ToString();
-        expansionGold.text = (expansionGoldValue + " G").ToString();
+        gachaWeponGold.text = gachaWeponGoldValue.ToString();
+        gachaUnitGold.text = gachaUnitGoldValue.ToString();
 
         IsESC = false;
         IsSynergy = false;
+        IsSynergy3 = false;
+        IsSynergy5 = false;
         IsRanking = false;
         IsChatting = false;
         IsSynergyEX = false;
-
-        //IsCurRound = true;
+        IsDead = false;
 
         // data 받아올 것
-        playerGoldValue = 1000;//player.GetGold;
+        playerGoldValue = 333333;//player.GetGold;
         expensionLevelValue = 1;//player.GetLevel;
         playerEXPValue = 0;//player.GetEXP;
-        playerLV.text = expensionLevelValue.ToString(); // 레벨 텍스트
+        playerExpensionLV.text = ("Lv." + expensionLevelValue).ToString(); // 레벨 텍스트
+        playerRankingnLV.text = ("Lv." + expensionLevelValue).ToString();
         expansionEXPSlider.value = playerEXPValue; // 슬라이더
 
-        expansionMaxEXPValue = 32; // 임시 - 데이터 받아오기
-        playerMaxHPValue = 1;
+        expansionMaxEXPValue = 32; // 임시 - 데이터 받아오기 - 수정필요
+        expansionGoldValue = expansionMaxEXPValue;
+        expansionGold.text = expansionGoldValue.ToString();
 
-        deployedUnit = 3; // 임시 - 배치된 유닛 수
+        deployedUnit = 0; // 임시 - 배치된 유닛 수
         RoundStageNum.text = (roundStepNumber1 + "-" + roundStepNumber2).ToString();
-        timeManager = FindObjectOfType<TimeManager>();
 
         RoundDetailInfo();
+
+        // 유닛 시너지 컨텐츠 UI         
+        for (int i = 0; i < UnitSynergyUI.Length; i++)
+        {
+            UnitSynergyUI[i].gameObject.SetActive(false);
+        }
+
+        // 정보에 따라 다른 정보가 들어갈 수 있어야 함.
+        SnergyUnitPopup_Info[0].text = InputInfo1;
+        SnergyUnitPopup_Info[1].text = InputInfo2;
+
+        //color
+        popupIconColor = SnergyUnitPopup_Icon[0].GetComponent<Image>().color;
+
+        SnergyUnitPopup_Name.text = Mecha; // 나중에 받아와서 업데이트
+
+        // player HP
+        playerMaxHPValue = 100f;
+        playerHPValue = playerMaxHPValue;
     }
+
 
 
     protected void Update()
     {
-        // 시너지 카운트 수 체크
-        // Debug.Log("rankingContents.transform.position.x : " + rankingContents.transform.position.x);
-        if ((mechaSynergyCount > 2) && (mechaSynergyCount < 5)) { IsMechaSynergy3 = true; }
-        if (mechaSynergyCount <= 5) { IsMechaSynergy5 = true; }
-        // mechaSynergyCount -> 카운트 갯수를 받아옴
-        Count();
+        // 배치된 유닛에 따른 시너지 확인
+        DeployedUnitSynergy();
+
+        if (IsSynergy3) Debug.Log("시너지 3 적용");
+        else Debug.Log("시너지 3 적용 취소");
+
+        if (IsSynergy5) Debug.Log("시너지 5 적용");
+        else Debug.Log("시너지 5 적용 취소");
+
 
         if (playerGoldValue <= 0) playerGoldValue = 0;
-        playerGold.text = (playerGoldValue + " G").ToString();
-        // UpdatePlayerInfo();
+        playerGold.text = string.Format("{0:#,###}", playerGoldValue); // 4자릿수 넘어가면 , 표시
+
+        if (playerHPValue <= 0) IsDead=true;
 
         // Game Setting
         if (Input.GetKeyDown(KeyCode.Escape)) SettingMenuESC();
@@ -298,7 +271,6 @@ public class UIManager : MonoBehaviour
                 timeManager.IsTimeOver = true;
                 return;
             }
-
             roundStepNumber2++;
             if (roundStepNumber2 >= 5)
             {
@@ -307,41 +279,103 @@ public class UIManager : MonoBehaviour
             }
             RoundStageNum.text = (roundStepNumber1 + "-" + roundStepNumber2).ToString();
             timeManager.IsNextRound = true;
-            // 한 라운드 끝나면 자동 1회 지급
-            // 조건
-            //OnFactionExpansion();
+            //playerGoldValue += RoundRewardGold; // 한라운드당 골드 지급
         }
         RoundDetailInfo();
-        
-        //playerHPSlider.value = (playerHPValue * 0.1f); // 이미지로 변경        
 
-        ChangeRankerPosition(rankUserInfo[0].gameObject.transform.position);
-        ChangeRankerPosition(rankUserInfo[1].gameObject.transform.position);
-        ChangeRankerPosition(rankUserInfo[2].gameObject.transform.position);
-        ChangeRankerPosition(rankUserInfo[3].gameObject.transform.position);
+        expansionGold.text = expansionGoldValue.ToString();
+
+        // 랭킹 컨텐츠
+        playerRankingnLV.text = ("Lv." + expensionLevelValue).ToString(); // 레벨 값 업데이트
+        playerHPSlider.fillAmount = playerHPValue / playerMaxHPValue;
+        // 체력에 따른 랭킹 컨텐츠 위치 이동
+        ChangeRankerPosition();
     }
 
-    // 테스트용 
-    private Vector2 playerRank1 = new Vector2(-4, 175);
-    private Vector2 playerRank2 = new Vector2(-4, 60);
-    private Vector2 playerRank3 = new Vector2(-4, -55);
-    private Vector2 playerRank4 = new Vector2(-4, -170);
-    protected void ChangeRankerPosition(Vector2 vec2)
+    private float attackPower = 10f; // 데이터 들어올 부분
+    private float healPower = 10f;
+    public void AttackTest() // test 중
     {
-        // 다른 플레이어와 비교했을 때 가장 높은 HP일 경우 상위 노출        
-        if (playerHPValue >= 50)
+        if (playerHPValue <= 0) playerHPValue = 0; // 죽음
+        playerHPValue -= attackPower;
+    }
+    public void HealTest() // test 중
+    {
+        Debug.Log("힐");
+        if (playerHPValue >= playerMaxHPValue) playerHPValue = playerMaxHPValue;
+        playerHPValue += healPower;
+    }
+    public void UnitTest_Plus() // test 중
+    {
+        deployedUnit++;
+        if (deployedUnit >= 5)
         {
-            rankUserInfo[0].gameObject.transform.position = playerRank1;
+            deployedUnit = 5;
         }
+    }
+    public void UnitTest_Minus()
+    {
+        deployedUnit--;
+        if (deployedUnit <= 0)
+        {
+            deployedUnit = 0;
+        }
+    }
+
+    Color rendererColor;
+
+    protected void ChangeRankerPosition()
+    {
+        rendererColor = rankUserInfo[0].gameObject.GetComponent<Image>().color;
+        // 다른 플레이어와 비교했을 때 가장 높은 HP일 경우 상위 노출        
+        rendererColor.a = 1.0f;
+        if (playerHPValue >= 70f)
+        {
+            rankUserInfo[0].transform.localPosition = new Vector2(125, 160);
+        }
+        if ((playerHPValue >= 50f) && (playerHPValue < 70f))
+         {
+             rankUserInfo[0].transform.localPosition = new Vector2(125, 40);
+         }
+        if ((playerHPValue >= 30f) && (playerHPValue < 50f))
+        {
+            rankUserInfo[0].transform.localPosition = new Vector2(125, -80);
+        }
+        if ((playerHPValue >= 0f) && (playerHPValue < 30f))
+        {
+            rankUserInfo[0].transform.localPosition = new Vector2(125, -200);
+        }
+        if (IsDead)
+        {
+            rendererColor.a = 0.5f;
+        }
+
+        // 죽은 플레이어 가장 아래로 내리고 비활성화 효과 주기
+        // 죽은 플레이어가 여러명일 때 -> 가장 먼저 죽은 순서대로 밑에 차곡차곡 쌓임
+
+         /*if ((playerHPValue >= 50f) ||(playerHPValue < 70f))
+         {
+             rankUserInfo[0].transform.localPosition = new Vector2(125, 40);
+         }
+         if ((playerHPValue >= 30f) || (playerHPValue < 50f))
+         {
+             rankUserInfo[0].transform.localPosition = new Vector2(125, -80);
+         }
+         if ((playerHPValue >= 0f) || (playerHPValue < 30f))
+         {
+             rankUserInfo[0].transform.localPosition = new Vector2(125, -200);
+         }*/
+       
+
     }
     // IsMine일 때 나에 해당하는 랭크 오브젝트 이동
     // 배열로 플레이어 목록 (닉네임, HP) 받아오기
     // 만약 2,3,4등에 있던 오브젝트가 1등 자리로 이동할 때
     // 다른 오브젝트들은 하나의 오브젝트 이동이 있을 때마다
     // 값을 비교하고 업데이트 되도록할 것
-    
 
-    // Round Detail Info
+
+    // Round Detail Info : 1-1 1-2 1-3 1-4 라운드 정보 색상 효과
     #region Round Detail Info
     protected void RoundDetailInfo()
     {
@@ -379,7 +413,6 @@ public class UIManager : MonoBehaviour
                 ChangeTextColor(RoundDetailStepNum4);
                 break;
         }
-        //Debug.Log("text color : " + RoundDetailStepNum1.color);
     }
     #endregion
 
@@ -447,9 +480,8 @@ public class UIManager : MonoBehaviour
     {
         if (IsSynergy)
         {
-            if (synergyContentsUI.transform.position.x >= 190f) return;
+            if (synergyContentsUI.transform.position.x >= 270f) return;
             synergyContentsUI.transform.localPosition = Vector2.Lerp(synergyContentsUI.transform.localPosition, new Vector2(synergyContentsUI.transform.localPosition.x + 10f, synergyContentsUI.transform.localPosition.y), Time.deltaTime * 100f);
-
         }
         else
         {
@@ -470,7 +502,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    // Synergy Explain UI
+    // Synergy Explain UI 
     #region Synergy Explain UI
     public void OnSynergyExplain()
     {
@@ -497,15 +529,79 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    // Ranking Contesnt UI - Slide
-    #region Ranking Contesnt UI   
+    // Deployed Unit Synergy - Popup
+    #region Deployed Unit Synergy 
+    private void DeployedUnitSynergy()
+    {
+        // 각 시너지마다 해당하는 유닛인지 확인필요 - 임시 적용중
+        switch (deployedUnit)
+        {
+            case 0:
+                UnitSynergyUI[0].gameObject.SetActive(false);
+                SynergyImage[0].gameObject.SetActive(false);
+                for (int i = 0; i < SnergyUnitPopup_Icon.Length; i++)
+                {
+                    OffSynergyPopupAlpha(i);
+                }
+                break;
+            case 1:
+                UnitSynergyUI[0].gameObject.SetActive(true);
+                SynergyImage[0].gameObject.SetActive(true); // 시너지 컨텐츠 - 유닛 이미지
+                SynergyImage[1].gameObject.SetActive(false);
+                OnSynergyPopupAlpha(0); // 시너지 팝업 컨텐츠 - 설명에 들어가는 유닛 이미지
+                OffSynergyPopupAlpha(1);
+                break;
+            case 2:
+                //IsMechaSynergy3 = false;
+                SynergyImage[1].gameObject.SetActive(true);
+                SynergyImage[2].gameObject.SetActive(false);
+                ChangeTextColorInitiate(SynergyPlus);
+                OnSynergyPopupAlpha(1);
+                OffSynergyPopupAlpha(2);
+                ChangeTextColorInitiate(SnergyUnitPopup_Info[0]); // 설명 글 활성화
+                break;
+            case 3:
+                //IsMechaSynergy3 = true;
+                SynergyImage[2].gameObject.SetActive(true);
+                ChangeTextColor(SynergyPlus);
+                OnSynergyPopupAlpha(2);
+                OffSynergyPopupAlpha(3);
+                ChangeTextColor(SnergyUnitPopup_Info[0]);
+                break;
+            case 4:
+                //IsMechaSynergy5 = false;
+                OnSynergyPopupAlpha(3);
+                OffSynergyPopupAlpha(4);
+                ChangeTextColorInitiate(SnergyUnitPopup_Info[1]);
+                break;
+            case 5:
+                //IsMechaSynergy5 = true;
+                OnSynergyPopupAlpha(4);
+                ChangeTextColor(SnergyUnitPopup_Info[1]);
+                ChangeTextColorInitiate(SnergyUnitPopup_Info[0]);
+                break;
+        }
+    }
+    // 시너지 팝업창 활성화 / 비활성화
+    private void OnSynergyPopupAlpha(int num)
+    {
+        popupIconColor.a = 1.0f; // 알파값으로 활성화 비활성화 조절
+        SnergyUnitPopup_Icon[num].color = popupIconColor;
+    }
+    private void OffSynergyPopupAlpha(int num)
+    {
+        popupIconColor.a = 0.5f; // 알파값으로 활성화 비활성화 조절
+        SnergyUnitPopup_Icon[num].color = popupIconColor;
+    }
+    #endregion
 
-    // 수치 조절 필요
+    // Ranking Contesnt UI - Slide
+    #region Ranking Contesnt UI  
     private void RankingContents()
     {
         if (IsRanking)
         {
-            if (rankingContentsUI.transform.position.x <= 1750f) return;
+            if (rankingContentsUI.transform.position.x <= 1650f) return;
             rankingContentsUI.transform.localPosition = Vector2.Lerp(rankingContentsUI.transform.localPosition, new Vector2(rankingContentsUI.transform.localPosition.x - 10f, rankingContentsUI.transform.localPosition.y), Time.deltaTime * 100f);
         }
         else
@@ -514,7 +610,6 @@ public class UIManager : MonoBehaviour
             rankingContentsUI.transform.localPosition = Vector2.Lerp(rankingContentsUI.transform.localPosition, new Vector2(rankingContentsUI.transform.localPosition.x + 10f, rankingContentsUI.transform.localPosition.y), Time.deltaTime * 100f);
         }
     }
-
     public void OnOffRankingContents()
     {
         if (IsRanking)
@@ -550,21 +645,19 @@ public class UIManager : MonoBehaviour
         if (playerEXPValue >= expansionMaxEXPValue)
         {
             expensionLevelValue += 1;
-            playerLV.text = expensionLevelValue.ToString();
             playerEXPValue = playerEXPValue - expansionMaxEXPValue;
-            // 
         }
-        playerGoldValue -= expansionGoldValue;
-        playerGoldValue += RoundRewardGold;
+        expansionGoldValue = Mathf.Abs(expansionMaxEXPValue - (int)playerEXPValue);
+        playerGoldValue -= expansionGoldValue; // 남은 exp 에 따른 골드 차감 변경       
         playerEXPValue += RoundRewardEXP;
-
-        playerGold.text = playerGoldValue.ToString();
-        playerLV.text = expensionLevelValue.ToString(); //
+        playerGold.text = string.Format("{0:#,###}", playerGoldValue); // 단위 끊기
+        playerExpensionLV.text = ("Lv." + expensionLevelValue).ToString(); // 레벨 값 업데이트
         expansionEXPSlider.value = (playerEXPValue * 0.1f); // 슬라이더 값 조절 필요
         expansionEXPSlider.maxValue = (expansionMaxEXPValue * 0.1f);
-        Debug.Log("playerEXPValue : " + playerEXPValue);
+
     }
 
+    // Setting Menu
     #region Setting Menu
     public void OnChattingUI()
     {
