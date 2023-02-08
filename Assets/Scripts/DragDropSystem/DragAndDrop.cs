@@ -446,7 +446,6 @@ namespace ZoneSystem
                     }
 
                 }
-
             }
                 selectedObject = null;
         }

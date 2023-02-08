@@ -53,6 +53,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        Screen.SetResolution(480,480,false);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
         gameScene = "SyncUnit";
@@ -91,7 +92,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void JoinRandomOrCreateRoom()
     {
         nomalMatchButton.interactable = false;
-        room.MaxPlayers = 2;
+        room.MaxPlayers = 4;
 
         if (PhotonNetwork.IsConnected)
         {
@@ -141,7 +142,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         UpdatePlayerCount();
 
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {
             PhotonNetwork.LoadLevel(gameScene);
         }

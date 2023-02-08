@@ -44,6 +44,11 @@ MonoBehaviour:
   - RPC_SetTriggerAttack
   - RPC_SetTriggerDeath
   - RPC_EnableThis
+  - RPC_SetEnemy
+  - RPC_SetIsMirrorPlayer
+  - StartChangeUnit
+  - RPC_SyncUnitIndex
+  - SetIsEndSetEnemy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -29,7 +30,7 @@ namespace ZoneSystem
         [SerializeField] private int magicianSynergyCount;
         [SerializeField] private int assassinSynergyCount;
         [SerializeField] private int rangeDealerSynergyCount;
-
+        private MapController[] maps = null;
         public TextMeshProUGUI debug;
 
         //아이템 랜뽑 일단은 스트링값으로
@@ -37,7 +38,59 @@ namespace ZoneSystem
 
         public int battleUnitCount = 0;
 
-        
+        private MapController enemy = null;
+        public bool isMirrorModePlayer = true;
+        private bool isInitIndex = false;
+
+        public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
+        }
+
+        [PunRPC]
+        public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            this.isMirrorModePlayer = isMirrorModePlayer;
+        }
+
+        [PunRPC]
+        public void RPC_SetEnemy(int myViewID, int enemyViewID)
+        {
+            if (maps == null)
+            {
+                maps = FindObjectsOfType<MapController>();
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                if (maps[i].photonView.ViewID == myViewID)
+                {
+                    continue;
+                }
+                else if (maps[i].photonView.ViewID == enemyViewID)
+                {
+                    enemy = maps[i];
+                }
+            }
+        }
+
+        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
+        {
+            if(isRPC == true)
+            {
+                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
+            }
+            else
+            {
+                this.enemy = enemy;
+            }
+        }
+
+        public MapController getEnemy()
+        {
+            return enemy;
+        }
+
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
@@ -59,6 +112,7 @@ namespace ZoneSystem
 
         private void Awake()
         {
+            
             //if (!photonView.IsMine) return;
             freenetUnitIndex = new int[3] { -1, -1, -1 };
             freenetUnits = new string[25];
@@ -70,31 +124,73 @@ namespace ZoneSystem
             initializingUnitName();
 
             int index = 0;
-            do
+            if(PhotonNetwork.IsMasterClient == true)
             {
-                bool isContains = false;
-                freenetUnitIndex[index] = Random.Range(0, 5);
-
-                for(int i = 0; i < freenetUnitIndex.Length; i++)
+                do
                 {
-                    if(i == index)
+                    bool isContains = false;
+                    freenetUnitIndex[index] = Random.Range(0, 5);
+
+                    for (int i = 0; i < freenetUnitIndex.Length; i++)
+                    {
+                        if (i == index)
+                        {
+                            continue;
+                        }
+
+                        if (freenetUnitIndex[i] == freenetUnitIndex[index])
+                        {
+                            isContains = true;
+                        }
+                    }
+
+                    if (isContains == true)
                     {
                         continue;
                     }
 
-                    if (freenetUnitIndex[i] == freenetUnitIndex[index])
+                    index++;
+                } while (index < freenetUnitIndex.Length);
+
+                
+            }
+        }
+
+        private void Start()
+        {
+            if (PhotonNetwork.IsMasterClient == true)
+            {
+                StartCoroutine(WaitAllPlayer());   
+            }
+        }
+
+        IEnumerator WaitAllPlayer()
+        {
+            yield return new WaitForSeconds(2f);
+            if(PhotonNetwork.IsMasterClient == true
+                && photonView.IsMine)
+            {
+                PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
+
+                if (maps == null)
+                {
+                    maps = FindObjectsOfType<MapController>();
+                }
+
+                for (int i = 0; i < maps.Length; i++)
+                {
+                    for (int j = 0; j < freenetUnitIndex.Length; j++)
                     {
-                        isContains = true;
+                        maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
                     }
                 }
+            }
+        }
 
-                if(isContains == true)
-                {
-                    continue;
-                }
-
-                index++;
-            } while (index < freenetUnitIndex.Length);
+        [PunRPC]
+        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        {
+            freenetUnitIndex[arrIndex] = unitIndex;
         }
 
         private void initializingUnitName()
@@ -408,7 +504,8 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
-
+            
+            
             if (UIManager.Inst.PlayerGold < 5)
             {
                 debug.text = "골드가 부족합니다.";
