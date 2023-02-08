@@ -8,12 +8,12 @@ public class TimeManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI Timer;
     [SerializeField] Image TimerIcon;
-    protected float maximumTime = 1;
+    protected float maximumTime;
     public float currentTime;
     public bool IsTimeOver { get; set; }
     public bool IsNextRound { get; set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         IsTimeOver = false;
         IsNextRound = false;
@@ -22,7 +22,7 @@ public class TimeManager : MonoBehaviour
         TimerIcon.fillAmount = maximumTime;
 
     }
-    private void Update()
+    protected virtual void Update()
     {
         // Game Timer
         //photonView.RPC(nameof(TimeFlow), RpcTarget.AllBuffered); // nameof 참조중인지 확인하기 위함
