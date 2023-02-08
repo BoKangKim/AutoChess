@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ZoneSystem
@@ -33,6 +34,7 @@ namespace ZoneSystem
         string[] RandomItem;
 
         public int battleUnitCount = 0;
+        public int SafetyObjectCount = 0;
 
         [SerializeField] private GameObject UnitPrefab;
         [SerializeField] private GameObject ItemPrefab;
@@ -47,6 +49,21 @@ namespace ZoneSystem
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
+        }
+
+        public int SafetyZoneCheck()
+        {
+            for (int z = 0; z < 2; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (safetyObject[z,x]!=null)
+                    {
+                        SafetyObjectCount++;
+                    }
+                }
+            }
+            return SafetyObjectCount;
         }
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
@@ -358,7 +375,6 @@ namespace ZoneSystem
 
         public void itemGain(GameObject getItem)
         {
-
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -368,7 +384,7 @@ namespace ZoneSystem
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
 
-                        Debug.Log(RandomItem[Random.Range(0, 5)]);
+                        //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
                         safetyObject[z, x].transform.position = new Vector3(PosX, 0.25f, PosZ);
@@ -381,9 +397,9 @@ namespace ZoneSystem
             debug.text = "세이프티존이 꽉차서 아이템을 습득할 수 없습니다.";
         }
 
-        public void SellUnitOutItem(GameObject Item)
+        public void UnitOutItem(GameObject Item)
         {
-
+            //transform.parent = null;
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

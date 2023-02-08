@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
 namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviour
@@ -254,7 +255,7 @@ namespace ZoneSystem
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        mapController.SellUnitOutItem(selectedObject.transform.GetChild(i).gameObject);
+                        mapController.UnitOutItem(selectedObject.transform.GetChild(i).gameObject);
                         selectedObject.transform.GetChild(i).gameObject.SetActive(true);
                         selectedObject.transform.GetChild(i).transform.parent = null;
                         count--;
@@ -529,7 +530,48 @@ namespace ZoneSystem
             return Vec;
         }
         #endregion
+        #region
+        public bool EquipmentAutoMergeResult(List<Transform> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                for (int j = i + 1; j < items.Count; j++)
+                {
+                    Transform item1 = items[i];
+                    Transform item2 = items[j];
+                    if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade)
+                    {
+                        item1.GetComponent<Equipment>().Upgrade();
+                        items.Remove(item2);
+                        if (EquipmentAutoMergeResult(items) == false) return false;
+                    }
+                }
+            }
+            return items.Count <= 3;
+        }
+        public bool MergeItemResult(Transform selected, Transform stay)
+        {
+            List<Transform> items = new List<Transform>();
 
+            for (int i = 0; i < selected.childCount; i++)
+            {
+                items.Add(selected.GetChild(i).transform);
+            }
+
+            for (int i = 0; i < stay.childCount; i++)
+            {
+                items.Add(stay.GetChild(i).transform);
+            }
+
+            return EquipmentAutoMergeResult(items);
+        }
+
+        public void EquipmentAutoMerge()
+        {
+
+        }
+
+        #endregion
         #region Merge
 
         public bool Merge(GameObject selectedObject, GameObject stayObject)
@@ -541,21 +583,62 @@ namespace ZoneSystem
             {
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
-                
-                //셀렉티드 아이템과 스테이 아이템을 전부 받아서 계산하는 로직 작성
 
-                //계산하는 로직은 드래그앤 드롭에서 계산한 로직이 가능(계산하고나서 3개 이하)할시 true 반환
-                //false반환시 2가지를 파악-> 머지가 가능한 장비는 스테이로 옮겨서 merge 진행시키고
-                //머지가 되지않는 경우에는 셀렉티드에 있는 아이템들을 뱉는 구조로...
+                selectedUnit.EquipCount();
+                stayUnit.EquipCount();
 
-                
+                int selectedEqCount = selectedUnit.GetEquipmentCount;
+                int stayEqCount = stayUnit.GetEquipmentCount;
 
-                //if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
-                //{
-                //    Destroy(selectedUnit.gameObject);
-                //    stayUnit.Upgrade();
-                //    return true;
-                //}
+
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
+                {
+                    
+                    if (stayEqCount + selectedEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
+                    {
+                        for (int i = 0; i < selectedEqCount; i++)
+                        {
+                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
+                            selectedEqCount--;
+                            i--;
+                        }
+
+                        stayUnit.EquipItem();
+                        Destroy(selectedUnit.gameObject);
+                        stayUnit.Upgrade();
+                    }
+
+                    else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == true)
+                    {
+                        //자동머지
+                        Destroy(selectedUnit.gameObject);
+                        stayUnit.Upgrade();
+                    }
+
+                    else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == false)
+                    { //여기 전부 디버그찍어
+                        if (mapController.SafetyZoneCheck() + selectedEqCount > 14)//얘는 그냥 머지 X
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            for (int i = 0; i < selectedEqCount; i++)//얘는 장비 사출
+                            {
+                                mapController.UnitOutItem(selectedUnit.transform.GetChild(i).gameObject);
+                                selectedEqCount--;
+                                i--;
+                            }
+                            Destroy(selectedUnit.gameObject);
+                            stayUnit.Upgrade();
+                        }
+                    }
+
+                    
+
+                    
+                    return true;
+                }
             }
 
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
@@ -585,7 +668,7 @@ namespace ZoneSystem
                 else
                 {
                     selectedObject.transform.parent = stayObject.transform;
-                    //stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                    stayObject.GetComponent<UnitClass.Unit>().EquipItem();
                 }
                 selectedObject.SetActive(false);
 

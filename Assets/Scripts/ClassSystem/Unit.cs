@@ -101,29 +101,31 @@ namespace UnitClass
             return grade++;
         }
 
-        //public int EquipCount()
-        //{
-        //    return equipmentCount++;
-        //}
+        public int EquipCount()
+        {
+            equipmentCount = transform.childCount;
+            return equipmentCount;
+        }
 
-        //public void EquipItem(int equipmentCount) // 속보 이거 기존 구조 이상함 수정 요함
-        //{
-        //    switch (equipmentCount)
-        //    {
-        //        case 0:
-        //            equipment01 = transform.GetChild(equipmentCount).gameObject;
-        //            EquipCount();
-        //            break;
-        //        case 1:
-        //            equipment02 = transform.GetChild(equipmentCount).gameObject;
-        //            EquipCount();
-        //            break;
-        //        case 2:
-        //            equipment03 = transform.GetChild(equipmentCount).gameObject;
-        //            EquipCount();
-        //            break;
-        //    }
-        //}
+        public void EquipItem() // 속보 이거 기존 구조 이상함 수정 요함
+        {
+            EquipCount();
+            switch (GetEquipmentCount)
+            {
+                case 1:
+                    equipment01 = transform.GetChild(0).gameObject;
+                    break;
+                case 2:
+                    equipment01 = transform.GetChild(0).gameObject;
+                    equipment02 = transform.GetChild(1).gameObject;
+                    break;
+                case 3:
+                    equipment01 = transform.GetChild(0).gameObject;
+                    equipment02 = transform.GetChild(1).gameObject;
+                    equipment03 = transform.GetChild(2).gameObject;
+                    break;
+            }
+        }
 
         public bool EquipmentCheck()
         {
@@ -144,7 +146,7 @@ namespace UnitClass
 
         public void GetSynergyData()
         {
-            
+
         }
 
     }
