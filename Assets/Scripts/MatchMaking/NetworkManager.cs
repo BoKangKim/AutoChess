@@ -52,6 +52,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         gameScene = "KCS_MainGameScene";
     }
 
+    private void Start()
+    {
+        Connect();
+    }
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
 
@@ -59,16 +63,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        //되긴하는데 맘에안드는 코드 
-        if (Database.Instance.userInfo.NickName == null || Database.Instance.userInfo.PhoneNumber == null) return;
-     
+        
         lobbyPanel.gameObject.SetActive(true);
+
         logingPanel.gameObject.SetActive(false);
-        myNickName.text = Database.Instance.userInfo.NickName;
-        PhotonNetwork.NickName = myNickName.text;
+        PhotonNetwork.NickName = Database.Instance.userInfo.NickName;
         chatmanager.enabled = true;
         PV = photonView;
-        PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
+        //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
     }
 
     public void JoinRandomOrCreateRoom()
@@ -99,7 +101,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         statusText.text = ($"metching + {PhotonNetwork.CurrentRoom.PlayerCount}");
-        Debug.Log("들어왔니?");
 
     }
 
@@ -121,12 +122,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
+        PhotonNetwork.LoadLevel(gameScene);
+
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         UpdatePlayerCount();
 
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 1)
         {
             PhotonNetwork.LoadLevel(gameScene);
         }
