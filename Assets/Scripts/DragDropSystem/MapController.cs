@@ -96,7 +96,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            //Debug.Log("중복되는것이 있음");
+                            
                         }
                         else
                         {
@@ -399,7 +399,8 @@ namespace ZoneSystem
 
         public void UnitOutItem(GameObject Item)
         {
-            //transform.parent = null;
+            Item.transform.parent = this.transform;
+            Item.gameObject.SetActive(true);
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

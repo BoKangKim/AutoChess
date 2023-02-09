@@ -14,11 +14,10 @@ namespace UnitClass
         [SerializeField] private GameObject equipment03 = null;
         [Header("장착한 아이템 갯수")]
         [SerializeField] private int equipmentCount;
-
         #endregion
 
         #region 유닛 지역변수
-        private int grade;
+        [SerializeField] private int grade; // 인스펙터에서 등급 볼라고
         private float maxHp;
         private float curHp;
         private float maxMp;
