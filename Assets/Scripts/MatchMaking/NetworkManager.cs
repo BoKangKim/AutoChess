@@ -6,6 +6,13 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Realtime;
 
+public enum GAMETYPE 
+{
+    FREENET,
+    LIVENET,
+    MAX
+}
+
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("LoginPanel")]
@@ -44,18 +51,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public ChatManager chatmanager = null;
 
-
     private void Awake()
     {
+        Screen.SetResolution(480,480,false);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "KCS_MainGameScene";
+        gameScene = "SyncUnit";
     }
 
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
-
-
 
     public override void OnJoinedLobby()
     {
@@ -71,11 +76,23 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
     }
 
+    public void joinFreeNet()
+    {
+        GameType.Inst.setType(GAMETYPE.FREENET,gameObject);
+        JoinRandomOrCreateRoom();
+
+    }
+
+    public void joinLiveNet()
+    {
+        GameType.Inst.setType(GAMETYPE.LIVENET, gameObject);
+        JoinRandomOrCreateRoom();
+    }
+
     public void JoinRandomOrCreateRoom()
     {
         nomalMatchButton.interactable = false;
         room.MaxPlayers = 4;
-
 
         if (PhotonNetwork.IsConnected)
         {
@@ -107,8 +124,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-
-
+       
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)

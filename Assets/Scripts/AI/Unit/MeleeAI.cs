@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle.AI;
 using Battle.EFFECT;
+using Photon.Realtime;
+using Photon.Pun;
 
 public class MeleeAI : UnitAI
 {
@@ -11,7 +13,7 @@ public class MeleeAI : UnitAI
     {
         mana += manaRecovery;
         Effect attack = null;
-        Instantiate(standardAttackEffect.gameObject, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack);
+        PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack);
         attack.setAttackDamage(unitData.GetUnitData.GetAtk);
         attack.setOwner(this);
     }
@@ -20,7 +22,7 @@ public class MeleeAI : UnitAI
     {
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
-        Instantiate(skillEffect.gameObject, new Vector3(targetPos.x, 0f, targetPos.z), Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name, new Vector3(targetPos.x, 0f, targetPos.z), Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
     }
 }

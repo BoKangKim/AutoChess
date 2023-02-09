@@ -43,9 +43,8 @@ namespace Battle.Location
         public static LocationXY convertPositionToLocation(Vector3 unitPostion)
         {
             LocationXY location;
-
-            location.x = (int)Mathf.Round((unitPostion.x / tileDistanceX));
-            location.y = (int)Mathf.Round((unitPostion.z / tileDistanceY));
+            location.x = (int)Math.Truncate((unitPostion.x / tileDistanceX));
+            location.y = (int)Math.Truncate((unitPostion.z / tileDistanceY));
             
             return location;
         }
@@ -63,6 +62,28 @@ namespace Battle.Location
             }
 
             return position;
+        }
+
+        public static Vector3 convertMirrorMode(Vector3 position)
+        {
+            Vector3 pos;
+            LocationXY location = convertPositionToLocation(position);
+            Debug.Log(location.ToString());
+            location = convertMirrorMode(location);
+            Debug.Log(location.ToString());
+            pos = convertLocationToPosition(location);
+
+            return pos;
+        }
+
+        public static LocationXY convertMirrorMode(LocationXY location)
+        {
+            LocationXY mirror;
+
+            mirror.x = 6 - location.x;
+            mirror.y = 5 - location.y;
+
+            return mirror;
         }
 
         public static Vector3 getFromLocationDirectionVector(LocationXY from, LocationXY to)

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.AI;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class OnClickStartButton : MonoBehaviour
 {
@@ -12,7 +14,14 @@ public class OnClickStartButton : MonoBehaviour
         units = FindObjectsOfType<ParentBT>();
         for (int i = 0; i < units.Length; i++)
         {
-            units[i].SetState(Battle.Stage.STAGETYPE.PVP);
+            units[i].SetState(Battle.Stage.STAGETYPE.MONSTER);
         }
+    }
+
+    public void OnClickStart_1()
+    {
+        Battle.Stage.StageControl stage = FindObjectOfType<Battle.Stage.StageControl>();
+
+        stage.OnClick_ChangeUnit();
     }
 }

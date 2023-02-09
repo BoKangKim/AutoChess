@@ -1,6 +1,8 @@
 using Battle.AI;
 using UnityEngine;
 using Battle.EFFECT;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class RangeAI : UnitAI
 {
@@ -9,6 +11,11 @@ public class RangeAI : UnitAI
 
     public override void StartEffect()
     {
+        if(photonView.IsMine == false)
+        {
+            return;
+        }
+
         mana += manaRecovery;
         if (mana > maxMana)
         {
@@ -17,10 +24,10 @@ public class RangeAI : UnitAI
 
         Effect flash = null;
         Effect project = null;
-        Instantiate(standardAttackEffect.gameObject, effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash);
+        PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name , effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash);
         flash.setOwner(this);
 
-        Instantiate(projectile.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
+        PhotonNetwork.Instantiate(projectile.gameObject.name,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
         project.setOwner(this);
         project.setDirection(target.transform.position);
     }
@@ -28,7 +35,7 @@ public class RangeAI : UnitAI
     public override void StartSkillEffect()
     {
         SkillEffect skill = null;
-        Instantiate(skillEffect.gameObject,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
         skill.setDirection(target.transform.position);
     }

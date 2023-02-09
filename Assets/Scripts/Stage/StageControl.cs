@@ -1,8 +1,10 @@
-using UnityEngine;
-using TMPro;
-
 namespace Battle.Stage
 {
+    using Battle.Location;
+    using Photon.Pun;
+    using UnityEngine;
+    using System.Collections;
+
     public enum STAGETYPE
     {
         PVP,
@@ -17,19 +19,53 @@ namespace Battle.Stage
 
     public delegate void ChangeStage(STAGETYPE stageType);
 
-    public class StageControl : MonoBehaviour
+    public class StageControl : MonoBehaviourPun
     {
-        [SerializeField] private TextMeshProUGUI STAGE = null;
-
+        private GameObject cam = null;
         private STAGETYPE[,] stages = new STAGETYPE[9, 4];
         private STAGETYPE nowStage = STAGETYPE.NULL;
         private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
+        private ZoneSystem.MapController[] maps = null;
+        private ZoneSystem.MapController myMap = null;
+        private GameObject[,] battleObject = null;
+        private int preIndex = -1;
+        private readonly Vector3 changeCamVec = new Vector3(19.5f, 0, 12f);
+        private readonly Quaternion changeCamRot = Quaternion.Euler(new Vector3(0f, 180f, 0f));
+        private bool isEndSetEnemy = false;
+        private delegate IEnumerator waitMaster();
+        private waitMaster waitM = null;
+        private WaitUntil wait = null;
 
         private void Awake()
         {
+            cam = GameObject.Find("Cam");
+            waitM = COR_WaitMaster;
+            wait = new WaitUntil(() => isEndSetEnemy);
             initializingStageInfo();
             checkNextStageInfo();
+        }
+
+        private void Start()
+        {
+            if (maps == null)
+            {
+                maps = FindObjectsOfType<ZoneSystem.MapController>();
+                for (int i = 0; i < maps.Length; i++)
+                {
+                    if (maps[i].photonView.IsMine == true)
+                    {
+                        myMap = maps[i];
+                        break;
+                    }
+                }
+            }
+        }
+
+        public void OnClick_ChangeUnit()
+        {
+            nowStage = STAGETYPE.PVP;
+            startNextStage();
         }
 
         public void checkNextStageInfo()
@@ -37,8 +73,7 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                STAGE.text = nowStage.ToString();
-                if(changeStage != null)
+                if (changeStage != null)
                 {
                     changeStage(nowStage);
                 }
@@ -64,16 +99,126 @@ namespace Battle.Stage
                 nowStage = stages[stageIndex.row, stageIndex.col];
             }
 
-            STAGE.text = nowStage.ToString() + "( " + (stageIndex.row + 1) + " - " + (stageIndex.col + 1) + " )";
             if (changeStage != null)
             {
                 changeStage(nowStage);
             }
-        }
 
+        }
         private void startNextStage()
         {
-            // 유닛 몬스터 보스 생성 로직
+            if (nowStage == STAGETYPE.PVP)
+            {
+                
+
+                if (PhotonNetwork.IsMasterClient == true)
+                {
+                    isEndSetEnemy = setNextEnemy();
+                    StartCoroutine(waitM());
+                }
+            }
+        }
+
+        [PunRPC]
+        public void SetIsEndSetEnemy()
+        {
+            changeUnitMap();
+        }
+
+        IEnumerator COR_WaitMaster()
+        {
+            yield return wait;
+            photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
+            isEndSetEnemy = false;
+        }
+
+        private void changeUnitMap()
+        {
+            if (myMap.isMirrorModePlayer == false)
+            {
+                return;
+            }
+
+            battleObject = myMap.getBattleObjects();
+
+            for (int i = 0; i < battleObject.GetLength(0); i++)
+            {
+                for (int j = 0; j < battleObject.GetLength(1); j++)
+                {
+                    if (battleObject[i, j] == null)
+                    {
+                        continue;
+                    }
+
+                    battleObject[i, j].transform.SetParent(myMap.getEnemy().transform, false);
+                    battleObject[i, j].transform.localPosition = LocationControl.convertMirrorMode(battleObject[i, j].transform.localPosition);
+                    cam.transform.position = myMap.getEnemy().transform.position + changeCamVec;
+                    cam.transform.rotation = changeCamRot;
+                }
+            }
+        }
+
+        private bool setNextEnemy()
+        {
+            if (myMap.getEnemy() == null)
+            {
+                do
+                {
+                    preIndex = UnityEngine.Random.Range(0, maps.Length);
+                    myMap.setEnemy(maps[preIndex], 0, 0, false);
+                } while (maps[preIndex].photonView.IsMine == true);
+            }
+            else
+            {
+                int index = -1;
+                do
+                {
+                    index = UnityEngine.Random.Range(0, maps.Length);
+                } while (maps[index].photonView.IsMine == true
+                || myMap.getEnemy().photonView.ViewID == maps[index].photonView.ViewID);
+
+                myMap.setEnemy(maps[index], 0, 0, false);
+                preIndex = index;
+            }
+
+            maps[preIndex].setEnemy(myMap, maps[preIndex].photonView.ViewID, myMap.photonView.ViewID, true);
+
+            int otherIndex = 0;
+            ZoneSystem.MapController[] others = new ZoneSystem.MapController[2];
+            for (int i = 0; i < maps.Length; i++)
+            {
+                if (i == preIndex ||
+                    maps[i].photonView.IsMine == true)
+                {
+                    continue;
+                }
+                else
+                {
+                    others[otherIndex] = maps[i];
+                    otherIndex++;
+                }
+            }
+
+            others[0].setEnemy(others[1], others[0].photonView.ViewID, others[1].photonView.ViewID, true);
+            others[1].setEnemy(others[0], others[1].photonView.ViewID, others[0].photonView.ViewID, true);
+
+            int change = UnityEngine.Random.Range(0, 2);
+            if (change == 0)
+            {
+                myMap.isMirrorModePlayer = true;
+                maps[preIndex].StartRPC_SetIsMirrorPlayer(false);
+                others[0].StartRPC_SetIsMirrorPlayer(true);
+                others[1].StartRPC_SetIsMirrorPlayer(false);
+            }
+            else
+            {
+                myMap.isMirrorModePlayer = false;
+                maps[preIndex].StartRPC_SetIsMirrorPlayer(true);
+                others[0].StartRPC_SetIsMirrorPlayer(false);
+                others[1].StartRPC_SetIsMirrorPlayer(true);
+            }
+
+            return true;
         }
 
         private void initializingStageInfo()
