@@ -9,7 +9,7 @@ public class DwarfTankerAI : MeleeAI
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
         Instantiate(skillEffect.gameObject, new Vector3(transform.position.x, 1f, transform.position.z), Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
     }
 
 }

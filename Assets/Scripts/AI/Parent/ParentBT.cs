@@ -44,6 +44,10 @@ namespace Battle.AI
         protected float maxMana = 10f;
         protected float attackRange = 0f;
         protected float manaRecovery = 5f;
+        protected float attackDamage = 0f;
+
+        private bool die = false;
+        private bool isInit = false;
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -80,6 +84,11 @@ namespace Battle.AI
         {
             return unitData.GetUnitData.GetAtk;
         }
+
+        public bool getIsDeath()
+        {
+            return die;
+        }
         #endregion
 
         private void Awake()
@@ -103,6 +112,11 @@ namespace Battle.AI
 
         private void Update()
         {
+            if(die == true)
+            {
+                return;
+            }
+
             if (stageType == STAGETYPE.PREPARE)
             {
                 return;
@@ -145,6 +159,16 @@ namespace Battle.AI
         protected abstract string initializingMytype();
         protected abstract float setAttackRange();
 
+        public void doDamage()
+        {
+            target.Damage(attackDamage);
+        }
+
+        public void doDamage(float damage)
+        {
+            target.Damage(damage);
+        }
+
         private void initializingData()
         {
             if (TryGetComponent<UnitClass.Unit>(out unitData) == false)
@@ -156,6 +180,8 @@ namespace Battle.AI
             maxMana = unitData.GetUnitData.GetMaxMp;
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
+            attackDamage = unitData.GetUnitData.GetAtk;
+
         }
 
         public void changeStage(STAGETYPE stageType)
@@ -271,7 +297,6 @@ namespace Battle.AI
         public void Damage(float damage)
         {
             currentHP -= damage;
-            Debug.Log(currentHP);
         }
         #endregion
 
@@ -286,12 +311,26 @@ namespace Battle.AI
                     
                     if (enemies.Count == 0)
                     {
-                        findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
-                        searchingTarget();
+                        if(isInit == false)
+                        {
+                            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
+                            searchingTarget();
 
-                        next = rta.searchNextLocation(myLocation, target.getMyLocation());
-                        nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.position).normalized;
+                            next = rta.searchNextLocation(myLocation, target.getMyLocation());
+                            nextPos = LocationControl.convertLocationToPosition(next);
+                            dir = (nextPos - transform.position).normalized;
+                            isInit = true;
+                        }
+                        else
+                        {
+                            // ½Â¸® ·ÎÁ÷
+                            ParentBT[] allUnit = FindObjectsOfType<ParentBT>();
+
+                            for(int i = 0;i < allUnit.Length; i++)
+                            {
+                                Destroy(allUnit[i].gameObject);
+                            }
+                        }
                     }
                 };
             }
@@ -383,9 +422,15 @@ namespace Battle.AI
                     myLocation = LocationControl.convertPositionToLocation(transform.position);
                     for (int i = 0; i < enemies.Count; i++)
                     {
+                        if (enemies[i].getIsDeath() == true) 
+                        {
+                            continue;
+                        }
+
                         if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
+                            rta.initCloseList();
                             target = enemies[i];
                             next = myLocation;
                             return true;
@@ -406,6 +451,7 @@ namespace Battle.AI
                     this.transform.LookAt(target.transform);
                     myAni.SetBool("isMove",false);
                     myAni.SetTrigger("isAttack");
+                    
                 };
             }
         }
@@ -416,7 +462,13 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    return currentHP <= 0;
+                    if(currentHP <= 0f)
+                    {
+                        die = true;
+                        return true;
+                    }
+
+                    return false;
                 };
             }
         }
@@ -428,7 +480,6 @@ namespace Battle.AI
                 return () =>
                 {
                     myAni.SetTrigger("isDeath");
-                    Destroy(this.gameObject);
                 };
             }
         }
@@ -441,6 +492,11 @@ namespace Battle.AI
                 {
                 };
             }
+        }
+
+        protected void DestroyObject()
+        {
+            Destroy(gameObject);
         }
 
         #endregion

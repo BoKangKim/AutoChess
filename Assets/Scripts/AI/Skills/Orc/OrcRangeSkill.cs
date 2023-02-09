@@ -10,8 +10,12 @@ public class OrcRangeSkill : SkillEffect
     private const float skillTime = 3f;
     private float initAttackSpeed = 0f;
     private float initAttackRange = 0f;
-    private ParentBT owner = null;
     private Animator ownerAni = null;
+
+    private void Start()
+    {
+        owner.TryGetComponent<Animator>(out ownerAni);
+    }
 
     protected override float setSpeed()
     {
@@ -26,12 +30,6 @@ public class OrcRangeSkill : SkillEffect
     protected override bool setIsNonAttackEffect()
     {
         return true;
-    }
-
-    public void initOwner(ParentBT owner)
-    {
-        this.owner = owner;
-        owner.TryGetComponent<Animator>(out ownerAni);
     }
 
     public void initSpeedAndArrange(float attackSpeed, float attackArrange)

@@ -10,6 +10,6 @@ public class GolemAssassinAI : MeleeAI
         Vector3 targetPos = target.transform.position;
         Instantiate(skillEffect.gameObject).TryGetComponent<SkillEffect>(out skill);
         skill.gameObject.transform.position = new Vector3(targetPos.x, 0f, targetPos.z);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
     }
 }

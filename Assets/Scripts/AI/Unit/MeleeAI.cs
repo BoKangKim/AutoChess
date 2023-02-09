@@ -13,7 +13,7 @@ public class MeleeAI : UnitAI
         Effect attack = null;
         Instantiate(standardAttackEffect.gameObject, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack);
         attack.setAttackDamage(unitData.GetUnitData.GetAtk);
-        attack.setOwnerName(nickName);
+        attack.setOwner(this);
     }
 
     public override void StartSkillEffect()
@@ -21,7 +21,7 @@ public class MeleeAI : UnitAI
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
         Instantiate(skillEffect.gameObject, new Vector3(targetPos.x, 0f, targetPos.z), Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
     }
 }
 

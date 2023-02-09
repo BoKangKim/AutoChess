@@ -9,7 +9,7 @@ public class OrcWarriorAI : MeleeAI
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
         Instantiate(skillEffect.gameObject, transform.position + (transform.forward * 3.5f), Quaternion.LookRotation(targetPos - transform.position).normalized).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
       
     }
 }

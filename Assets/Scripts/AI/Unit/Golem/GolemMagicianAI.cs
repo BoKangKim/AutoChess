@@ -8,6 +8,6 @@ public class GolemMagicianAI : RangeAI
     {
         SkillEffect skill = null;
         Instantiate(skillEffect.gameObject, target.transform.position + Vector3.up, Quaternion.Euler(new Vector3(-90f, 0f, 0f))).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwnerName(nickName);
+        skill.setOwner(this);
     }
 }
