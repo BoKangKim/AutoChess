@@ -513,11 +513,11 @@ namespace ZoneSystem
             }
 
             string UnitPrefab = null;
-            if(GameType.Inst.getType() == GAMETYPE.LIVENET)
+            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameType.Inst.getType() == GAMETYPE.FREENET)
+            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
                 int index = freenetUnitIndex[Random.Range(0, 3)];
                 index *= 5;

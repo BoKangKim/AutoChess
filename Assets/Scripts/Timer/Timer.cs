@@ -2,39 +2,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.Stage;
-using TMPro;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class Timer : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI TIME = null;
-    
     private StageControl sc = null;
     private const float STAGE_TIME = 5f;
     private float nowTime = 0f;
+    private bool scIsNull = true;
 
     public float getNowTime()
     {
         return nowTime;
     }
 
-    private void Awake()
+    public void setNowTime(float time)
     {
-        sc = FindObjectOfType<StageControl>();
-        if(sc == null)
+        if(time > STAGE_TIME + 2)
         {
-            sc = new GameObject("StageControl").AddComponent<StageControl>();
+            return;
         }
+
+        nowTime = time;
     }
 
     private void Update()
     {
-        nowTime += Time.deltaTime;
-        TIME.text = "TIME : " + (int)nowTime;
+        if(sc == null)
+        {
+            return;
+        }
 
+        if(PhotonNetwork.IsMasterClient == false)
+        {
+            return;
+        }
+
+        nowTime += Time.deltaTime;
+        GameManager.Inst.time = nowTime;
         if(nowTime >= STAGE_TIME)
         {
             sc.checkNextStageInfo();
+            sc.startNextStage();
             nowTime = 0f;
         }
+    }
+
+    public void initializingStageControl(StageControl sc)
+    {
+        this.sc = sc;
+    }
+
+    public void findStageControl()
+    {
+        sc = FindObjectOfType<StageControl>();
     }
 }

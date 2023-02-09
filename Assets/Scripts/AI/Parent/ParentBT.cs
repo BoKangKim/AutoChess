@@ -52,6 +52,9 @@ namespace Battle.AI
         private bool isInit = false;
         private string enemyNickName = "";
 
+        private Vector3 startposition;
+        private bool isFirst = true;
+
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -100,6 +103,11 @@ namespace Battle.AI
         }
         #endregion
 
+        public void initUnit()
+        {
+            transform.position = startposition;
+        }
+
         private void Awake()
         {
             InitializingRootNode();
@@ -116,9 +124,9 @@ namespace Battle.AI
             Debug.Log("START");
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            
-            //StageControl sc = FindObjectOfType<StageControl>();
-            //sc.changeStage = changeStage;
+
+            StageControl sc = FindObjectOfType<StageControl>();
+            sc.changeStage = changeStage;
         }
 
         private void Update()

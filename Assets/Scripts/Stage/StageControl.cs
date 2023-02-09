@@ -48,6 +48,14 @@ namespace Battle.Stage
 
         private void Start()
         {
+            if(PhotonNetwork.IsMasterClient == true)
+            {
+                Timer timer = FindObjectOfType<Timer>();
+
+                timer.initializingStageControl(this);
+            }
+            
+
             if (maps == null)
             {
                 maps = FindObjectsOfType<ZoneSystem.MapController>();
@@ -62,17 +70,23 @@ namespace Battle.Stage
             }
         }
 
-        public void OnClick_ChangeUnit()
-        {
-            nowStage = STAGETYPE.PVP;
-            startNextStage();
-        }
-
         public void checkNextStageInfo()
         {
+            if(PhotonNetwork.IsMasterClient == false)
+            {
+                return;
+            }
+            else
+            {
+                nowStage = GameManager.Inst.nowStage;
+                stageIndex = GameManager.Inst.getStageIndex();
+            }
+
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
+                GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
+                GameManager.Inst.nowStage = nowStage;
                 if (changeStage != null)
                 {
                     changeStage(nowStage);
@@ -93,10 +107,12 @@ namespace Battle.Stage
             {
                 stageIndex.col = 5;
                 nowStage = STAGETYPE.PVP;
+                GameManager.Inst.nowStage = nowStage;
             }
             else
             {
                 nowStage = stages[stageIndex.row, stageIndex.col];
+                GameManager.Inst.nowStage = nowStage;
             }
 
             if (changeStage != null)
@@ -104,13 +120,30 @@ namespace Battle.Stage
                 changeStage(nowStage);
             }
 
+            GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
+            photonView.RPC("CacheMasterIndex", RpcTarget.All,stageIndex.row,stageIndex.col);
+            photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
+            Debug.Log(nowStage);
         }
-        private void startNextStage()
+
+        [PunRPC]
+        public void CacheMasterIndex(int row, int col)
         {
+            GameManager.Inst.SyncStageIndex(row,col);
+        }
+
+        [PunRPC]
+        public void CacheMasterStage(STAGETYPE stage)
+        {
+            GameManager.Inst.nowStage = stage;
+        }
+
+        public void startNextStage()
+        {
+            
+
             if (nowStage == STAGETYPE.PVP)
             {
-                
-
                 if (PhotonNetwork.IsMasterClient == true)
                 {
                     isEndSetEnemy = setNextEnemy();

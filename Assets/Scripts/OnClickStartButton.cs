@@ -22,6 +22,5 @@ public class OnClickStartButton : MonoBehaviour
     {
         Battle.Stage.StageControl stage = FindObjectOfType<Battle.Stage.StageControl>();
 
-        stage.OnClick_ChangeUnit();
     }
 }

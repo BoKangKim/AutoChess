@@ -78,14 +78,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void joinFreeNet()
     {
-        GameType.Inst.setType(GAMETYPE.FREENET,gameObject);
+        GameManager.Inst.setType(GAMETYPE.FREENET,gameObject);
         JoinRandomOrCreateRoom();
 
     }
 
     public void joinLiveNet()
     {
-        GameType.Inst.setType(GAMETYPE.LIVENET, gameObject);
+        GameManager.Inst.setType(GAMETYPE.LIVENET, gameObject);
         JoinRandomOrCreateRoom();
     }
 

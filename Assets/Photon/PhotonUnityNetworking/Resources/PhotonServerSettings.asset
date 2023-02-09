@@ -49,6 +49,8 @@ MonoBehaviour:
   - StartChangeUnit
   - RPC_SyncUnitIndex
   - SetIsEndSetEnemy
+  - CacheMasterIndex
+  - CacheMasterStage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
