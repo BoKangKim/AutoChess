@@ -256,9 +256,16 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-  
+    (string name, int age) TupleTest(string name, int age)
+    {
+        return ( name, age);
+    }
     private void Start()
     {
+        (string name, int age) = TupleTest("슬깃",20);
+        Debug.Log(name);
+        Debug.Log(age);
+
         timeManager = FindObjectOfType<TimeManager>();
         // 고정 지불 비용
         gachaWeponGoldValue = 3;
@@ -329,10 +336,6 @@ public class UIManager : MonoBehaviour
         // Game Setting
         if (Input.GetKeyDown(KeyCode.Escape)) SettingMenuESC();
 
-        // 경매 기능 UI 구현
-       // SynergyContents();
-       // RankingContents();
-
         // Round Info
         RoundInfoNum.text = (expensionLevelValue + " / " + deployedUnit).ToString();
         // timer = 0 -> Next Round
@@ -367,9 +370,10 @@ public class UIManager : MonoBehaviour
         // 베팅 금액
         Auction_test();
         AuctionButton();
-    }
 
-    // 경매 라운드 버튼 - 플레이어 소지금 부족 - 베팅 불가 예외처리
+    }
+    
+
     private void AuctionButton()
     {
         if (playerGoldValue < bettingGold1)
