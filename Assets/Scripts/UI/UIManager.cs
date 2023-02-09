@@ -165,7 +165,7 @@ public class UIManager : MonoBehaviour
     private string Tanker = "Tanker";
     private string Magician = "Magician";
     #endregion
-    // 
+    // 시너지 설명 데이터 관리 어떻게 할지 
     private string InputInfo1 = "(3) 전투 시작 시 Orc의 함성소리와 함께 상대 유닛의 공격력과 체력을 5% 하락시킴";
     private string InputInfo2 = "(5) 전투 시작 시 Orc의 함성 소리와 함께 상대 유닛의 공격력과 체력을 15% 하락시킴";
 
@@ -184,7 +184,7 @@ public class UIManager : MonoBehaviour
     private int roundStepNumber1 = 1;
     private int roundStepNumber2 = 1;
     private int roundTextColor;
-    private int RoundRewardGold = 10;
+    private int RoundRewardGold = 10; // 한 라운드 돌아갈때마다 받을 골드
     private float RoundRewardEXP = 4f;
 
     // Betting Round
@@ -192,7 +192,7 @@ public class UIManager : MonoBehaviour
     private int betOnUserGoldValue; 
     private int betOnMaximumGoldValue; 
 
-    private int TypeSynergyAllCount = 5; // 공통 전체 수
+    private int TypeSynergyAllCount = 5; // 공통 시너지 전체 수
     // 종류 시너지 카운트
     private int mechaSynergyCount; // 보유 수
     public void TypeSynergyCount(int num)
@@ -223,7 +223,7 @@ public class UIManager : MonoBehaviour
 
     protected TimeManager timeManager; // 보강이가 작업중
 
-   
+    // 인게임 채팅 사용 x
     // 채팅 모드별 버튼 - 귓속말 길드 전체
     // Chatting Menu
     #region Chatting Menu
@@ -320,13 +320,6 @@ public class UIManager : MonoBehaviour
     {
         // 배치된 유닛에 따른 시너지 확인
         DeployedUnitSynergy();
-
-        if (IsSynergy3) Debug.Log("시너지 3 적용");
-        else Debug.Log("시너지 3 적용 취소");
-
-        if (IsSynergy5) Debug.Log("시너지 5 적용");
-        else Debug.Log("시너지 5 적용 취소");
-
 
         if (playerGoldValue <= 0) playerGoldValue = 0;
         playerGold.text = string.Format("{0:#,###}", playerGoldValue); // 4자릿수 넘어가면 , 표시
