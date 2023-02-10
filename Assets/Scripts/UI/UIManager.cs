@@ -109,7 +109,7 @@ public class UIManager : MonoBehaviour
 
     // 해당 등급에 맞게 등급 표시 - 경매에 뜨는 등급은 아직 모름
     #region Auction Grade
-    public void AuctionGrade() 
+    public void AuctionGrade()
     {
         auctionGradeIcon[0].gameObject.SetActive(true);
         auctionGradeIcon[1].gameObject.SetActive(true);
@@ -121,7 +121,7 @@ public class UIManager : MonoBehaviour
     delegate void MyDelegate();
     MyDelegate myDelegate;
 
-    public void DelegateTest() 
+    public void DelegateTest()
     {
         // delegate += 함수
 
@@ -189,8 +189,8 @@ public class UIManager : MonoBehaviour
 
     // Betting Round
     private int prossessedUserGoldValue;
-    private int betOnUserGoldValue; 
-    private int betOnMaximumGoldValue; 
+    private int betOnUserGoldValue;
+    private int betOnMaximumGoldValue;
 
     private int TypeSynergyAllCount = 5; // 공통 시너지 전체 수
     // 종류 시너지 카운트
@@ -227,7 +227,7 @@ public class UIManager : MonoBehaviour
     // 채팅 모드별 버튼 - 귓속말 길드 전체
     // Chatting Menu
     #region Chatting Menu
-    public void ChattingMode() 
+    public void ChattingMode()
     {
         chattingModeUI.gameObject.SetActive(true);
     }
@@ -258,11 +258,11 @@ public class UIManager : MonoBehaviour
 
     (string name, int age) TupleTest(string name, int age)
     {
-        return ( name, age);
+        return (name, age);
     }
     private void Start()
     {
-        (string name, int age) = TupleTest("슬깃",20);
+        (string name, int age) = TupleTest("슬깃", 20);
         Debug.Log(name);
         Debug.Log(age);
 
@@ -319,7 +319,7 @@ public class UIManager : MonoBehaviour
         playerMaxHPValue = 100f;
         playerHPValue = playerMaxHPValue;
         // player - data 받을 부분
-        auctionRoundID.text = UserName;        
+        auctionRoundID.text = UserName;
         rankingUserID.text = UserName;
     }
 
@@ -331,7 +331,7 @@ public class UIManager : MonoBehaviour
         if (playerGoldValue <= 0) playerGoldValue = 0;
         playerGold.text = string.Format("{0:#,###}", playerGoldValue); // 4자릿수 넘어가면 , 표시
 
-        if (playerHPValue <= 0) IsDead=true;
+        if (playerHPValue <= 0) IsDead = true;
 
         // Game Setting
         if (Input.GetKeyDown(KeyCode.Escape)) SettingMenuESC();
@@ -372,7 +372,7 @@ public class UIManager : MonoBehaviour
         AuctionButton();
 
     }
-    
+
 
     private void AuctionButton()
     {
@@ -380,7 +380,7 @@ public class UIManager : MonoBehaviour
         {
             bettingButton[0].interactable = false;
         }
-        else 
+        else
         {
             bettingButton[0].interactable = true;
         }
@@ -444,24 +444,24 @@ public class UIManager : MonoBehaviour
 
     // Auction Round State
     #region Auction Round State
-    enum AuctionRoundState 
-    { 
+    enum AuctionRoundState
+    {
         None,
-        Loading, 
+        Loading,
         Auction,
         Result
     }
     Coroutine curCoroutine = null;
     AuctionRoundState curState = AuctionRoundState.None;
 
-    private void nextState(AuctionRoundState newState) 
+    private void nextState(AuctionRoundState newState)
     {
         if (newState == curState) return;
-        if (curCoroutine!=null) StopCoroutine(curCoroutine);
+        if (curCoroutine != null) StopCoroutine(curCoroutine);
         curState = newState;
-        curCoroutine = StartCoroutine(newState.ToString()+ "State");
+        curCoroutine = StartCoroutine(newState.ToString() + "State");
     }
-    IEnumerator LoadingState() 
+    IEnumerator LoadingState()
     {
         AuctionLoadingUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(1f);
@@ -469,7 +469,7 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1f);
         StartCoroutine(AuctionState());
     }
-    IEnumerator AuctionState() 
+    IEnumerator AuctionState()
     {
         AuctionRoundUI.gameObject.SetActive(true);
         yield return new WaitForSeconds(15f); // 타이머 0 되면 꺼짐
@@ -486,15 +486,15 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
-    public void Auction_test_On() 
+    public void Auction_test_On()
     {
         StartCoroutine(LoadingState());
     }
-    
-    private void Auction_test() 
+
+    private void Auction_test()
     {
         // 1P : 플레이어 네임
-        auctionRoundID.text = ("1P : "+UserName);
+        auctionRoundID.text = ("1P : " + UserName);
         // 본인 소지금
         prossessedUserGold.text = string.Format("{0:#,###}", playerGoldValue);
         // 베팅한 금액 띄우기
@@ -502,20 +502,20 @@ public class UIManager : MonoBehaviour
         // 최고 금액 띄우기 - 비교식 필요
         betOnMaximumGold.text = (betOnUserGoldValue + "G").ToString(); // 최고금액 계산 필요        
 
-       
+
         // 종족 : 클래스
-        auctionRoundUnitinfo.text = (Mecha + " : " +Warrior);
+        auctionRoundUnitinfo.text = (Mecha + " : " + Warrior);
         // 타이머 -> 스크립트 따로 써야함
         // 등급
 
     }
     // 베팅할 금액 버튼 - 본인 소지금보다 높을 경우 예외처리
-    private int bettingGold1=1;
-    private int bettingGold2=5;
-    private int bettingGold3=10;
-    private int bettingGold4=20;
+    private int bettingGold1 = 1;
+    private int bettingGold2 = 5;
+    private int bettingGold3 = 10;
+    private int bettingGold4 = 20;
 
-    public void BetOn1() 
+    public void BetOn1()
     {
         playerGoldValue -= 1;
         betOnUserGoldValue += 1;
@@ -538,16 +538,16 @@ public class UIManager : MonoBehaviour
 
 
     protected void ChangeRankerPosition()
-    {        
+    {
         // 다른 플레이어와 비교했을 때 가장 높은 HP일 경우 상위 노출             
         if (playerHPValue >= 70f)
         {
             rankUserInfo[0].transform.localPosition = new Vector2(125, 160);
         }
         if ((playerHPValue >= 50f) && (playerHPValue < 70f))
-         {
-             rankUserInfo[0].transform.localPosition = new Vector2(125, 40);
-         }
+        {
+            rankUserInfo[0].transform.localPosition = new Vector2(125, 40);
+        }
         if ((playerHPValue >= 30f) && (playerHPValue < 50f))
         {
             rankUserInfo[0].transform.localPosition = new Vector2(125, -80);
@@ -612,7 +612,7 @@ public class UIManager : MonoBehaviour
     private void ChangeTextColor(TextMeshProUGUI t) { t.color = Color.yellow; }
     private void ChangeTextColorInitiate(TextMeshProUGUI t) { t.color = Color.gray; }
 
-   
+
     // Synergy Contents UI - Slide
     #region Synergy Contents UI   
     private void SynergyContents()
@@ -794,7 +794,7 @@ public class UIManager : MonoBehaviour
         playerExpensionLV.text = ("Lv." + expensionLevelValue).ToString(); // 레벨 값 업데이트
         expansionEXPSlider.value = (playerEXPValue * 0.1f); // 슬라이더 값 조절 필요
         expansionEXPSlider.maxValue = (expansionMaxEXPValue * 0.1f);
-        
+
     }
 
 
@@ -859,7 +859,7 @@ public class UIManager : MonoBehaviour
     public void OnOffChattingList()
     {
         if (!IsChattingMode)
-        {           
+        {
             OnChattingList();
         }
         else
@@ -900,5 +900,5 @@ public class UIManager : MonoBehaviour
     {
         Application.Quit();
     }
-  
+
 }
