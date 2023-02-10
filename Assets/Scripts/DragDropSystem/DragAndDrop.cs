@@ -44,6 +44,15 @@ namespace ZoneSystem
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
+
+            if (photonView.IsMine)
+            {
+                safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                safetyZoneTile = safetyZoneTile.transform.Find("SafetyZone").gameObject;
+
+                battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
+            }
         }
         private void Update()
         {
@@ -351,7 +360,7 @@ namespace ZoneSystem
                 }
                 else
                 {
-                    if ((int)beforePos.z < 0)
+                    if ((int)this.beforePos.z < 0)
                     {
                         beforePos = safetyPosToIndex(this.beforePos);
                         if (Merge(selectedObject, mapController.safetyObject[safetyPos.z, safetyPos.x]))
@@ -362,7 +371,7 @@ namespace ZoneSystem
                         else
                         {
                             mapController.safetyObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
-                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
@@ -379,7 +388,7 @@ namespace ZoneSystem
                         else
                         {
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
-                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
@@ -391,7 +400,7 @@ namespace ZoneSystem
             {
                 if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
-                    selectedObject.transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                    selectedObject.transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                     selectedObject = null;
                     return;
                 }
@@ -405,7 +414,7 @@ namespace ZoneSystem
                 }
                 else
                 {
-                    if ((int)beforePos.z < 0)
+                    if ((int)this.beforePos.z < 0)
                     {
                         beforePos = safetyPosToIndex(this.beforePos);
                         if (Merge(selectedObject, mapController.battleObject[battlePos.z, battlePos.x]))
@@ -417,7 +426,7 @@ namespace ZoneSystem
                         else
                         {
                             mapController.safetyObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
-                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
@@ -437,7 +446,7 @@ namespace ZoneSystem
                         {
 
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
-                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);

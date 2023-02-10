@@ -37,7 +37,7 @@ namespace ZoneSystem
 
         public int battleUnitCount = 0;
 
-        
+
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
 
@@ -66,7 +66,7 @@ namespace ZoneSystem
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
-            UIManager.Inst.UnitInstButton = OnClick_UnitInst;
+
             initializingUnitName();
 
             int index = 0;
@@ -75,9 +75,9 @@ namespace ZoneSystem
                 bool isContains = false;
                 freenetUnitIndex[index] = Random.Range(0, 5);
 
-                for(int i = 0; i < freenetUnitIndex.Length; i++)
+                for (int i = 0; i < freenetUnitIndex.Length; i++)
                 {
-                    if(i == index)
+                    if (i == index)
                     {
                         continue;
                     }
@@ -88,7 +88,7 @@ namespace ZoneSystem
                     }
                 }
 
-                if(isContains == true)
+                if (isContains == true)
                 {
                     continue;
                 }
@@ -97,12 +97,24 @@ namespace ZoneSystem
             } while (index < freenetUnitIndex.Length);
         }
 
+        private void Start()
+        {
+
+            if (photonView.IsMine == true)
+            {
+                UIManager.Inst.UnitInstButton = OnClick_UnitInst;
+
+                battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
+            }
+        }
+
         private void initializingUnitName()
         {
             string firstName = "";
-            for(int i = 0; i < freenetUnits.Length; i += 5)
+            for (int i = 0; i < freenetUnits.Length; i += 5)
             {
-                switch (i / 5) 
+                switch (i / 5)
                 {
                     case 0:
                         firstName = "Orc_";
@@ -154,7 +166,7 @@ namespace ZoneSystem
                     if (battleObject[z, x] != null)
                     {
                         ParentBT bt = null;
-                        if(battleObject[z, x].TryGetComponent<ParentBT>(out bt))
+                        if (battleObject[z, x].TryGetComponent<ParentBT>(out bt))
                         {
                             bt.enabled = true;
                         }
@@ -337,10 +349,10 @@ namespace ZoneSystem
 
                             if (mechaSynergyCount == 3) activeSynergyList.Add("Mecha");
                             if (mechaSynergyCount == 5)
-                            if (mechaSynergyCount > 2 && mechaSynergyCount < 5)
-                            {
-                                if (!activeSynergyList.Contains("Mecha")) activeSynergyList.Add("Mecha");
-                            }
+                                if (mechaSynergyCount > 2 && mechaSynergyCount < 5)
+                                {
+                                    if (!activeSynergyList.Contains("Mecha")) activeSynergyList.Add("Mecha");
+                                }
                             if (mechaSynergyCount >= 5)
                             {
                                 if (activeSynergyList.Contains("Mecha"))
@@ -416,11 +428,11 @@ namespace ZoneSystem
             }
 
             string UnitPrefab = null;
-            if(GameType.Inst.getType() == GAMETYPE.LIVENET)
+            if (GameType.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameType.Inst.getType() == GAMETYPE.FREENET)
+            else if (GameType.Inst.getType() == GAMETYPE.FREENET)
             {
                 int index = freenetUnitIndex[Random.Range(0, 3)];
                 index *= 5;
@@ -437,13 +449,13 @@ namespace ZoneSystem
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
 
-                        safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab,Vector3.zero,Quaternion.identity);
+                        safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
 
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
                         }
-                        safetyObject[z, x].transform.localPosition = new Vector3(PosX,0.25f,PosZ);
+                        safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;
                     }
                 }
@@ -490,7 +502,7 @@ namespace ZoneSystem
                         Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
-        
+
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
@@ -508,7 +520,7 @@ namespace ZoneSystem
 
         public void SellUnitOutItem(GameObject Item)
         {
-            
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -528,7 +540,7 @@ namespace ZoneSystem
         }
 
 
-        
+
 
 
     }
