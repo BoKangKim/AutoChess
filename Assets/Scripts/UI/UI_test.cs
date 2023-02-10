@@ -45,10 +45,7 @@ namespace UI
             if (EventSystem.current.IsPointerOverGameObject())
             {
                 // 마우스를 올린 위치가 synergy일때 synergy 창 띄우기
-                /*if (gameObject.CompareTag(""))
-                {
-
-                }*/
+                
                 testWindow.gameObject.SetActive(true);
                 
             }
