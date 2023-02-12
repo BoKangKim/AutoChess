@@ -8,7 +8,7 @@ public class TimeManager : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI Timer;
     [SerializeField] Image TimerIcon;
-    protected float maximumTime = 1;
+    protected float maximumTime = 30;
     public float currentTime;
     public bool IsTimeOver { get; set; }
     public bool IsNextRound { get; set; }

@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
 
     // [SerializeField] private TextMeshProUGUI userID;
     // [SerializeField] private string playerID;
-
+    [Header("Canvas")]
     [SerializeField] private GameObject roundInfoUI;
     [SerializeField] private GameObject settingUI;
     [SerializeField] private GameObject synergyContentsUI;
@@ -852,6 +852,7 @@ public class UIManager : MonoBehaviour
     }
     #endregion
 
+    
     // Chatting Mode
     #region Chatting Mode
     // 선택된 모드 배경 켜기 / 모드번호를 매개변수로 받아서 정리

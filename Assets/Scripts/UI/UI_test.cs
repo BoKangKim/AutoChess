@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using Battle.Stage;
+using Battle.AI.Effect;
 // 진행중 - 시너지 팝업창 ON/OFF까지
 // 
 
@@ -12,6 +13,8 @@ namespace UI
 {
     public class UI_test : MonoBehaviour //,IPointerEnterHandler,IPointerExitHandler
     {
+
+
         #region SingleTon
         private UI_test() { }
         private static UI_test inst = null;
@@ -32,160 +35,214 @@ namespace UI
         }
         #endregion
 
-        //        
-        GraphicRaycaster graphicRaycaster = null;
-        PointerEventData pointerEventData = null;
-        List<RaycastResult> rrList = null;
-        [SerializeField] private TextMeshProUGUI synergyInfo = null;
-        //
-
-
-        //--------------------------------------------------------------
-
-        public Button ChattingButton, SettingButton, SettingPopupButton, RoundButton, RoundEXButton, LevelUpButton, WeaponDrawButton, UnitDrawButton, RankingButton = null;
-        public Button unitBuyButton, unitSellButton = null;
-        public Button unitAttackButton, unitHealButton = null;
-
-        public Button SynergyButton, SynergyEXButton;
-
-        // 시너지 발동 - 이름, 설명, 이미지
-        // 배치된 유닛에 해당하는 이름 정보를 받아와서 텍스트로 띄우면 됨
-
-        public TextMeshProUGUI synergyActivationName, synergyActivationInfo3, synergyActivationInfo5;
-
-        // 배치된 유닛수
-        public TextMeshProUGUI deployedActivation;
-        private int deployedUnitCount;
-
-        // Gacha
-        public TextMeshProUGUI gachaUserGold, gachaWeponGold, gachaUnitGold;
-        private int gachaWeponGoldValue, gachaUnitGoldValue = 3;
-        private int gachaUserGoldValue = 100;
-
-        //test                
-        public Image testWindow;
+        // 시너지 이름 받아옴 - 시너지 이름에 따라 적용될 수 있는 부분이 있나?
+        /* public void SynergyInfo(string name) 
+       {
+           if (name == null)
+           {
+               synergyActivationName.text = "";
+           }
+           else
+           {
+               synergyActivationName.text += name + "\n";
+           }
+       }*/
 
         //--------------------------------------------------------------
-        // Round
-        public TextMeshProUGUI RoundInfoNum, RoundStageNum;
-        public TextMeshProUGUI RoundDetailStepNum, RoundDetailStepNum1, RoundDetailStepNum2, RoundDetailStepNum3, RoundDetailStepNum4;
 
+        //Player        
+        private int PlayerGoldValue = 100;
+        private string PlayerID = "ID_123";
+        private Image PlayerIcon = null;
+
+        [Header("Contents")]
+        public Canvas canvas;
+        public Button UnitStateContents, ChattingContents, SettingContents, RoundContents = null;
+        public Image SynergyContents, SynergyEXContents, RankingContents, ExpensionContents, GachaContents = null;
+        // public RectTransform RouletteContents, AuctionContents = null;
+
+        // Unit State Contents
+        [Header("Unit State Contents")]
+        public Image[] UnitStatusInfo = null; // UnitStatusInfo, UnitSkillInfo, Equipment
+        public Button UnitStatusDetailInfo = null;
+        public TextMeshProUGUI[] UnitStatusInfoTxt = null; // 유닛 레벨, HP, MP
+        public TextMeshProUGUI[] UnitStatusDetailIInfoTxt = null; // 종족:클래스, HP, MP, 공격력, 주문력, 공격 속도
+        public TextMeshProUGUI[] UnitSkillInfoTxt = null; // 스킬 이름, 효과 설명
+
+        // Contents Popup
+        [Header("Chatting Contents")]
+        public Button ChattingContentsPopup = null;
+
+        // Round Contents
+        [Header("Round Contents")]
+        public Button RoundEXContents = null;
+        public Image RoundContentsBoss, RoundContentsResult = null;
+        public TextMeshProUGUI RoundLimit = null;// 확장 레벨 / 배치된 유닛수
+        public TextMeshProUGUI[] RoundNumber, RoundType = null; // 라운드 표시 텍스트
+
+        // Setting Contents
+        [Header("Setting Contents")]
+        public Button SettingContentsPopup = null;
+        public Button[] SettingBtn = null; // apply, quit?        
 
         // Synergy Contents
-        public void SortUI()
-        {
-            // 종족이 들어왔을 경우 상위 노출되도록 정렬
-        }
-        public void SynergyInfo(string name) // 시너지 이름 받아옴
-        {
-            if (name == null)
-            {
-                synergyActivationName.text = "";
-            }
-            else
-            {
-                synergyActivationName.text += name + "\n";
-            }
-        }
-        public void SynergyExplainPopup(string Ex3, string Ex5, Image[] icon)
-        {
-            // 들어오는 정보에 따라 표시되는 정보 text 다르게 표현
-            // 이미지 데이터를 어떻게 받아와야 할지 - 이미지를 관리하는 데이터베이스가 따로 있는지?
-        }
+        [Header("Synergy Contents")]
+        public Button[] ClassSynergy,SpeciesSynergy = null; // 클래스 : 어쌔신,매지션,딜러,탱커,워리어 / 종족 : 데몬,드워프,골렘,메카,오크
+        // 시너지에 표시되는 3마리 아이콘, 시너지 설명에 들어갈 배치된 유닛 아이콘 - 들어온 순서대로 정렬 필요        
+        public Image[] SynergyIcon, SynergyEXIcon = null; 
+        public TextMeshProUGUI[] ClassSynergyEX, SpeciesSynergyEX = null; // 시너지 이름, 설명 - 클래스 : 2, 4 / 종족 : 3, 5
+        public string[] SynergyEX = null;
+        // 배치된 유닛의 해당하는 이미지, 이름, 종족, 클래스 정보를 읽어와서 넣어줘야 함. -> 어디서 받아올 수 있는지?
+
+        // Ranking Contents
+        [Header("Ranking Contents")]
+        public Button[] Ranking= null; // 순위
+        public TextMeshProUGUI[] RankingContentsInfo = null; // 플레이어 레벨, ID
+
+        // Excepsion Contents
+        [Header("Excepsion Contents")]
+        public Button ExcepsionLevelUP = null;
+        public TextMeshProUGUI[] ExcepsionContentsInfo = null; // 플레이어 레벨, ID, 구매비용, CurExp/MaxExp
+
+        // Gacha Contents
+        [Header("Gacha Contents")]
+        public Button WeaponDrawContents, UnitDrawContents = null;
+        public TextMeshProUGUI[] gachaContentsGold = null; // 플레이어, 무기뽑기, 유닛뽑기
+        private int gachaContentsGoldValue = 5; // 임시
+
+        // test
+        [Header("test")]
+        public Button unitBuyButton, unitSellButton, unitAttackButton, unitHealButton = null;
+        
+        public ScrollRect synergyScroll;
+
+        // 시너지 발동 - 이름, 설명, 이미지 추가필요
+        // 이미지 - 배치된 유닛에 해당하는 이름 정보를 받아와서 텍스트로 띄울 수 있도록
+        // public TextMeshProUGUI synergyActivationName, synergyActivationCount3, synergyActivationCount5;
+
+        // 배치된 유닛수 - 카운트 아직 안됨
+        // public TextMeshProUGUI deployedActivation;
+        // private int expensionLevelCount,deployedUnitCount;
+       
+        //--------------------------------------------------------------
 
         // Awake
         #region Awake
         public void Awake()
         {
-            
-            graphicRaycaster = GetComponent<GraphicRaycaster>();
-            pointerEventData = new PointerEventData(EventSystem.current);
-            rrList = new List<RaycastResult>();
-
-            // touchObject = EventSystem.current.currentSelectedGameObject;
-            // Debug.Log(touchObject.name +", "+ touchObject.GetComponentInChildren<TextMeshProUGUI>().text);
-
-            // data
-            //mapController = GetComponent<ZoneSystem.MapController>();
-            //settingButton = GameObject.Find("Btn_Setting_menu").GetComponent<Button>();
 
             // 자주 활성화/비활성화하는 경우 부모오브젝트를 찾아두고 접근하게끔
-            ChattingButton = GameObject.Find("Chatting_Contents").GetComponent<Button>();
-            SettingButton = GameObject.Find("Setting_Contents").GetComponent<Button>();
-            SettingPopupButton = GameObject.Find("Setting_Contents_Popup").GetComponent<Button>();
-            RoundButton = GameObject.Find("Round_Contents").GetComponent<Button>();
-            RoundEXButton = GameObject.Find("ChattingContents").GetComponent<Button>();
-            RankingButton = GameObject.Find("Ranking_Contents").GetComponent<Button>();
+            canvas = GetComponent<Canvas>();
+            /*
+            ChattingContents = canvas.transform.GetChild(2).GetComponent<Button>();
+
+            SettingContents = canvas.transform.GetChild(3).GetComponent<Button>();
+            // SettingPopupContents = canvas.transform.GetChild(4).GetComponent<Image>();
+            // SettingQuitButton = SettingPopupContents.transform.GetChild(5).GetComponent<Button>();
+
+            RoundContents = canvas.transform.GetChild(5).GetComponent<Button>();
+            RoundEXContents = canvas.transform.GetChild(6).GetComponent<Button>();
+
+            SynergyContents = canvas.transform.GetChild(7).GetComponent<Image>();
+            // SynergyPopupContents = canvas.transform.GetChild(8).GetComponent<Image>();
+            synergyScroll = SynergyContents.transform.Find("Scroll View").GetComponent<ScrollRect>();
+            SynergyEXContents = synergyScroll.content.GetChild(0).GetComponent<Image>();
+
+            RankingContents = canvas.transform.GetChild(9).GetComponent<Image>();
+
+            ExpensionContents = canvas.transform.GetChild(10).GetComponent<Image>();
+
+            GachaContents = canvas.transform.GetChild(11).GetComponent<Image>();
+            WeaponDrawContents = GachaContents.transform.GetChild(1).GetComponent<Button>();
+            UnitDrawContents = GachaContents.transform.GetChild(2).GetComponent<Button>();
             // 컨텐츠를 추가하는 것도 넣어야됨. - 배치된 유닛이 없으면 시너지 버튼도 필요없음
             // 배치된 유닛이 하나라도 있을 때 버튼이 활성화
-            // 
-            SynergyButton = GameObject.Find("Synergy_Contents").GetComponent<Button>();
-            SynergyEXButton = transform.GetChild(4).GetChild(1).GetComponent<Button>();
-            LevelUpButton = transform.GetChild(6).GetChild(0).GetChild(1).GetComponent<Button>();
-            WeaponDrawButton = transform.GetChild(7).GetChild(1).GetComponent<Button>();
-            UnitDrawButton = transform.GetChild(7).GetChild(2).GetComponent<Button>();
-
-            testWindow = transform.GetChild(2).GetComponent<Image>();
+            // */
 
         }
         #endregion
 
         public void Start()
         {
-            IsSetting = false;
-            ChattingButton.onClick.AddListener(OnChatting);
-            SettingButton.onClick.AddListener(OnSetting);
-            RoundButton.onClick.AddListener(OnRoundInfoChange);
-            RoundEXButton.onClick.AddListener(OnRoundEXInfoChange);
-            LevelUpButton.onClick.AddListener(OnLevelUp);
-            WeaponDrawButton.onClick.AddListener(OnWeaponDraw);
-            UnitDrawButton.onClick.AddListener(OnUnitDraw);
-            SynergyButton.onClick.AddListener(OnSynergy);
-            SynergyEXButton.onClick.AddListener(OffSynergy);
+            /* ChattingContents.onClick.AddListener(OnChatting);
+             SettingContents.onClick.AddListener(OnSetting);
+             SettingQuitButton.onClick.AddListener(OffSetting);
+             RoundContents.onClick.AddListener(OnRoundInfoChange);
+             RoundEXContents.onClick.AddListener(OnRoundEXInfoChange);
+             // ExpensionContents.onClick.AddListener(OnExpensionLevelUp);
+             WeaponDrawContents.onClick.AddListener(OnWeaponDraw);
+             UnitDrawContents.onClick.AddListener(OnUnitDraw);
+             // SynergyContents.onClick.AddListener(OnSynergy);
+             // SynergyEXContents.onClick.AddListener(OffSynergy);
 
-            //hitObject = hit.transform.gameObject; // 레이가 충돌한 위치에 정보 출력
-            //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+             //hitObject = hit.transform.gameObject; // 레이가 충돌한 위치에 정보 출력
+             //ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+             graphicRaycaster = GetComponent<GraphicRaycaster>();
+             eventSystem = GetComponent<EventSystem>();     */
         }
-        
+
+        /*  GraphicRaycaster graphicRaycaster = null;
+          PointerEventData pointerEventData = null;
+          EventSystem eventSystem = EventSystem.current;
+          List<RaycastResult> resultsList = null;
+
+          void touchRay() 
+          {
+              pointerEventData = new PointerEventData(eventSystem);
+              pointerEventData.position = Input.mousePosition;
+              resultsList = new List<RaycastResult>();
+              graphicRaycaster.Raycast(pointerEventData, resultsList);
+
+              GameObject hitObj = resultsList[0].gameObject;
+
+
+              //if (hitObj.CompareTag("Demon")) { Debug.Log("Demon"); }
+              if (hitObj.layer==5) 
+              {
+                  Debug.Log("UI Layer 입니다.");
+                  Debug.Log("Synergy UI 입니다. : " + hitObj.gameObject.name);
+                  *//*if (hitObj.gameObject.name=="Synergy")
+                  {
+
+                  }*//*
+              }
+
+          }*/
         private void Update()
-        {            
-            if (Input.GetKeyDown(KeyCode.Escape)) IsSetting = true;            
+        {
+            if (Input.GetKeyDown(KeyCode.Escape)) OffSetting(); //IsSetting = true;            
+
+            //touchRay();
+
+            /*if (Input.GetMouseButtonDown(0))
+            {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                if (Physics.Raycast(ray,out hit,100,5))
+                {
+                    Debug.Log("name : " + hit.transform.gameObject);
+                }
+            }*/
         }
 
-        //UI Raycast
-        public T RaycastUI<T>(int num) where T : Component
-        {
-            rrList.Clear();
-            graphicRaycaster.Raycast(pointerEventData, rrList);
-
-            if (rrList.Count == 0)
-                return null;
-
-
-
-            return rrList[num].gameObject.GetComponent<T>();
-        }
-
-        /*public void SynergyText(string text)
-        {
-            if (text == null)
-            {
-                SynergyInfo.text = "";
-            }
-            else
-            {
-                SynergyInfo.text += text + "\n";
-            }
-        }*/
 
         public void OnSetting()
         {
             Debug.Log("ON Setting");
-            //settingMenu.gameObject.SetActive(true);
+            //SettingPopupContents.gameObject.SetActive(true);
         }
-        public void OnWeaponDraw()
+        public void OffSetting()
+        {
+            Debug.Log("OFF Setting");
+            //SettingPopupContents.gameObject.SetActive(false);
+        }
+        public void OnWeaponDraw() //int gold
         {
             Debug.Log("ON Weapon Draw");
+            //if (gold < goldExpense) return;
+            //gold -= goldExpense;
+            //gachaUserGold.text = string.Format("{0:#,###}", PlayerGoldValue);
+
         }
         public void OnUnitDraw()
         {
@@ -198,24 +255,29 @@ namespace UI
         public void OnRoundInfoChange()
         {
             Debug.Log("ON RoundInfoChange");
-            RoundEXButton.gameObject.SetActive(true);
+            RoundEXContents.gameObject.SetActive(true);
         }
         public void OnRoundEXInfoChange()
         {
             Debug.Log("ON RoundEXInfoChange");
-            RoundEXButton.gameObject.SetActive(false);
+            RoundEXContents.gameObject.SetActive(false);
         }
-        public void OnSynergy()
+
+        public void OnSynergy() //PointerEventData data
         {
+            /*EventTrigger eventTrigger = gameObject.GetComponent<EventTrigger>(); ;
+            EventTrigger.Entry entry_PointerDown = new EventTrigger.Entry();
+            entry_PointerDown.eventID = EventTriggerType.PointerEnter;*/
             Debug.Log("ON Synergy");
-            SynergyEXButton.gameObject.SetActive(true);
+            //SynergyPopupContents.gameObject.SetActive(true);
+
         }
         public void OffSynergy()
         {
             Debug.Log("OFF Synergy");
-            SynergyEXButton.gameObject.SetActive(false);
+            //SynergyPopupContents.gameObject.SetActive(false);
         }
-        public void OnLevelUp()
+        public void OnExpensionLevelUp()
         {
             Debug.Log("ON LevelUp");
         }
@@ -230,45 +292,43 @@ namespace UI
         {
         }
 
+        // Synergy Contents
+        public void SortUI()
+        {
+            // 종족이 들어왔을 경우 상위 노출되도록 정렬
+        }
+
+        public void SynergyExplainPopup(string Ex3, string Ex5, Image[] icon)
+        {
+            // 들어오는 정보에 따라 표시되는 정보 text 다르게 표현
+            // 이미지 데이터를 어떻게 받아와야 할지 - 이미지를 관리하는 데이터베이스가 따로 있는지?
+        }
+
         // Gold Expense
         private int goldExpense;
         private bool IsWeponDraw { get; set; }
         private bool IsUnitDraw { get; set; }
         private bool IsLevelUp { get; set; }
-        public void GoldException(int gold)
-        {
-            if (gold < goldExpense) return;
-            gold -= goldExpense;
+        /* public void GoldException(int gold, int goldExpense)
+         {
+             if (gold < goldExpense) return;
+             gold -= goldExpense;
+             gachaUserGold.text = string.Format("{0:#,###}", PlayerGoldValue);
+             *//*if (IsWeponDraw)
+             {
+                 Debug.Log("무기 뽑기");
+             }            
+             if (IsUnitDraw)
+             {
+                 Debug.Log("유닛 뽑기");
+             }            
+             if (IsLevelUp)
+             {
+                 Debug.Log("레벨업");
+             }  *//*
+             // playerGold.text = string.Format("{0:#,###}", playerGoldValue); 
+         }*/
 
-            // 누른 버튼이 무기 뽑기일 때
-            if (IsWeponDraw)
-            {
-
-            }
-            // 누른 버튼이 유닛 뽑기일 때
-            if (IsUnitDraw)
-            {
-
-            }
-            // 누른 버튼이 레벨업일 때
-            if (IsLevelUp)
-            {
-
-            }
-
-            // playerGold.text = string.Format("{0:#,###}", playerGoldValue); 
-        }
-
-        private Image EXP;
-        private int expValue;
-        public void Exp(int exp)
-        {
-
-        }
-
-
-
-        // Round UI
         // Text Color Change
         private void ChangeTextColor(TextMeshProUGUI t) { t.color = Color.yellow; }
         private void ChangeTextColorInitiate(TextMeshProUGUI t) { t.color = Color.gray; }
