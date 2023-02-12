@@ -530,7 +530,7 @@ namespace ZoneSystem
         }
         #endregion
         #region 장비 auto merge 관련
-        public bool EquipmentAutoMergeResult(List<Transform> items)
+        public bool EquipmentAutoMergeResult(List<Transform> items) //이거도 체크
         {
             for (int i = 0; i < items.Count; i++)
             {
@@ -593,7 +593,7 @@ namespace ZoneSystem
                 }
             }
 
-            for(int i = 0; i<items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 items[i].transform.parent = stay.transform;
             }
@@ -623,7 +623,9 @@ namespace ZoneSystem
                         {
                             Transform item1 = items[i];
                             Transform item2 = items[j];
-                            if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade)
+                            if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade < 4)
                             {
                                 item1.GetComponent<Equipment>().Upgrade(); //여기가 문제임 여기서 다해
                                 items.Remove(item2);
@@ -660,7 +662,7 @@ namespace ZoneSystem
 
                 if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
                 {
-                    
+
                     if (stayEqCount + selectedEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
                     {
                         for (int i = 0; i < selectedEqCount; i++)
@@ -699,9 +701,9 @@ namespace ZoneSystem
                         }
                     }
 
-                    
 
-                    
+
+
                     return true;
                 }
             }
@@ -725,8 +727,8 @@ namespace ZoneSystem
             //유닛에 장비 장착
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                
-                if (!EquipItemToUnitAutoMerge(selectedObject.transform,stayObject.transform)) //여기서 automerge result 받아서 false이면 return
+
+                if (!EquipItemToUnitAutoMerge(selectedObject.transform, stayObject.transform)) //여기서 automerge result 받아서 false이면 return
                 {
                     Debug.Log("오토머지 안되서 장비 장착 불가능");
                     return false;
