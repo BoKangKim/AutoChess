@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Unit Data", menuName = "Scriptable Object/Unit Data")]
 public class ScriptableUnit : ScriptableObject
 {
-    [SerializeField] private string unitName;
-    public string GetUnitName { get { return unitName; } }
-
     [SerializeField] private int maxHp;
     public int GetMaxHp { get { return maxHp; } }
 

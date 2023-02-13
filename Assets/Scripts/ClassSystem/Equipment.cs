@@ -13,6 +13,8 @@ public class Equipment : MonoBehaviour
     [SerializeField] private int equipmentHp;
     [SerializeField] private int equipmentMpRecovery;
 
+    public int originGrade;
+
     public string GetEquipmentName { get { return equipmentName; } }
     public int GetEquipmentAtk { get { return equipmentAtk; } }
     public int GetEquipmentSpellPower { get { return equipmentSpellPower; } }
@@ -21,7 +23,7 @@ public class Equipment : MonoBehaviour
     public int GetEquipmentMpRecovery { get { return equipmentMpRecovery; } }
     public int GetEquipmentGrade { get { return equipmentGrade; } }
 
-    
+
 
     private void Awake()
     {
@@ -33,14 +35,24 @@ public class Equipment : MonoBehaviour
         equipmentSpellPower = equipmentData.GetEquipmentSpellPower;
     }
 
-    public void Upgrade()
+    public bool Upgrade()
     {
-        equipmentGrade++;
+        if (equipmentGrade < 4)
+        {
+            equipmentGrade++;
+            return true;
+        }
+        return false;
     }
 
-    public void SetData()
+    public void SaveGrade()
     {
+        originGrade= equipmentGrade;
+    }
 
+    public void LoadGrade()
+    {
+        equipmentGrade = originGrade;
     }
 
 }

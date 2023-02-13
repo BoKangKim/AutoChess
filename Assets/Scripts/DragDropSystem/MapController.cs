@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -19,9 +20,9 @@ namespace ZoneSystem
         [Header("종족 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int orcSynergyCount;
         [SerializeField] private int dwarfSynergyCount;
-        [SerializeField] private int scorpionSynergyCount;
+        [SerializeField] private int golemSynergyCount;
         [SerializeField] private int mechaSynergyCount;
-        [SerializeField] private int undeadSynergyCount;
+        [SerializeField] private int demonSynergyCount;
 
         [Header("직업 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int warriorSynergyCount;
@@ -36,6 +37,7 @@ namespace ZoneSystem
         private string[] RandomItem;
 
         public int battleUnitCount = 0;
+        public int SafetyObjectCount = 0;
 
 
         //유닛 랜덤뽑기
@@ -97,9 +99,7 @@ namespace ZoneSystem
             } while (index < freenetUnitIndex.Length);
         }
 
-        private void Start()
-        {
-
+        private void Start(){
             if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
@@ -141,6 +141,21 @@ namespace ZoneSystem
             }
         }
 
+        public int SafetyZoneCheck()
+        {
+            for (int z = 0; z < 2; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (safetyObject[z,x]!=null)
+                    {
+                        SafetyObjectCount++;
+                    }
+                }
+            }
+            return SafetyObjectCount;
+        }
+
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
@@ -149,9 +164,9 @@ namespace ZoneSystem
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
-            scorpionSynergyCount = 0;
+            golemSynergyCount = 0;
             mechaSynergyCount = 0;
-            undeadSynergyCount = 0;
+            demonSynergyCount = 0;
 
             warriorSynergyCount = 0;
             tankerSynergyCount = 0;
@@ -178,7 +193,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            //Debug.Log("중복되는것이 있음");
+                            
                         }
                         else
                         {
@@ -215,11 +230,11 @@ namespace ZoneSystem
                                     case "Orc":
                                         orcSynergyCount++;
                                         break;
-                                    case "Scorpion":
-                                        scorpionSynergyCount++;
+                                    case "Golem":
+                                        golemSynergyCount++;
                                         break;
-                                    case "Undead":
-                                        undeadSynergyCount++;
+                                    case "Demon":
+                                        demonSynergyCount++;
                                         break;
                                 }
 
@@ -366,37 +381,37 @@ namespace ZoneSystem
                                 }
                             }
 
-                            if (scorpionSynergyCount > 2 && scorpionSynergyCount < 5)
+                            if (golemSynergyCount > 2 && golemSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Scorpion")) activeSynergyList.Add("Scorpion");
+                                if (!activeSynergyList.Contains("Golem")) activeSynergyList.Add("Golem");
                             }
-                            if (scorpionSynergyCount >= 5)
+                            if (golemSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Scorpion"))
+                                if (activeSynergyList.Contains("Golem"))
                                 {
-                                    activeSynergyList.Remove("Scorpion");
+                                    activeSynergyList.Remove("Golem");
                                 }
 
-                                if (!activeSynergyList.Contains("Scorpion2"))
+                                if (!activeSynergyList.Contains("Golem2"))
                                 {
-                                    activeSynergyList.Add("Scorpion2");
+                                    activeSynergyList.Add("Golem2");
                                 }
                             }
 
-                            if (undeadSynergyCount > 2 && undeadSynergyCount < 5)
+                            if (demonSynergyCount > 2 && demonSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Undead")) activeSynergyList.Add("Undead");
+                                if (!activeSynergyList.Contains("Demon")) activeSynergyList.Add("Demon");
                             }
-                            if (undeadSynergyCount >= 5)
+                            if (demonSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Undead"))
+                                if (activeSynergyList.Contains("Demon"))
                                 {
-                                    activeSynergyList.Remove("Undead");
+                                    activeSynergyList.Remove("Demon");
                                 }
 
-                                if (!activeSynergyList.Contains("Undead2"))
+                                if (!activeSynergyList.Contains("Demon2"))
                                 {
-                                    activeSynergyList.Add("Undead2");
+                                    activeSynergyList.Add("Demon2");
                                 }
                             }
                         }
@@ -405,16 +420,14 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
-            //뱉는 시점은 여기인데 각각 객체 접근하려면 또 이중 for문 돌려야 하는데 그러긴 싫고
-            //스크립트에 접근하자니 추후 포톤뷰 체크도 해야하고
-            //나중에 거울모드 뽑을때 데이터 가져가는거 생각까지 해야해서 생각보다 어려움
+            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+
+            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
 
             //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();
-
             return battleUnitCount;
         }
 
@@ -499,7 +512,7 @@ namespace ZoneSystem
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
 
-                        Debug.Log(RandomItem[Random.Range(0, 5)]);
+                        //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
 
@@ -518,9 +531,10 @@ namespace ZoneSystem
             debug.text = "세이프티존이 꽉차서 아이템을 습득할 수 없습니다.";
         }
 
-        public void SellUnitOutItem(GameObject Item)
+        public void UnitOutItem(GameObject Item)
         {
-
+            Item.transform.parent = this.transform;
+            Item.gameObject.SetActive(true);
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

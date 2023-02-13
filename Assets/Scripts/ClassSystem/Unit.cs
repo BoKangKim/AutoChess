@@ -14,11 +14,10 @@ namespace UnitClass
         [SerializeField] private GameObject equipment03 = null;
         [Header("장착한 아이템 갯수")]
         [SerializeField] private int equipmentCount;
-
         #endregion
 
         #region 유닛 지역변수
-        private int grade;
+        [SerializeField] private int grade; // 인스펙터에서 등급 볼라고
         private float maxHp;
         private float curHp;
         private float maxMp;
@@ -104,26 +103,33 @@ namespace UnitClass
 
         public int EquipCount()
         {
-            return equipmentCount++;
+            equipmentCount = transform.childCount;
+            return equipmentCount;
         }
 
-        public void EquipItem(int equipmentCount) // 속보 이거 기존 구조 이상함 수정 요함
+        public void EquipItem() // 속보 이거 기존 구조 이상함 수정 요함
         {
-            switch (equipmentCount)
+            EquipCount();
+            switch (GetEquipmentCount)
             {
-                case 0:
-                    equipment01 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
-                    break;
                 case 1:
-                    equipment02 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
+                    equipment01 = transform.GetChild(0).gameObject;
                     break;
                 case 2:
-                    equipment03 = transform.GetChild(equipmentCount).gameObject;
-                    EquipCount();
+                    equipment01 = transform.GetChild(0).gameObject;
+                    equipment02 = transform.GetChild(1).gameObject;
+                    break;
+                case 3:
+                    equipment01 = transform.GetChild(0).gameObject;
+                    equipment02 = transform.GetChild(1).gameObject;
+                    equipment03 = transform.GetChild(2).gameObject;
                     break;
             }
+        }
+
+        public bool EquipmentCheck()
+        {
+            return false;
         }
 
         public void GetItemStat()
@@ -140,7 +146,7 @@ namespace UnitClass
 
         public void GetSynergyData()
         {
-            
+
         }
 
     }
