@@ -66,4 +66,13 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
         gameObject.SetActive(false);
         instList.Enqueue(gameObject);
     }
+
+    public void listCaching(string[] cachingUnits)
+    {
+        Debug.Log("CACHING");
+        for (int i = 0; i < cachingUnits.Length; i++)
+        {
+            resourceCache.Add(cachingUnits[i] ,Resources.Load<GameObject>(cachingUnits[i]));
+        }
+    }
 }

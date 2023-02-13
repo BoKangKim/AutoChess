@@ -370,7 +370,6 @@ namespace ZoneSystem
                     }
 
                 }
-
             }
                 selectedObject = null;
         }

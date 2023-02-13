@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
@@ -30,8 +31,9 @@ namespace ZoneSystem
         [SerializeField] private int magicianSynergyCount;
         [SerializeField] private int assassinSynergyCount;
         [SerializeField] private int rangeDealerSynergyCount;
-
+        private MapController[] maps = null;
         public TextMeshProUGUI debug;
+        private bool isFullPlayer = false;
 
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
@@ -39,6 +41,58 @@ namespace ZoneSystem
         public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
 
+        private MapController enemy = null;
+        public bool isMirrorModePlayer = true;
+        private bool isInitIndex = false;
+
+        public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
+        }
+
+        [PunRPC]
+        public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            this.isMirrorModePlayer = isMirrorModePlayer;
+        }
+
+        [PunRPC]
+        public void RPC_SetEnemy(int myViewID, int enemyViewID)
+        {
+            if (maps == null)
+            {
+                maps = FindObjectsOfType<MapController>();
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                if (maps[i].photonView.ViewID == myViewID)
+                {
+                    continue;
+                }
+                else if (maps[i].photonView.ViewID == enemyViewID)
+                {
+                    enemy = maps[i];
+                }
+            }
+        }
+
+        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
+        {
+            if(isRPC == true)
+            {
+                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
+            }
+            else
+            {
+                this.enemy = enemy;
+            }
+        }
+
+        public MapController getEnemy()
+        {
+            return enemy;
+        }
 
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
@@ -72,41 +126,84 @@ namespace ZoneSystem
             initializingUnitName();
 
             int index = 0;
-            do
+            if(PhotonNetwork.IsMasterClient == true)
             {
-                bool isContains = false;
-                freenetUnitIndex[index] = Random.Range(0, 5);
-
-                for (int i = 0; i < freenetUnitIndex.Length; i++)
+                do
                 {
-                    if (i == index)
+                    bool isContains = false;
+                    freenetUnitIndex[index] = Random.Range(0, 5);
+
+                    for  (int i = 0; i < freenetUnitIndex.Length; i++)
+                    {
+                        if  (i == index)
+                        {
+                            continue;
+                        }
+
+                        if (freenetUnitIndex[i] == freenetUnitIndex[index])
+                        {
+                            isContains = true;
+                        }
+                    }
+
+                    if (isContains == true)
                     {
                         continue;
                     }
 
-                    if (freenetUnitIndex[i] == freenetUnitIndex[index])
-                    {
-                        isContains = true;
-                    }
-                }
+                    index++;
+                } while (index < freenetUnitIndex.Length);
 
-                if (isContains == true)
-                {
-                    continue;
-                }
-
-                index++;
-            } while (index < freenetUnitIndex.Length);
+                
+            }
         }
 
-        private void Start(){
-            if (photonView.IsMine == true)
+        private void Start()
+        {
+if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
 
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+
+            if (PhotonNetwork.IsMasterClient == true
+                && photonView.IsMine)
+            {
+                StartCoroutine(WaitPlayer());
+            }
+        }
+
+            
+        IEnumerator WaitPlayer()
+        {
+            maps = FindObjectsOfType<MapController>();
+
+            while (maps.Length < 4)
+            {
+                maps = FindObjectsOfType<MapController>();
+
+                yield return null;
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                for (int j = 0; j < freenetUnitIndex.Length; j++)
+                {
+                    maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
+                }
+            }
+
+            PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
+
+            yield break;
+        }
+
+        [PunRPC]
+        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        {
+            freenetUnitIndex[arrIndex] = unitIndex;
         }
 
         private void initializingUnitName()
@@ -433,7 +530,8 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
-
+            
+            
             if (UIManager.Inst.PlayerGold < 5)
             {
                 debug.text = "골드가 부족합니다.";
@@ -441,11 +539,11 @@ namespace ZoneSystem
             }
 
             string UnitPrefab = null;
-            if (GameType.Inst.getType() == GAMETYPE.LIVENET)
+            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if (GameType.Inst.getType() == GAMETYPE.FREENET)
+            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
                 int index = freenetUnitIndex[Random.Range(0, 3)];
                 index *= 5;
