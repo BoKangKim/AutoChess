@@ -47,6 +47,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
+        DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
         gameScene = "KCS_MainGameScene";
@@ -67,7 +68,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         lobbyPanel.gameObject.SetActive(true);
 
         logingPanel.gameObject.SetActive(false);
-        PhotonNetwork.NickName = Database.Instance.userInfo.NickName;
+
+        Debug.Log(Database.Instance.userInfo.username);
+        myNickName.text = Database.Instance.userInfo.username;
+        PhotonNetwork.NickName = Database.Instance.userInfo.username;
+
+        
         chatmanager.enabled = true;
         PV = photonView;
         //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
@@ -122,14 +128,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
                 break;
             }
         }
-        PhotonNetwork.LoadLevel(gameScene);
-
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
         UpdatePlayerCount();
 
-        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 1)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {
             PhotonNetwork.LoadLevel(gameScene);
         }
