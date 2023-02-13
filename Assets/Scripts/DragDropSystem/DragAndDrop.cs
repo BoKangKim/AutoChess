@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 
 namespace ZoneSystem
 {
@@ -530,7 +529,7 @@ namespace ZoneSystem
         }
         #endregion
         #region 장비 auto merge 관련
-        public bool EquipmentAutoMergeResult(List<Transform> items) //이거도 체크
+        public bool EquipmentAutoMergeResult(List<Transform> items)
         {
             for (int i = 0; i < items.Count; i++)
             {
@@ -538,9 +537,11 @@ namespace ZoneSystem
                 {
                     Transform item1 = items[i];
                     Transform item2 = items[j];
-                    if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade)
+                    if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade < 4)
                     {
-                        item1.GetComponent<Equipment>().Upgrade(); //여기도 문제일듯
+                        item1.GetComponent<Equipment>().Upgrade();
                         items.Remove(item2);
                         if (EquipmentAutoMergeResult(items) == false) return false;
                     }
@@ -554,11 +555,13 @@ namespace ZoneSystem
 
             for (int i = 0; i < selected.childCount; i++)
             {
+                selected.GetChild(i).GetComponent<Equipment>().SaveGrade();
                 items.Add(selected.GetChild(i).transform);
             }
 
             for (int i = 0; i < stay.childCount; i++)
             {
+                stay.GetChild(i).GetComponent<Equipment>().SaveGrade();
                 items.Add(stay.GetChild(i).transform);
             }
 
@@ -579,16 +582,24 @@ namespace ZoneSystem
                 items.Add(stay.GetChild(i).transform);
             }
 
-            for (int i = 0; i < items.Count; i++)
+            bool merged = true;
+            while (merged)
             {
-                for (int j = i + 1; j < items.Count; j++)
+                merged = false;
+                for (int i = 0; i < items.Count; i++)
                 {
-                    Transform item1 = items[i];
-                    Transform item2 = items[j];
-                    if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade)
+                    for (int j = i + 1; j < items.Count; j++)
                     {
-                        item1.GetComponent<Equipment>().Upgrade(); //여기도 체크
-                        items.Remove(item2);
+                        Transform item1 = items[i];
+                        Transform item2 = items[j];
+                        if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade && item1.GetComponent<Equipment>().GetEquipmentGrade < 4 && item2.GetComponent<Equipment>().GetEquipmentGrade < 4)
+                        {
+                            item1.GetComponent<Equipment>().Upgrade();
+                            items.Remove(item2);
+                            Destroy(item2.gameObject);
+                            merged = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -660,18 +671,12 @@ namespace ZoneSystem
                 int stayEqCount = stayUnit.GetEquipmentCount;
 
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName&&stayUnit.GetGrade <4)
                 {
 
-                    if (stayEqCount + selectedEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
+                    if (stayEqCount + selectedEqCount < 4)
                     {
-                        for (int i = 0; i < selectedEqCount; i++)
-                        {
-                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
-                            selectedEqCount--;
-                            i--;
-                        }
-
+                        EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
                         stayUnit.EquipItem();
                         Destroy(selectedUnit.gameObject);
                         stayUnit.Upgrade();
@@ -679,7 +684,20 @@ namespace ZoneSystem
 
                     else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == true)
                     {
-                        //EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
+                        for (int i = 0; i < selectedEqCount; i++)
+                        {
+                            selectedUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
+                        }
+
+                        for(int i = 0; i<stayEqCount; i++)
+                        {
+                            stayUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
+                        }
+
+                        EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
+                        stayUnit.EquipItem();
+                        Destroy(selectedUnit.gameObject);
+                        stayUnit.Upgrade();
                     }
 
                     else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == false)
