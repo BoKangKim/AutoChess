@@ -249,7 +249,6 @@ namespace Battle.AI
             if (stageType == STAGETYPE.PVP
                 || stageType == STAGETYPE.CLONE)
             {
-                Debug.Log(fieldAIObejects.Length);
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
                     if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)

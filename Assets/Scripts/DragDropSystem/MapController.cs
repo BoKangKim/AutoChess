@@ -32,6 +32,7 @@ namespace ZoneSystem
         [SerializeField] private int rangeDealerSynergyCount;
         private MapController[] maps = null;
         public TextMeshProUGUI debug;
+        private bool isFullPlayer = false;
 
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
@@ -112,7 +113,6 @@ namespace ZoneSystem
 
         private void Awake()
         {
-            
             //if (!photonView.IsMine) return;
             freenetUnitIndex = new int[3] { -1, -1, -1 };
             freenetUnits = new string[25];
@@ -158,33 +158,37 @@ namespace ZoneSystem
 
         private void Start()
         {
-            if (PhotonNetwork.IsMasterClient == true)
+
+            if (PhotonNetwork.IsMasterClient == true
+                && photonView.IsMine)
             {
-                StartCoroutine(WaitAllPlayer());   
+                StartCoroutine(WaitPlayer());
             }
         }
 
-        IEnumerator WaitAllPlayer()
+            
+        IEnumerator WaitPlayer()
         {
-            yield return new WaitForSeconds(2f);
-            if(PhotonNetwork.IsMasterClient == true
-                && photonView.IsMine)
+            maps = FindObjectsOfType<MapController>();
+
+            while (maps.Length < 4)
             {
-                PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
+                maps = FindObjectsOfType<MapController>();
 
-                if (maps == null)
-                {
-                    maps = FindObjectsOfType<MapController>();
-                }
+                yield return null;
+            }
 
-                for (int i = 0; i < maps.Length; i++)
+            for (int i = 0; i < maps.Length; i++)
+            {
+                for (int j = 0; j < freenetUnitIndex.Length; j++)
                 {
-                    for (int j = 0; j < freenetUnitIndex.Length; j++)
-                    {
-                        maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
-                    }
+                    maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
                 }
             }
+
+            PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
+
+            yield break;
         }
 
         [PunRPC]

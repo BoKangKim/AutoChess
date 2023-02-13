@@ -21,9 +21,10 @@ namespace Battle.Stage
 
     public class StageControl : MonoBehaviourPun
     {
+        [SerializeField] private GameObject[] Monsters = null;
         private GameObject cam = null;
         private STAGETYPE[,] stages = new STAGETYPE[9, 4];
-        private STAGETYPE nowStage = STAGETYPE.NULL;
+        private STAGETYPE nowStage = STAGETYPE.PREPARE;
         private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
         private ZoneSystem.MapController[] maps = null;
@@ -43,18 +44,21 @@ namespace Battle.Stage
             waitM = COR_WaitMaster;
             wait = new WaitUntil(() => isEndSetEnemy);
             initializingStageInfo();
-            checkNextStageInfo();
+            //checkNextStageInfo();
         }
 
         private void Start()
         {
-            if(PhotonNetwork.IsMasterClient == true)
+            if (photonView.IsMine == true)
             {
                 Timer timer = FindObjectOfType<Timer>();
 
-                timer.initializingStageControl(this);
+                if (timer != null)
+                {
+                    timer.initializingStageControl(this);
+                }
             }
-            
+
 
             if (maps == null)
             {
@@ -72,7 +76,7 @@ namespace Battle.Stage
 
         public void checkNextStageInfo()
         {
-            if(PhotonNetwork.IsMasterClient == false)
+            if (PhotonNetwork.IsMasterClient == false)
             {
                 return;
             }
@@ -85,6 +89,7 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
+                Debug.Log(nowStage);
                 GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
                 GameManager.Inst.nowStage = nowStage;
                 if (changeStage != null)
@@ -121,7 +126,7 @@ namespace Battle.Stage
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
-            photonView.RPC("CacheMasterIndex", RpcTarget.All,stageIndex.row,stageIndex.col);
+            photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
             Debug.Log(nowStage);
         }
@@ -129,7 +134,7 @@ namespace Battle.Stage
         [PunRPC]
         public void CacheMasterIndex(int row, int col)
         {
-            GameManager.Inst.SyncStageIndex(row,col);
+            GameManager.Inst.SyncStageIndex(row, col);
         }
 
         [PunRPC]
@@ -140,8 +145,6 @@ namespace Battle.Stage
 
         public void startNextStage()
         {
-            
-
             if (nowStage == STAGETYPE.PVP)
             {
                 if (PhotonNetwork.IsMasterClient == true)
@@ -150,6 +153,29 @@ namespace Battle.Stage
                     StartCoroutine(waitM());
                 }
             }
+            else if (nowStage == STAGETYPE.MONSTER)
+            {
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                inst.transform.SetParent(gameObject.transform, false);
+                photonView.RPC("instantiateMonster",RpcTarget.Others);
+            }
+            else if (nowStage == STAGETYPE.BOSS)
+            {
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                inst.transform.SetParent(gameObject.transform, false);
+                photonView.RPC("instantiateMonster", RpcTarget.Others);
+            }
+            else if (nowStage == STAGETYPE.PREPARE)
+            {
+
+            }
+        }
+
+        [PunRPC]
+        public void instantiateMonster()
+        {
+            GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+            inst.transform.SetParent(this.transform, false);
         }
 
         [PunRPC]
