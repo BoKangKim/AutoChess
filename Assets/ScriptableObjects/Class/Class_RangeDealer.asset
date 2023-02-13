@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Class_RangeDealer
   m_EditorClassIdentifier: 
   Class: RangeDealer
-  attackRange: 0
-  mpRecovery: -2
+  attackRange: 2
+  mpRecovery: -1
   atkPercentage: 0
   hpPercentage: 0
   skillDamagePercentage: 0

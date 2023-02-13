@@ -1,39 +1,39 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.EventSystems;
 using TMPro;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
+using System.Linq;
 
 namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviourPun
     {
 
-        MapController mapController;
-        GameObject selectedObject;
-        Camera cam;
-        int ObjectLayer;
-        int battleSpaceLayer;
-        int safetySpaceLayer;
-        int itemLayer;
+        private MapController mapController;
+        private GameObject selectedObject;
+        private Camera cam;
+        private int ObjectLayer;
+        private int battleSpaceLayer;
+        private int safetySpaceLayer;
+        private int itemLayer;
 
         public GameObject safetyZoneTile;
         public GameObject battleZoneTile;
-        List<GameObject> dragObject;
-        Color tileColor;
+        private List<GameObject> dragObject;
+        private Color tileColor;
 
 
+        private Vector3 beforePos;
 
-        Vector3 beforePos;
-
-        Button buySellButton = null;
+        Button posCheckButton = null;
 
         private void Awake()
         {
             mapController = GetComponent<MapController>();
+          
         }
         private void Start()
         {
@@ -43,7 +43,16 @@ namespace ZoneSystem
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
-            tileColor = new Color( 51/255f,83/255f,113/255f,1);
+            tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
+
+            if (photonView.IsMine)
+            {
+                safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                safetyZoneTile = safetyZoneTile.transform.Find("SafetyZone").gameObject;
+
+                battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
+            }
         }
         private void Update()
         {
@@ -138,7 +147,7 @@ namespace ZoneSystem
             #region PC��
             if (Input.GetMouseButtonDown(0))
             {
-                //Debug.Log(CastRay(battleSpaceLayer).transform);
+
                 if (CastRay(itemLayer).collider != null)
                 {
                     mapController.itemGain(CastRay(itemLayer).collider.gameObject);
@@ -147,13 +156,13 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
-                    
+
                     if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
+                        //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
 
-                        
+
 
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
@@ -175,11 +184,11 @@ namespace ZoneSystem
 
                         }
                     }
-                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
-                        
+                        //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
+
 
                         safetyZoneTile.gameObject.SetActive(true);
 
@@ -196,9 +205,12 @@ namespace ZoneSystem
                 else
                 {
                     // ���� �Ǹ�
-                    sellUnit();
+                    sellObject();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
+
+                    Debug.Log(CastRay(safetySpaceLayer).collider);
+                    Debug.Log(CastRay(battleSpaceLayer).collider);
 
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
@@ -216,19 +228,21 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
+                storeButtonChange();
+
             }
             //Drag
             if (selectedObject != null)
             {
                 tileChangeColor();
-                buttonChange();
+                buttonPosCheck();
                 Drag();
             }
             #endregion
         }
 
         #region raycast
-        RaycastHit CastRay(int Layer)
+        private RaycastHit CastRay(int Layer)
         {
             Vector3 screenMousePosFar = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.farClipPlane));
             Vector3 screenMousePosNear = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, cam.nearClipPlane));
@@ -241,7 +255,7 @@ namespace ZoneSystem
         #endregion
 
         #region outRange
-        void outRange()
+        private void outRange()
         {
             if ((int)beforePos.z < 0)
             {
@@ -257,36 +271,60 @@ namespace ZoneSystem
         #endregion
 
         #region sellUnit
-        void sellUnit()
+        void sellObject()
         {
-            if (buySellButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
+
+            if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
-                storeButtonChange(Color.black, Color.white, true, "유닛 구매");
-                buySellButton = null;
+                int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
+                if (count != 0) // 판매시 장비 뱉는 로직
+                {
+                    for (int i = 0; i < count; i++)
+                    {
+                        mapController.SellUnitOutItem(selectedObject.transform.GetChild(i).gameObject);
+                        selectedObject.transform.GetChild(i).gameObject.SetActive(true);
+                        selectedObject.transform.GetChild(i).transform.parent = null;
+                        count--;
+                        i--;
+                    }
+                }
+                posCheckButton = null;
 
                 Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+            }
+            if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
+            {
+                posCheckButton = null;
+
+                Destroy(selectedObject);
+                selectedObject = null;
+                storeButtonChange();
+                battleZoneTile.gameObject.SetActive(false);
+                safetyZoneTile.gameObject.SetActive(false);
+
+
             }
         }
-#endregion
+        #endregion
 
         #region buttonChange
-        void buttonChange()
+        void buttonPosCheck()
         {
-
-            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject.GetComponent<UnitClass.Unit>() != null)
+            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject != null)
             {
-                buySellButton = UIManager.Inst.RaycastUI<Button>(1);
-
-                storeButtonChange(Color.white, Color.black, false, "유닛 판매");
+                posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
 
             }
             else
             {
-                if (buySellButton != null)
+                if (posCheckButton != null)
                 {
-                    storeButtonChange(Color.black, Color.white, true, "유닛 구매");
 
-                    buySellButton = null;
+                    posCheckButton = null;
                 }
             }
         }
@@ -303,13 +341,13 @@ namespace ZoneSystem
         #endregion
 
         #region DropPos
-        void DropPosition(int Layer)
+        private void DropPosition(int Layer)
         {
             Vector3 worldPosition = CastRay(Layer).collider.transform.localPosition;
             var safetyPos = safetyPosToIndex(worldPosition);
             var battlePos = battlePosToIndex(worldPosition);
             var beforePos = safetyPosToIndex(this.beforePos);
-            
+
 
 
             if (Layer == safetySpaceLayer)
@@ -319,11 +357,10 @@ namespace ZoneSystem
                     mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     mapController.BattleZoneCheck();
-                    selectedObject = null;
                 }
                 else
                 {
-                    if ((int)beforePos.z < 0)
+                    if ((int)this.beforePos.z < 0)
                     {
                         beforePos = safetyPosToIndex(this.beforePos);
                         if (Merge(selectedObject, mapController.safetyObject[safetyPos.z, safetyPos.x]))
@@ -334,7 +371,7 @@ namespace ZoneSystem
                         else
                         {
                             mapController.safetyObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
-                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
@@ -351,20 +388,19 @@ namespace ZoneSystem
                         else
                         {
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
-                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
-                    selectedObject = null;
                 }
             }
 
             else if (Layer == battleSpaceLayer)
             {
-                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
+                if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
-                    selectedObject.transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                    selectedObject.transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                     selectedObject = null;
                     return;
                 }
@@ -375,11 +411,10 @@ namespace ZoneSystem
                     mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                     mapController.BattleZoneCheck();
-                    selectedObject = null;
                 }
                 else
                 {
-                    if ((int)beforePos.z < 0)
+                    if ((int)this.beforePos.z < 0)
                     {
                         beforePos = safetyPosToIndex(this.beforePos);
                         if (Merge(selectedObject, mapController.battleObject[battlePos.z, battlePos.x]))
@@ -391,7 +426,7 @@ namespace ZoneSystem
                         else
                         {
                             mapController.safetyObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
-                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
@@ -409,24 +444,25 @@ namespace ZoneSystem
                         }
                         else
                         {
-                           
+
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
-                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(beforePos.x, 0.25f, beforePos.z);
+                            mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
                             selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
 
                         }
                     }
-                    selectedObject = null;
 
                 }
+
             }
+                selectedObject = null;
         }
         #endregion
 
-        #region �巡�׽� Ÿ�� ���� ����
-        void tileChangeColor()
+        #region  타일색바뀜
+        private void tileChangeColor()
         {
             if (CastRay(safetySpaceLayer).collider != null)
             {
@@ -472,49 +508,56 @@ namespace ZoneSystem
         #endregion
 
         #region ��ưü����
-        void storeButtonChange(Color text, Color button, bool enabled, string unitStatus)
+        void storeButtonChange()
         {
+            if (selectedObject == null)
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
+                UIManager.Inst.sellButton.gameObject.SetActive(false);
 
-            buySellButton.image.color = button;
-            TextMeshProUGUI buttonText = buySellButton.GetComponentInChildren<TextMeshProUGUI>();
-            buySellButton.enabled = enabled;
-            buttonText.text = unitStatus;
-            buttonText.color = text;
+            }
+            else
+            {
+                UIManager.Inst.unitBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(false);
+                UIManager.Inst.sellButton.gameObject.SetActive(true);
+            }
+
+            
         }
         #endregion
 
-        #region ��ǥ�� �ε����� ��ȯ
-
-        //��Ʋ�� ��ǥ�� �ε��� ������ ��ȯ
+        #region 좌표변환
+        int safetyInterval = 3;
+        Vector3 battleInterval = new Vector3(1.5f, 0 , 2.5f);
         (int x , int z) battlePosToIndex(Vector3 Vec)
         {
-            Debug.Log($"pos + {Vec}");
+            //Debug.Log($"pos + {Vec}");
 
-            Vec.z = (Vec.z / 2.5f);
+            Vec.z = (Vec.z / battleInterval.z);
 
-            if (Vec.z % 2 == 0) { Vec.x -= 1.5f; }
+            if (Vec.z % 2 == 0) { Vec.x -= battleInterval.x; }
 
-            else{}
+            else { }
 
             Vec.x /= 3f;
-            Debug.Log($"index + {Vec}");
             return ((int)Vec.x,(int)Vec.z);
         }
         (int x, int z) safetyPosToIndex(Vector3 Vec)
         {
             Vec.x = (Vec.x - 1) / 3;
             Vec.z = (Vec.z + 7) / 3;
-       
+
 
             return ((int)Vec.x, (int)Vec.z);
         }
         #endregion
 
-        #region ����
-        //���� + ������ ����
+        #region 머지시스템
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
-
+       
             if (selectedObject == null || stayObject == null) return false;
             //���� ����
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
@@ -522,44 +565,67 @@ namespace ZoneSystem
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
+                int stayEqCount = stayUnit.GetEquipmentCount;
+                int selectEqCount = selectedUnit.GetEquipmentCount;
                 if (stayUnit.GetGrade > 3) return false;
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
                 {
 
+
+                    if (stayEqCount + selectEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
+                    {
+                        for (int i = selectEqCount; i < 0; i--)
+                        {
+                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
+                        }
+                        stayUnit.EquipItem(selectEqCount + stayEqCount);
+                    }
+
+                    else // 아이템이 4개 이상이라서 확인이 필요->
+                    {
+
+                    }
                     Destroy(selectedUnit.gameObject);
                     stayUnit.Upgrade(); //���׷��̵� ���� ��� ����(2023.01.18 15:08-�̿���)
 
-                   // stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
+
+
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<testItem>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
             {
-                testItem selectedItem = selectedObject.GetComponent<testItem>();
-                testItem stayItem = stayObject.GetComponent<testItem>();
+                Equipment selectedItem = selectedObject.GetComponent<Equipment>();
+                Equipment stayItem = stayObject.GetComponent<Equipment>();
 
-                if (stayItem.itemNum > 2) return false;
+                if (stayItem.GetEquipmentGrade > 2) return false;
 
-                if (selectedItem.itemNum == stayItem.itemNum)
+                if (selectedItem.GetEquipmentGrade == stayItem.GetEquipmentGrade && selectedItem.GetEquipmentName == stayItem.GetEquipmentName)
                 {
                     Destroy(selectedItem.gameObject);
-                    ++stayItem.itemNum;
+                    stayItem.Upgrade();
 
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
                     return true;
                 }
             }
             //��� ����
-            else if(selectedObject.GetComponent<testItem>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                    Destroy(selectedObject.gameObject);
-                    stayObject.gameObject.name = "Item_Equip";
-
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    //stayObject.GetComponent<MeshRenderer>().material.color = Color.red;
-                    return true;
+                int eqcount = stayObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
+                if (eqcount > 2)
+                {
+                    return false;
+                }
+                else
+                {
+                    selectedObject.transform.parent = stayObject.transform;
+                    stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                }
+                selectedObject.SetActive(false);
+     
+                return true;
             }
             return false;
         }

@@ -9,7 +9,7 @@ namespace ZoneSystem
 {
     public class UIManager : MonoBehaviour
     {
-        #region ╫л╠шео
+        #region О©╫л╠О©╫О©╫О©╫
         private UIManager() { }
         private static UIManager inst = null;
         public static UIManager Inst
@@ -29,12 +29,13 @@ namespace ZoneSystem
         }
         #endregion
 
-        [SerializeField]
-        Button buyButton, sellButton = null;
+        public Button unitBuyButton, equipmentBuyButton, sellButton = null;
         GraphicRaycaster graphicRaycaster = null;
         PointerEventData pointerEventData = null;
         List<RaycastResult> rrList = null;
         [SerializeField] private TextMeshProUGUI SynergyInfo = null;
+        public int PlayerGold = 500;
+
 
         public Action UnitInstButton;
 
@@ -49,7 +50,6 @@ namespace ZoneSystem
         private void Update()
         {
             pointerEventData.position = Input.mousePosition;
-
         }
 
 
@@ -58,29 +58,21 @@ namespace ZoneSystem
         {
             rrList.Clear();
             graphicRaycaster.Raycast(pointerEventData, rrList);
-
-            if (rrList.Count == 0)
-                return null;
-
-
-
+            if (rrList.Count == 0) return null;
             return rrList[num].gameObject.GetComponent<T>();
         }
 
         public void unitInstButton() => UnitInstButton();
-   
-
 
         public void SynergyText(string text)
         {
-            Debug.Log(text);
-            if (text == null)
+            if (text == null) 
             {
-                //SynergyInfo.text = "";
+                SynergyInfo.text = "";
             }
             else
             {
-                SynergyInfo.text += "\n" + text;
+                SynergyInfo.text += text + "\n";
             }
         }
 

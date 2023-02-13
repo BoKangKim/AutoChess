@@ -12,7 +12,7 @@ public class OnClickStartButton : MonoBehaviour
         units = FindObjectsOfType<ParentBT>();
         for (int i = 0; i < units.Length; i++)
         {
-            units[i].SetState(Battle.Stage.STAGETYPE.PVP);
+            units[i].SetState(Battle.Stage.STAGETYPE.MONSTER);
         }
     }
 }

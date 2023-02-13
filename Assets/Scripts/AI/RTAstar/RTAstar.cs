@@ -39,6 +39,10 @@ namespace Battle.RTASTAR
         {
             for(int i = 0; i < allUnits.Length; i++)
             {
+                if (allUnits[i] == null)
+                {
+                    continue;
+                }
                 LocationXY unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
                 if (checkLocationArrange(unitLocation.x, unitLocation.y) == false)
                     continue;

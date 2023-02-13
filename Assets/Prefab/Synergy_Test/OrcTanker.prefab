@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5704cfdf11ac20e4e9bd40687b620a27, type: 2}
+  - {fileID: 2100000, guid: c7960a04b7fb4b041aaf8f4ef2a65ff5, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -113,7 +113,7 @@ MonoBehaviour:
   UnitData: {fileID: 11400000, guid: 6b964e8b02f346042828d1f7122cfed0, type: 2}
   ClassData: {fileID: 11400000, guid: bc4fd2e3ce85a7c46a7802e59ad1b744, type: 2}
   SpeciesData: {fileID: 11400000, guid: 5e330af4f2ed5d4449f8b4eb6ef4077c, type: 2}
-  Equipment01: {fileID: 2039538674309082093, guid: 09d5880ce0967504f9b330388830d4a7, type: 3}
-  Equipment02: {fileID: 0}
-  Equipment03: {fileID: 0}
-  grade: 0
+  equipment01: {fileID: 0}
+  equipment02: {fileID: 0}
+  equipment03: {fileID: 0}
+  equipmentCount: 0

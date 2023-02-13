@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Class_Warrior
   m_EditorClassIdentifier: 
   Class: Warrior
-  attackRange: 0
-  mpRecovery: -2
+  attackRange: 1
+  mpRecovery: 0
   atkPercentage: 0
   hpPercentage: 0
   skillDamagePercentage: 0

@@ -31,13 +31,13 @@ public class Database : MonoBehaviour
             return _instance;
         }
 
-    // DataBase : CollectionÀÇ ¹°¸®Àû ÄÁÅ×ÀÌ³Ê
-    // Collection : DocumentÀÇ ±×·ì, DocumentÀÇ ³»ºÎ¿¡ À§Ä¡ÇØ ÀÖÀ½.
-    // Document : ÇÑ°³ ÀÌ»óÀÇ Key-value ½ÖÀ¸·Î ÀÌ·ç¾îÁø ±¸Á¶ <BsonDocument>
-    // Key / Field : ÄÃ·³ ¸í°ú ÀúÀå °ª
+    // DataBase : Collectionï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ì³ï¿½
+    // Collection : Documentï¿½ï¿½ ï¿½×·ï¿½, Documentï¿½ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+    // Document : ï¿½Ñ°ï¿½ ï¿½Ì»ï¿½ï¿½ï¿½ Key-value ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì·ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ <BsonDocument>
+    // Key / Field : ï¿½Ã·ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
     }
 
-    #region Client ÁÖ¼Ò ¼³Á¤
+    #region Client ï¿½Ö¼ï¿½ ï¿½ï¿½ï¿½ï¿½
     MongoClient client = new MongoClient("mongodb+srv://mongo:mongo1234@autochesscluster.ogdgk4g.mongodb.net/?retryWrites=true&w=majority");
     #endregion
 
@@ -85,20 +85,20 @@ public class Database : MonoBehaviour
         //Input_PhoneNumber.contentType = TMP_InputField.ContentType.IntegerNumber;
         //Input_NickName.contentType = TMP_InputField.ContentType.Alphanumeric;
         //Input_Password.contentType = TMP_InputField.ContentType.Password;
-        #region Database ¿¬µ¿
+        #region Database ï¿½ï¿½ï¿½ï¿½
         // MongoDB database name
         database = client.GetDatabase("AutoChessDB");
         #endregion
 
-        #region Collection ¿¬µ¿
-        // ÇØ´ç Database¿¡ ÀÖ´Â Collection °¡Á®¿À±â
+        #region Collection ï¿½ï¿½ï¿½ï¿½
+        // ï¿½Ø´ï¿½ Databaseï¿½ï¿½ ï¿½Ö´ï¿½ Collection ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         // MongoDB collection name
         collection = database.GetCollection<BsonDocument>("UserInfo");
         #endregion
 
         userInfo = new UserInfo();
         //
-        //bsonarray¿¡ ÄÝ·º¼ÇÀ» ´ã¾Æ¼­ ¿ä¼Ò¸¦ ³ª´­¼ö ÀÖÀ½.
+        //bsonarrayï¿½ï¿½ ï¿½Ý·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ¼ï¿½ ï¿½ï¿½Ò¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
         //BsonArray aa = DataFind("01013345678").GetValue("UnitInventory").AsBsonDocument.GetValue("Orc").AsBsonArray;
 
         //PhoneNumRegex = new Regex(@"010-[0-9]{4}-[0-9]{4}$");
@@ -107,21 +107,21 @@ public class Database : MonoBehaviour
         //NickNameRegex = new Regex(@"^[0-9a-zA-Z]{2,12}$");
 
 
-        //api¿¡¼­ µ¥ÀÌÅÍ¸¦ ¹Þ¾Æ¿ÔÀ»¶§ ½ÇÇà(ÀÏ´ÜÀº db/ start¿¡¼­ ½ÇÇàÇÏ°ÔÇØ³õÀ½)
+        //apiï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ï´ï¿½ï¿½ï¿½ db/ startï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ï¿½Ø³ï¿½ï¿½ï¿½)
         GetUserInfo();
     }
 
 
 
     //---------------
-    // À¯Àú Á¤º¸
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void GetUserInfo()
 	{
 		StartCoroutine(processRequestGetUserInfo());
 	}
 	IEnumerator processRequestGetUserInfo()
 	{
-		// À¯Àú Á¤º¸
+		// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 		yield return requestGetUserInfo((response) =>
 		{
 			if (response != null)
@@ -145,7 +145,7 @@ public class Database : MonoBehaviour
         if (userInfos == null)
         {
             DataInst(userInfo.public_address);
-            Debug.Log("»ý¼ºµÇ´Ï?");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½?");
         }
         else
         {
@@ -193,7 +193,7 @@ public class Database : MonoBehaviour
 
     //    if (!M_PhoneNumRegex.Success || !M_Password.Success)
     //    {
-    //        Debug.Log("¾ÆÀÌµð³ª ºñ¹Ð¹øÈ£ÀÇ ÀÚ¸®¼ö°¡ ¸ÂÁö ¾ÊÀ½.");
+    //        Debug.Log("ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
     //        return;
     //    }
 
@@ -203,7 +203,7 @@ public class Database : MonoBehaviour
     //    if (UserInfo == null)
     //    {
     //        DataInst(Input_PhoneNumber.text, Input_Password.text);
-    //        //´Ð³×ÀÓ ÀÎÇ² ÇÊµå°¡ ¶ä
+    //        //ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½Ç² ï¿½Êµå°¡ ï¿½ï¿½
     //        PhoneNumberPanel.gameObject.SetActive(false);
     //        NickNamePanel.gameObject.SetActive(true);
     //    }
@@ -211,7 +211,7 @@ public class Database : MonoBehaviour
     //    {
     //        if (Input_Password.text != DetaFindFild("PhoneNumber", Input_PhoneNumber.text).ToString())
     //        {
-    //            Debug.Log("ºñ¹Ð¹øÈ£°¡ Æ²·È½À´Ï´Ù.");
+    //            Debug.Log("ï¿½ï¿½Ð¹ï¿½È£ï¿½ï¿½ Æ²ï¿½È½ï¿½ï¿½Ï´ï¿½.");
     //        }
     //        else
     //        {
@@ -225,7 +225,7 @@ public class Database : MonoBehaviour
     //    }
     //}
 
-    // ´Ð³×ÀÓÀ» Àû°í ´Ð³×ÀÓÀ» »ý¼ºÇÏ¸é Æù³Ñ¹öµ¥ÀÌÅÍ¿¡ ´Ð³×ÀÓ Ãß°¡
+    // ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½Ñ¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Í¿ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ß°ï¿½
     //public void InputNickNameDataUpdate()
     //{
 
@@ -233,7 +233,7 @@ public class Database : MonoBehaviour
 
     //    if (!M_NickNameRegex.Success)
     //    {
-    //        Debug.Log("¿Ã¹Ù¸¥ ´Ð³×ÀÓÀÌ ¾Æ´Õ´Ï´Ù. ´Ù½ÃÀÔ·ÂÇÏ¼¼¿ä.");
+    //        Debug.Log("ï¿½Ã¹Ù¸ï¿½ ï¿½Ð³ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Õ´Ï´ï¿½. ï¿½Ù½ï¿½ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.");
     //        return;
     //    }
     //    else if (userInfo.NickName == null)
@@ -244,7 +244,7 @@ public class Database : MonoBehaviour
     //        collection.FindOneAndUpdate(filter, update);
     //    }
 
-    //    //·Îºñ·Î ÀÌµ¿
+    //    //ï¿½Îºï¿½ï¿½ ï¿½Ìµï¿½
     //}
 
 
@@ -252,7 +252,7 @@ public class Database : MonoBehaviour
 
 
     //------------------------------------------------------------------------------------------------------------------
-    //µµÅ¥¸ÕÆ® »ý¼º
+    //ï¿½ï¿½Å¥ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     void DataInst(string address)
     {
         userInfo.public_address = address;
@@ -268,7 +268,7 @@ public class Database : MonoBehaviour
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    //Æ¯Á¤ ÇÊµå·Î µµÅ¥¸ÕÆ® Ã£±â
+    //Æ¯ï¿½ï¿½ ï¿½Êµï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ® Ã£ï¿½ï¿½
     BsonDocument DataFind(string address)
     {
         //FilterDefinition<BsonDocument> filter2 = Builders<BsonDocument>.Filter.Eq("id", findID);
@@ -284,18 +284,18 @@ public class Database : MonoBehaviour
 
 
     //------------------------------------------------------------------------------------------------------------------
-    //Æ¯Á¤ µµÅ¥¸ÕÆ®ÀÇ Æ¯Á¤ ÇÊµå ¼öÁ¤
-    void DataUpdate(string findID,string updataData)
+    //Æ¯ï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ®ï¿½ï¿½ Æ¯ï¿½ï¿½ ï¿½Êµï¿½ ï¿½ï¿½ï¿½ï¿½
+    void DataUpdate(string findID, string updataData)
     {
         BsonDocument filter = new BsonDocument { { "PhoneNumber", findID } };
-        
+
         UpdateDefinition<BsonDocument> update = Builders<BsonDocument>.Update.Set("NickName", updataData);
         collection.FindOneAndUpdate(filter, update);
         //collection.UpdateOne(filter,update);
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    //Æ¯Á¤ µµÅ¥¸ÕÆ® »èÁ¦
+    //Æ¯ï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     void DataDelete(string findID)
     {
         BsonDocument filter = new BsonDocument { { "id", findID } };
@@ -303,14 +303,14 @@ public class Database : MonoBehaviour
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    //Æ¯Á¤ µµÅ¥¸ÕÆ®¸¦ Ã£Àº µÚ¿¡ ±× µµÅ¥¸ÕÆ®¿¡ ÀÖ´Â Æ¯Á¤ ÇÊµå¸¸ Ã£¾Æ¿È.
+    //Æ¯ï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ®ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½Ú¿ï¿½ ï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö´ï¿½ Æ¯ï¿½ï¿½ ï¿½Êµå¸¸ Ã£ï¿½Æ¿ï¿½.
     BsonValue DetaFindFild(string findKey, string findfild )
     {
-        var filter = Builders<BsonDocument>.Filter.Eq(findKey, findfild);//Ã£À» µµÅ¥¸ÕÆ®ÀÇ NameÀÌ ¾ÆµðÀÎ°Í
-        var nullFilter = collection.Find(filter).FirstOrDefault();//if null ÀÌ¸é Ã£Áö ¸øÇÔ
+        var filter = Builders<BsonDocument>.Filter.Eq(findKey, findfild);//Ã£ï¿½ï¿½ ï¿½ï¿½Å¥ï¿½ï¿½Æ®ï¿½ï¿½ Nameï¿½ï¿½ ï¿½Æµï¿½ï¿½Î°ï¿½
+        var nullFilter = collection.Find(filter).FirstOrDefault();//if null ï¿½Ì¸ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (nullFilter != null)
         {
-            Debug.Log(nullFilter.GetValue("password")); // Æ¯Á¤ ÇÊµå¸¦ Ã£À½.
+            Debug.Log(nullFilter.GetValue("password")); // Æ¯ï¿½ï¿½ ï¿½Êµå¸¦ Ã£ï¿½ï¿½.
         }
         return nullFilter.GetValue("password");
     }
