@@ -23,17 +23,21 @@ namespace Battle.Stage
     {
         [SerializeField] private GameObject[] Monsters = null;
         private GameObject cam = null;
+
         private STAGETYPE[,] stages = new STAGETYPE[9, 4];
         private STAGETYPE nowStage = STAGETYPE.PREPARE;
         private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
+
         private ZoneSystem.MapController[] maps = null;
         private ZoneSystem.MapController myMap = null;
         private GameObject[,] battleObject = null;
+
         private int preIndex = -1;
         private readonly Vector3 changeCamVec = new Vector3(19.5f, 0, 12f);
         private readonly Quaternion changeCamRot = Quaternion.Euler(new Vector3(0f, 180f, 0f));
         private bool isEndSetEnemy = false;
+
         private delegate IEnumerator waitMaster();
         private waitMaster waitM = null;
         private WaitUntil wait = null;
@@ -89,7 +93,6 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                Debug.Log(nowStage);
                 GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
                 GameManager.Inst.nowStage = nowStage;
                 if (changeStage != null)
@@ -123,12 +126,18 @@ namespace Battle.Stage
             if (changeStage != null)
             {
                 changeStage(nowStage);
+                photonView.RPC("RPC_changeStage",RpcTarget.Others,nowStage);
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
-            Debug.Log(nowStage);
+        }
+
+        [PunRPC]
+        public void RPC_changeStage(STAGETYPE nowStage)
+        {
+            changeStage(nowStage);
         }
 
         [PunRPC]
@@ -156,13 +165,13 @@ namespace Battle.Stage
             else if (nowStage == STAGETYPE.MONSTER)
             {
                 GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-                inst.transform.SetParent(gameObject.transform, false);
-                photonView.RPC("instantiateMonster",RpcTarget.Others);
+                inst.transform.SetParent(myMap.transform, false);
+                photonView.RPC("instantiateMonster", RpcTarget.Others);
             }
             else if (nowStage == STAGETYPE.BOSS)
             {
                 GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-                inst.transform.SetParent(gameObject.transform, false);
+                inst.transform.SetParent(myMap.transform, false);
                 photonView.RPC("instantiateMonster", RpcTarget.Others);
             }
             else if (nowStage == STAGETYPE.PREPARE)
@@ -175,7 +184,7 @@ namespace Battle.Stage
         public void instantiateMonster()
         {
             GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-            inst.transform.SetParent(this.transform, false);
+            inst.transform.SetParent(myMap.transform, false);
         }
 
         [PunRPC]

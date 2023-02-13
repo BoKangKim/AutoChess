@@ -121,7 +121,6 @@ namespace Battle.AI
 
         private void Start()
         {
-            Debug.Log("START");
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
 
@@ -235,7 +234,8 @@ namespace Battle.AI
         {
             for (int i = 0; i < fieldAIObejects.Length; i++)
             {
-                if (fieldAIObejects[i].myType.CompareTo(compare) == 0)
+                if (fieldAIObejects[i].myType.CompareTo(compare) == 0
+                    || fieldAIObejects[i].photonView.IsMine == false)
                 {
                     continue;
                 }
@@ -292,7 +292,7 @@ namespace Battle.AI
                     continue;
                 }
 
-                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.localPosition,transform.localPosition)) <= minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
@@ -441,11 +441,11 @@ namespace Battle.AI
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.position).normalized;
+                        dir = (nextPos - transform.localPosition).normalized;
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
-                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.World);
+                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.Self);
                 };
             }
         }
@@ -465,7 +465,7 @@ namespace Battle.AI
                             continue;
                         }
 
-                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
+                        if (Vector3.Distance(enemies[i].transform.localPosition, transform.localPosition) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
                             rta.initCloseList();

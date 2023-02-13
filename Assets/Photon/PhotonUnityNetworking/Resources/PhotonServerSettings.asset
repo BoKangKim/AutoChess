@@ -52,6 +52,7 @@ MonoBehaviour:
   - CacheMasterIndex
   - CacheMasterStage
   - instantiateMonster
+  - RPC_changeStage
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

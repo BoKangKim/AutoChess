@@ -160,7 +160,7 @@ namespace ZoneSystem
 
         private void Start()
         {
-if (photonView.IsMine == true)
+            if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
 
