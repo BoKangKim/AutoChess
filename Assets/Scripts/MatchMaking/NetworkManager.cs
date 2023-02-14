@@ -6,11 +6,18 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Realtime;
 
+public enum GAMETYPE 
+{
+    FREENET,
+    LIVENET,
+    MAX
+}
+
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("LoginPanel")]
     public Image logingPanel;
-    public TMP_InputField nickNameField;
+
 
     [Header("LobbyPanel")]
     public Image lobbyPanel;
@@ -32,43 +39,62 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI metchingSecText;
     public TextMeshProUGUI metchingCurPlyaerText;
 
-
-
+    
     public TextMeshProUGUI statusText;
 
     PhotonView PV;
     RoomOptions room;
+    private string gameScene;
 
     public TMP_InputField ChatInput;
     public TextMeshProUGUI[] ChatText;
 
     public ChatManager chatmanager = null;
 
-
     private void Awake()
     {
+        Screen.SetResolution(480,480,false);
+        DontDestroyOnLoad(this);
+        PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
+        gameScene = "SyncUnit";
     }
 
+    private void Start()
+    {
+        Connect();
+    }
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     public override void OnConnectedToMaster() => PhotonNetwork.JoinLobby();
 
-
-
     public override void OnJoinedLobby()
     {
+        
         lobbyPanel.gameObject.SetActive(true);
-
-        myNickName.text = nickNameField.GetComponent<TMP_InputField>().text;
-        PhotonNetwork.NickName = myNickName.text;
 
         logingPanel.gameObject.SetActive(false);
 
+        Debug.Log(Database.Instance.userInfo.username);
+        myNickName.text = Database.Instance.userInfo.username;
+        PhotonNetwork.NickName = Database.Instance.userInfo.username;
+
+        
         chatmanager.enabled = true;
-
         PV = photonView;
+        //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
+    }
 
-        PhotonNetwork.LocalPlayer.NickName = nickNameField.text;
+    public void joinFreeNet()
+    {
+        GameManager.Inst.setType(GAMETYPE.FREENET,gameObject);
+        JoinRandomOrCreateRoom();
+
+    }
+
+    public void joinLiveNet()
+    {
+        GameManager.Inst.setType(GAMETYPE.LIVENET, gameObject);
+        JoinRandomOrCreateRoom();
     }
 
     public void JoinRandomOrCreateRoom()
@@ -76,15 +102,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         nomalMatchButton.interactable = false;
         room.MaxPlayers = 4;
 
-
         if (PhotonNetwork.IsConnected)
         {
             statusText.text = "Connecting to Random Room...";
             room.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
 
             PhotonNetwork.JoinRandomOrCreateRoom(
-                expectedCustomRoomProperties: new ExitGames.Client.Photon.Hashtable(), expectedMaxPlayers: room.MaxPlayers, // Âü°¡ÇÒ ¶§ÀÇ ±âÁØ.
-                roomOptions: room // »ý¼ºÇÒ ¶§ÀÇ ±âÁØ.
+                expectedCustomRoomProperties: new ExitGames.Client.Photon.Hashtable(), expectedMaxPlayers: room.MaxPlayers, // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
+                roomOptions: room // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
                 );
 
         }
@@ -99,27 +124,42 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnCreatedRoom()
     {
         statusText.text = ($"metching + {PhotonNetwork.CurrentRoom.PlayerCount}");
-        Debug.Log("µé¾î¿Ô´Ï?");
 
     }
+
+
     public override void OnJoinedRoom()
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
+       
+        for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+        {
+            if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
+            {
+      
+                PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"] = i;
+
+                PhotonNetwork.PlayerList[i].SetCustomProperties(PhotonNetwork.LocalPlayer.CustomProperties);
+
+                break;
+            }
+        }
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
 
-        if (PhotonNetwork.CurrentRoom.PlayerCount == 4)
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {
-            statusText.text = "´Ùµé¾î¿È";
+            PhotonNetwork.LoadLevel(gameScene);
         }
     }
+
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-        UpdatePlayerCounts();
+        UpdatePlayerCount();
     }
-    private void UpdatePlayerCounts()
+    private void UpdatePlayerCount()
     {
         loadingPanel.gameObject.SetActive(true);
         for (int i = 0; i < PhotonNetwork.CurrentRoom.PlayerCount; i++)
@@ -128,6 +168,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         }
         metchingCurPlyaerText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
+
+    
     float time = 0f;
 
     void Update()

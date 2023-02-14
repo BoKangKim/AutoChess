@@ -154,7 +154,9 @@ PlayerSettings:
   resetResolutionOnWindowResize: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    Android: com.DefaultCompany.AutoChess_develop
+    Standalone: com.DefaultCompany.AutoChess-develop
   buildNumber:
     Standalone: 0
     iPhone: 0

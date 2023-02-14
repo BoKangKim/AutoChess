@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Unit Data", menuName = "Scriptable Object/Unit Data")]
 public class ScriptableUnit : ScriptableObject
 {
-    [SerializeField] private string unitName;
-    public string GetUnitName { get { return unitName; } }
-
     [SerializeField] private int maxHp;
     public int GetMaxHp { get { return maxHp; } }
 
@@ -21,9 +18,6 @@ public class ScriptableUnit : ScriptableObject
     [SerializeField] private int attackSpeed;
     public int GetAttackSpeed { get { return attackSpeed; } }
 
-    [SerializeField] private float attackRange;
-    public float GetAttackRange { get { return attackRange; } }
-
     [SerializeField] private int spellPower;
     public int GetSpellPower { get { return spellPower; } }
 
@@ -32,20 +26,5 @@ public class ScriptableUnit : ScriptableObject
 
     [SerializeField] private float magicCastingTime;
     public float GetMagicCastingTime { get { return magicCastingTime; } }
-
-    [SerializeField] private ScriptableObject unitClass;
-    public ScriptableObject GetUnitClass { get { return unitClass; } }
-
-    [SerializeField] private ScriptableObject unitSpecies;
-    public ScriptableObject GetUnitSpecies { get { return unitSpecies; } }
-
-    [SerializeField] private ScriptableObject unitequipment01;
-    public ScriptableObject GetUnitEqupment01 { get { return unitequipment01; } }
-
-    [SerializeField] private ScriptableObject unitequipment02;
-    public ScriptableObject GetUnitEqupment02 { get { return unitequipment02; } }
-
-    [SerializeField] private ScriptableObject unitequipment03;
-    public ScriptableObject GetUnitEqupment03 { get { return unitequipment03; } }
 }
 
