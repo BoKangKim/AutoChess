@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 18638
+  controlID: 20523
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -143,7 +143,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 18639
+  controlID: 20524
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 18640
+  controlID: 20525
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: 0.06480965, y: 0.927395, z: -0.18763936, w: 0.31759915}
     speed: 2
-    m_Value: {x: 0.06479865, y: 0.9272376, z: -0.18760751, w: 0.31754524}
+    m_Value: {x: 0.06480965, y: 0.927395, z: -0.18763936, w: 0.31759915}
   m_Size:
     m_Target: 0.8660254
     speed: 2
@@ -733,7 +733,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 18672
+  controlID: 20571
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -791,23 +791,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: b8110000
       m_LastClickedID: 0
-      m_ExpandedIDs: 0821fcffc821fcffc225fcffd425fcff8e70fcffce73fcff8e74fcff8878fcff9a78fcff24a5fcff3ca5fcffe2cffcffa4d0fcff9ed4fcffb0d4fcff181efdffd81efdffd222fdffe422fdff2e49fdff4649fdff524cfdff124dfdff0c51fdff1e51fdffae78fdff6e79fdff687dfdff7a7dfdff5482fdff1483fdff0e87fdff2087fdffb6cffdff76d0fdff70d4fdff82d4fdff3c02feff5402feffc205feff8206feff7c0afeff8e0afeff862dfeff9e2dfeffd631feff9632feff9036feffa236feff8261feff9a61feff7265feff3266feff2c6afeff3e6afeff2692feff3e92feffc04cffffe24cffff3672fffff672fffff076ffff0277fffffa8fffffe09dfffff89dffff5cc3ffff74c3ffff2cfbffff
+      m_ExpandedIDs: f8abfbff10acfbffe6e1fbffa8e2fbffa2e6fbffb4e6fbff0821fcffc821fcffc225fcffd425fcff8e70fcffce73fcff8e74fcff8878fcff9a78fcff24a5fcff3ca5fcffe2cffcffa4d0fcff9ed4fcffb0d4fcff181efdffd81efdffd222fdffe422fdff2e49fdff4649fdff524cfdff124dfdff0c51fdff1e51fdffae78fdff6e79fdff687dfdff7a7dfdff5482fdff1483fdff0e87fdff2087fdffb6cffdff76d0fdff70d4fdff82d4fdff3c02feff5402feffc205feff8206feff7c0afeff8e0afeff862dfeff9e2dfeffd631feff9632feff9036feffa236feff8261feff9a61feff7265feff3266feff2c6afeff3e6afeff2692feff3e92feffc04cffffe24cffff3672fffff672fffff076ffff0277fffffa8fffffe09dfffff89dffff5cc3ffff74c3ffff2cfbfffff4ffffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: Orc_Assassin(Clone)
-        m_OriginalName: Orc_Assassin(Clone)
+        m_Name: 
+        m_OriginalName: 
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: -239346
+        m_UserData: 0
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 0
+        m_OriginalEventType: 11
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 10}
       m_SearchString: 
@@ -872,7 +872,7 @@ MonoBehaviour:
     m_LastAppliedPresetName: Default
     m_SaveData: []
   m_SearchFilter:
-    m_NameFilter: 
+    m_NameFilter: Drag
     m_ClassNames: []
     m_AssetLabels: []
     m_AssetBundleNames: []
@@ -886,7 +886,7 @@ MonoBehaviour:
     m_Folders:
     - Assets/TbAsset/Unit/Orc/Ainimations/Assassin
     m_Globs: []
-    m_OriginalText: 
+    m_OriginalText: Drag
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
@@ -952,8 +952,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
+    m_SelectedInstanceIDs: b8110000
+    m_LastClickedInstanceID: 4536
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
@@ -1007,7 +1007,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 18750
+  controlID: 20631
 --- !u!114 &15
 MonoBehaviour:
   m_ObjectHideFlags: 52

@@ -130,7 +130,7 @@ namespace Battle.AI
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
 
             StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage = changeStage;
+            sc.changeStage += changeStage;
         }
 
         private void Update()
@@ -213,6 +213,7 @@ namespace Battle.AI
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
+            Debug.Log(this.stageType + " " + gameObject.name);
         }
 
         #region Searching Enemy
@@ -505,6 +506,15 @@ namespace Battle.AI
         [PunRPC]
         public void RPC_SetTriggerAttack()
         {
+            if(myAni == null)
+            {
+                if(gameObject.TryGetComponent<Animator>(out myAni) == false)
+                {
+                    Debug.Log("Not Found Animator" + gameObject.name);
+                    return;
+                }
+            }
+
             myAni.SetTrigger("isAttack");
         }
 

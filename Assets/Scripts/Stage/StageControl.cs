@@ -243,30 +243,30 @@ namespace Battle.Stage
 
         private void returnMyMap()
         {
-            //if (myMap.isMirrorModePlayer == false)
-            //{
-            //    return;
-            //}
+            if (myMap.isMirrorModePlayer == false)
+            {
+                return;
+            }
 
-            //for (int i = 0; i < battleObject.GetLength(0); i++)
-            //{
-            //    for (int j = 0; j < battleObject.GetLength(1); j++)
-            //    {
-            //        if (battleObject[i, j] == null)
-            //        {
-            //            continue;
-            //        }
+            for (int i = 0; i < battleObject.GetLength(0); i++)
+            {
+                for (int j = 0; j < battleObject.GetLength(1); j++)
+                {
+                    if (battleObject[i, j] == null)
+                    {
+                        continue;
+                    }
 
-            //        LocationXY location;
-            //        location.x = j;
-            //        location.y = i;
-            //        battleObject[i, j].SetActive(true);
-            //        battleObject[i, j].transform.SetParent(myMap.transform, false);
-            //        battleObject[i, j].transform.localPosition = LocationControl.convertLocationToPosition(location);
-            //        cam.transform.position = camStartPos;
-            //        cam.transform.rotation = Quaternion.Euler(Vector3.zero);
-            //    }
-            //}
+                    LocationXY location;
+                    location.x = j;
+                    location.y = i;
+                    battleObject[i, j].SetActive(true);
+                    battleObject[i, j].transform.SetParent(myMap.transform, false);
+                    battleObject[i, j].transform.localPosition = LocationControl.convertLocationToPosition(location);
+                    cam.transform.position = camStartPos;
+                    cam.transform.rotation = Quaternion.Euler(Vector3.zero);
+                }
+            }
 
         }
 
