@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using TMPro;
 using Battle.Stage;
-using Battle.AI.Effect;
+using Battle.AI;
 // 진행중 - 시너지 팝업창 ON/OFF까지
 // 
 

@@ -9,7 +9,7 @@ using UnityEngine.UI;
 using TMPro;
 
 using Battle.Stage;
-using Battle.AI.Effect;
+using Battle.AI;
 
 namespace UI 
 {
