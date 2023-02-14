@@ -4,6 +4,7 @@ namespace Battle.Stage
     using Photon.Pun;
     using UnityEngine;
     using System.Collections;
+    using Battle.AI;
 
     public enum STAGETYPE
     {
@@ -42,6 +43,8 @@ namespace Battle.Stage
         private waitMaster waitM = null;
         private WaitUntil wait = null;
 
+        private Vector3 camStartPos = Vector3.zero;
+
         private void Awake()
         {
             cam = GameObject.Find("Cam");
@@ -76,6 +79,8 @@ namespace Battle.Stage
                     }
                 }
             }
+
+            camStartPos = cam.transform.position;
         }
 
         public void checkNextStageInfo()
@@ -164,27 +169,37 @@ namespace Battle.Stage
             }
             else if (nowStage == STAGETYPE.MONSTER)
             {
-                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
                 inst.transform.SetParent(myMap.transform, false);
+                ParentBT bt = null;
+                if(inst.TryGetComponent<ParentBT>(out bt) == true)
+                {
+                    bt.setMyLocation();
+                }
                 photonView.RPC("instantiateMonster", RpcTarget.Others);
             }
             else if (nowStage == STAGETYPE.BOSS)
             {
-                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
                 inst.transform.SetParent(myMap.transform, false);
                 photonView.RPC("instantiateMonster", RpcTarget.Others);
             }
             else if (nowStage == STAGETYPE.PREPARE)
             {
-
+                returnMyMap();
             }
         }
 
         [PunRPC]
         public void instantiateMonster()
         {
-            GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
+            GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
             inst.transform.SetParent(myMap.transform, false);
+            ParentBT bt = null;
+            if (inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.setMyLocation();
+            }
         }
 
         [PunRPC]
@@ -224,6 +239,35 @@ namespace Battle.Stage
                     cam.transform.rotation = changeCamRot;
                 }
             }
+        }
+
+        private void returnMyMap()
+        {
+            //if (myMap.isMirrorModePlayer == false)
+            //{
+            //    return;
+            //}
+
+            //for (int i = 0; i < battleObject.GetLength(0); i++)
+            //{
+            //    for (int j = 0; j < battleObject.GetLength(1); j++)
+            //    {
+            //        if (battleObject[i, j] == null)
+            //        {
+            //            continue;
+            //        }
+
+            //        LocationXY location;
+            //        location.x = j;
+            //        location.y = i;
+            //        battleObject[i, j].SetActive(true);
+            //        battleObject[i, j].transform.SetParent(myMap.transform, false);
+            //        battleObject[i, j].transform.localPosition = LocationControl.convertLocationToPosition(location);
+            //        cam.transform.position = camStartPos;
+            //        cam.transform.rotation = Quaternion.Euler(Vector3.zero);
+            //    }
+            //}
+
         }
 
         private bool setNextEnemy()

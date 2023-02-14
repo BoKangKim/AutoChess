@@ -2,6 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.AI;
+using BehaviorTree;
+using System;
+using Photon.Pun;
+using Photon.Realtime;
+using static BehaviorTree.BehaviorTreeMan;
 
 public class MonsterAI : ParentBT
 {
@@ -15,4 +20,35 @@ public class MonsterAI : ParentBT
         return 2f;
     }
 
+    protected override INode initializingSpecialRootNode()
+    {
+        INode Special = Selector
+            (
+                IfAction(isPrepare,destroyMonster)
+            );
+
+        return Special;
+    }
+
+    private Func<bool> isPrepare 
+    {
+        get 
+        {
+            return () =>
+            {
+                return stageType == Battle.Stage.STAGETYPE.PREPARE;
+            };
+        }
+    }
+
+    private Action destroyMonster
+    {
+        get
+        {
+            return () =>
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+            };
+        }
+    }
 }

@@ -87,6 +87,11 @@ namespace Battle.AI
             return next;
         }
 
+        public void setMyLocation()
+        {
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
+        }
+
         public float getAttackDamage()
         {
             return unitData.GetUnitData.GetAtk;
@@ -112,7 +117,6 @@ namespace Battle.AI
         {
             InitializingRootNode();
             specialRoot = initializingSpecialRootNode();
-            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
@@ -123,6 +127,7 @@ namespace Battle.AI
         {
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
 
             StageControl sc = FindObjectOfType<StageControl>();
             sc.changeStage = changeStage;
@@ -287,7 +292,7 @@ namespace Battle.AI
                     continue;
                 }
 
-                if ((enemies[i].transform.position.z < 0 || enemies[i].transform.position.z > 12.5f))
+                if ((enemies[i].transform.localPosition.z < 0 || enemies[i].transform.localPosition.z > 12.5f))
                 {
                     continue;
                 }
@@ -332,7 +337,7 @@ namespace Battle.AI
         #region AI Behavior
         protected virtual Action idle
         {
-            get
+            get     
             {
                 return () =>
                 {
@@ -345,9 +350,13 @@ namespace Battle.AI
                             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
                             searchingTarget();
 
+                            Debug.Log(target.getMyLocation().ToString());
                             next = rta.searchNextLocation(myLocation, target.getMyLocation());
                             nextPos = LocationControl.convertLocationToPosition(next);
-                            dir = (nextPos - transform.position).normalized;
+                            dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
+                            Debug.Log(nextPos + " nextPos " + gameObject.name);
+                            Debug.Log(transform.localPosition + " localPos " + gameObject.name);
+                            Debug.Log(dir + " direction " + gameObject.name);
                             isInit = true;
                         }
                         else
@@ -441,11 +450,11 @@ namespace Battle.AI
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.localPosition).normalized;
+                        dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
-                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.Self);
+                    gameObject.transform.Translate(dir * 5f * Time.deltaTime,Space.World);
                 };
             }
         }
