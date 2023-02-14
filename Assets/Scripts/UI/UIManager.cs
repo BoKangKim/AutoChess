@@ -425,7 +425,7 @@ public class UIManager : MonoBehaviour
 
         // 업데이트 문 줄여야 함
         if (playerHPValue <= 0) IsDead = true;
-        if (playerGoldValue <= 0) playerGoldValue = 0;        
+        if (playerGoldValue <= 0) playerGoldValue = 0;
 
         // Round Info
         RoundType(roundType);
