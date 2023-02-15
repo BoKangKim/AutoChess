@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
@@ -20,9 +22,9 @@ namespace ZoneSystem
         [Header("종족 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int orcSynergyCount;
         [SerializeField] private int dwarfSynergyCount;
-        [SerializeField] private int scorpionSynergyCount;
+        [SerializeField] private int golemSynergyCount;
         [SerializeField] private int mechaSynergyCount;
-        [SerializeField] private int undeadSynergyCount;
+        [SerializeField] private int demonSynergyCount;
 
         [Header("직업 시너지")] //개 무식한 방법으로 해놨는데 추후 수정해야함
         [SerializeField] private int warriorSynergyCount;
@@ -30,14 +32,68 @@ namespace ZoneSystem
         [SerializeField] private int magicianSynergyCount;
         [SerializeField] private int assassinSynergyCount;
         [SerializeField] private int rangeDealerSynergyCount;
-
+        private MapController[] maps = null;
         public TextMeshProUGUI debug;
+        private bool isFullPlayer = false;
 
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
 
         public int battleUnitCount = 0;
+        public int SafetyObjectCount = 0;
 
+        private MapController enemy = null;
+        public bool isMirrorModePlayer = true;
+        private bool isInitIndex = false;
+
+        public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
+        }
+
+        [PunRPC]
+        public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            this.isMirrorModePlayer = isMirrorModePlayer;
+        }
+
+        [PunRPC]
+        public void RPC_SetEnemy(int myViewID, int enemyViewID)
+        {
+            if (maps == null)
+            {
+                maps = FindObjectsOfType<MapController>();
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                if (maps[i].photonView.ViewID == myViewID)
+                {
+                    continue;
+                }
+                else if (maps[i].photonView.ViewID == enemyViewID)
+                {
+                    enemy = maps[i];
+                }
+            }
+        }
+
+        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
+        {
+            if(isRPC == true)
+            {
+                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
+            }
+            else
+            {
+                this.enemy = enemy;
+            }
+        }
+
+        public MapController getEnemy()
+        {
+            return enemy;
+        }
 
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
@@ -72,43 +128,84 @@ namespace ZoneSystem
             initializingUnitName();
 
             int index = 0;
-            do
+            if(PhotonNetwork.IsMasterClient == true)
             {
-                bool isContains = false;
-                freenetUnitIndex[index] = Random.Range(0, 5);
-
-                for (int i = 0; i < freenetUnitIndex.Length; i++)
+                do
                 {
-                    if (i == index)
+                    bool isContains = false;
+                    freenetUnitIndex[index] = Random.Range(0, 5);
+
+                    for  (int i = 0; i < freenetUnitIndex.Length; i++)
+                    {
+                        if  (i == index)
+                        {
+                            continue;
+                        }
+
+                        if (freenetUnitIndex[i] == freenetUnitIndex[index])
+                        {
+                            isContains = true;
+                        }
+                    }
+
+                    if (isContains == true)
                     {
                         continue;
                     }
 
-                    if (freenetUnitIndex[i] == freenetUnitIndex[index])
-                    {
-                        isContains = true;
-                    }
-                }
+                    index++;
+                } while (index < freenetUnitIndex.Length);
 
-                if (isContains == true)
-                {
-                    continue;
-                }
-
-                index++;
-            } while (index < freenetUnitIndex.Length);
+                
+            }
         }
 
         private void Start()
         {
-
-            if (photonView.IsMine == true)
+if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
 
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+
+            if (PhotonNetwork.IsMasterClient == true
+                && photonView.IsMine)
+            {
+                StartCoroutine(WaitPlayer());
+            }
+        }
+
+            
+        IEnumerator WaitPlayer()
+        {
+            maps = FindObjectsOfType<MapController>();
+
+            while (maps.Length < 4)
+            {
+                maps = FindObjectsOfType<MapController>();
+
+                yield return null;
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                for (int j = 0; j < freenetUnitIndex.Length; j++)
+                {
+                    maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
+                }
+            }
+
+            PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
+
+            yield break;
+        }
+
+        [PunRPC]
+        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        {
+            freenetUnitIndex[arrIndex] = unitIndex;
         }
 
         private void initializingUnitName()
@@ -143,6 +240,21 @@ namespace ZoneSystem
             }
         }
 
+        public int SafetyZoneCheck()
+        {
+            for (int z = 0; z < 2; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (safetyObject[z,x]!=null)
+                    {
+                        SafetyObjectCount++;
+                    }
+                }
+            }
+            return SafetyObjectCount;
+        }
+
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
@@ -151,9 +263,9 @@ namespace ZoneSystem
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
-            scorpionSynergyCount = 0;
+            golemSynergyCount = 0;
             mechaSynergyCount = 0;
-            undeadSynergyCount = 0;
+            demonSynergyCount = 0;
 
             warriorSynergyCount = 0;
             tankerSynergyCount = 0;
@@ -180,7 +292,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            //Debug.Log("중복되는것이 있음");
+                            
                         }
                         else
                         {
@@ -217,11 +329,11 @@ namespace ZoneSystem
                                     case "Orc":
                                         orcSynergyCount++;
                                         break;
-                                    case "Scorpion":
-                                        scorpionSynergyCount++;
+                                    case "Golem":
+                                        golemSynergyCount++;
                                         break;
-                                    case "Undead":
-                                        undeadSynergyCount++;
+                                    case "Demon":
+                                        demonSynergyCount++;
                                         break;
                                 }
 
@@ -368,37 +480,37 @@ namespace ZoneSystem
                                 }
                             }
 
-                            if (scorpionSynergyCount > 2 && scorpionSynergyCount < 5)
+                            if (golemSynergyCount > 2 && golemSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Scorpion")) activeSynergyList.Add("Scorpion");
+                                if (!activeSynergyList.Contains("Golem")) activeSynergyList.Add("Golem");
                             }
-                            if (scorpionSynergyCount >= 5)
+                            if (golemSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Scorpion"))
+                                if (activeSynergyList.Contains("Golem"))
                                 {
-                                    activeSynergyList.Remove("Scorpion");
+                                    activeSynergyList.Remove("Golem");
                                 }
 
-                                if (!activeSynergyList.Contains("Scorpion2"))
+                                if (!activeSynergyList.Contains("Golem2"))
                                 {
-                                    activeSynergyList.Add("Scorpion2");
+                                    activeSynergyList.Add("Golem2");
                                 }
                             }
 
-                            if (undeadSynergyCount > 2 && undeadSynergyCount < 5)
+                            if (demonSynergyCount > 2 && demonSynergyCount < 5)
                             {
-                                if (!activeSynergyList.Contains("Undead")) activeSynergyList.Add("Undead");
+                                if (!activeSynergyList.Contains("Demon")) activeSynergyList.Add("Demon");
                             }
-                            if (undeadSynergyCount >= 5)
+                            if (demonSynergyCount >= 5)
                             {
-                                if (activeSynergyList.Contains("Undead"))
+                                if (activeSynergyList.Contains("Demon"))
                                 {
-                                    activeSynergyList.Remove("Undead");
+                                    activeSynergyList.Remove("Demon");
                                 }
 
-                                if (!activeSynergyList.Contains("Undead2"))
+                                if (!activeSynergyList.Contains("Demon2"))
                                 {
-                                    activeSynergyList.Add("Undead2");
+                                    activeSynergyList.Add("Demon2");
                                 }
                             }
                         }
@@ -407,22 +519,26 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 계속 하는게 아니라 특정 지점에만 해줘(라운드 시작 직전)
-            //뱉는 시점은 여기인데 각각 객체 접근하려면 또 이중 for문 돌려야 하는데 그러긴 싫고
-            //스크립트에 접근하자니 추후 포톤뷰 체크도 해야하고
-            //나중에 거울모드 뽑을때 데이터 가져가는거 생각까지 해야해서 생각보다 어려움
+            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+
+            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
 
             //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();
-
             return battleUnitCount;
         }
 
         public void OnClick_UnitInst() //유닛 구매
         {
+<<<<<<< HEAD
             if (playerData.gold < 5)
+=======
+            
+            
+            if (UIManager.Inst.PlayerGold < 5)
+>>>>>>> feature_UI
             {
                 debug.text = "골드가 부족합니다.";
                 return;
@@ -431,11 +547,11 @@ namespace ZoneSystem
             playerData.gold -= 5; 
 
             string UnitPrefab = null;
-            if (GameType.Inst.getType() == GAMETYPE.LIVENET)
+            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if (GameType.Inst.getType() == GAMETYPE.FREENET)
+            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
                 int index = freenetUnitIndex[Random.Range(0, 3)];
                 index *= 5;
@@ -502,7 +618,7 @@ namespace ZoneSystem
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
 
-                        Debug.Log(RandomItem[Random.Range(0, 5)]);
+                        //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
                         safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
 
@@ -520,9 +636,10 @@ namespace ZoneSystem
             debug.text = "세이프티존이 꽉차서 아이템을 습득할 수 없습니다.";
         }
 
-        public void SellUnitOutItem(GameObject Item)
+        public void UnitOutItem(GameObject Item)
         {
-
+            Item.transform.parent = this.transform;
+            Item.gameObject.SetActive(true);
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)

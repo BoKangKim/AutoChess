@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -38,7 +37,7 @@ namespace ZoneSystem
         private void Start()
         {
             cam = Camera.main;
-            safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace");
+            safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace"); //이거 비트연산자가 더 빠르지 않나?
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
@@ -199,9 +198,7 @@ namespace ZoneSystem
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        mapController.SellUnitOutItem(selectedObject.transform.GetChild(i).gameObject);
-                        selectedObject.transform.GetChild(i).gameObject.SetActive(true);
-                        selectedObject.transform.GetChild(i).transform.parent = null;
+                        mapController.UnitOutItem(selectedObject.transform.GetChild(i).gameObject);
                         count--;
                         i--;
                     }
@@ -240,7 +237,7 @@ namespace ZoneSystem
             if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject != null)
             {
                 posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
-
+                Debug.Log(UIManager.Inst.RaycastUI<Button>(0));
             }
             else
             {
@@ -378,7 +375,6 @@ namespace ZoneSystem
                     }
 
                 }
-
             }
                 selectedObject = null;
         }
@@ -438,7 +434,6 @@ namespace ZoneSystem
                 UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
                 UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
                 UIManager.Inst.sellButton.gameObject.SetActive(false);
-
             }
             else
             {
@@ -447,7 +442,7 @@ namespace ZoneSystem
                 UIManager.Inst.sellButton.gameObject.SetActive(true);
             }
 
-            
+
         }
         #endregion
 
@@ -476,54 +471,211 @@ namespace ZoneSystem
             return ((int)Vec.x, (int)Vec.z);
         }
         #endregion
+        #region 장비 auto merge 관련
+        public bool EquipmentAutoMergeResult(List<Transform> items)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                for (int j = i + 1; j < items.Count; j++)
+                {
+                    Transform item1 = items[i];
+                    Transform item2 = items[j];
+                    if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade < 4)
+                    {
+                        item1.GetComponent<Equipment>().Upgrade();
+                        items.Remove(item2);
+                        if (EquipmentAutoMergeResult(items) == false) return false;
+                    }
+                }
+            }
+            return items.Count <= 3;
+        }
+        public bool MergeItemResult(Transform selected, Transform stay)
+        {
+            List<Transform> items = new List<Transform>();
+
+            for (int i = 0; i < selected.childCount; i++)
+            {
+                selected.GetChild(i).GetComponent<Equipment>().SaveGrade();
+                items.Add(selected.GetChild(i).transform);
+            }
+
+            for (int i = 0; i < stay.childCount; i++)
+            {
+                stay.GetChild(i).GetComponent<Equipment>().SaveGrade();
+                items.Add(stay.GetChild(i).transform);
+            }
+
+            return EquipmentAutoMergeResult(items);
+        }
+
+        public void EquipmentAutoMerge(Transform selected, Transform stay)
+        {
+            List<Transform> items = new List<Transform>();
+
+            for (int i = 0; i < selected.childCount; i++)
+            {
+                items.Add(selected.GetChild(i).transform);
+            }
+
+            for (int i = 0; i < stay.childCount; i++)
+            {
+                items.Add(stay.GetChild(i).transform);
+            }
+
+            bool merged = true;
+            while (merged)
+            {
+                merged = false;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    for (int j = i + 1; j < items.Count; j++)
+                    {
+                        Transform item1 = items[i];
+                        Transform item2 = items[j];
+                        if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade && item1.GetComponent<Equipment>().GetEquipmentGrade < 4 && item2.GetComponent<Equipment>().GetEquipmentGrade < 4)
+                        {
+                            item1.GetComponent<Equipment>().Upgrade();
+                            items.Remove(item2);
+                            Destroy(item2.gameObject);
+                            merged = true;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            for (int i = 0; i < items.Count; i++)
+            {
+                items[i].transform.parent = stay.transform;
+            }
+
+        }
+
+        public bool EquipItemToUnitAutoMerge(Transform Item, Transform stay)
+        {
+            List<Transform> items = new List<Transform>();
+
+            for (int i = 0; i < stay.childCount; i++)
+            {
+                items.Add(stay.GetChild(i).transform);
+            }
+
+            items.Add(Item);
+
+            bool isMerged = false;
+            do
+            {
+                isMerged = false;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    for (int j = 0; j < items.Count; j++)
+                    {
+                        if (i != j)
+                        {
+                            Transform item1 = items[i];
+                            Transform item2 = items[j];
+                            if (item1.GetComponent<Equipment>().GetEquipmentName == item2.GetComponent<Equipment>().GetEquipmentName
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade == item2.GetComponent<Equipment>().GetEquipmentGrade
+                                && item1.GetComponent<Equipment>().GetEquipmentGrade < 4)
+                            {
+                                item1.GetComponent<Equipment>().Upgrade(); //여기가 문제임 여기서 다해
+                                items.Remove(item2);
+                                Destroy(item2.gameObject);
+                                isMerged = true;
+                            }
+                        }
+                    }
+                }
+            } while (isMerged);
+            if (items.Count < 4) return true;
+            else return false;
+        }
+
+        #endregion
+  
 
         #region 머지시스템
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
        
             if (selectedObject == null || stayObject == null) return false;
-            //���� ����
+            //유닛 끼리 머지
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
-                int stayEqCount = stayUnit.GetEquipmentCount;
-                int selectEqCount = selectedUnit.GetEquipmentCount;
-                if (stayUnit.GetGrade > 3) return false;
+                selectedUnit.EquipCount();
+                stayUnit.EquipCount();
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName)
+                int selectedEqCount = selectedUnit.GetEquipmentCount;
+                int stayEqCount = stayUnit.GetEquipmentCount;
+
+
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName&&stayUnit.GetGrade <4)
                 {
 
-
-                    if (stayEqCount + selectEqCount < 4) // 그냥 머지(한 캐릭에 몰아주기)
+                    if (stayEqCount + selectedEqCount < 4)
                     {
-                        for (int i = selectEqCount; i < 0; i--)
+                        EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
+                        stayUnit.EquipItem();
+                        Destroy(selectedUnit.gameObject);
+                        stayUnit.Upgrade();
+                    }
+
+                    else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == true)
+                    {
+                        for (int i = 0; i < selectedEqCount; i++)
                         {
-                            selectedUnit.transform.GetChild(i).transform.parent = stayUnit.transform;
+                            selectedUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
                         }
-                        stayUnit.EquipItem(selectEqCount + stayEqCount);
+
+                        for(int i = 0; i<stayEqCount; i++)
+                        {
+                            stayUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
+                        }
+
+                        EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
+                        stayUnit.EquipItem();
+                        Destroy(selectedUnit.gameObject);
+                        stayUnit.Upgrade();
                     }
 
-                    else // 아이템이 4개 이상이라서 확인이 필요->
+                    else if (stayEqCount + selectedEqCount > 3 && MergeItemResult(selectedObject.transform, stayObject.transform) == false)
                     {
-
+                        if (mapController.SafetyZoneCheck() + selectedEqCount > 14)//얘는 그냥 머지 X
+                        {
+                            return false;
+                        }
+                        else
+                        {
+                            for (int i = 0; i < selectedEqCount; i++)//얘는 장비 사출
+                            {
+                                mapController.UnitOutItem(selectedUnit.transform.GetChild(i).gameObject);
+                                selectedEqCount--;
+                                i--;
+                            }
+                            Destroy(selectedUnit.gameObject);
+                            stayUnit.Upgrade();
+                        }
                     }
-                    Destroy(selectedUnit.gameObject);
-                    stayUnit.Upgrade(); //���׷��̵� ���� ��� ����(2023.01.18 15:08-�̿���)
+
+
+
 
                     return true;
                 }
             }
-
-
-            //��� ����
+            //장비 끼리 머지
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<Equipment>() != null)
             {
                 Equipment selectedItem = selectedObject.GetComponent<Equipment>();
                 Equipment stayItem = stayObject.GetComponent<Equipment>();
 
-                if (stayItem.GetEquipmentGrade > 2) return false;
+                if (stayItem.GetEquipmentGrade > 3) return false;
 
                 if (selectedItem.GetEquipmentGrade == stayItem.GetEquipmentGrade && selectedItem.GetEquipmentName == stayItem.GetEquipmentName)
                 {
@@ -533,18 +685,20 @@ namespace ZoneSystem
                     return true;
                 }
             }
-            //��� ����
+            //유닛에 장비 장착
             else if (selectedObject.GetComponent<Equipment>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
-                int eqcount = stayObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
-                if (eqcount > 2)
+
+                if (!EquipItemToUnitAutoMerge(selectedObject.transform, stayObject.transform)) //여기서 automerge result 받아서 false이면 return
                 {
+                    Debug.Log("오토머지 안되서 장비 장착 불가능");
                     return false;
                 }
-                else
+                else //여기서 automerge result 받아서 true이기때문에 갯수 상관없이 auto merge 실행
                 {
+                    Debug.Log("오토머지 가능해서 장비 장착 ");
                     selectedObject.transform.parent = stayObject.transform;
-                    stayObject.GetComponent<UnitClass.Unit>().EquipItem(eqcount);
+                    stayObject.GetComponent<UnitClass.Unit>().EquipItem();
                 }
                 selectedObject.SetActive(false);
      

@@ -52,6 +52,9 @@ namespace Battle.AI
         private bool isInit = false;
         private string enemyNickName = "";
 
+        private Vector3 startposition;
+        private bool isFirst = true;
+
         #endregion
         #region GET,SET
         public void setAttackRange(float attackRange)
@@ -100,11 +103,16 @@ namespace Battle.AI
         }
         #endregion
 
+        public void initUnit()
+        {
+            transform.position = startposition;
+        }
+
         private void Awake()
         {
             InitializingRootNode();
             specialRoot = initializingSpecialRootNode();
-            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
@@ -116,9 +124,9 @@ namespace Battle.AI
             Debug.Log("START");
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
-            
-            //StageControl sc = FindObjectOfType<StageControl>();
-            //sc.changeStage = changeStage;
+
+            StageControl sc = FindObjectOfType<StageControl>();
+            sc.changeStage = changeStage;
         }
 
         private void Update()
@@ -144,7 +152,7 @@ namespace Battle.AI
             }
 
             root.Run();
-            myLocation = LocationControl.convertPositionToLocation(transform.position);
+            myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
         }
 
         private void InitializingRootNode()
@@ -241,7 +249,6 @@ namespace Battle.AI
             if (stageType == STAGETYPE.PVP
                 || stageType == STAGETYPE.CLONE)
             {
-                Debug.Log(fieldAIObejects.Length);
                 for (int i = 0; i < fieldAIObejects.Length; i++)
                 {
                     if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)
@@ -306,7 +313,7 @@ namespace Battle.AI
                     continue;
                 }
 
-                unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.position);
+                unitLocation = LocationControl.convertPositionToLocation(allUnits[i].gameObject.transform.localPosition);
                 if (unitLocation.CompareTo(myLocation) == true)
                 {
                     return true;
@@ -329,7 +336,7 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    myLocation = LocationControl.convertPositionToLocation(gameObject.transform.position);
+                    myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
                     if (enemies.Count == 0)
                     {
                         if(isInit == false)
@@ -429,7 +436,7 @@ namespace Battle.AI
                 return () =>
                 {
                     myAni.SetBool("isMove",true);
-                    myLocation = LocationControl.convertPositionToLocation(transform.position);
+                    myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
                     if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
@@ -450,7 +457,7 @@ namespace Battle.AI
                 return () =>
                 {
                     
-                    myLocation = LocationControl.convertPositionToLocation(transform.position);
+                    myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         if (enemies[i].getIsDeath() == true) 
