@@ -1,10 +1,10 @@
 namespace Battle.Stage
 {
+    using Battle.AI;
     using Battle.Location;
     using Photon.Pun;
-    using UnityEngine;
     using System.Collections;
-    using Battle.AI;
+    using UnityEngine;
 
     public enum STAGETYPE
     {
@@ -44,6 +44,11 @@ namespace Battle.Stage
         private WaitUntil wait = null;
 
         private Vector3 camStartPos = Vector3.zero;
+
+        public STAGETYPE getNowStage()
+        {
+            return nowStage;
+        }
 
         private void Awake()
         {
@@ -97,12 +102,15 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
                 GameManager.Inst.nowStage = nowStage;
+                photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
                 if (changeStage != null)
                 {
                     changeStage(nowStage);
+                    photonView.RPC("RPC_changeStage", RpcTarget.Others, nowStage);
                 }
+
+                Debug.Log(nowStage);
                 return;
             }
 
@@ -130,12 +138,14 @@ namespace Battle.Stage
             if (changeStage != null)
             {
                 changeStage(nowStage);
-                photonView.RPC("RPC_changeStage",RpcTarget.Others,nowStage);
+                photonView.RPC("RPC_changeStage", RpcTarget.Others, nowStage);
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
+            GameManager.Inst.nowStage = nowStage;
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
-            photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
+            photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
+            Debug.Log(nowStage);
         }
 
         [PunRPC]
@@ -172,7 +182,7 @@ namespace Battle.Stage
                 GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
                 inst.transform.SetParent(myMap.transform, false);
                 ParentBT bt = null;
-                if(inst.TryGetComponent<ParentBT>(out bt) == true)
+                if (inst.TryGetComponent<ParentBT>(out bt) == true)
                 {
                     bt.setMyLocation();
                     bt.SetState(nowStage);
@@ -193,7 +203,7 @@ namespace Battle.Stage
             }
             else if (nowStage == STAGETYPE.PREPARE)
             {
-                photonView.RPC("returnMyMap",RpcTarget.All);
+                photonView.RPC("returnMyMap", RpcTarget.All);
             }
         }
 
@@ -230,8 +240,6 @@ namespace Battle.Stage
                 return;
             }
 
-            battleObject = myMap.getBattleObjects();
-
             for (int i = 0; i < battleObject.GetLength(0); i++)
             {
                 for (int j = 0; j < battleObject.GetLength(1); j++)
@@ -250,18 +258,20 @@ namespace Battle.Stage
         }
 
         [PunRPC]
-        private void returnMyMap()
+        public void returnMyMap()
         {
+            battleObject = myMap.getBattleObjects();
             for (int i = 0; i < battleObject.GetLength(0); i++)
             {
                 for (int j = 0; j < battleObject.GetLength(1); j++)
                 {
+                    Debug.Log("Before Return");
                     if (battleObject[i, j] == null)
                     {
                         continue;
                     }
 
-                    Debug.Log(battleObject[i,j].gameObject.name);
+                    Debug.Log("After Return");
                     LocationXY location;
                     location.x = j;
                     location.y = i;

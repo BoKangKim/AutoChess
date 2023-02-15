@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 596
+    x: 524
     y: 545
-    width: 427
-    height: 512
+    width: 375
+    height: 615
   m_ShowMode: 0
   m_Title: Console
   m_RootView: {fileID: 4}
@@ -38,10 +38,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 960
-    y: 43
+    x: 952
+    y: 51
     width: 960
-    height: 1117
+    height: 1101
   m_ShowMode: 4
   m_Title: Game
   m_RootView: {fileID: 6}
@@ -65,8 +65,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 427
-    height: 512
+    width: 375
+    height: 615
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
   m_ActualView: {fileID: 9}
@@ -92,12 +92,12 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 427
-    height: 512
+    width: 375
+    height: 615
   m_MinSize: {x: 100, y: 121}
   m_MaxSize: {x: 4000, y: 4021}
   vertical: 0
-  controlID: 4011
+  controlID: 990
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -116,7 +116,7 @@ MonoBehaviour:
     x: 0
     y: 30
     width: 960
-    height: 1067
+    height: 1051
   m_MinSize: {x: 200, y: 223}
   m_MaxSize: {x: 4000, y: 4023}
   m_ActualView: {fileID: 10}
@@ -141,7 +141,7 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 960
-    height: 1117
+    height: 1101
   m_MinSize: {x: 875, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
   m_UseTopView: 1
@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 1097
+    y: 1081
     width: 960
     height: 20
   m_MinSize: {x: 0, y: 0}
@@ -211,10 +211,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 596
+    x: 524
     y: 545
-    width: 427
-    height: 491
+    width: 375
+    height: 594
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -239,10 +239,10 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
-    x: 960
-    y: 73
+    x: 952
+    y: 81
     width: 960
-    height: 1048
+    height: 1032
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -292,9 +292,9 @@ MonoBehaviour:
       x: 0
       y: 21
       width: 960
-      height: 1027
+      height: 1011
     m_Scale: {x: 0.5, y: 0.5}
-    m_Translation: {x: 480, y: 513.5}
+    m_Translation: {x: 480, y: 505.5}
     m_MarginLeft: 0
     m_MarginRight: 0
     m_MarginTop: 0
@@ -302,12 +302,12 @@ MonoBehaviour:
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
       x: -960
-      y: -1027
+      y: -1011
       width: 1920
-      height: 2054
+      height: 2022
     m_MinimalGUI: 1
   m_defaultScale: 0.5
-  m_LastWindowPixelSize: {x: 960, y: 1048}
+  m_LastWindowPixelSize: {x: 960, y: 1032}
   m_ClearInEditMode: 1
   m_NoCameraWarning: 1
   m_LowResolutionForAspectRatios: 01000001000000000000

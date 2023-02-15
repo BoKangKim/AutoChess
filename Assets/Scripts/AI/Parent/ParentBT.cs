@@ -147,6 +147,11 @@ namespace Battle.AI
 
             if (stageType == STAGETYPE.PREPARE)
             {
+                if(myType.CompareTo("Monster") == 0
+                    && photonView.IsMine == true)
+                {
+                    PhotonNetwork.Destroy(this.gameObject);
+                }
                 return;
             }
                 
@@ -249,7 +254,6 @@ namespace Battle.AI
                 enemies.Add(fieldAIObejects[i]);
             }
 
-            Debug.Log(enemies.Count);
         }
 
         private void addEnemyList(ParentBT[] fieldAIObejects)

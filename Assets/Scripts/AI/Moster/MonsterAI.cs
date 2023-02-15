@@ -20,36 +20,4 @@ public class MonsterAI : ParentBT
         return 2f;
     }
 
-    protected override INode initializingSpecialRootNode()
-    {
-        INode Special = Selector
-            (
-                IfAction(isPrepare,destroyMonster)
-            );
-
-        return Special;
-    }
-
-    private Func<bool> isPrepare 
-    {
-        get 
-        {
-            return () =>
-            {
-                Debug.Log(stageType + " " + myType);
-                return stageType == Battle.Stage.STAGETYPE.PREPARE;
-            };
-        }
-    }
-
-    private Action destroyMonster
-    {
-        get
-        {
-            return () =>
-            {
-                PhotonNetwork.Destroy(this.gameObject);
-            };
-        }
-    }
 }
