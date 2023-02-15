@@ -83,7 +83,7 @@ namespace Battle.Stage
             else
             {
                 nowStage = GameManager.Inst.nowStage;
-                stageIndex = GameManager.Inst.getStageIndex();
+                stageIndex = GameManager.Inst.getStageIndex();                
             }
 
             if (nowStage != STAGETYPE.PREPARE)
@@ -126,9 +126,10 @@ namespace Battle.Stage
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
+            UIManager_KSR.Inst.UpdateRoundInfo(stageIndex.row,stageIndex.col);
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
-            Debug.Log(nowStage);
+            Debug.Log(nowStage);            
         }
 
         [PunRPC]
@@ -289,7 +290,7 @@ namespace Battle.Stage
                 stages[0, 2] = STAGETYPE.MONSTER;
                 stages[0, 3] = STAGETYPE.BOSS;
             }
-
+            
             // STAGE 2
             {
                 stages[1, 0] = STAGETYPE.MONSTER;

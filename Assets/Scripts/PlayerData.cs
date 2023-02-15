@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
+    // ID
+    public string name;
     //골드
     public int gold;
     //레벨
@@ -12,17 +14,20 @@ public class PlayerData : MonoBehaviour
     public int CurHP;
     public int MaxHP;
     //경험치
-    public int[] MaxExp;
-    public int CurExp;
+    public float[] MaxExp;
+    public float CurExp;
 
     private void Awake()
     {
+        name = "name";
         gold = 0;
         playerLevel = 1;
         MaxHP = 100;
         CurHP = MaxHP;
-        MaxExp = new int[10] { 0, 2, 6, 10, 20, 36, 56, 70 , 80, 100 };
+        MaxExp = new float[10] { 0, 2, 6, 10, 20, 36, 56, 70 , 80, 100 };
         CurExp = 0;
+        UIManager_KSR.Inst.UpdatePlayerName(name);
+        UIManager_KSR.Inst.UpdatePlayerInfo(gold, CurExp, playerLevel, CurHP);
     }
     // 골드는 유닛을 구매할때 장비를 구매할때사용
     // 플레이어 레벨은 경험치가 꽉찼을때 플레이어 레벨은 maxexp배열의인덱스의 들어가서 경험치 통을 가져온다.
