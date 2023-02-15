@@ -51,7 +51,6 @@ namespace Battle.Stage
             waitM = COR_WaitMaster;
             wait = new WaitUntil(() => isEndSetEnemy);
             initializingStageInfo();
-            //checkNextStageInfo();
         }
 
         private void Start()
@@ -149,6 +148,7 @@ namespace Battle.Stage
         public void CacheMasterIndex(int row, int col)
         {
             GameManager.Inst.SyncStageIndex(row, col);
+            stageIndex = (row, col);
         }
 
         [PunRPC]
@@ -175,23 +175,30 @@ namespace Battle.Stage
                 if(inst.TryGetComponent<ParentBT>(out bt) == true)
                 {
                     bt.setMyLocation();
+                    bt.SetState(nowStage);
                 }
-                photonView.RPC("instantiateMonster", RpcTarget.Others);
+                photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
             else if (nowStage == STAGETYPE.BOSS)
             {
                 GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
                 inst.transform.SetParent(myMap.transform, false);
-                photonView.RPC("instantiateMonster", RpcTarget.Others);
+                ParentBT bt = null;
+                if (inst.TryGetComponent<ParentBT>(out bt) == true)
+                {
+                    bt.setMyLocation();
+                    bt.SetState(nowStage);
+                }
+                photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
             else if (nowStage == STAGETYPE.PREPARE)
             {
-                returnMyMap();
+                photonView.RPC("returnMyMap",RpcTarget.All);
             }
         }
 
         [PunRPC]
-        public void instantiateMonster()
+        public void instantiateMonster(STAGETYPE nowStage)
         {
             GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
             inst.transform.SetParent(myMap.transform, false);
@@ -199,6 +206,7 @@ namespace Battle.Stage
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
+                bt.SetState(nowStage);
             }
         }
 
@@ -241,13 +249,9 @@ namespace Battle.Stage
             }
         }
 
+        [PunRPC]
         private void returnMyMap()
         {
-            if (myMap.isMirrorModePlayer == false)
-            {
-                return;
-            }
-
             for (int i = 0; i < battleObject.GetLength(0); i++)
             {
                 for (int j = 0; j < battleObject.GetLength(1); j++)
@@ -257,6 +261,7 @@ namespace Battle.Stage
                         continue;
                     }
 
+                    Debug.Log(battleObject[i,j].gameObject.name);
                     LocationXY location;
                     location.x = j;
                     location.y = i;

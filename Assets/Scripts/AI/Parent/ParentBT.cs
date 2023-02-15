@@ -139,6 +139,7 @@ namespace Battle.AI
             {
                 return;
             }
+
             if(die == true)
             {
                 return;
@@ -213,7 +214,6 @@ namespace Battle.AI
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
-            Debug.Log(this.stageType + " " + gameObject.name);
         }
 
         #region Searching Enemy
@@ -248,6 +248,8 @@ namespace Battle.AI
 
                 enemies.Add(fieldAIObejects[i]);
             }
+
+            Debug.Log(enemies.Count);
         }
 
         private void addEnemyList(ParentBT[] fieldAIObejects)
@@ -284,7 +286,8 @@ namespace Battle.AI
         {
             float minDistance = 100000f;
             float temp = 0f;
-        
+            target = null;
+
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemies[i] == null)
@@ -351,24 +354,15 @@ namespace Battle.AI
                             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
                             searchingTarget();
 
-                            Debug.Log(target.getMyLocation().ToString());
                             next = rta.searchNextLocation(myLocation, target.getMyLocation());
                             nextPos = LocationControl.convertLocationToPosition(next);
                             dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
-                            Debug.Log(nextPos + " nextPos " + gameObject.name);
-                            Debug.Log(transform.localPosition + " localPos " + gameObject.name);
-                            Debug.Log(dir + " direction " + gameObject.name);
+                            
                             isInit = true;
                         }
                         else
                         {
                             // ½Â¸® ·ÎÁ÷
-                            ParentBT[] allUnit = FindObjectsOfType<ParentBT>();
-
-                            for(int i = 0;i < allUnit.Length; i++)
-                            {
-                                PhotonNetwork.Destroy(allUnit[i].gameObject);
-                            }
                         }
                     }
                 };
@@ -393,6 +387,8 @@ namespace Battle.AI
                     searchingTarget();
                     if (target == null)
                     {
+                        myAni.SetBool("isMove",false);
+                        dir = Vector3.zero;
                         return false;
                     }
                     else
@@ -472,6 +468,12 @@ namespace Battle.AI
                     {
                         if (enemies[i].getIsDeath() == true) 
                         {
+                            enemies[i] = null;
+                            continue;
+                        }
+                        if (enemies[i].isActiveAndEnabled == false)
+                        {
+                            target = null;
                             continue;
                         }
 
