@@ -119,7 +119,6 @@ namespace Battle.EFFECT
                         PhotonNetwork.Instantiate(HitEffect.name, gameObject.transform.position, Quaternion.identity).TryGetComponent<Effect>(out hit);
                         hit.setOwner(owner);
                         PhotonNetwork.Destroy(gameObject);
-                        Debug.Log("Collision 6");
 
                     }
                     else if(HitEffect == null && isAttacked == false)

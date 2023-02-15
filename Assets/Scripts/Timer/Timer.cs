@@ -8,7 +8,7 @@ using Photon.Realtime;
 public class Timer : MonoBehaviour
 {
     private StageControl sc = null;
-    private const float STAGE_TIME = 15f;
+    private const float STAGE_TIME = 30f;
     private float nowTime = 0f;
     private bool scIsNull = true;
 
@@ -41,7 +41,6 @@ public class Timer : MonoBehaviour
         }
 
         nowTime += Time.deltaTime;
-        Debug.Log(nowTime);
         GameManager.Inst.time = nowTime;
         if(nowTime >= STAGE_TIME)
         {

@@ -54,7 +54,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         Screen.SetResolution(480,480,false);
-        DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
         gameScene = "SyncUnit";
