@@ -10,6 +10,7 @@ namespace ZoneSystem
 
     public class MapController : MonoBehaviourPun
     {
+        [SerializeField] private PlayerData playerData;
         public GameObject[,] safetyObject;
         public GameObject[,] battleObject;
         public Dictionary<string, int> unitCount;
@@ -66,6 +67,7 @@ namespace ZoneSystem
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
+            playerData = GetComponent<PlayerData>();
 
             initializingUnitName();
 
@@ -420,12 +422,13 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
-
-            if (UIManager.Inst.PlayerGold < 5)
+            if (playerData.gold < 5)
             {
                 debug.text = "골드가 부족합니다.";
                 return;
             }
+
+            playerData.gold -= 5; 
 
             string UnitPrefab = null;
             if (GameType.Inst.getType() == GAMETYPE.LIVENET)
@@ -506,7 +509,6 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
-
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         safetyObject[z, x].transform.rotation = Quaternion.identity;

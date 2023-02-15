@@ -28,7 +28,7 @@ namespace ZoneSystem
             }
         }
         #endregion
-
+        [SerializeField] private PlayerData playerData;
         public Button unitBuyButton, equipmentBuyButton, sellButton = null;
         GraphicRaycaster graphicRaycaster = null;
         PointerEventData pointerEventData = null;
@@ -63,6 +63,32 @@ namespace ZoneSystem
         }
 
         public void unitInstButton() => UnitInstButton();
+
+        public void OnClick_EXP_Buy()
+        {
+            if (playerData.gold < 4)
+            {
+                Debug.Log("골드가 부족합니다.");
+                return;
+            }
+            if (playerData.playerLevel > 8)
+            {
+                Debug.Log("최대레벨 입니다.");
+                return;
+            }
+            playerData.CurExp += 4;
+            //레벨업
+            if(playerData.CurExp <= playerData.MaxExp[playerData.playerLevel])
+            {
+                playerData.CurExp -= playerData.MaxExp[playerData.playerLevel];
+                ++playerData.playerLevel;
+                if (playerData.playerLevel == 9)
+                {
+                    playerData.CurExp = 0;
+                }
+
+            }
+        }
 
         public void SynergyText(string text)
         {

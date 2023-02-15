@@ -11,7 +11,7 @@ namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviourPun
     {
-
+        private PlayerData playerData;
         private MapController mapController;
         private GameObject selectedObject;
         private Camera cam;
@@ -33,7 +33,7 @@ namespace ZoneSystem
         private void Awake()
         {
             mapController = GetComponent<MapController>();
-          
+            playerData = GetComponent<PlayerData>();
         }
         private void Start()
         {
@@ -60,89 +60,7 @@ namespace ZoneSystem
             {
                 return;
             }
-            #region ����Ͽ�
-            //if (Input.touchCount == 1)
-            //{
-            //    if (Input.GetTouch(0).phase == TouchPhase.Began)
-            //    {
-            //        if (CastRay(itemLayer).collider != null)
-            //        {
-            //            mapController.itemGain(CastRay(itemLayer).collider.gameObject);
-            //            return;
-            //        }
 
-            //        if (selectedObject == null)
-            //        {
-            //            if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
-            //            {
-            //                selectedObject = CastRay(ObjectLayer).collider.gameObject;
-            //                Vector3 vec;
-
-            //                if (CastRay(safetySpaceLayer).collider != null)
-            //                {
-            //                    vec = selectedObject.transform.position;
-            //                    mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-            //                    beforePos = CastRay(safetySpaceLayer).collider.transform.position;
-            //                }
-            //                else if (CastRay(battleSpaceLayer).collider != null)
-            //                {
-            //                    vec = PosToIndex(CastRay(battleSpaceLayer).collider.transform.position);
-            //                    mapController.battleObject[(int)vec.z, (int)vec.x] = null;
-
-            //                    beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-            //                    beforePos = CastRay(battleSpaceLayer).collider.transform.position;
-            //                }
-            //            }
-            //            else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<testItem>() != null)
-            //            {
-            //                Vector3 vec;
-            //                selectedObject = CastRay(ObjectLayer).collider.gameObject;
-
-            //                if (CastRay(safetySpaceLayer).collider != null)
-            //                {
-            //                    vec = selectedObject.transform.position;
-            //                    mapController.safetyObject[(int)vec.z, (int)vec.x] = null;
-            //                    beforePos = CastRay(safetySpaceLayer).collider.transform.position;
-            //                }
-            //            }
-            //        }
-            //    }
-            //    //Drag
-
-            //    else if (Input.GetTouch(0).phase == TouchPhase.Moved)
-            //    {
-            //        //Drag
-            //        if (selectedObject != null)
-            //        {
-            //            buttonChange();
-            //            Drag();
-            //        }
-            //    }
-
-            //    //Drop
-            //    else if (Input.GetTouch(0).phase == TouchPhase.Ended)
-            //    {
-            //        if (selectedObject == null) return;
-            //        //���� �Ǹ�
-            //        sellUnit();
-
-            //        if (EventSystem.current.IsPointerOverGameObject()) return;
-
-            //        if (CastRay(safetySpaceLayer).collider != null)
-            //        {
-            //            DropPosition(safetySpaceLayer);
-            //        }
-            //        else if (CastRay(battleSpaceLayer).collider != null)
-            //        {
-            //            DropPosition(battleSpaceLayer);
-            //        }
-            //        else
-            //        {
-            //            outRange();
-            //        }
-            //    }
-            //}
-            #endregion
 
             #region PC��
             if (Input.GetMouseButtonDown(0))
@@ -291,22 +209,27 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 Destroy(selectedObject);
+
+                playerData.gold += 3;
+
                 selectedObject = null;
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
+
+
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
             {
                 posCheckButton = null;
 
                 Destroy(selectedObject);
+                playerData.gold += 3;
+
                 selectedObject = null;
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
-
-
             }
         }
         #endregion
@@ -507,7 +430,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ��ưü����
+        #region 버튼체인지
         void storeButtonChange()
         {
             if (selectedObject == null)
