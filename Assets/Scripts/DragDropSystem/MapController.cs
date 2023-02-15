@@ -532,14 +532,9 @@ if (photonView.IsMine == true)
 
         public void OnClick_UnitInst() //유닛 구매
         {
-<<<<<<< HEAD
             if (playerData.gold < 5)
-=======
-            
-            
-            if (UIManager.Inst.PlayerGold < 5)
->>>>>>> feature_UI
-            {
+            { 
+
                 debug.text = "골드가 부족합니다.";
                 return;
             }

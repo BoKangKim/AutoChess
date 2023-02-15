@@ -1469,7 +1469,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: UnitTest_Plus
         m_Mode: 1
@@ -2304,7 +2304,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OffRoundEXChange
         m_Mode: 1
@@ -3159,7 +3159,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -3175,7 +3175,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -7477,7 +7477,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: AttackTest
         m_Mode: 1
@@ -9653,7 +9653,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnFactionExpansion
         m_Mode: 1
@@ -12475,7 +12475,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectBoss_1
         m_Mode: 1
@@ -12981,7 +12981,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 17752d951e8283e4d98f3446be5c3c5a, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -15456,7 +15456,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectBoss_3
         m_Mode: 1
@@ -16480,7 +16480,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: SelectBoss_2
         m_Mode: 1
@@ -21112,7 +21112,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnSetting
         m_Mode: 1
@@ -22835,7 +22835,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -22851,7 +22851,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -30323,7 +30323,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -30339,7 +30339,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -31301,7 +31301,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OffSetting
         m_Mode: 1
@@ -33028,7 +33028,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnUnitGacha
         m_Mode: 1
@@ -34222,7 +34222,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnSurrender
         m_Mode: 1
@@ -36530,7 +36530,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -36546,7 +36546,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -39194,7 +39194,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: UnitTest_Minus
         m_Mode: 1
@@ -39570,7 +39570,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -39586,7 +39586,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -39838,7 +39838,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -39854,7 +39854,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -40845,7 +40845,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnRoundEXChange
         m_Mode: 1
@@ -41955,6 +41955,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22b71808e93abb740a4291dcaa389741, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerData: {fileID: 0}
   synergyList: []
   activeSynergyList: []
   orcSynergyCount: 0
@@ -41970,7 +41971,7 @@ MonoBehaviour:
   debug: {fileID: 0}
   battleUnitCount: 0
   SafetyObjectCount: 0
-  UnitPrefab: {fileID: 7156501485292659843, guid: 91ed305375f37c044b2d9d1717b35a25, type: 3}
+  isMirrorModePlayer: 1
   ItemPrefab: {fileID: 0}
   battleZoneTile: {fileID: 0}
 --- !u!1 &1942527889
@@ -42544,7 +42545,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: OnWeponGacha
         m_Mode: 1
@@ -43041,7 +43042,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: HealTest
         m_Mode: 1
@@ -44238,7 +44239,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -44254,7 +44255,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -45016,86 +45017,58 @@ MonoBehaviour:
   m_GameObject: {fileID: 2038668767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2ac041f9634c2744a858dda1d2dc9d0, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d72aa7fe2acb564eb59232cc2c3554e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   UnitStatusContents: {fileID: 1494726884}
-  UnitStatusInfo: {fileID: 0}
-  UnitStatusDetailInfo: {fileID: 0}
-  UnitSkillInfo: {fileID: 0}
+  UnitStatusInfo: {fileID: 546315005}
+  UnitStatusDetailInfo: {fileID: 473083541}
+  UnitSkillInfo: {fileID: 1807818850}
   bettingUnitGrade: []
   ChattingContents: {fileID: 591088457}
   ChattingContentsPopup: {fileID: 1835792592}
   SettingContents: {fileID: 1031352504}
   SettingContentsPopup: {fileID: 156017290}
-  playerExpensionLV: {fileID: 8075441350298412587}
-  playerRankingnLV: {fileID: 1917422031}
-  playerGold: {fileID: 74622366}
-  playerHPSlider: {fileID: 1766870632}
+  playerExpensionLV: {fileID: 0}
+  playerRankingnLV: {fileID: 0}
+  playerGold: {fileID: 0}
+  playerHPSlider: {fileID: 0}
   RoundContents: {fileID: 512549079}
   RoundEXContents: {fileID: 79029787}
   RoundBossContents: {fileID: 71784419}
-  SelectBossContents:
-  - {fileID: 558666433}
-  - {fileID: 819117964}
-  - {fileID: 780487769}
-  RoundResultContents: {fileID: 960338118}
-  RoundInfoNum: {fileID: 1448102823}
-  RoundStageNum: {fileID: 1773604252}
-  RoundDetailStepNum: {fileID: 213801125}
-  RoundDetailStepNum1: {fileID: 1921499660}
-  RoundDetailStepNum2: {fileID: 658018280}
-  RoundDetailStepNum3: {fileID: 397954383}
-  RoundDetailStepNum4: {fileID: 1167730715}
-  roundTypeText:
-  - {fileID: 287519749}
-  - {fileID: 1916763243}
-  - {fileID: 66483525}
-  - {fileID: 1388683442}
-  SynergyContents: {fileID: 1070330834}
-  SynergyEXContents: {fileID: 2094174901}
-  SynergyEXContentsPopup: {fileID: 234495721}
-  synergyContentsPopupName: {fileID: 553420917}
-  synergyContentsPopupInfo:
-  - {fileID: 1798972278}
-  - {fileID: 1555025161}
-  SynergyUnitIcon:
-  - {fileID: 1934451872}
-  - {fileID: 798248321}
-  - {fileID: 1073521899}
-  SnergyUnitPopupIcon:
-  - {fileID: 1884630980}
-  - {fileID: 403322650}
-  - {fileID: 612325493}
-  - {fileID: 1952207681}
-  - {fileID: 1209275513}
-  SynergyPlus: {fileID: 686492392}
-  ClassSynergy:
-  - {fileID: 2094174899}
-  - {fileID: 1865440852}
-  - {fileID: 1121842208}
-  - {fileID: 1870158655}
-  - {fileID: 2131282273}
-  SpeciesSynergy:
-  - {fileID: 2020351153}
-  - {fileID: 116305757}
-  - {fileID: 1446777577}
-  - {fileID: 1744247121}
-  - {fileID: 2067466006}
-  rankingContents: {fileID: 506368756}
-  rankingUserID: {fileID: 1564390380}
-  rankingUserLV: {fileID: 1917422031}
-  rankUserInfo:
-  - {fileID: 402991087}
-  expansionUserID: {fileID: 5190963624264359127}
-  expansionGold: {fileID: 4795708056187930168}
-  expensionLV: {fileID: 8075441350298412587}
-  expansionEXPSlider: {fileID: 1015125483}
-  RouletteContents: {fileID: 1868928894}
-  RouletteResultUI: {fileID: 1796369559}
-  gachaWeponGold: {fileID: 469113251}
-  gachaUnitGold: {fileID: 1287356426}
-  timeManager: {fileID: 1085852002}
+  SelectBossContents: []
+  RoundResultContents: {fileID: 0}
+  RoundInfoNum: {fileID: 0}
+  RoundStageNum: {fileID: 0}
+  RoundDetailStepNum: {fileID: 0}
+  RoundDetailStepNum1: {fileID: 0}
+  RoundDetailStepNum2: {fileID: 0}
+  RoundDetailStepNum3: {fileID: 0}
+  RoundDetailStepNum4: {fileID: 0}
+  roundTypeText: []
+  SynergyContents: {fileID: 0}
+  SynergyEXContents: {fileID: 0}
+  SynergyEXContentsPopup: {fileID: 0}
+  synergyContentsPopupName: {fileID: 0}
+  synergyContentsPopupInfo: []
+  SynergyUnitIcon: []
+  SnergyUnitPopupIcon: []
+  SynergyPlus: {fileID: 0}
+  ClassSynergy: []
+  SpeciesSynergy: []
+  rankingContents: {fileID: 0}
+  rankingUserID: {fileID: 0}
+  rankingUserLV: {fileID: 0}
+  rankUserInfo: []
+  expansionUserID: {fileID: 0}
+  expansionGold: {fileID: 0}
+  expensionLV: {fileID: 0}
+  expansionEXPSlider: {fileID: 0}
+  RouletteContents: {fileID: 0}
+  RouletteResultUI: {fileID: 0}
+  gachaWeponGold: {fileID: 0}
+  gachaUnitGold: {fileID: 0}
+  timeManager: {fileID: 0}
   userName: user1
   deployedUnit: 0
 --- !u!1 &2047177427
@@ -45476,7 +45449,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -45492,7 +45465,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -46182,7 +46155,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergy
           m_Mode: 1
@@ -46198,7 +46171,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OffSynergy
           m_Mode: 1
@@ -47212,7 +47185,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
@@ -47228,7 +47201,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
           m_MethodName: OnSynergyExplain
           m_Mode: 1
