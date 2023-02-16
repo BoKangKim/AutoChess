@@ -211,6 +211,10 @@ namespace ZoneSystem
         private void initializingUnitName()
         {
             string firstName = "";
+            firstName = "Mecha_";
+            freenetUnits[0] = firstName + "Warrior";
+            return;
+
             for (int i = 0; i < freenetUnits.Length; i += 5)
             {
                 switch (i / 5)
@@ -532,14 +536,14 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
-            if (playerData.gold < 5)
-            { 
+            //if (playerData.gold < 5)
+            //{ 
 
-                debug.text = "골드가 부족합니다.";
-                return;
-            }
+            //    debug.text = "골드가 부족합니다.";
+            //    return;
+            //}
 
-            playerData.gold -= 5; 
+            //playerData.gold -= 5; 
 
             string UnitPrefab = null;
             if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
@@ -551,6 +555,8 @@ namespace ZoneSystem
                 int index = freenetUnitIndex[Random.Range(0, 3)];
                 index *= 5;
                 UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
+
+                UnitPrefab = freenetUnits[0];
             }
 
             // 유닛의 최대 수는 15개

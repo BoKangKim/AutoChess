@@ -22,4 +22,9 @@ public class MechaRangeSkill : SkillEffect
     protected override void specialLogic()
     {
     }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("µûÄá~");
+    }
 }

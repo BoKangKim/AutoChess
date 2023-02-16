@@ -101,6 +101,10 @@ namespace Battle.AI
         {
             return die;
         }
+        public List<ParentBT> getFindEnemies()
+        {
+            return enemies;
+        }
 
         public string getMyType()
         {
@@ -130,7 +134,7 @@ namespace Battle.AI
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
 
             StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage += changeStage;
+            //sc.changeStage += changeStage;
         }
 
         private void Update()

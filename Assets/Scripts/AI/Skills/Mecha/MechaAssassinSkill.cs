@@ -33,12 +33,21 @@ public class MechaAssassinSkill : SkillEffect
     {
         Destroy(inst);
     }
+  
 
+  
     protected override void specialLogic()
     {
-        if(transform.position.y <= 2.6f && inst == null)
+
+        if (transform.position.y <= 2.6f && inst == null)
         {
             inst = Instantiate(collisionEffect, new Vector3(transform.position.x, 0.2f, transform.position.z),Quaternion.Euler(euler));
         }
+    }
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage(attackDamage * 6);
+
+        gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 }

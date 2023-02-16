@@ -21,5 +21,12 @@ public class MechaMagicianSkill : SkillEffect
 
     protected override void specialLogic()
     {
+
+    }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("µûÄá~");
+        gameObject.GetComponent<BoxCollider>().enabled = false;
     }
 }
