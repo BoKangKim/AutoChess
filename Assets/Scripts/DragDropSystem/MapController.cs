@@ -44,74 +44,18 @@ namespace ZoneSystem
         private MapController enemy = null;
         public bool isMirrorModePlayer = true;
         private bool isInitIndex = false;
-
-        public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
-        {
-            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
-        }
-
-        [PunRPC]
-        public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
-        {
-            this.isMirrorModePlayer = isMirrorModePlayer;
-        }
-
-        [PunRPC]
-        public void RPC_SetEnemy(int myViewID, int enemyViewID)
-        {
-            if (maps == null)
-            {
-                maps = FindObjectsOfType<MapController>();
-            }
-
-            for (int i = 0; i < maps.Length; i++)
-            {
-                if (maps[i].photonView.ViewID == myViewID)
-                {
-                    continue;
-                }
-                else if (maps[i].photonView.ViewID == enemyViewID)
-                {
-                    enemy = maps[i];
-                }
-            }
-        }
-
-        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
-        {
-            if(isRPC == true)
-            {
-                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
-            }
-            else
-            {
-                this.enemy = enemy;
-            }
-        }
-
-        public MapController getEnemy()
-        {
-            return enemy;
-        }
+        private string myNickName = "";
+        private string enemyNickName = "";
 
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
-
         private int[] freenetUnitIndex = null;
         private string[] freenetUnits = null;
 
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
-        public GameObject[,] getBattleObjects()
-        {
-            return battleObject;
-        }
-
-        public int getPhotonViewID()
-        {
-            return photonView.ViewID;
-        }
+       
 
         private void Awake()
         {
@@ -121,7 +65,6 @@ namespace ZoneSystem
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
-
 
             initializingUnitName();
 
@@ -154,12 +97,18 @@ namespace ZoneSystem
                     index++;
                 } while (index < freenetUnitIndex.Length);
 
-                
+
             }
         }
 
         private void Start()
         {
+            if (photonView.IsMine == true)
+            {
+                myNickName = PhotonNetwork.NickName;
+                photonView.RPC("setMyNickName", RpcTarget.Others, myNickName);
+            }
+
             if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
@@ -175,7 +124,84 @@ namespace ZoneSystem
             }
         }
 
-            
+        public GameObject[,] getBattleObjects()
+        {
+            return battleObject;
+        }
+
+        public int getPhotonViewID()
+        {
+            return photonView.ViewID;
+        }
+
+        public string getEnemyNickName()
+        {
+            return enemyNickName;
+        }
+
+
+        public string getMyNickName()
+        {
+            return myNickName;
+        }
+
+        public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
+        }
+
+        [PunRPC]
+        public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
+        {
+            this.isMirrorModePlayer = isMirrorModePlayer;
+        }
+
+        [PunRPC]
+        public void RPC_SetEnemy(int myViewID, int enemyViewID)
+        {
+            if (maps == null)
+            {
+                maps = FindObjectsOfType<MapController>();
+            }
+
+            for (int i = 0; i < maps.Length; i++)
+            {
+                if (maps[i].photonView.ViewID == myViewID)
+                {
+                    continue;
+                }
+                else if (maps[i].photonView.ViewID == enemyViewID)
+                {
+                    enemy = maps[i];
+                    enemyNickName = maps[i].getMyNickName();
+                }
+            }
+        }
+
+        public void setEnemy(MapController enemy, int myViewID, int enemyViewID, bool isRPC)
+        {
+            if (isRPC == true)
+            {
+                photonView.RPC("RPC_SetEnemy", RpcTarget.All, myViewID, enemyViewID);
+            }
+            else
+            {
+                this.enemy = enemy;
+                enemyNickName = enemy.getMyNickName();
+            }
+        }
+
+        public MapController getEnemy()
+        {
+            return enemy;
+        }
+
+        [PunRPC]
+        public void setMyNickName(string nickname)
+        {
+            this.myNickName = nickname;
+        }
+
         IEnumerator WaitPlayer()
         {
             maps = FindObjectsOfType<MapController>();

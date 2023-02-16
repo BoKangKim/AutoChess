@@ -50,7 +50,7 @@ namespace Battle.AI
 
         private bool die = false;
         private bool isInit = false;
-        private string enemyNickName = "";
+        [SerializeField] private string enemyNickName = "";
 
         private Vector3 startposition;
         private bool isFirst = true;
@@ -106,12 +106,12 @@ namespace Battle.AI
         {
             return myType;
         }
-        #endregion
 
-        public void initUnit()
+        public void setEnemyNickName(string enemyNickName)
         {
-            transform.position = startposition;
+            this.enemyNickName = enemyNickName;
         }
+        #endregion
 
         private void Awake()
         {
@@ -120,7 +120,6 @@ namespace Battle.AI
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
-            nickName = PhotonNetwork.NickName;
         }
 
         private void Start()
@@ -128,10 +127,42 @@ namespace Battle.AI
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
             myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
+        }
+
+        private void OnDisable()
+        {
+            if(photonView.IsMine == false)
+            {
+                return;
+            }
+
+            StageControl sc = FindObjectOfType<StageControl>();
+            if(sc != null)
+            {
+                sc.changeStage -= changeStage;
+            }
+        }
+
+        private void OnEnable()
+        {
+            if (photonView.IsMine == false)
+            {
+                return;
+            }
 
             StageControl sc = FindObjectOfType<StageControl>();
             sc.changeStage += changeStage;
+
+            nickName = PhotonNetwork.NickName;
+            photonView.RPC("RPC_SetNickName",RpcTarget.Others, nickName);
         }
+
+        [PunRPC]
+        public void RPC_SetNickName(string nickName)
+        {
+            this.nickName = nickName;
+        }
+
 
         private void Update()
         {
@@ -147,14 +178,13 @@ namespace Battle.AI
 
             if (stageType == STAGETYPE.PREPARE)
             {
-                if(myType.CompareTo("Monster") == 0
-                    && photonView.IsMine == true)
+                if(myType.CompareTo("MonsterAI") == 0)
                 {
                     PhotonNetwork.Destroy(this.gameObject);
                 }
                 return;
             }
-                
+
             if (specialRoot != null 
                 && specialRoot.Run() == true)
             {
@@ -192,6 +222,18 @@ namespace Battle.AI
         protected abstract string initializingMytype();
         protected abstract float setAttackRange();
 
+        protected virtual void initializingAfterBattle()
+        {
+            myAni.SetBool("isMove",false);
+            myAni.ResetTrigger("isAttack");
+            isInit = false;
+            enemies.Clear();
+            target = null;
+            mana = 0;
+            die = false;
+            initializingData();
+        }
+
         public void doDamage()
         {
             target.Damage(attackDamage);
@@ -219,6 +261,22 @@ namespace Battle.AI
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
+            if (stageType == STAGETYPE.PREPARE)
+            {
+                if(photonView.IsMine == false)
+                {
+                    return;
+                }
+
+                if (myType.CompareTo("UnitAI") == 0)
+                {
+                    initializingAfterBattle();
+                    return;
+                }
+                              
+                
+                return;
+            }
         }
 
         #region Searching Enemy
@@ -300,11 +358,6 @@ namespace Battle.AI
                     continue;
                 }
 
-                if ((enemies[i].transform.localPosition.z < 0 || enemies[i].transform.localPosition.z > 12.5f))
-                {
-                    continue;
-                }
-
                 if ((temp = Vector3.Distance(enemies[i].transform.localPosition,transform.localPosition)) <= minDistance)
                 {
                     minDistance = temp;
@@ -350,18 +403,24 @@ namespace Battle.AI
                 return () =>
                 {
                     myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
+                    photonView.RPC("RPC_SetMyLocation",RpcTarget.Others,myLocation.x,myLocation.y);
                     if (enemies.Count == 0)
                     {
-                        if(isInit == false)
+                        if (isInit == false)
                         {
                             photonView.RPC("RPC_EnableThis",RpcTarget.All);
                             findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
                             searchingTarget();
 
+                            if(target == null)
+                            {
+                                return;
+                            }
+
                             next = rta.searchNextLocation(myLocation, target.getMyLocation());
                             nextPos = LocationControl.convertLocationToPosition(next);
-                            dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
-                            
+                            Debug.Log(transform.localPosition);
+                            dir = (nextPos - transform.position).normalized;
                             isInit = true;
                         }
                         else
@@ -392,48 +451,14 @@ namespace Battle.AI
                     if (target == null)
                     {
                         myAni.SetBool("isMove",false);
+                        myAni.ResetTrigger("isAttack");
                         dir = Vector3.zero;
                         return false;
                     }
                     else
                     {
+                        Debug.Log(target.gameObject.name);
                         return true;
-                    }
-                };
-            }
-        }
-
-        protected virtual Action moveCenter
-        {
-            get
-            {
-                return () =>
-                {
-                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
-                        return;
-
-                    Vector3 cDir = (centerPosition - transform.position).normalized;
-                    transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(cDir), Time.deltaTime * 10f);
-                    gameObject.transform.Translate(cDir * 1f * Time.deltaTime, Space.World);
-                };
-            }
-        }
-
-        protected virtual Func<bool> isCenter
-        {
-            get
-            {
-                return () =>
-                {
-                    Vector3 centerPosition = LocationControl.convertLocationToPosition(myLocation);
-                    if (Vector3.Distance(centerPosition, transform.position) <= 0.25f)
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        return false;
                     }
                 };
             }
@@ -445,13 +470,26 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    if(target == null)
+                    {
+                        return;
+                    }
+
+                    if((target.getMyLocation().x >= 7 || target.getMyLocation().x < 0)
+                    || (target.getMyLocation().y >= 6 || target.getMyLocation().y < 0))
+                    {
+                        return;
+                    }
+
                     myAni.SetBool("isMove",true);
                     myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
-                    if (Vector3.Distance(nextPos, transform.position) <= 0.2f)
+                    photonView.RPC("RPC_SetMyLocation", RpcTarget.Others, myLocation.x, myLocation.y);
+                    Debug.Log(target.getMyLocation());
+                    if (Vector3.Distance(nextPos, transform.localPosition) <= 0.2f)
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
+                        dir = (nextPos - transform.position).normalized;
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
@@ -468,6 +506,7 @@ namespace Battle.AI
                 {
                     
                     myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
+                    photonView.RPC("RPC_SetMyLocation", RpcTarget.Others, myLocation.x, myLocation.y);
                     for (int i = 0; i < enemies.Count; i++)
                     {
                         if (enemies[i].getIsDeath() == true) 
@@ -481,7 +520,9 @@ namespace Battle.AI
                             continue;
                         }
 
-                        if (Vector3.Distance(enemies[i].transform.localPosition, transform.localPosition) <= (LocationControl.radius * attackRange)
+                        Vector3 targetPos = LocationControl.convertLocationToPosition(enemies[i].getMyLocation());
+
+                        if (Vector3.Distance(targetPos, transform.position) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
                             rta.initCloseList();
@@ -507,6 +548,13 @@ namespace Battle.AI
                     photonView.RPC("RPC_SetTriggerAttack",RpcTarget.All);
                 };
             }
+        }
+
+        [PunRPC]
+        public void RPC_SetMyLocation(int x,int y)
+        {
+            this.myLocation.x = x;
+            this.myLocation.y = y;
         }
 
         [PunRPC]

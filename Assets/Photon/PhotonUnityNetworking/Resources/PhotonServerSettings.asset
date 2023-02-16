@@ -54,6 +54,9 @@ MonoBehaviour:
   - instantiateMonster
   - RPC_changeStage
   - returnMyMap
+  - RPC_SetNickName
+  - setMyNickName
+  - RPC_SetMyLocation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
