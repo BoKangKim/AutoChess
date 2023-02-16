@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UnitClass
@@ -49,6 +50,10 @@ namespace UnitClass
         private float originWeakness; //허약 시간(CC기)
         private string speciesName;
         private string className;
+        [SerializeField] private bool speciesSynergy1Grade = false;
+        [SerializeField] private bool speciesSynergy2Grade = false;
+        [SerializeField] private bool classSynergy1Grade = false;
+        [SerializeField] private bool classSynergy2Grade = false;
         private string synergyName;
 
         private float eqHp; // 장비로 인해 추가될 스텟
@@ -80,58 +85,38 @@ namespace UnitClass
         #endregion
 
         #region 프로퍼티
-        public string GetSpeciesName { get { return speciesName; } }
-        public string GetClassName { get { return className; } }
         public string GetSynergyName { get { return synergyName; } }
-        public ScriptableUnit GetUnitData { get { return UnitData; } }
         public float GetGrade { get { return grade; } }
         public int GetEquipmentCount { get { return equipmentCount; } }
+
+        public float GetTotalSpellPower { get { return totalSpellPower; } }
+        public float GetTotalMpRecovery { get { return totalMpRecovery; } }
+        public float GetTotalMaxHp { get { return totalMaxHp; } }
+        public float GetTotalAttackSpeed { get { return totalAttackSpeed; } }
+
 
         #endregion
         private void Awake()
         {
+            speciesName = SpeciesData.GetSpecies;
+            className = ClassData.GetClass;
+
             synergyName = SpeciesData.GetSpecies + " " + ClassData.GetClass;
             grade = UnitData.GetGrade;
             //여기서 시리얼라이즈필드된거 초기화 해줘야함
-            //speciesName = SpeciesData.GetSpecies;
-            //className = ClassData.GetSynergeClass;
             originCurHp = UnitData.GetMaxHp;
             originCurMp = UnitData.GetMaxMp;
-            //maxHp = UnitData.GetMaxHp;
-            //maxMp = UnitData.GetMaxMp;
-            //moveSpeed = UnitData.GetMoveSpeed;
-            //atk = UnitData.GetAtk;
-            //attackRange = UnitData.GetAttackRange;
-            //attackSpeed = UnitData.GetAttackSpeed;
-            //spellPower = UnitData.GetSpellPower;
-            //magicDamage;
-            //magicCastingTime = UnitData.GetMagicCastingTime;
-            //crowdControlTime;
-            //tenacity;
-            //attackTarget = 1;
-            //barrier;
-            //stunTime;
-            //blindnessTime;
-            //weakness;
+            originMaxHp = UnitData.GetMaxHp;
+            originMaxMp = UnitData.GetMaxMp;
+            originAtk = UnitData.GetAtk;
+            originAttackSpeed = UnitData.GetAttackSpeed;
+            originSpellPower = UnitData.GetSpellPower;
+            originMpRecovery = 5 + ClassData.GetMpRecovery; //나중에 total이랑 정리를 해야함
+            SetUnitStat();
         }
 
-        //private void Update()
-        //{
-        //    //데이터 잘 들어왔나 확인용
-        //    Debug.Log("Atkspeed : " + attackSpeed + " hp : " + maxHp + " mp : " + mpRecovery);
 
-        //    if(Input.GetKeyDown(KeyCode.T))
-        //    {
-        //        GetItemStat();
-        //    }
-        //}
-
-        public float GetAttackSpeed()
-        {
-            return originAttackSpeed * SpeciesData.GetAttackSpeedPercentage;
-        }
-
-        public int Upgrade() //일단은 머지시 두배씩 증가함 - >
+        public int Upgrade()
         {
             return grade++;
         }
@@ -180,11 +165,41 @@ namespace UnitClass
 
         public void SetUnitStat()
         {
-            this.totalAtk = eqAtk + originAtk;
-            this.totalSpellPower = eqSpellPower + originSpellPower;
-            this.totalAttackSpeed = eqAttackSpeed + originAttackSpeed;
-            this.totalMaxHp = eqHp + originMaxHp;
+            this.totalAtk = eqAtk + originAtk * grade;
+            this.totalSpellPower = eqSpellPower + originSpellPower * grade;
+            this.totalAttackSpeed = eqAttackSpeed + originAttackSpeed * grade;
+            this.totalMaxHp = eqHp + originMaxHp * grade;
             this.totalMpRecovery = eqMpRecovery + originMpRecovery;
+        }
+
+        public void SetSynergy(List<string> activeSynergyList) //나는 병신이야
+        {
+            for(int i=0;i<activeSynergyList.Count;i++)
+            {
+                if (activeSynergyList[i] == speciesName)
+                {
+                    speciesSynergy1Grade = true;
+                }
+
+                if (activeSynergyList[i] == className)
+                {
+                    classSynergy1Grade = true;
+                }
+
+                if (activeSynergyList[i] == speciesName + "2")
+                {
+                    speciesSynergy1Grade = false;
+                    speciesSynergy2Grade = true;
+                }
+
+                if (activeSynergyList[i] == className + "2")
+                {
+                    classSynergy1Grade = false;
+                    classSynergy2Grade = true;
+                }
+
+                
+            }
         }
 
     }
