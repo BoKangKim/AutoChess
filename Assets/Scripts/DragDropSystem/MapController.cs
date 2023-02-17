@@ -1,11 +1,10 @@
+using Battle.AI;
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Battle.AI;
 
 namespace ZoneSystem
 {
@@ -39,6 +38,12 @@ namespace ZoneSystem
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
 
+        private string[] priorityOrder = {
+    "Demon2", "Mecha2", "Orc2", "Assassin2", "Magician2", "RangeDealer2",
+    "Tanker2", "Warrior2", "Demon", "Mecha", "Orc", "Assassin", "Magician",
+    "RangeDealer", "Tanker", "Warrior"
+                                    };
+
         public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
 
@@ -48,7 +53,7 @@ namespace ZoneSystem
 
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
-            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
+            photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
         }
 
         [PunRPC]
@@ -78,11 +83,11 @@ namespace ZoneSystem
             }
         }
 
-        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
+        public void setEnemy(MapController enemy, int myViewID, int enemyViewID, bool isRPC)
         {
-            if(isRPC == true)
+            if (isRPC == true)
             {
-                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
+                photonView.RPC("RPC_SetEnemy", RpcTarget.All, myViewID, enemyViewID);
             }
             else
             {
@@ -128,16 +133,16 @@ namespace ZoneSystem
             initializingUnitName();
 
             int index = 0;
-            if(PhotonNetwork.IsMasterClient == true)
+            if (PhotonNetwork.IsMasterClient == true)
             {
                 do
                 {
                     bool isContains = false;
-                    freenetUnitIndex[index] = Random.Range(0, 5);
+                    freenetUnitIndex[index] = UnityEngine.Random.Range(0, 5);
 
-                    for  (int i = 0; i < freenetUnitIndex.Length; i++)
+                    for (int i = 0; i < freenetUnitIndex.Length; i++)
                     {
-                        if  (i == index)
+                        if (i == index)
                         {
                             continue;
                         }
@@ -156,13 +161,13 @@ namespace ZoneSystem
                     index++;
                 } while (index < freenetUnitIndex.Length);
 
-                
+
             }
         }
 
         private void Start()
         {
-if (photonView.IsMine == true)
+            if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
 
@@ -177,7 +182,7 @@ if (photonView.IsMine == true)
             }
         }
 
-            
+
         IEnumerator WaitPlayer()
         {
             maps = FindObjectsOfType<MapController>();
@@ -203,7 +208,7 @@ if (photonView.IsMine == true)
         }
 
         [PunRPC]
-        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        public void RPC_SyncUnitIndex(int arrIndex, int unitIndex)
         {
             freenetUnitIndex[arrIndex] = unitIndex;
         }
@@ -246,7 +251,7 @@ if (photonView.IsMine == true)
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyObject[z,x]!=null)
+                    if (safetyObject[z, x] != null)
                     {
                         SafetyObjectCount++;
                     }
@@ -292,7 +297,7 @@ if (photonView.IsMine == true)
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            
+
                         }
                         else
                         {
@@ -519,11 +524,29 @@ if (photonView.IsMine == true)
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+            //여기서 시너지를 뱉어줘야함
+            for (int z = 0; z < 3; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (battleObject[z, x] != null)
+                    {
+                        battleObject[z, x].GetComponent<UnitClass.Unit>().SetSynergy(activeSynergyList);
+                    }
+                }
+            }
 
-            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
+            //여기서 시너지 정렬해야함
+            activeSynergyList.Sort((x, y) =>
+            {
+                int xIndex = Array.IndexOf(priorityOrder, x);
+                int yIndex = Array.IndexOf(priorityOrder, y);
+                if (xIndex != -1 && yIndex != -1) return xIndex.CompareTo(yIndex);
+                if (xIndex != -1) return -1;
+                if (yIndex != -1) return 1;
+                return x.CompareTo(y);
+            });
 
-            //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();
@@ -533,24 +556,24 @@ if (photonView.IsMine == true)
         public void OnClick_UnitInst() //유닛 구매
         {
             if (playerData.gold < 5)
-            { 
+            {
 
                 debug.text = "골드가 부족합니다.";
                 return;
             }
 
-            playerData.gold -= 5; 
+            playerData.gold -= 5;
 
             string UnitPrefab = null;
-            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
+            if (GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
+            else if (GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = freenetUnitIndex[Random.Range(0, 3)];
+                int index = freenetUnitIndex[UnityEngine.Random.Range(0, 3)];
                 index *= 5;
-                UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
+                UnitPrefab = freenetUnits[UnityEngine.Random.Range(index, index + 5)];
             }
 
             // 유닛의 최대 수는 15개
@@ -615,7 +638,7 @@ if (photonView.IsMine == true)
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 5)];
 
                         if (PlayerMapSpawner.Map != null)
                         {

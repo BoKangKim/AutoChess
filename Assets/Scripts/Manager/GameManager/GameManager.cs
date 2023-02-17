@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
+    [SerializeField] private RealUIManager UIManager = null;
 
     private void Awake()
     {
