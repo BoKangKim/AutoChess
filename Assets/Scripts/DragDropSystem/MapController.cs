@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace ZoneSystem
@@ -33,6 +33,12 @@ namespace ZoneSystem
         //아이템 랜뽑 일단은 스트링값으로
         string[] RandomItem;
 
+        private string[] priorityOrder = {
+    "Demon2", "Mecha2", "Orc2", "Assassin2", "Magician2", "RangeDealer2",
+    "Tanker2", "Warrior2", "Demon", "Mecha", "Orc", "Assassin", "Magician",
+    "RangeDealer", "Tanker", "Warrior"
+                                    };
+
         public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
 
@@ -57,7 +63,7 @@ namespace ZoneSystem
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyObject[z,x]!=null)
+                    if (safetyObject[z, x] != null)
                     {
                         SafetyObjectCount++;
                     }
@@ -96,7 +102,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            
+
                         }
                         else
                         {
@@ -321,11 +327,18 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+            //여기서 시너지 정렬해야함
 
-            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
+            activeSynergyList.Sort((x, y) =>
+            {
+                int xIndex = Array.IndexOf(priorityOrder, x);
+                int yIndex = Array.IndexOf(priorityOrder, y);
+                if (xIndex != -1 && yIndex != -1) return xIndex.CompareTo(yIndex);
+                if (xIndex != -1) return -1;
+                if (yIndex != -1) return 1;
+                return x.CompareTo(y);
+            });
 
-            //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();
@@ -386,7 +399,7 @@ namespace ZoneSystem
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 5)];
                         safetyObject[z, x].transform.position = new Vector3(PosX, 0.25f, PosZ);
                         safetyObject[z, x].transform.rotation = Quaternion.identity;
                         safetyObject[z, x].layer = 31;
