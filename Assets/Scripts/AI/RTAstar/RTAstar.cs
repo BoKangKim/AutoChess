@@ -127,7 +127,7 @@ namespace Battle.RTASTAR
             return nearLocation[index];
         }
 
-        private bool checkLocationArrange(int x, int y)
+        public bool checkLocationArrange(int x, int y)
         {
             if ((x >= 0 && x < weight.GetLength(1))
                     && (y >= 0 && y < weight.GetLength(0)))

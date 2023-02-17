@@ -36,15 +36,12 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
             listCache.Add(prefabId, instList);
         }
 
-        if(instList.Count != 0)
+        if(instList.Count == 0)
         {
-            inst = instList.Dequeue();
-        }
-        else
-        {
-            inst = Instantiate(inst);
+            instList.Enqueue(GameObject.Instantiate(inst,position,rotation));
         }
 
+        inst = instList.Dequeue();
         inst.SetActive(true);
         inst.transform.position = position;
         inst.transform.rotation = rotation;

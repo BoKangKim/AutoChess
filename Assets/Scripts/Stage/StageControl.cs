@@ -146,7 +146,10 @@ namespace Battle.Stage
         [PunRPC]
         public void RPC_changeStage(STAGETYPE nowStage)
         {
-            changeStage(nowStage);
+            if(changeStage != null)
+            {
+                changeStage(nowStage);
+            }
         }
 
         [PunRPC]
@@ -253,12 +256,15 @@ namespace Battle.Stage
                     cam.transform.rotation = changeCamRot;
                 }
             }
+
+            
         }
 
         [PunRPC]
         public void returnMyMap()
         {
             battleObject = myMap.getBattleObjects();
+
             for (int i = 0; i < battleObject.GetLength(0); i++)
             {
                 for (int j = 0; j < battleObject.GetLength(1); j++)
@@ -274,7 +280,11 @@ namespace Battle.Stage
 
                     if (battleObject[i, j].activeSelf == false)
                     {
-                        GameObject inst = PhotonNetwork.Instantiate(battleObject[i, j].name,Vector3.zero,Quaternion.identity);
+                        battleObject[i, j].SetActive(true);
+                        string objectName = battleObject[i ,j].name;
+                        battleObject[i, j].SetActive(false);
+                        GameObject inst = PhotonNetwork.Instantiate(objectName, Vector3.zero,Quaternion.identity);
+                        Debug.Log(battleObject[i,j].name);
                         inst.transform.SetParent(myMap.transform,false);
                         inst.transform.localPosition = LocationControl.convertLocationToPosition(location);
                     }
@@ -284,11 +294,11 @@ namespace Battle.Stage
                         battleObject[i, j].transform.localPosition = LocationControl.convertLocationToPosition(location);
                         battleObject[i, j].transform.rotation = Quaternion.identity;
                     }
-                    
-                    cam.transform.position = camStartPos;
-                    cam.transform.rotation = Quaternion.Euler(Vector3.zero);
                 }
             }
+
+            cam.transform.position = camStartPos;
+            cam.transform.rotation = Quaternion.identity;
 
         }
 

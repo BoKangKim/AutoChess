@@ -49,7 +49,7 @@ namespace ZoneSystem
 
         //유닛 랜덤뽑기
         //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
-        private int[] freenetUnitIndex = null;
+        //private int[] freenetUnitIndex = null;
         private string[] freenetUnits = null;
 
         [SerializeField] private GameObject ItemPrefab;
@@ -60,45 +60,46 @@ namespace ZoneSystem
         private void Awake()
         {
             //if (!photonView.IsMine) return;
-            freenetUnitIndex = new int[3] { -1, -1, -1 };
-            freenetUnits = new string[25];
+            freenetUnits = new string[15];
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             initializingUnitName();
 
-            int index = 0;
-            if(PhotonNetwork.IsMasterClient == true)
-            {
-                do
-                {
-                    bool isContains = false;
-                    freenetUnitIndex[index] = Random.Range(0, 5);
+            #region FreeNet Random Three Random Unit 
+            //int index = 0;
+            //if(PhotonNetwork.IsMasterClient == true)
+            //{
+            //    do
+            //    {
+            //        bool isContains = false;
+            //        freenetUnitIndex[index] = Random.Range(0, 5);
 
-                    for  (int i = 0; i < freenetUnitIndex.Length; i++)
-                    {
-                        if  (i == index)
-                        {
-                            continue;
-                        }
+            //        for  (int i = 0; i < freenetUnitIndex.Length; i++)
+            //        {
+            //            if  (i == index)
+            //            {
+            //                continue;
+            //            }
 
-                        if (freenetUnitIndex[i] == freenetUnitIndex[index])
-                        {
-                            isContains = true;
-                        }
-                    }
+            //            if (freenetUnitIndex[i] == freenetUnitIndex[index])
+            //            {
+            //                isContains = true;
+            //            }
+            //        }
 
-                    if (isContains == true)
-                    {
-                        continue;
-                    }
+            //        if (isContains == true)
+            //        {
+            //            continue;
+            //        }
 
-                    index++;
-                } while (index < freenetUnitIndex.Length);
+            //        index++;
+            //    } while (index < freenetUnitIndex.Length);
 
 
-            }
+            //}
+            #endregion
         }
 
         private void Start()
@@ -213,24 +214,24 @@ namespace ZoneSystem
                 yield return null;
             }
 
-            for (int i = 0; i < maps.Length; i++)
-            {
-                for (int j = 0; j < freenetUnitIndex.Length; j++)
-                {
-                    maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
-                }
-            }
+            //for (int i = 0; i < maps.Length; i++)
+            //{
+            //    for (int j = 0; j < freenetUnitIndex.Length; j++)
+            //    {
+            //        maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
+            //    }
+            //}
 
             PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
 
             yield break;
         }
 
-        [PunRPC]
-        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
-        {
-            freenetUnitIndex[arrIndex] = unitIndex;
-        }
+        //[PunRPC]
+        //public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        //{
+        //    freenetUnitIndex[arrIndex] = unitIndex;
+        //}
 
         private void initializingUnitName()
         {
@@ -243,16 +244,10 @@ namespace ZoneSystem
                         firstName = "Orc_";
                         break;
                     case 1:
-                        firstName = "Dwarf_";
+                        firstName = "Demon_";
                         break;
                     case 2:
                         firstName = "Mecha_";
-                        break;
-                    case 3:
-                        firstName = "Demon_";
-                        break;
-                    case 4:
-                        firstName = "Golem_";
                         break;
                 }
 
@@ -571,9 +566,12 @@ namespace ZoneSystem
             }
             else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = freenetUnitIndex[Random.Range(0, 3)];
-                index *= 5;
-                UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
+                int index = Random.Range(0, 15);
+
+                UnitPrefab = freenetUnits[index];
+                //int index = freenetUnitIndex[Random.Range(0, 3)];
+                //index *= 5;
+                //UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
             }
 
             // 유닛의 최대 수는 15개

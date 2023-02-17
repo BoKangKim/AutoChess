@@ -57,6 +57,10 @@ MonoBehaviour:
   - RPC_SetNickName
   - setMyNickName
   - RPC_SetMyLocation
+  - initializingData
+  - RPC_DoDamage
+  - setIsDeath
+  - RPC_initializingAfterBattle
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

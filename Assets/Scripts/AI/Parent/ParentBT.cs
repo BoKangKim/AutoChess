@@ -232,16 +232,40 @@ namespace Battle.AI
             mana = 0;
             die = false;
             initializingData();
+
+            if(photonView.IsMine == true)
+            {
+                photonView.RPC("RPC_initializingAfterBattle",RpcTarget.Others);
+            }
+        }
+
+        [PunRPC]
+        public void RPC_initializingAfterBattle()
+        {
+            myAni.SetBool("isMove", false);
+            myAni.ResetTrigger("isAttack");
+            isInit = false;
+            enemies.Clear();
+            target = null;
+            mana = 0;
+            die = false;
+            initializingData();
         }
 
         public void doDamage()
         {
-            target.Damage(attackDamage);
+            target.photonView.RPC("RPC_DoDamage", RpcTarget.All,attackDamage);
         }
 
         public void doDamage(float damage)
         {
-            target.Damage(damage);
+            target.photonView.RPC("RPC_DoDamage", RpcTarget.All, damage);
+        }
+
+        [PunRPC]
+        public void RPC_DoDamage(float damage)
+        {
+            Damage(damage);
         }
 
         private void initializingData()
@@ -404,29 +428,32 @@ namespace Battle.AI
                 {
                     myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
                     photonView.RPC("RPC_SetMyLocation",RpcTarget.Others,myLocation.x,myLocation.y);
-                    if (enemies.Count == 0)
+                    if (enemies.Count == 0 || isInit == false)
                     {
-                        if (isInit == false)
-                        {
-                            photonView.RPC("RPC_EnableThis",RpcTarget.All);
-                            findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
-                            searchingTarget();
+                        photonView.RPC("RPC_EnableThis",RpcTarget.All);
+                        findEnemyFuncOnStart((allUnits = FindObjectsOfType<ParentBT>()));
+                        searchingTarget();
 
-                            if(target == null)
-                            {
-                                return;
-                            }
-
-                            next = rta.searchNextLocation(myLocation, target.getMyLocation());
-                            nextPos = LocationControl.convertLocationToPosition(next);
-                            Debug.Log(transform.localPosition);
-                            dir = (nextPos - transform.position).normalized;
-                            isInit = true;
-                        }
-                        else
+                        if(target == null)
                         {
-                            // ½Â¸® ·ÎÁ÷
+                            Debug.Log(enemies.Count + " target null");
+                            return;
                         }
+
+                        if (rta.checkLocationArrange(target.getMyLocation().x, target.getMyLocation().y) == false)
+                        {
+                            Debug.Log(enemies.Count + " Arrange");
+                            enemies.Clear();
+                            return;
+                        }
+
+                        next = rta.searchNextLocation(myLocation, target.getMyLocation());
+                        nextPos = LocationControl.convertLocationToPosition(next);
+                        dir = (nextPos - transform.localPosition).normalized;
+                        dir.y = 0f;
+                        
+                        isInit = true;
+                        
                     }
                 };
             }
@@ -457,7 +484,6 @@ namespace Battle.AI
                     }
                     else
                     {
-                        Debug.Log(target.gameObject.name);
                         return true;
                     }
                 };
@@ -475,8 +501,7 @@ namespace Battle.AI
                         return;
                     }
 
-                    if((target.getMyLocation().x >= 7 || target.getMyLocation().x < 0)
-                    || (target.getMyLocation().y >= 6 || target.getMyLocation().y < 0))
+                    if(rta.checkLocationArrange(target.getMyLocation().x,target.getMyLocation().y) == false)
                     {
                         return;
                     }
@@ -484,12 +509,14 @@ namespace Battle.AI
                     myAni.SetBool("isMove",true);
                     myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
                     photonView.RPC("RPC_SetMyLocation", RpcTarget.Others, myLocation.x, myLocation.y);
-                    Debug.Log(target.getMyLocation());
+                    
                     if (Vector3.Distance(nextPos, transform.localPosition) <= 0.2f)
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.position).normalized;
+
+                        dir = (nextPos - transform.localPosition).normalized;
+                        dir.y = 0f;
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
@@ -522,7 +549,7 @@ namespace Battle.AI
 
                         Vector3 targetPos = LocationControl.convertLocationToPosition(enemies[i].getMyLocation());
 
-                        if (Vector3.Distance(targetPos, transform.position) <= (LocationControl.radius * attackRange)
+                        if (Vector3.Distance(targetPos, transform.localPosition) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
                             rta.initCloseList();
@@ -578,15 +605,23 @@ namespace Battle.AI
             {
                 return () =>
                 {
+                    Debug.Log(currentHP);
                     if(currentHP <= 0f)
                     {
                         die = true;
+                        photonView.RPC("setIsDeath",RpcTarget.Others,die);
                         return true;
                     }
 
                     return false;
                 };
             }
+        }
+
+        [PunRPC]
+        public void setIsDeath(bool die)
+        {
+            this.die = die;
         }
 
         protected virtual Action death
@@ -618,7 +653,10 @@ namespace Battle.AI
 
         protected void DestroyObject()
         {
-            Destroy(gameObject);
+            if(photonView.IsMine == true)
+            {
+                PhotonNetwork.Destroy(gameObject);
+            }
         }
 
         #endregion
