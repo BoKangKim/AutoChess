@@ -57,6 +57,20 @@ namespace Battle.AI
 
         #endregion
         #region GET,SET
+
+        public void SetRecoveryCurrentHP(float Recovery)
+        {
+            currentHP += Recovery;
+            if (currentHP > unitData.GetUnitData.GetMaxHp)
+            {
+                currentHP = unitData.GetUnitData.GetMaxHp;
+            }
+            
+        }
+        public UnitClass.Unit GetUnitData()
+        {
+            return unitData;
+        }
         public void setAttackRange(float attackRange)
         {
             this.attackRange = attackRange;
@@ -87,6 +101,11 @@ namespace Battle.AI
             return next;
         }
 
+        public void setMyLocation()
+        {
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
+        }
+
         public float getAttackDamage()
         {
             return unitData.GetUnitData.GetAtk;
@@ -95,6 +114,10 @@ namespace Battle.AI
         public bool getIsDeath()
         {
             return die;
+        }
+        public List<ParentBT> getFindEnemies()
+        {
+            return enemies;
         }
 
         public string getMyType()
@@ -112,7 +135,6 @@ namespace Battle.AI
         {
             InitializingRootNode();
             specialRoot = initializingSpecialRootNode();
-            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
@@ -121,12 +143,12 @@ namespace Battle.AI
 
         private void Start()
         {
-            Debug.Log("START");
             myAni = GetComponent<Animator>();
             enemies = new List<ParentBT>();
+            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
 
             StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage = changeStage;
+            //sc.changeStage += changeStage;
         }
 
         private void Update()
@@ -135,6 +157,7 @@ namespace Battle.AI
             {
                 return;
             }
+
             if(die == true)
             {
                 return;
@@ -200,7 +223,8 @@ namespace Battle.AI
             }
 
             currentHP = unitData.GetUnitData.GetMaxHp;
-            maxMana = unitData.GetUnitData.GetMaxMp;
+            //maxMana = unitData.GetUnitData.GetMaxMp;
+            maxMana = 5f;
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
             attackDamage = unitData.GetUnitData.GetAtk;
@@ -235,13 +259,16 @@ namespace Battle.AI
         {
             for (int i = 0; i < fieldAIObejects.Length; i++)
             {
-                if (fieldAIObejects[i].myType.CompareTo(compare) == 0)
+                if (fieldAIObejects[i].myType.CompareTo(compare) == 0
+                    || fieldAIObejects[i].photonView.IsMine == false)
                 {
                     continue;
                 }
 
                 enemies.Add(fieldAIObejects[i]);
             }
+
+            Debug.Log(enemies.Count);
         }
 
         private void addEnemyList(ParentBT[] fieldAIObejects)
@@ -278,7 +305,8 @@ namespace Battle.AI
         {
             float minDistance = 100000f;
             float temp = 0f;
-        
+            target = null;
+
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (enemies[i] == null)
@@ -287,12 +315,12 @@ namespace Battle.AI
                     continue;
                 }
 
-                if ((enemies[i].transform.position.z < 0 || enemies[i].transform.position.z > 12.5f))
+                if ((enemies[i].transform.localPosition.z < 0 || enemies[i].transform.localPosition.z > 12.5f))
                 {
                     continue;
                 }
 
-                if ((temp = Vector3.Distance(enemies[i].transform.position,transform.position)) <= minDistance)
+                if ((temp = Vector3.Distance(enemies[i].transform.localPosition,transform.localPosition)) <= minDistance)
                 {
                     minDistance = temp;
                     target = enemies[i];
@@ -332,7 +360,7 @@ namespace Battle.AI
         #region AI Behavior
         protected virtual Action idle
         {
-            get
+            get     
             {
                 return () =>
                 {
@@ -347,18 +375,13 @@ namespace Battle.AI
 
                             next = rta.searchNextLocation(myLocation, target.getMyLocation());
                             nextPos = LocationControl.convertLocationToPosition(next);
-                            dir = (nextPos - transform.position).normalized;
+                            dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
+                            
                             isInit = true;
                         }
                         else
                         {
                             // ½Â¸® ·ÎÁ÷
-                            ParentBT[] allUnit = FindObjectsOfType<ParentBT>();
-
-                            for(int i = 0;i < allUnit.Length; i++)
-                            {
-                                PhotonNetwork.Destroy(allUnit[i].gameObject);
-                            }
                         }
                     }
                 };
@@ -383,6 +406,8 @@ namespace Battle.AI
                     searchingTarget();
                     if (target == null)
                     {
+                        myAni.SetBool("isMove",false);
+                        dir = Vector3.zero;
                         return false;
                     }
                     else
@@ -441,7 +466,7 @@ namespace Battle.AI
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
-                        dir = (nextPos - transform.position).normalized;
+                        dir = (nextPos - new Vector3(transform.localPosition.x, nextPos.y,transform.localPosition.z)).normalized;
                     }
 
                     transform.rotation = Quaternion.Slerp(transform.rotation,Quaternion.LookRotation(dir), Time.deltaTime * 10f);
@@ -462,10 +487,16 @@ namespace Battle.AI
                     {
                         if (enemies[i].getIsDeath() == true) 
                         {
+                            enemies[i] = null;
+                            continue;
+                        }
+                        if (enemies[i].isActiveAndEnabled == false)
+                        {
+                            target = null;
                             continue;
                         }
 
-                        if (Vector3.Distance(enemies[i].transform.position, transform.position) <= (LocationControl.radius * attackRange)
+                        if (Vector3.Distance(enemies[i].transform.localPosition, transform.localPosition) <= (LocationControl.radius * attackRange)
                         && checkIsOverlapUnits() == false)
                         {
                             rta.initCloseList();
@@ -496,6 +527,15 @@ namespace Battle.AI
         [PunRPC]
         public void RPC_SetTriggerAttack()
         {
+            if(myAni == null)
+            {
+                if(gameObject.TryGetComponent<Animator>(out myAni) == false)
+                {
+                    Debug.Log("Not Found Animator" + gameObject.name);
+                    return;
+                }
+            }
+
             myAni.SetTrigger("isAttack");
         }
 

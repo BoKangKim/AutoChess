@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private (int row, int col) stageIndex = (0, -1);
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
-    public float time = 0f;
+    [HideInInspector] public float time = 0f;
 
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
@@ -46,7 +46,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         return type;
     }
-
 
     public void setType(GAMETYPE type,GameObject networkManager)
     {

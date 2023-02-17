@@ -54,7 +54,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     private void Awake()
     {
         Screen.SetResolution(480,480,false);
-        DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
         gameScene = "SyncUnit";
@@ -131,7 +130,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-       
+        PhotonNetwork.LoadLevel(gameScene);
+
+
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)

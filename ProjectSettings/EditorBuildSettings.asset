@@ -8,21 +8,16 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/RoomScene.unity
     guid: 0b631ffc5143b3f459fe28175e3083e8
-  - enabled: 0
-    path: Assets/Scenes/MainGameScene.unity
-    guid: 2a738f474ae15bd44bcc7f65ae34287d
   - enabled: 1
-    path: Assets/Scenes/KCS_MainGameScene.unity
-    guid: 2dff96fff8138d04ca901795d9399ddc
+    path: Assets/Scenes/SyncUnit.unity
+    guid: fb1ef3715ae385a4f8549bd6f651c166
   m_configObjects: {}

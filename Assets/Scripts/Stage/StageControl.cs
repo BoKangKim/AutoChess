@@ -4,6 +4,7 @@ namespace Battle.Stage
     using Photon.Pun;
     using UnityEngine;
     using System.Collections;
+    using Battle.AI;
 
     public enum STAGETYPE
     {
@@ -23,20 +24,26 @@ namespace Battle.Stage
     {
         [SerializeField] private GameObject[] Monsters = null;
         private GameObject cam = null;
+
         private STAGETYPE[,] stages = new STAGETYPE[9, 4];
         private STAGETYPE nowStage = STAGETYPE.PREPARE;
         private (int row, int col) stageIndex = (0, -1);
         public ChangeStage changeStage = null;
+
         private ZoneSystem.MapController[] maps = null;
         private ZoneSystem.MapController myMap = null;
         private GameObject[,] battleObject = null;
+
         private int preIndex = -1;
         private readonly Vector3 changeCamVec = new Vector3(19.5f, 0, 12f);
         private readonly Quaternion changeCamRot = Quaternion.Euler(new Vector3(0f, 180f, 0f));
         private bool isEndSetEnemy = false;
+
         private delegate IEnumerator waitMaster();
         private waitMaster waitM = null;
         private WaitUntil wait = null;
+
+        private Vector3 camStartPos = Vector3.zero;
 
         private void Awake()
         {
@@ -44,7 +51,6 @@ namespace Battle.Stage
             waitM = COR_WaitMaster;
             wait = new WaitUntil(() => isEndSetEnemy);
             initializingStageInfo();
-            //checkNextStageInfo();
         }
 
         private void Start()
@@ -72,6 +78,8 @@ namespace Battle.Stage
                     }
                 }
             }
+
+            camStartPos = cam.transform.position;
         }
 
         public void checkNextStageInfo()
@@ -89,7 +97,6 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                Debug.Log(nowStage);
                 GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
                 GameManager.Inst.nowStage = nowStage;
                 if (changeStage != null)
@@ -123,19 +130,26 @@ namespace Battle.Stage
             if (changeStage != null)
             {
                 changeStage(nowStage);
+                photonView.RPC("RPC_changeStage",RpcTarget.Others,nowStage);
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
             UIManager_KSR.Inst.UpdateRoundInfo(stageIndex.row,stageIndex.col);
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
-            Debug.Log(nowStage);            
+        }
+
+        [PunRPC]
+        public void RPC_changeStage(STAGETYPE nowStage)
+        {
+            changeStage(nowStage);
         }
 
         [PunRPC]
         public void CacheMasterIndex(int row, int col)
         {
             GameManager.Inst.SyncStageIndex(row, col);
+            stageIndex = (row, col);
         }
 
         [PunRPC]
@@ -156,27 +170,45 @@ namespace Battle.Stage
             }
             else if (nowStage == STAGETYPE.MONSTER)
             {
-                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-                inst.transform.SetParent(gameObject.transform, false);
-                photonView.RPC("instantiateMonster",RpcTarget.Others);
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                inst.transform.SetParent(myMap.transform, false);
+                ParentBT bt = null;
+                if(inst.TryGetComponent<ParentBT>(out bt) == true)
+                {
+                    bt.setMyLocation();
+                    bt.SetState(nowStage);
+                }
+                photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
             else if (nowStage == STAGETYPE.BOSS)
             {
-                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-                inst.transform.SetParent(gameObject.transform, false);
-                photonView.RPC("instantiateMonster", RpcTarget.Others);
+                GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
+                inst.transform.SetParent(myMap.transform, false);
+                ParentBT bt = null;
+                if (inst.TryGetComponent<ParentBT>(out bt) == true)
+                {
+                    bt.setMyLocation();
+                    bt.SetState(nowStage);
+                }
+                photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
             else if (nowStage == STAGETYPE.PREPARE)
             {
-
+                photonView.RPC("returnMyMap",RpcTarget.All);
             }
         }
 
         [PunRPC]
-        public void instantiateMonster()
+        public void instantiateMonster(STAGETYPE nowStage)
         {
-            GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0f, 10f), Quaternion.Euler(0f, 180f, 0f));
-            inst.transform.SetParent(this.transform, false);
+            GameObject inst = PhotonNetwork.Instantiate(Monsters[0].gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
+            inst.transform.SetParent(myMap.transform, false);
+            ParentBT bt = null;
+            if (inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.setMyLocation();
+                bt.SetState(nowStage);
+            }
         }
 
         [PunRPC]
@@ -216,6 +248,32 @@ namespace Battle.Stage
                     cam.transform.rotation = changeCamRot;
                 }
             }
+        }
+
+        [PunRPC]
+        private void returnMyMap()
+        {
+            for (int i = 0; i < battleObject.GetLength(0); i++)
+            {
+                for (int j = 0; j < battleObject.GetLength(1); j++)
+                {
+                    if (battleObject[i, j] == null)
+                    {
+                        continue;
+                    }
+
+                    Debug.Log(battleObject[i,j].gameObject.name);
+                    LocationXY location;
+                    location.x = j;
+                    location.y = i;
+                    battleObject[i, j].SetActive(true);
+                    battleObject[i, j].transform.SetParent(myMap.transform, false);
+                    battleObject[i, j].transform.localPosition = LocationControl.convertLocationToPosition(location);
+                    cam.transform.position = camStartPos;
+                    cam.transform.rotation = Quaternion.Euler(Vector3.zero);
+                }
+            }
+
         }
 
         private bool setNextEnemy()

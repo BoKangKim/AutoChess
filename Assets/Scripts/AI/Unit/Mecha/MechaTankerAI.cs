@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class MechaTankerAI : MeleeAI
 {
@@ -8,7 +10,7 @@ public class MechaTankerAI : MeleeAI
     {
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
-        Instantiate(skillEffect.gameObject, new Vector3(transform.position.x, 1f, transform.position.z), Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name, new Vector3(transform.position.x, 1f, transform.position.z), Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
     }
 }

@@ -11,6 +11,10 @@ public class MeleeAI : UnitAI
 
     public override void StartEffect()
     {
+        if(photonView.IsMine == false)
+        {
+            return;
+        }
         mana += manaRecovery;
         Effect attack = null;
         PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack);
@@ -20,6 +24,10 @@ public class MeleeAI : UnitAI
 
     public override void StartSkillEffect()
     {
+        if (photonView.IsMine == false)
+        {
+            return;
+        }
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
         PhotonNetwork.Instantiate(skillEffect.gameObject.name, new Vector3(targetPos.x, 0f, targetPos.z), Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
