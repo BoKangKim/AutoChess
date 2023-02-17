@@ -57,6 +57,20 @@ namespace Battle.AI
 
         #endregion
         #region GET,SET
+
+        public void SetRecoveryCurrentHP(float Recovery)
+        {
+            currentHP += Recovery;
+            if (currentHP > unitData.GetUnitData.GetMaxHp)
+            {
+                currentHP = unitData.GetUnitData.GetMaxHp;
+            }
+            
+        }
+        public UnitClass.Unit GetUnitData()
+        {
+            return unitData;
+        }
         public void setAttackRange(float attackRange)
         {
             this.attackRange = attackRange;
@@ -209,7 +223,8 @@ namespace Battle.AI
             }
 
             currentHP = unitData.GetUnitData.GetMaxHp;
-            maxMana = unitData.GetUnitData.GetMaxMp;
+            //maxMana = unitData.GetUnitData.GetMaxMp;
+            maxMana = 5f;
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
             attackDamage = unitData.GetUnitData.GetAtk;

@@ -36,7 +36,7 @@ public class MonsterAI : ParentBT
         {
             return () =>
             {
-                Debug.Log(stageType + " " + myType);
+                //Debug.Log(stageType + " " + myType);
                 return stageType == Battle.Stage.STAGETYPE.PREPARE;
             };
         }

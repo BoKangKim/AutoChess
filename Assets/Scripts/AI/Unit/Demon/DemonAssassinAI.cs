@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class DemonAssassinAI : MeleeAI
 {
     public override void StartSkillEffect()

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class MechaMagicianSkill : SkillEffect
 {
+    float damageTime = 0f;
+    int count = 0;
     protected override float setDestroyTime()
     {
         return 2f;
@@ -24,9 +26,35 @@ public class MechaMagicianSkill : SkillEffect
 
     }
 
-    protected override void OnCollisionEnter(Collision collision)
+    private void OnEnable()
     {
-        Debug.Log("µûÄá~");
-        gameObject.GetComponent<BoxCollider>().enabled = false;
+        count = 0;
+        gameObject.GetComponent<BoxCollider>().enabled = true;
     }
+
+    private void OnCollisionStay(Collision collision)
+    {
+        damageTime += Time.deltaTime;
+        if (collision.gameObject.GetComponent<Battle.AI.ParentBT>() != null)
+        {
+            //if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
+            {
+                if (count > 4)
+                {
+                    gameObject.GetComponent<BoxCollider>().enabled = false;
+
+                    return;
+                }
+
+                if (damageTime >= 1f)
+                {
+                    //collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((this.gameObject.GetComponent<UnitClass.Unit>().GetTotalSpellPower / 100) * 40);
+                    damageTime = 0f;
+                    ++count;
+
+                }
+            }
+        }
+    }
+
 }

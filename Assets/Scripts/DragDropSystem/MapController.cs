@@ -211,8 +211,8 @@ namespace ZoneSystem
         private void initializingUnitName()
         {
             string firstName = "";
-            firstName = "Mecha_";
-            freenetUnits[0] = firstName + "Warrior";
+            firstName = "Demon_";
+            freenetUnits[0] = firstName + "Assassin";
             return;
 
             for (int i = 0; i < freenetUnits.Length; i += 5)

@@ -1573,6 +1573,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2543572867600025058, guid: 4b9fa307d43f1c34fb201578c4ce87f2, type: 3}
+      propertyPath: m_Size.x
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2543572867600025058, guid: 4b9fa307d43f1c34fb201578c4ce87f2, type: 3}
+      propertyPath: m_Size.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6256945552540008342, guid: 4b9fa307d43f1c34fb201578c4ce87f2, type: 3}
       propertyPath: m_Name
       value: skeleton_king
