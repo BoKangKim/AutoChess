@@ -3,6 +3,7 @@ namespace Battle.Stage
     using Battle.AI;
     using Battle.Location;
     using Photon.Pun;
+    using Photon.Realtime;
     using System.Collections;
     using UnityEngine;
 
@@ -106,7 +107,6 @@ namespace Battle.Stage
                     photonView.RPC("RPC_changeStage", RpcTarget.Others, nowStage);
                 }
 
-                Debug.Log(nowStage);
                 return;
             }
 
@@ -280,10 +280,11 @@ namespace Battle.Stage
 
                     if (battleObject[i, j].activeSelf == false)
                     {
-                        battleObject[i, j].SetActive(true);
-                        string objectName = battleObject[i ,j].name;
-                        battleObject[i, j].SetActive(false);
-                        GameObject inst = PhotonNetwork.Instantiate(objectName, Vector3.zero,Quaternion.identity);
+                        //battleObject[i, j].SetActive(true);
+                        //string objectName = battleObject[i ,j].name;
+                        //battleObject[i, j].SetActive(false);
+
+                        GameObject inst = PhotonNetwork.Instantiate(battleObject[i, j].name, Vector3.zero,Quaternion.identity);
                         Debug.Log(battleObject[i,j].name);
                         inst.transform.SetParent(myMap.transform,false);
                         inst.transform.localPosition = LocationControl.convertLocationToPosition(location);
@@ -298,8 +299,7 @@ namespace Battle.Stage
             }
 
             cam.transform.position = camStartPos;
-            cam.transform.rotation = Quaternion.identity;
-
+            cam.transform.rotation = Quaternion.Euler(Vector3.zero);
         }
 
         private bool setNextEnemy()
@@ -369,8 +369,8 @@ namespace Battle.Stage
         {
             // STAGE 1
             {
-                stages[0, 0] = STAGETYPE.PVP;
-                stages[0, 1] = STAGETYPE.PVP;
+                stages[0, 0] = STAGETYPE.MONSTER;
+                stages[0, 1] = STAGETYPE.MONSTER;
                 stages[0, 2] = STAGETYPE.MONSTER;
                 stages[0, 3] = STAGETYPE.BOSS;
             }
