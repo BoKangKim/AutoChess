@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44396698, g: 0.49335665, b: 0.57282805, a: 1}
+  m_IndirectSpecularColor: {r: 0.44396722, g: 0.49335706, b: 0.57282865, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3249,48 +3249,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05d2d85b33f15146b27788d451650a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  UnitStatusContents: {fileID: 0}
-  UnitStatusInfo: {fileID: 0}
-  UnitStatusDetailInfo: {fileID: 0}
-  UnitSkillInfo: {fileID: 0}
-  SettingContents: {fileID: 0}
-  SettingContentsPopup: {fileID: 0}
-  playerExpensionLV: {fileID: 0}
-  playerRankingnLV: {fileID: 0}
+  unitStatusContents: {fileID: 1494726884}
+  unitStatusInfo: {fileID: 546315005}
+  unitStatusDetailInfo: {fileID: 473083541}
+  unitSkillInfo: {fileID: 1807818850}
+  settingButton: {fileID: 1031352508}
+  settingContentsPopup: {fileID: 156017290}
+  playerExpensionLv: {fileID: 0}
+  playerRankingLv: {fileID: 0}
   playerGold: {fileID: 0}
-  playerHPSlider: {fileID: 0}
-  RoundContents: {fileID: 0}
-  RoundEXContents: {fileID: 0}
-  RoundResultContents: {fileID: 0}
-  RoundInfoNum: {fileID: 0}
-  RoundStageNum: {fileID: 0}
-  RoundDetailNum: {fileID: 0}
-  RoundDetailStepNum:
+  playerHpSlider: {fileID: 0}
+  roundContents: {fileID: 0}
+  roundExContents: {fileID: 0}
+  roundResultContents: {fileID: 0}
+  roundInfoNum: {fileID: 0}
+  roundStageNum: {fileID: 0}
+  roundDetailNum: {fileID: 0}
+  roundDetailStepNum:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  SynergyContents: {fileID: 0}
-  SynergyEXContents: {fileID: 0}
-  SynergyEXContentsPopup: {fileID: 0}
+  synergyContents: {fileID: 0}
+  synergyExContents: {fileID: 0}
+  synergyExContentsPopup: {fileID: 0}
   synergyContentsPopupName: {fileID: 0}
   synergyContentsPopupInfo: []
-  SynergyUnitIcon: []
-  SnergyUnitPopupIcon: []
-  SynergyPlus: {fileID: 0}
-  ClassSynergy: []
-  SpeciesSynergy: []
+  synergyUnitIcon: []
+  synergyUnitPopupIcon: []
+  synergyPlus: {fileID: 0}
+  classSynergy: []
+  speciesSynergy: []
   rankingContents: {fileID: 0}
   rankingUserID: {fileID: 0}
   rankingUserLV: {fileID: 0}
-  rankUserInfo: []
+  rankUserInfo:
+  - {fileID: 402991087}
+  - {fileID: 799404720}
+  - {fileID: 928258384}
+  - {fileID: 1537770554}
   expansionUserID: {fileID: 0}
   expansionGold: {fileID: 0}
   expensionLV: {fileID: 0}
   expansionEXPSlider: {fileID: 0}
   gachaWeponGold: {fileID: 0}
   gachaUnitGold: {fileID: 0}
-  timeManager: {fileID: 0}
 --- !u!4 &176468621
 Transform:
   m_ObjectHideFlags: 0
@@ -3304,7 +3307,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &188491719
 GameObject:
@@ -6574,7 +6577,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
         m_MethodName: OnFactionExpansion
         m_Mode: 1
@@ -7181,7 +7184,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &473083542
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7732,7 +7735,7 @@ RectTransform:
   - {fileID: 928258385}
   - {fileID: 1537770555}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
@@ -7793,7 +7796,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &512549080
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7812,7 +7815,7 @@ RectTransform:
   - {fileID: 71784420}
   - {fileID: 960338119}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -8261,7 +8264,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &546315006
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9127,7 +9130,7 @@ RectTransform:
   m_Children:
   - {fileID: 1835792593}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
@@ -14603,7 +14606,7 @@ RectTransform:
   m_Children:
   - {fileID: 156017291}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -14692,9 +14695,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 176468619}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
-        m_MethodName: OnSetting
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -14973,7 +14976,7 @@ RectTransform:
   - {fileID: 234495720}
   - {fileID: 1680084682}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -15843,7 +15846,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 00aef884485809146a9ba8b68e4ae42f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85f7fb94563c3e9478cc06b8d6bfbe78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -18520,12 +18523,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1494726885}
-  - {fileID: 591088458}
   - {fileID: 1031352505}
+  - {fileID: 5770417999331375661}
+  - {fileID: 591088458}
   - {fileID: 512549080}
   - {fileID: 1070330835}
   - {fileID: 506368757}
-  - {fileID: 5770417999331375661}
   - {fileID: 847604235}
   m_Father: {fileID: 0}
   m_RootOrder: 5
@@ -21819,7 +21822,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
         m_MethodName: OffSetting
         m_Mode: 1
@@ -21957,7 +21960,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1494726885
 RectTransform:
   m_ObjectHideFlags: 0
@@ -23274,7 +23277,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
         m_MethodName: OnUnitGacha
         m_Mode: 1
@@ -24071,7 +24074,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
         m_MethodName: OnSurrender
         m_Mode: 1
@@ -27138,7 +27141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1807818851
 RectTransform:
   m_ObjectHideFlags: 0
@@ -27996,7 +27999,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 00aef884485809146a9ba8b68e4ae42f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85f7fb94563c3e9478cc06b8d6bfbe78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -28246,7 +28249,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 00aef884485809146a9ba8b68e4ae42f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85f7fb94563c3e9478cc06b8d6bfbe78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -30770,7 +30773,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2038668769}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
         m_MethodName: OnWeponGacha
         m_Mode: 1
@@ -32671,124 +32674,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030420506}
   m_CullTransparentMesh: 1
---- !u!1 &2038668767
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2038668768}
-  - component: {fileID: 2038668769}
-  m_Layer: 0
-  m_Name: UIManger
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2038668768
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2038668767}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2038668769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2038668767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d72aa7fe2acb564eb59232cc2c3554e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UnitStatusContents: {fileID: 1494726884}
-  UnitStatusInfo: {fileID: 546315005}
-  UnitStatusDetailInfo: {fileID: 473083541}
-  UnitSkillInfo: {fileID: 1807818850}
-  SettingContents: {fileID: 1031352504}
-  SettingContentsPopup: {fileID: 156017290}
-  playerExpensionLV: {fileID: 8075441350298412587}
-  playerRankingnLV: {fileID: 1917422031}
-  playerGold: {fileID: 74622366}
-  playerHPSlider: {fileID: 1766870632}
-  RoundContents: {fileID: 512549079}
-  RoundEXContents: {fileID: 79029787}
-  RoundResultContents: {fileID: 960338118}
-  RoundInfoNum: {fileID: 1448102823}
-  RoundStageNum: {fileID: 1773604252}
-  RoundDetailNum: {fileID: 213801125}
-  RoundDetailStepNum:
-  - {fileID: 1921499660}
-  - {fileID: 658018280}
-  - {fileID: 397954383}
-  - {fileID: 1167730715}
-  SynergyContents: {fileID: 1070330834}
-  SynergyEXContents: {fileID: 2094174901}
-  SynergyEXContentsPopup: {fileID: 234495721}
-  synergyContentsPopupName: {fileID: 553420917}
-  synergyContentsPopupInfo:
-  - {fileID: 1798972278}
-  - {fileID: 1555025161}
-  SynergyUnitIcon:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  SnergyUnitPopupIcon:
-  - {fileID: 1884630980}
-  - {fileID: 403322650}
-  - {fileID: 612325493}
-  - {fileID: 1952207681}
-  - {fileID: 1209275513}
-  SynergyPlus: {fileID: 686492392}
-  ClassSynergy:
-  - {fileID: 2094174899}
-  - {fileID: 1865440852}
-  - {fileID: 1121842208}
-  - {fileID: 1870158655}
-  - {fileID: 2131282273}
-  SpeciesSynergy:
-  - {fileID: 2020351153}
-  - {fileID: 116305757}
-  - {fileID: 1446777577}
-  - {fileID: 1744247121}
-  - {fileID: 2067466006}
-  rankingContents: {fileID: 506368756}
-  rankingUserID: {fileID: 1564390380}
-  rankingUserLV: {fileID: 1917422031}
-  rankUserInfo:
-  - {fileID: 402991087}
-  expansionUserID: {fileID: 5190963624264359127}
-  expansionGold: {fileID: 4795708056187930168}
-  expensionLV: {fileID: 8075441350298412587}
-  expansionEXPSlider: {fileID: 1015125483}
-  gachaWeponGold: {fileID: 469113251}
-  gachaUnitGold: {fileID: 1287356426}
-  timeManager: {fileID: 1085852002}
-  userName: user1
-  deployedUnit: 0
-  playerGoldValue: 0
-  playerEXPValue: 0
-  playerMaxEXPValue: 0
-  playerHPValue: 0
-  playerMaxHPValue: 0
-  unitBuyButton: {fileID: 0}
-  equipmentBuyButton: {fileID: 0}
-  sellButton: {fileID: 0}
-  SynergyInfo: {fileID: 0}
 --- !u!1 &2047177427
 GameObject:
   m_ObjectHideFlags: 0
@@ -33853,7 +33738,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2094174900
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33932,7 +33817,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
           m_MethodName: OnSynergy
           m_Mode: 1
@@ -33948,7 +33833,7 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2038668769}
+        - m_Target: {fileID: 0}
           m_TargetAssemblyTypeName: UIManager_KSR, Assembly-CSharp
           m_MethodName: OffSynergy
           m_Mode: 1
@@ -34369,7 +34254,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 00aef884485809146a9ba8b68e4ae42f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85f7fb94563c3e9478cc06b8d6bfbe78, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -34811,7 +34696,7 @@ RectTransform:
   - {fileID: 1666626179}
   - {fileID: 425889165}
   m_Father: {fileID: 1301573429}
-  m_RootOrder: 6
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
