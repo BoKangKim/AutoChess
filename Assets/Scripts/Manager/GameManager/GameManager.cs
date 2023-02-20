@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
 
+    private PlayerData player = null;
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
 
@@ -38,7 +39,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        
+    }
+
+    private void Start()
+    {
+        if(TryGetComponent<PlayerData>(out player) == false)
+        {
+            Debug.LogError("Not Found Player Data");
+        }
     }
 
     private GAMETYPE type = GAMETYPE.MAX;
@@ -70,27 +78,21 @@ public class GameManager : MonoBehaviourPunCallbacks
         return stageIndex;
     }
 
-    public void poolOFF()
-    {
-        pool.gameObject.SetActive(false);
-    }
-
-    public void poolON()
-    {
-        pool.gameObject.SetActive(true);
-    }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         if(PhotonNetwork.IsMasterClient == true)
         {
-            poolOFF();
             PhotonNetwork.Instantiate("StageControl",Vector3.zero,Quaternion.identity);
             Timer timer = FindObjectOfType<Timer>();
             timer.setNowTime(time);
             timer.findStageControl();
         }
 
-        poolON();
+    }
+
+    public PlayerData GetPlayer()
+    {
+        return player;
     }
 }

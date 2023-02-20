@@ -140,13 +140,6 @@ namespace Battle.AI
             initializingData();
         }
 
-        private void Start()
-        {
-            myAni = GetComponent<Animator>();
-            enemies = new List<ParentBT>();
-            myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
-        }
-
         private void OnDisable()
         {
             if(photonView.IsMine == false)
@@ -163,15 +156,19 @@ namespace Battle.AI
 
         private void OnEnable()
         {
-            if (photonView.IsMine == false)
+            if(myAni == null && 
+                enemies == null)
             {
-                return;
+                myAni = GetComponent<Animator>();
+                enemies = new List<ParentBT>();
+                myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             }
+
+            initializingAfterBattle();
 
             StageControl sc = FindObjectOfType<StageControl>();
             sc.changeStage += changeStage;
 
-            nickName = PhotonNetwork.NickName;
             photonView.RPC("RPC_SetNickName",RpcTarget.Others, nickName);
         }
 
@@ -184,22 +181,18 @@ namespace Battle.AI
 
         private void Update()
         {
-            if(photonView.IsMine == false)
-            {
-                return;
-            }
-
-            if(die == true)
+            if (photonView.IsMine == false)
             {
                 return;
             }
 
             if (stageType == STAGETYPE.PREPARE)
             {
-                if(myType.CompareTo("MonsterAI") == 0)
-                {
-                    PhotonNetwork.Destroy(this.gameObject);
-                }
+                return;
+            }
+
+            if (die == true)
+            {
                 return;
             }
 
@@ -217,10 +210,7 @@ namespace Battle.AI
         {
             root = Selector
                 (
-                    Sequence
-                    (
-                        IfAction(isDeath, death)
-                    ),
+                    IfAction(isDeath, death),
 
                     Sequence
                     (
@@ -228,11 +218,7 @@ namespace Battle.AI
                         NotIf(findEnemy)
                     ),
 
-                    Sequence
-                    (
-                        IfElseAction(isArangeIn, attack, move)
-                        //IfAction(isCenter,attack)
-                    )
+                    IfElseAction(isArangeIn, attack, move)
                 );
         }
 
@@ -242,18 +228,24 @@ namespace Battle.AI
 
         protected virtual void initializingAfterBattle()
         {
-            myAni.SetBool("isMove",false);
-            myAni.ResetTrigger("isAttack");
+            if(myAni != null)
+            {
+                myAni.SetBool("isMove", false);
+                myAni.ResetTrigger("isAttack");
+            }
+            
             isInit = false;
             enemies.Clear();
             target = null;
             mana = 0;
             die = false;
             initializingData();
+            rta.initCloseList();
+            nickName = PhotonNetwork.NickName;
 
-            if(photonView.IsMine == true)
+            if (photonView.IsMine == true)
             {
-                photonView.RPC("RPC_initializingAfterBattle",RpcTarget.Others);
+                photonView.RPC("RPC_initializingAfterBattle", RpcTarget.Others);
             }
         }
 
@@ -267,6 +259,7 @@ namespace Battle.AI
             target = null;
             mana = 0;
             die = false;
+            nickName = PhotonNetwork.NickName;
             initializingData();
         }
 
@@ -294,8 +287,7 @@ namespace Battle.AI
             }
 
             currentHP = unitData.GetUnitData.GetMaxHp;
-            //maxMana = unitData.GetUnitData.GetMaxMp;
-            maxMana = 5f;
+            maxMana = unitData.GetUnitData.GetMaxMp;
             manaRecovery += unitData.GetClassData.GetMpRecovery;
             attackRange = unitData.GetClassData.GetAttackRange;
             attackDamage = unitData.GetUnitData.GetAtk;
@@ -304,21 +296,10 @@ namespace Battle.AI
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
-            if (stageType == STAGETYPE.PREPARE)
-            {
-                if(photonView.IsMine == false)
-                {
-                    return;
-                }
 
-                if (myType.CompareTo("UnitAI") == 0)
-                {
-                    initializingAfterBattle();
-                    return;
-                }
-                              
-                
-                return;
+            if(stageType != STAGETYPE.PREPARE)
+            {
+                initializingAfterBattle();
             }
         }
 
@@ -529,7 +510,7 @@ namespace Battle.AI
                     myLocation = LocationControl.convertPositionToLocation(transform.localPosition);
                     photonView.RPC("RPC_SetMyLocation", RpcTarget.Others, myLocation.x, myLocation.y);
                     
-                    if (Vector3.Distance(nextPos, transform.localPosition) <= 0.2f)
+                    if (Vector3.Distance(nextPos, transform.localPosition) <= 0.4f)
                     {
                         next = rta.searchNextLocation(myLocation, target.getMyLocation());
                         nextPos = LocationControl.convertLocationToPosition(next);
@@ -624,7 +605,6 @@ namespace Battle.AI
             {
                 return () =>
                 {
-                    Debug.Log(currentHP);
                     if(currentHP <= 0f)
                     {
                         die = true;

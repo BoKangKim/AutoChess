@@ -152,6 +152,26 @@ namespace ZoneSystem
             photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
         }
 
+        public ParentBT InstantiateMonster(GameObject monster,Battle.Stage.STAGETYPE stage)
+        {
+            if(photonView.IsMine == false)
+            {
+                return null;
+            }
+
+            GameObject inst = PhotonNetwork.Instantiate(monster.gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
+            inst.transform.SetParent(gameObject.transform, false);
+            ParentBT bt = null;
+
+            if (inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.setMyLocation();
+                bt.SetState(stage);
+            }
+
+            return bt;
+        }
+
         [PunRPC]
         public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
@@ -237,9 +257,6 @@ namespace ZoneSystem
         private void initializingUnitName()
         {
             string firstName = "";
-            firstName = "Demon_";
-            freenetUnits[0] = firstName + "Assassin";
-            return;
 
             for (int i = 0; i < freenetUnits.Length; i += 5)
             {

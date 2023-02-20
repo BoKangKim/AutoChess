@@ -5,17 +5,17 @@ using UnityEngine;
 public class PlayerData : MonoBehaviour
 {
     // ID
-    public string name;
+    [HideInInspector] public string name;
     //골드
-    public int gold;
+    [HideInInspector] public int gold;
     //레벨
-    public int playerLevel;
+    [HideInInspector] public int playerLevel;
     //hp
-    public int CurHP;
-    public int MaxHP;
+    [HideInInspector] public int CurHP;
+    [HideInInspector] public int MaxHP;
     //경험치
-    public float[] MaxExp;
-    public float CurExp;
+    [HideInInspector] public float[] MaxExp;
+    [HideInInspector] public float CurExp;
 
     private void Awake()
     {
