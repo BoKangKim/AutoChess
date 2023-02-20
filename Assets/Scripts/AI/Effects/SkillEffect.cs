@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Battle.EFFECT;
 using Battle.AI;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class SkillEffect : Effect
 {
@@ -37,7 +39,7 @@ public class SkillEffect : Effect
             {
                 if (HitEffect != null)
                 {
-                    Instantiate(HitEffect, gameObject.transform.position, Quaternion.identity);
+                    PhotonNetwork.Instantiate(HitEffect.name, gameObject.transform.position, Quaternion.identity);
                 }
                 // Hit Damage Logic
             }

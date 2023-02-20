@@ -131,7 +131,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-       
+        PhotonNetwork.LoadLevel(gameScene);
+
+
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)

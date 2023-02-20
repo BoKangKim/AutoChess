@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
+
 public class DemonAssassinAI : MeleeAI
 {
     public override void StartSkillEffect()

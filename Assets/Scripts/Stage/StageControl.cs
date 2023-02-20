@@ -93,7 +93,7 @@ namespace Battle.Stage
             else
             {
                 nowStage = GameManager.Inst.nowStage;
-                stageIndex = GameManager.Inst.getStageIndex();
+                stageIndex = GameManager.Inst.getStageIndex();                
             }
 
             if (nowStage != STAGETYPE.PREPARE)
@@ -382,7 +382,7 @@ namespace Battle.Stage
                 stages[0, 2] = STAGETYPE.MONSTER;
                 stages[0, 3] = STAGETYPE.BOSS;
             }
-
+            
             // STAGE 2
             {
                 stages[1, 0] = STAGETYPE.MONSTER;

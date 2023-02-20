@@ -10,6 +10,9 @@ public class MechaAssassinAI : MeleeAI
         SkillEffect skill = null;
         PhotonNetwork.Instantiate(skillEffect.gameObject.name,new Vector3(transform.position.x,6f,transform.position.z),Quaternion.Euler(new Vector3(90f,0f, 0f))).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
+
+        Battle.AI.ParentBT target = getFindEnemies()[Random.Range(0, getFindEnemies().Count)];
+
         skill.setDirection(target.transform.position);
     }
 }

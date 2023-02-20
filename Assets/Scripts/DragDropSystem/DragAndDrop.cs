@@ -10,7 +10,7 @@ namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviourPun
     {
-
+        private PlayerData playerData;
         private MapController mapController;
         private GameObject selectedObject;
         private Camera cam;
@@ -32,7 +32,7 @@ namespace ZoneSystem
         private void Awake()
         {
             mapController = GetComponent<MapController>();
-          
+            playerData = GetComponent<PlayerData>();
         }
         private void Start()
         {
@@ -59,9 +59,9 @@ namespace ZoneSystem
             {
                 return;
             }
-            
 
-            #region PC버전
+
+            #region PC��
             if (Input.GetMouseButtonDown(0))
             {
 
@@ -205,22 +205,27 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 Destroy(selectedObject);
+
+                playerData.gold += 3;
+
                 selectedObject = null;
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
+
+
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
             {
                 posCheckButton = null;
 
                 Destroy(selectedObject);
+                playerData.gold += 3;
+
                 selectedObject = null;
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
-
-
             }
         }
         #endregion
@@ -420,7 +425,7 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region ��ưü����
+        #region 버튼체인지
         void storeButtonChange()
         {
             if (selectedObject == null)

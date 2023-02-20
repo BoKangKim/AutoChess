@@ -9,6 +9,7 @@ public class MechaMagicianAI : RangeAI
     {
         SkillEffect skill = null;
         PhotonNetwork.Instantiate(skillEffect.gameObject.name, target.transform.position, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name, target.transform.position, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
 
     }

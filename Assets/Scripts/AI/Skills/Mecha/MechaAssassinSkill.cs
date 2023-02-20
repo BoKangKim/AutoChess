@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class MechaAssassinSkill : SkillEffect
 {
@@ -8,9 +10,10 @@ public class MechaAssassinSkill : SkillEffect
     private GameObject inst = null;
     private Vector3 euler = new Vector3(-90f, 0f, 0f);
 
+    
     protected override float setDestroyTime()
     {
-        return 2f;
+        return 3f;
     }
 
     protected override bool setIsNonAttackEffect()
@@ -28,17 +31,41 @@ public class MechaAssassinSkill : SkillEffect
         direction = (targetPosition - transform.position).normalized;
         transform.rotation = Quaternion.LookRotation(-direction);
     }
+    private void OnEnable()
+    {
+        gameObject.GetComponent<BoxCollider>().enabled = true;
+    }
 
     private void OnDestroy()
     {
-        Destroy(inst);
+        PhotonNetwork.Destroy(inst);
     }
-
+  
     protected override void specialLogic()
     {
-        if(transform.position.y <= 2.6f && inst == null)
+
+        if (transform.position.y <= 2.6f && inst == null)
         {
-            inst = Instantiate(collisionEffect, new Vector3(transform.position.x, 0.2f, transform.position.z),Quaternion.Euler(euler));
+            inst = PhotonNetwork.Instantiate(collisionEffect.name, new Vector3(transform.position.x, 0.2f, transform.position.z),Quaternion.Euler(euler));
         }
+    }
+    protected override void OnCollisionEnter(Collision collision)
+    {
+
+        if (collision.gameObject.GetComponent<Battle.AI.ParentBT>() != null)
+        {
+            if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
+            {
+                Debug.Log("µûÄá!");
+                collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage(attackDamage * 6);
+                gameObject.GetComponent<BoxCollider>().enabled = false;
+            }
+
+        }
+
+
+
+
+
     }
 }
