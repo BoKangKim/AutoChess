@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class DemonMagicianAI : RangeAI
 {
     public override void StartSkillEffect()
     {
         SkillEffect skill = null;
-        Instantiate(skillEffect.gameObject, target.transform.position + Vector3.up, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name, transform.position, Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
     }
 }

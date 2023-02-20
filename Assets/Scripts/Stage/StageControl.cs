@@ -176,7 +176,7 @@ namespace Battle.Stage
                 if(inst.TryGetComponent<ParentBT>(out bt) == true)
                 {
                     bt.setMyLocation();
-                    bt.SetState(nowStage);
+                    bt.setState(nowStage);
                 }
                 photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
@@ -188,7 +188,7 @@ namespace Battle.Stage
                 if (inst.TryGetComponent<ParentBT>(out bt) == true)
                 {
                     bt.setMyLocation();
-                    bt.SetState(nowStage);
+                    bt.setState(nowStage);
                 }
                 photonView.RPC("instantiateMonster", RpcTarget.Others, nowStage);
             }
@@ -207,7 +207,7 @@ namespace Battle.Stage
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
-                bt.SetState(nowStage);
+                bt.setState(nowStage);
             }
         }
 

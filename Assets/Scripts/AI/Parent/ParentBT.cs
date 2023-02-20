@@ -19,10 +19,14 @@ namespace Battle.AI
         private INode root = null;
         private INode specialRoot = null;
         protected ParentBT target = null;
+        protected ParentBT skilltarget = null;
+
         protected STAGETYPE stageType = STAGETYPE.PREPARE;
 
         protected Animator myAni = null;
         private List<ParentBT> enemies = null;
+        private List<ParentBT> myUnits = null;
+
         private ParentBT[] allUnits = null;
 
         protected string myType = null;
@@ -39,14 +43,19 @@ namespace Battle.AI
         protected RTAstar rta = null;
         protected UnitClass.Unit unitData = null;
 
+        [Header("unitStatus")]
         private float currentHP = 100f;
         protected bool ishit = false;
 
-        protected float mana = 0f;
+        protected float attackDamage = 0f;
+        protected float spellPower = 0f;
         protected float maxMana = 10f;
+        protected float maxHP = 0f;
+        protected float shield = 0f;
+
+        protected float mana = 0f;
         protected float attackRange = 0f;
         protected float manaRecovery = 5f;
-        protected float attackDamage = 0f;
 
         private bool die = false;
         private bool isInit = false;
@@ -58,16 +67,50 @@ namespace Battle.AI
         #endregion
         #region GET,SET
 
-        public void SetRecoveryCurrentHP(float Recovery)
+        public ParentBT getSkillTarget()
+        {
+            return skilltarget;
+        }
+        
+        public void setAttackDamage(float addAtk)
+        {
+            attackDamage += addAtk;
+        }
+        public void setSpellPower(float addSpellPower)
+        {
+            attackDamage += addSpellPower;
+        }
+        public float getSpellPower()
+        {
+            return spellPower;
+        }
+        public Animator getAnimator()
+        {
+            return myAni;
+        }
+        public ParentBT getTarget()
+        {
+            return target;
+        }
+        public float getMaxHP()
+        {
+            return maxHP;
+        }
+        public void setShield(float addShield)
+        {
+            currentHP += addShield;
+        }
+
+        public void setRecoveryCurrentHP(float Recovery)
         {
             currentHP += Recovery;
-            if (currentHP > unitData.GetUnitData.GetMaxHp)
+            if (currentHP > maxHP)
             {
-                currentHP = unitData.GetUnitData.GetMaxHp;
+                currentHP = maxHP;
             }
             
         }
-        public UnitClass.Unit GetUnitData()
+        public UnitClass.Unit getUnitData()
         {
             return unitData;
         }
@@ -76,7 +119,7 @@ namespace Battle.AI
             this.attackRange = attackRange;
         }
 
-        public void SetState(STAGETYPE state)
+        public void setState(STAGETYPE state)
         {
             this.stageType = state;
         }
@@ -108,7 +151,7 @@ namespace Battle.AI
 
         public float getAttackDamage()
         {
-            return unitData.GetUnitData.GetAtk;
+            return attackDamage;
         }
 
         public bool getIsDeath()
@@ -119,7 +162,10 @@ namespace Battle.AI
         {
             return enemies;
         }
-
+        public List<ParentBT> getFindMyUnits()
+        {
+            return myUnits;
+        }
         public string getMyType()
         {
             return myType;
@@ -222,12 +268,14 @@ namespace Battle.AI
                 Debug.LogError("Not Found Unit Data");
             }
 
-            currentHP = unitData.GetUnitData.GetMaxHp;
-            //maxMana = unitData.GetUnitData.GetMaxMp;
+            currentHP = unitData.totalMaxHp;
+            maxMana = unitData.totalMaxMp;
             maxMana = 5f;
-            manaRecovery += unitData.GetClassData.GetMpRecovery;
-            attackRange = unitData.GetClassData.GetAttackRange;
-            attackDamage = unitData.GetUnitData.GetAtk;
+            manaRecovery += unitData.totalMpRecovery;
+            attackRange = unitData.totalAttackRange;
+            attackDamage = unitData.totalAtkDamage;
+            spellPower = unitData.totalSpellPower;
+            myAni.speed = unitData.totalAttackSpeed;
         }
 
         public void changeStage(STAGETYPE stageType)
@@ -270,6 +318,38 @@ namespace Battle.AI
 
             Debug.Log(enemies.Count);
         }
+
+        private void addMyUnitList(ParentBT[] fieldAIObejects)
+        {
+            if (stageType == STAGETYPE.PVP
+                || stageType == STAGETYPE.CLONE)
+            {
+                for (int i = 0; i < fieldAIObejects.Length; i++)
+                {
+                 
+                    if (fieldAIObejects[i].nickName.CompareTo(enemyNickName) == 0)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].enabled == false)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)
+                    {
+
+                        enemies.Add(fieldAIObejects[i]);
+                    }
+                }
+            }
+            else
+            {
+                addEnemyList(fieldAIObejects, "UnitAI");
+            }
+        }
+
 
         private void addEnemyList(ParentBT[] fieldAIObejects)
         {

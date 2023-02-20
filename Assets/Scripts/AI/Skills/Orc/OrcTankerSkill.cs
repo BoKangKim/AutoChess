@@ -23,4 +23,11 @@ public class OrcTankerSkill : SkillEffect
     {
         
     }
+
+    private void OnEnable()
+    {
+
+        owner.setShield((owner.getUnitData().GetTotalMaxHp / 100) * 30);
+
+    }
 }

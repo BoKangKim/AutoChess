@@ -23,7 +23,6 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
     {
         GameObject inst = null;
         Queue<GameObject> instList = null;
-
         if(resourceCache.TryGetValue(prefabId,out inst) == false)
         {
             inst = Resources.Load<GameObject>(prefabId);

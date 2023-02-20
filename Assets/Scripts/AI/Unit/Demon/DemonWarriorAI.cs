@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 
 public class DemonWarriorAI : MeleeAI
 {
     public override void StartSkillEffect()
     {
         SkillEffect skill = null;
-        Vector3 targetPos = target.transform.position;
-        Instantiate(skillEffect.gameObject).TryGetComponent<SkillEffect>(out skill);
-        skill.gameObject.transform.position = new Vector3(targetPos.x, 0f, targetPos.z);
+    
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name,transform.position,Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
     }
 }
