@@ -171,8 +171,15 @@ namespace Battle.Stage
             {
                 if (PhotonNetwork.IsMasterClient == true)
                 {
-                    isEndSetEnemy = setNextEnemy();
-                    photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
+                    if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
+                    {
+                        //isEndSetEnemy = setCloneStage();
+                    }
+                    else
+                    {
+                        isEndSetEnemy = setNextEnemy();
+                        photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
+                    }
                 }
             }
             else if (nowStage == STAGETYPE.MONSTER)
@@ -364,6 +371,7 @@ namespace Battle.Stage
 
             return true;
         }
+        
 
         private void initializingStageInfo()
         {
