@@ -211,6 +211,7 @@ namespace Battle.Stage
 
         private void changeUnitMap()
         {
+            GameManager.Inst.ResetUnitCount();
             battleObject = myMap.getBattleObjects();
             ParentBT bt = null;
 
@@ -226,6 +227,7 @@ namespace Battle.Stage
                     if (battleObject[i, j].TryGetComponent<ParentBT>(out bt) == true)
                     {
                         bt.setEnemyNickName(myMap.getEnemy().getMyNickName());
+                        GameManager.Inst.PlusUnitCount();
                     }
 
                     if (myMap.isMirrorModePlayer == false)
@@ -362,7 +364,7 @@ namespace Battle.Stage
         {
             // STAGE 1
             {
-                stages[0, 0] = STAGETYPE.MONSTER;
+                stages[0, 0] = STAGETYPE.PVP;
                 stages[0, 1] = STAGETYPE.PVP;
                 stages[0, 2] = STAGETYPE.PVP;
                 stages[0, 3] = STAGETYPE.PVP;

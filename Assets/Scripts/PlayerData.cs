@@ -12,12 +12,17 @@ public class PlayerData
     public int playerLevel;
     //hp
     public int CurHP;
-    public int MaxHP;
+    private int MaxHP;
     //경험치
     public float[] MaxExp;
     public float CurExp;
 
     public PlayerData()
+    {
+        Initializing();
+    }
+
+    private void Initializing()
     {
         playerName = "name";
         gold = 0;
@@ -26,8 +31,6 @@ public class PlayerData
         CurHP = MaxHP;
         MaxExp = new float[10] { 0, 2, 6, 10, 20, 36, 56, 70, 80, 100 };
         CurExp = 0;
-        UIManager_KSR.Inst.UpdatePlayerName(playerName);
-        UIManager_KSR.Inst.UpdatePlayerInfo(gold, CurExp, playerLevel, CurHP);
     }
 
     // 골드는 유닛을 구매할때 장비를 구매할때사용

@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
+    private int playerUnitCount = 0;
+
 
     private PlayerData player = null;
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
@@ -39,16 +41,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
+        player = new PlayerData();
     }
 
-    private void Start()
-    {
-        if(TryGetComponent<PlayerData>(out player) == false)
-        {
-            Debug.LogError("Not Found Player Data");
-        }
-    }
-
+    #region GAMETYPE
     private GAMETYPE type = GAMETYPE.MAX;
 
     public GAMETYPE getType()
@@ -66,7 +62,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         this.type = type;
     }
+    #endregion
 
+    #region SyncMasterInfo
     public void SyncStageIndex(int row , int col)
     {
         stageIndex.row = row;
@@ -91,8 +89,32 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     }
 
+    #endregion
+
+    #region Player Info
+    public void PlusUnitCount()
+    {
+        playerUnitCount++;
+    }
+
+    public void MinusUnitCount()
+    {
+        playerUnitCount--;
+    }
+
+    public void ResetUnitCount()
+    {
+        playerUnitCount = 0;
+    }
+
+    public int GetUnitCount()
+    {
+        return playerUnitCount;
+    }
+
     public PlayerData GetPlayer()
     {
         return player;
     }
+    #endregion
 }
