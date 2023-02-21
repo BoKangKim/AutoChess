@@ -44,6 +44,7 @@ namespace Battle.Stage
         private delegate IEnumerator waitMaster();
 
         private Vector3 camStartPos = Vector3.zero;
+        
 
         public STAGETYPE getNowStage()
         {
@@ -172,15 +173,8 @@ namespace Battle.Stage
             {
                 if (PhotonNetwork.IsMasterClient == true)
                 {
-                    if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
-                    {
-                        //isEndSetEnemy = setCloneStage();
-                    }
-                    else
-                    {
-                        isEndSetEnemy = setNextEnemy();
-                        photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
-                    }
+                    isEndSetEnemy = setNextEnemy();
+                    photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
                 }
             }
             else if (nowStage == STAGETYPE.MONSTER)
@@ -256,10 +250,17 @@ namespace Battle.Stage
         {
             battleObject = myMap.getBattleObjects();
 
-            if(monster.gameObject.activeSelf == true)
+            if(monster != null &&
+                monster.gameObject.activeSelf == true)
             {
                 PhotonNetwork.Destroy(monster.gameObject);
                 monster = null;
+            }
+
+            if (myMap.isMirrorModePlayer == true)
+            {
+                cam.transform.position = camStartPos;
+                cam.transform.rotation = Quaternion.Euler(Vector3.zero);
             }
 
             for (int i = 0; i < battleObject.GetLength(0); i++)
@@ -277,14 +278,7 @@ namespace Battle.Stage
 
                     if (battleObject[i, j].activeSelf == false)
                     {
-                        //battleObject[i, j].SetActive(true);
-                        //string objectName = battleObject[i ,j].name;
-                        //battleObject[i, j].SetActive(false);
-
-                        GameObject inst = PhotonNetwork.Instantiate(battleObject[i, j].name, Vector3.zero,Quaternion.identity);
-                        Debug.Log(battleObject[i,j].name);
-                        inst.transform.SetParent(myMap.transform,false);
-                        inst.transform.localPosition = LocationControl.convertLocationToPosition(location);
+                        myMap.instantiateBattleObj(battleObject[i,j].name,Vector3.zero,Quaternion.identity,location);
                     }
                     else
                     {
@@ -295,8 +289,9 @@ namespace Battle.Stage
                 }
             }
 
-            cam.transform.position = camStartPos;
-            cam.transform.rotation = Quaternion.Euler(Vector3.zero);
+            
+
+            myMap.isMirrorModePlayer = false;
         }
 
         private bool setNextEnemy()
@@ -368,7 +363,7 @@ namespace Battle.Stage
             // STAGE 1
             {
                 stages[0, 0] = STAGETYPE.MONSTER;
-                stages[0, 1] = STAGETYPE.MONSTER;
+                stages[0, 1] = STAGETYPE.PVP;
                 stages[0, 2] = STAGETYPE.PVP;
                 stages[0, 3] = STAGETYPE.PVP;
             }

@@ -50,11 +50,12 @@ namespace Battle.AI
 
         private bool die = false;
         private bool isInit = false;
+        private bool isFirst = true;
         [SerializeField] private string enemyNickName = "";
 
         private Vector3 startposition;
-        private bool isFirst = true;
-
+        private bool isEnabled = true;
+        private StageControl sc = null;
         #endregion
         #region GET,SET
 
@@ -138,19 +139,11 @@ namespace Battle.AI
             rta = new RTAstar(myLocation,gameObject.name);
             myType = initializingMytype();
             initializingData();
-        }
-
-        private void OnDisable()
-        {
-            if(photonView.IsMine == false)
+            if(photonView.IsMine == true)
             {
-                return;
-            }
-
-            StageControl sc = FindObjectOfType<StageControl>();
-            if(sc != null)
-            {
-                sc.changeStage -= changeStage;
+                nickName = PhotonNetwork.NickName;
+                Debug.Log(nickName + " AWAKE");
+                photonView.RPC("RPC_SetNickName", RpcTarget.Others, nickName);
             }
         }
 
@@ -166,18 +159,24 @@ namespace Battle.AI
 
             initializingAfterBattle();
 
-            StageControl sc = FindObjectOfType<StageControl>();
-            sc.changeStage += changeStage;
+            if(photonView.IsMine == true
+                && isEnabled == true
+                && myType.CompareTo("UnitAI") == 0)
+            {
+                this.enabled = false;
 
-            photonView.RPC("RPC_SetNickName",RpcTarget.Others, nickName);
+                isEnabled = false;
+            }
         }
 
-        [PunRPC]
-        public void RPC_SetNickName(string nickName)
+        private void Start()
         {
-            this.nickName = nickName;
+            sc = FindObjectOfType<StageControl>();
+            if (sc != null)
+            {
+                sc.changeStage += changeStage;
+            }
         }
-
 
         private void Update()
         {
@@ -185,16 +184,19 @@ namespace Battle.AI
             {
                 return;
             }
+                Debug.Log("ISMine False");
 
             if (stageType == STAGETYPE.PREPARE)
             {
                 return;
             }
+                Debug.Log("STAGE PREPARE");
 
             if (die == true)
             {
                 return;
             }
+                Debug.Log("DIE");
 
             if (specialRoot != null 
                 && specialRoot.Run() == true)
@@ -234,6 +236,13 @@ namespace Battle.AI
                 myAni.ResetTrigger("isAttack");
             }
             
+            
+            sc = FindObjectOfType<StageControl>();
+            if (sc != null)
+            {
+               sc.changeStage += changeStage;
+            }
+
             isInit = false;
             enemies.Clear();
             target = null;
@@ -241,12 +250,18 @@ namespace Battle.AI
             die = false;
             initializingData();
             rta.initCloseList();
-            nickName = PhotonNetwork.NickName;
 
             if (photonView.IsMine == true)
             {
-                photonView.RPC("RPC_initializingAfterBattle", RpcTarget.Others);
+                nickName = PhotonNetwork.NickName;
+                photonView.RPC("RPC_SetNickName", RpcTarget.Others, nickName);
             }
+        }
+
+        [PunRPC]
+        public void RPC_SetNickName(string nickName)
+        {
+            this.nickName = nickName;
         }
 
         [PunRPC]
@@ -296,11 +311,7 @@ namespace Battle.AI
         public void changeStage(STAGETYPE stageType)
         {
             this.stageType = stageType;
-
-            if(stageType != STAGETYPE.PREPARE)
-            {
-                initializingAfterBattle();
-            }
+            initializingAfterBattle();
         }
 
         #region Searching Enemy
@@ -442,7 +453,6 @@ namespace Battle.AI
 
                         if (rta.checkLocationArrange(target.getMyLocation().x, target.getMyLocation().y) == false)
                         {
-                            Debug.Log(enemies.Count + " Arrange");
                             enemies.Clear();
                             return;
                         }

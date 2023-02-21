@@ -172,6 +172,20 @@ namespace ZoneSystem
             return bt;
         }
 
+        public void instantiateBattleObj(string objName, Vector3 pos , Quaternion rot,Battle.Location.LocationXY location)
+        {
+            GameObject inst = PhotonNetwork.Instantiate(objName, pos, rot);
+            ParentBT bt = null;
+
+            if(inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.enabled = true;
+            }
+
+            inst.transform.SetParent(this.transform, false);
+            inst.transform.localPosition = Battle.Location.LocationControl.convertLocationToPosition(location);
+        }
+
         [PunRPC]
         public void RPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
@@ -188,11 +202,7 @@ namespace ZoneSystem
 
             for (int i = 0; i < maps.Length; i++)
             {
-                if (maps[i].photonView.ViewID == myViewID)
-                {
-                    continue;
-                }
-                else if (maps[i].photonView.ViewID == enemyViewID)
+                if (maps[i].photonView.ViewID == enemyViewID)
                 {
                     enemy = maps[i];
                     enemyNickName = maps[i].getMyNickName();
@@ -606,8 +616,10 @@ namespace ZoneSystem
                     {
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
-
-                        safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                        if(photonView.IsMine == true)
+                        {
+                            safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                        }
 
                         if (PlayerMapSpawner.Map != null)
                         {
