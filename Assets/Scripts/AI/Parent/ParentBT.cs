@@ -128,6 +128,7 @@ namespace Battle.AI
 
         public void setEnemyNickName(string enemyNickName)
         {
+            enemies.Clear();
             this.enemyNickName = enemyNickName;
         }
         #endregion
@@ -184,19 +185,16 @@ namespace Battle.AI
             {
                 return;
             }
-                Debug.Log("ISMine False");
 
             if (stageType == STAGETYPE.PREPARE)
             {
                 return;
             }
-                Debug.Log("STAGE PREPARE");
 
             if (die == true)
             {
                 return;
             }
-                Debug.Log("DIE");
 
             if (specialRoot != null 
                 && specialRoot.Run() == true)

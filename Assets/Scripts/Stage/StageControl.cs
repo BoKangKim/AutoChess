@@ -310,10 +310,10 @@ namespace Battle.Stage
                 do
                 {
                     index = UnityEngine.Random.Range(0, maps.Length);
+                    myMap.setEnemy(maps[index], 0, 0, false);
                 } while (maps[index].photonView.IsMine == true
-                || myMap.getEnemy().photonView.ViewID == maps[index].photonView.ViewID);
+                || maps[preIndex].photonView.ViewID == maps[index].photonView.ViewID);
 
-                myMap.setEnemy(maps[index], 0, 0, false);
                 preIndex = index;
             }
 
