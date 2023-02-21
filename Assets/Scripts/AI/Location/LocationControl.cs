@@ -3,6 +3,7 @@ using System;
 
 namespace Battle.Location
 {
+    [System.Serializable]
     public struct LocationXY
     {
         public int x;
@@ -68,9 +69,7 @@ namespace Battle.Location
         {
             Vector3 pos;
             LocationXY location = convertPositionToLocation(position);
-            Debug.Log(location.ToString());
             location = convertMirrorMode(location);
-            Debug.Log(location.ToString());
             pos = convertLocationToPosition(location);
 
             return pos;

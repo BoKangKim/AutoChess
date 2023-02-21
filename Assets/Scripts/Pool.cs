@@ -9,12 +9,7 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
     private readonly Dictionary<string, GameObject> resourceCache = new Dictionary<string, GameObject>();
     private readonly Dictionary<string, Queue<GameObject>> listCache = new Dictionary<string, Queue<GameObject>>();
 
-    private void OnDisable()
-    {
-        PhotonNetwork.PrefabPool = default;
-    }
-
-    private void OnEnable()
+    private void Awake()
     {
         PhotonNetwork.PrefabPool = this;
     }
@@ -23,6 +18,8 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
     {
         GameObject inst = null;
         Queue<GameObject> instList = null;
+
+        prefabId = prefabId.Replace("(Clone)","");
 
         if(resourceCache.TryGetValue(prefabId,out inst) == false)
         {
@@ -36,15 +33,12 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
             listCache.Add(prefabId, instList);
         }
 
-        if(instList.Count != 0)
+        if(instList.Count == 0)
         {
-            inst = instList.Dequeue();
-        }
-        else
-        {
-            inst = Instantiate(inst);
+            instList.Enqueue(GameObject.Instantiate(inst,position,rotation));
         }
 
+        inst = instList.Dequeue();
         inst.SetActive(true);
         inst.transform.position = position;
         inst.transform.rotation = rotation;
@@ -52,9 +46,9 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
         return inst;
     }
 
-    public void Destroy(GameObject gameObject)
+    public void Destroy(GameObject deObject)
     {
-        string prefabID = gameObject.name.Replace("(Clone)","");
+        string prefabID = deObject.name.Replace("(Clone)","");
         Queue<GameObject> instList = null;
 
         if(listCache.TryGetValue(prefabID,out instList) == false)
@@ -63,13 +57,13 @@ public class Pool : MonoBehaviourPun ,IPunPrefabPool
             return;
         }
 
-        gameObject.SetActive(false);
-        instList.Enqueue(gameObject);
+        deObject.transform.parent = null;
+        deObject.SetActive(false);
+        instList.Enqueue(deObject);
     }
 
     public void listCaching(string[] cachingUnits)
     {
-        Debug.Log("CACHING");
         for (int i = 0; i < cachingUnits.Length; i++)
         {
             resourceCache.Add(cachingUnits[i] ,Resources.Load<GameObject>(cachingUnits[i]));

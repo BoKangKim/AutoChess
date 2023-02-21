@@ -68,16 +68,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        
+        int rnd = Random.Range(0, 2147483645);
+
         lobbyPanel.gameObject.SetActive(true);
 
         logingPanel.gameObject.SetActive(false);
 
         Debug.Log(Database.Instance.userInfo.username);
         myNickName.text = Database.Instance.userInfo.username;
-        PhotonNetwork.NickName = Database.Instance.userInfo.username;
+        PhotonNetwork.NickName = Database.Instance.userInfo.username + rnd.ToString();
 
-        
+        Debug.Log(PhotonNetwork.NickName);
         chatmanager.enabled = true;
         PV = photonView;
         //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
@@ -130,7 +131,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-        PhotonNetwork.LoadLevel(gameScene);
+        //PhotonNetwork.LoadLevel(gameScene);
 
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -188,7 +189,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
         //loadingImg
     }
-
+     
     public void OnClick_MatchPanel()
     {
         if (!matchButtonPanel.gameObject.activeSelf)

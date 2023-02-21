@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class DwarfWarriorAI : MeleeAI
 {
@@ -8,7 +9,7 @@ public class DwarfWarriorAI : MeleeAI
     {
         SkillEffect skill = null;
         Vector3 targetPos = target.transform.position;
-        Instantiate(skillEffect.gameObject, new Vector3(transform.position.x, 0f, transform.position.z), Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
+        PhotonNetwork.Instantiate(skillEffect.gameObject.name, new Vector3(transform.position.x, 0f, transform.position.z), Quaternion.identity).TryGetComponent<SkillEffect>(out skill);
         skill.setOwner(this);
     }
 

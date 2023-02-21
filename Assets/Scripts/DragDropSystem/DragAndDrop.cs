@@ -88,7 +88,6 @@ namespace ZoneSystem
                         if (CastRay(safetySpaceLayer).collider != null)
                         {
                             var vec = safetyPosToIndex(selectedObject.transform.localPosition);
-                            Debug.Log(vec);
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }

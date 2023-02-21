@@ -45,10 +45,145 @@ namespace ZoneSystem
         private MapController enemy = null;
         public bool isMirrorModePlayer = true;
         private bool isInitIndex = false;
+        private string myNickName = "";
+        private string enemyNickName = "";
+
+        //유닛 랜덤뽑기
+        //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
+        //private int[] freenetUnitIndex = null;
+        private string[] freenetUnits = null;
+
+        [SerializeField] private GameObject ItemPrefab;
+        [SerializeField] private GameObject battleZoneTile;
+
+       
+
+        private void Awake()
+        {
+            //if (!photonView.IsMine) return;
+            freenetUnits = new string[15];
+            safetyObject = new GameObject[2, 7];
+            battleObject = new GameObject[3, 7];
+            RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
+
+            initializingUnitName();
+
+            #region FreeNet Random Three Random Unit 
+            //int index = 0;
+            //if(PhotonNetwork.IsMasterClient == true)
+            //{
+            //    do
+            //    {
+            //        bool isContains = false;
+            //        freenetUnitIndex[index] = Random.Range(0, 5);
+
+            //        for  (int i = 0; i < freenetUnitIndex.Length; i++)
+            //        {
+            //            if  (i == index)
+            //            {
+            //                continue;
+            //            }
+
+            //            if (freenetUnitIndex[i] == freenetUnitIndex[index])
+            //            {
+            //                isContains = true;
+            //            }
+            //        }
+
+            //        if (isContains == true)
+            //        {
+            //            continue;
+            //        }
+
+            //        index++;
+            //    } while (index < freenetUnitIndex.Length);
+
+
+            //}
+            #endregion
+        }
+
+        private void Start()
+        {
+            if (photonView.IsMine == true)
+            {
+                myNickName = PhotonNetwork.NickName;
+                photonView.RPC("setMyNickName", RpcTarget.Others, myNickName);
+            }
+
+            if (photonView.IsMine == true)
+            {
+                UIManager.Inst.UnitInstButton = OnClick_UnitInst;
+
+                battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
+                battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
+            }
+
+            if (PhotonNetwork.IsMasterClient == true
+                && photonView.IsMine)
+            {
+                StartCoroutine(WaitPlayer());
+            }
+        }
+
+        public GameObject[,] getBattleObjects()
+        {
+            return battleObject;
+        }
+
+        public int getPhotonViewID()
+        {
+            return photonView.ViewID;
+        }
+
+        public string getEnemyNickName()
+        {
+            return enemyNickName;
+        }
+
+
+        public string getMyNickName()
+        {
+            return myNickName;
+        }
 
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
-            photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
+            photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
+        }
+
+        public ParentBT InstantiateMonster(GameObject monster,Battle.Stage.STAGETYPE stage)
+        {
+            if(photonView.IsMine == false)
+            {
+                return null;
+            }
+
+            GameObject inst = PhotonNetwork.Instantiate(monster.gameObject.name, new Vector3(10.5f, 0.25f, 10f), Quaternion.Euler(0f, 180f, 0f));
+            inst.transform.SetParent(gameObject.transform, false);
+            ParentBT bt = null;
+
+            if (inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.setMyLocation();
+                bt.SetState(stage);
+            }
+
+            return bt;
+        }
+
+        public void instantiateBattleObj(string objName, Vector3 pos , Quaternion rot,Battle.Location.LocationXY location)
+        {
+            GameObject inst = PhotonNetwork.Instantiate(objName, pos, rot);
+            ParentBT bt = null;
+
+            if(inst.TryGetComponent<ParentBT>(out bt) == true)
+            {
+                bt.enabled = true;
+            }
+
+            inst.transform.SetParent(this.transform, false);
+            inst.transform.localPosition = Battle.Location.LocationControl.convertLocationToPosition(location);
         }
 
         [PunRPC]
@@ -67,26 +202,24 @@ namespace ZoneSystem
 
             for (int i = 0; i < maps.Length; i++)
             {
-                if (maps[i].photonView.ViewID == myViewID)
-                {
-                    continue;
-                }
-                else if (maps[i].photonView.ViewID == enemyViewID)
+                if (maps[i].photonView.ViewID == enemyViewID)
                 {
                     enemy = maps[i];
+                    enemyNickName = maps[i].getMyNickName();
                 }
             }
         }
 
-        public void setEnemy(MapController enemy,int myViewID,int enemyViewID,bool isRPC)
+        public void setEnemy(MapController enemy, int myViewID, int enemyViewID, bool isRPC)
         {
-            if(isRPC == true)
+            if (isRPC == true)
             {
-                photonView.RPC("RPC_SetEnemy",RpcTarget.All,myViewID,enemyViewID);
+                photonView.RPC("RPC_SetEnemy", RpcTarget.All, myViewID, enemyViewID);
             }
             else
             {
                 this.enemy = enemy;
+                enemyNickName = enemy.getMyNickName();
             }
         }
 
@@ -95,89 +228,12 @@ namespace ZoneSystem
             return enemy;
         }
 
-        //유닛 랜덤뽑기
-        //private string[] units = new string[Database.Instance.userInfo.UserUnitCount];
-
-        private int[] freenetUnitIndex = null;
-        private string[] freenetUnits = null;
-
-        [SerializeField] private GameObject ItemPrefab;
-        [SerializeField] private GameObject battleZoneTile;
-
-        public GameObject[,] getBattleObjects()
+        [PunRPC]
+        public void setMyNickName(string nickname)
         {
-            return battleObject;
+            this.myNickName = nickname;
         }
 
-        public int getPhotonViewID()
-        {
-            return photonView.ViewID;
-        }
-
-        private void Awake()
-        {
-            //if (!photonView.IsMine) return;
-            freenetUnitIndex = new int[3] { -1, -1, -1 };
-            freenetUnits = new string[25];
-            safetyObject = new GameObject[2, 7];
-            battleObject = new GameObject[3, 7];
-            RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
-
-            playerData = GetComponent<PlayerData>();
-
-            initializingUnitName();
-
-            int index = 0;
-            if(PhotonNetwork.IsMasterClient == true)
-            {
-                do
-                {
-                    bool isContains = false;
-                    freenetUnitIndex[index] = Random.Range(0, 5);
-
-                    for  (int i = 0; i < freenetUnitIndex.Length; i++)
-                    {
-                        if  (i == index)
-                        {
-                            continue;
-                        }
-
-                        if (freenetUnitIndex[i] == freenetUnitIndex[index])
-                        {
-                            isContains = true;
-                        }
-                    }
-
-                    if (isContains == true)
-                    {
-                        continue;
-                    }
-
-                    index++;
-                } while (index < freenetUnitIndex.Length);
-
-                
-            }
-        }
-
-        private void Start()
-        {
-            if (photonView.IsMine == true)
-            {
-                UIManager.Inst.UnitInstButton = OnClick_UnitInst;
-
-                battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
-                battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
-            }
-
-            if (PhotonNetwork.IsMasterClient == true
-                && photonView.IsMine)
-            {
-                StartCoroutine(WaitPlayer());
-            }
-        }
-
-            
         IEnumerator WaitPlayer()
         {
             maps = FindObjectsOfType<MapController>();
@@ -189,31 +245,28 @@ namespace ZoneSystem
                 yield return null;
             }
 
-            for (int i = 0; i < maps.Length; i++)
-            {
-                for (int j = 0; j < freenetUnitIndex.Length; j++)
-                {
-                    maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
-                }
-            }
+            //for (int i = 0; i < maps.Length; i++)
+            //{
+            //    for (int j = 0; j < freenetUnitIndex.Length; j++)
+            //    {
+            //        maps[i].photonView.RPC("RPC_SyncUnitIndex", RpcTarget.All, j, freenetUnitIndex[j]);
+            //    }
+            //}
 
             PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
 
             yield break;
         }
 
-        [PunRPC]
-        public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
-        {
-            freenetUnitIndex[arrIndex] = unitIndex;
-        }
+        //[PunRPC]
+        //public void RPC_SyncUnitIndex(int arrIndex,int unitIndex)
+        //{
+        //    freenetUnitIndex[arrIndex] = unitIndex;
+        //}
 
         private void initializingUnitName()
         {
             string firstName = "";
-            firstName = "Demon_";
-            freenetUnits[0] = firstName + "Assassin";
-            return;
 
             for (int i = 0; i < freenetUnits.Length; i += 5)
             {
@@ -223,16 +276,10 @@ namespace ZoneSystem
                         firstName = "Orc_";
                         break;
                     case 1:
-                        firstName = "Dwarf_";
+                        firstName = "Demon_";
                         break;
                     case 2:
                         firstName = "Mecha_";
-                        break;
-                    case 3:
-                        firstName = "Demon_";
-                        break;
-                    case 4:
-                        firstName = "Golem_";
                         break;
                 }
 
@@ -552,11 +599,12 @@ namespace ZoneSystem
             }
             else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = freenetUnitIndex[Random.Range(0, 3)];
-                index *= 5;
-                UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
+                int index = Random.Range(0, 15);
 
-                UnitPrefab = freenetUnits[0];
+                UnitPrefab = freenetUnits[index];
+                //int index = freenetUnitIndex[Random.Range(0, 3)];
+                //index *= 5;
+                //UnitPrefab = freenetUnits[Random.Range(index, index + 5)];
             }
 
             // 유닛의 최대 수는 15개
@@ -568,8 +616,10 @@ namespace ZoneSystem
                     {
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
-
-                        safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                        if(photonView.IsMine == true)
+                        {
+                            safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                        }
 
                         if (PlayerMapSpawner.Map != null)
                         {
