@@ -45,6 +45,7 @@ namespace Battle.Stage
 
         private Vector3 camStartPos = Vector3.zero;
         private PlayerData player = null;
+        private PlayerInfoConnector[] connectors = null;
 
         public STAGETYPE getNowStage()
         {
@@ -94,7 +95,7 @@ namespace Battle.Stage
             }
             else
             {
-                nowStage = GameManager.Inst.nowStage;
+                //nowStage = GameManager.Inst.nowStage;
                 stageIndex = GameManager.Inst.getStageIndex();                
             }
 
@@ -135,19 +136,63 @@ namespace Battle.Stage
 
             if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
             {
+                connectors = FindObjectsOfType<PlayerInfoConnector>();
+                int minHP = 0;
+                string minNickName = "";
 
+                if(connectors.Length > 0)
+                {
+                    minHP = connectors[0].GetPlayer().CurHP;
+                    minNickName = connectors[0].GetNickName();
+
+                    for(int i = 1; i < connectors.Length; i++)
+                    {
+                        if(minHP > connectors[i].GetPlayer().CurHP)
+                        {
+                            minHP = connectors[i].GetPlayer().CurHP;
+                            minNickName = connectors[i].GetNickName();
+                        }
+                    }
+                }
+
+                if(changeStage != null)
+                {
+                    photonView.RPC("RPC_changeStage", RpcTarget.All, nowStage, minNickName);
+                }
             }
-
-            if (changeStage != null)
+            else
             {
-                //changeStage(nowStage);
-                photonView.RPC("RPC_changeStage", RpcTarget.All, nowStage);
+                if (changeStage != null)
+                {
+                    //changeStage(nowStage);
+                    photonView.RPC("RPC_changeStage", RpcTarget.All, nowStage);
+                }
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
             GameManager.Inst.nowStage = nowStage;
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
-            photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
+            //photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
+        }
+
+        [PunRPC]
+        public void RPC_changeStage(STAGETYPE nowStage, string nickname)
+        {
+            if (changeStage == null)
+            {
+                return;
+            }
+
+            if(nickname.CompareTo(myMap.getMyNickName()) == 0) 
+            {
+                changeStage(STAGETYPE.BOSS);
+                myMap.setEnemy(myMap, 0, 0, false);
+                monster = (MonsterAI)myMap.InstantiateMonster(Monsters[0], nowStage);
+            }
+            else
+            {
+                changeStage(STAGETYPE.PVP);
+            }
         }
 
         [PunRPC]
@@ -303,6 +348,25 @@ namespace Battle.Stage
 
         private bool setNextEnemy()
         {
+            if(PhotonNetwork.CurrentRoom.PlayerCount <= 3)
+            {
+                for(int i = 0; i < maps.Length; i++)
+                {
+                    if (maps[i] == null
+                        || maps[i].photonView.IsMine == true)
+                    {
+                        continue;
+                    }
+
+                    myMap.setEnemy(maps[i], 0, 0, false);
+                }
+
+                
+
+                return true;
+            }
+
+
             if (myMap.getEnemy() == null)
             {
                 do

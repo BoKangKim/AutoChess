@@ -668,8 +668,7 @@ namespace Battle.AI
                 if(GameManager.Inst.GetPlayerInfoConnector().GetUnitCount() <= 0
                     && myType.CompareTo("UnitAI") == 0)
                 {
-                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 2);
-                    Debug.Log(GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP);
+                    GameManager.Inst.GetPlayerInfoConnector().DamageHP(enemies.Count * 2);
                 }
             }
         }

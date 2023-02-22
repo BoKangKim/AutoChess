@@ -791,7 +791,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfe0616745c6b6345946daa8a75250f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerData: {fileID: 0}
   unitBuyButton: {fileID: 1288078459}
   equipmentBuyButton: {fileID: 1867678984}
   sellButton: {fileID: 1224020186}

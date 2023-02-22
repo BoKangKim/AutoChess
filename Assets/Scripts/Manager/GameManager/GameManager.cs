@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
-    private PlayerInfoConnector connecter = null;
+    private PlayerInfoConnector connector = null;
 
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
         
+        if(TryGetComponent<PlayerInfoConnector>(out connector) == false)
+        {
+            Debug.LogError("Not Found Player Info Connector");
+        }
     }
 
     #region GAMETYPE
@@ -91,11 +95,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void SetPlayerInfoConnector(PlayerInfoConnector player)
     {
-        this.connecter = player;
+        this.connector = player;
     }
 
     public PlayerInfoConnector GetPlayerInfoConnector()
     {
-        return connecter;
+        return connector;
     }
 }

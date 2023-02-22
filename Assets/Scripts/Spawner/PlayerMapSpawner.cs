@@ -11,6 +11,7 @@ public class PlayerMapSpawner : MonoBehaviourPun
     void Start()
     {
         Map = PhotonNetwork.Instantiate("Map", Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate("InfoConnector", Vector3.zero, Quaternion.identity);
 
         switch (PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"])
         {

@@ -1,21 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using Photon.Realtime;
 
 public class PlayerInfoConnector : MonoBehaviourPun
 {
     private int playerUnitCount = 0;
     private PlayerData player = null;
+    private string nickName = "";
 
     private void Awake()
     {
-        if(photonView.IsMine == true)
-        {
-            player = new PlayerData();
-            GameManager.Inst.SetPlayerInfoConnector(this);
-        }
+        player = new PlayerData();
+        GameManager.Inst.SetPlayerInfoConnector(this);
+        nickName = PhotonNetwork.NickName;
+    }
+
+    public string GetNickName()
+    {
+        return nickName;
     }
 
     #region Player Info
@@ -43,6 +43,26 @@ public class PlayerInfoConnector : MonoBehaviourPun
     {
         return player;
     }
+    #endregion
+
+    #region SyncPlayerInfo
+
+    public void DamageHP(int damage)
+    {
+        photonView.RPC("RPC_DamageHP",RpcTarget.All,damage);
+    }
+
+    [PunRPC]
+    public void RPC_DamageHP(int damage)
+    {
+        this.player.CurHP -= damage;
+        if(player.CurHP <= 0)
+        {
+            PhotonNetwork.LeaveRoom();
+        }
+    }
+
+
     #endregion
 
 }
