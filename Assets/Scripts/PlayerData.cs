@@ -26,8 +26,7 @@ public class PlayerData : MonoBehaviour
         CurHP = MaxHP;
         MaxExp = new float[10] { 0, 2, 6, 10, 20, 36, 56, 70 , 80, 100 };
         CurExp = 0;
-        UIManager_KSR.Inst.UpdatePlayerName(name);
-        UIManager_KSR.Inst.UpdatePlayerInfo(gold, CurExp, playerLevel, CurHP);
+        
     }
     // 골드는 유닛을 구매할때 장비를 구매할때사용
     // 플레이어 레벨은 경험치가 꽉찼을때 플레이어 레벨은 maxexp배열의인덱스의 들어가서 경험치 통을 가져온다.

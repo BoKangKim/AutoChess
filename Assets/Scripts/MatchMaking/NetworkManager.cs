@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Realtime;
 
-public enum GAMETYPE 
+public enum GAMETYPE
 {
     FREENET,
     LIVENET,
@@ -39,7 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI metchingSecText;
     public TextMeshProUGUI metchingCurPlyaerText;
 
-    
+
     public TextMeshProUGUI statusText;
 
     PhotonView PV;
@@ -53,11 +53,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        Screen.SetResolution(480,480,false);
-        DontDestroyOnLoad(this);
+        Screen.SetResolution(480, 480, false);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "SyncUnit";
+        gameScene = "MainGameScene";
     }
 
     private void Start()
@@ -69,7 +68,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        
+
         lobbyPanel.gameObject.SetActive(true);
 
         logingPanel.gameObject.SetActive(false);
@@ -78,7 +77,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         myNickName.text = Database.Instance.userInfo.username;
         PhotonNetwork.NickName = Database.Instance.userInfo.username;
 
-        
+
         chatmanager.enabled = true;
         PV = photonView;
         //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
@@ -86,7 +85,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void joinFreeNet()
     {
-        GameManager.Inst.setType(GAMETYPE.FREENET,gameObject);
+        GameManager.Inst.setType(GAMETYPE.FREENET, gameObject);
         JoinRandomOrCreateRoom();
 
     }
@@ -131,12 +130,14 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         UpdatePlayerCount();
-       
+        PhotonNetwork.LoadLevel(gameScene);
+
+
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-      
+
                 PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"] = i;
 
                 PhotonNetwork.PlayerList[i].SetCustomProperties(PhotonNetwork.LocalPlayer.CustomProperties);
@@ -169,7 +170,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         metchingCurPlyaerText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
-    
+
     float time = 0f;
 
     void Update()

@@ -16,6 +16,7 @@ public class RealUIManager : MonoBehaviour
     [Header("[Setting]")]
     [SerializeField] private Button settingButton;
     [SerializeField] private GameObject settingContentsPopup;
+    [SerializeField] private Button applyButton;
 
     [Header("[Player]")]
     [SerializeField] private TextMeshProUGUI playerExpensionLv;
@@ -61,9 +62,15 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gachaWeponGold;
     [SerializeField] private TextMeshProUGUI gachaUnitGold;
 
+
+    [SerializeField] private ScrollRect synergyScroll = null;
+    [SerializeField] private GameObject[] synergyList = null;
+
+    [SerializeField] private PlayerData playerData = null;
+
     private void Awake()
     {
-        
+        //expansionUserID.text = Database.Instance.userInfo.username;
     }
 
     private void Start()
@@ -73,16 +80,51 @@ public class RealUIManager : MonoBehaviour
 
     private void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            Debug.Log("생성");
+            SynergyScroll("Mecha2");
+            SynergyScroll("Orc");
+            SynergyScroll("Demon");
+            SynergyScroll("Assassin2");
+            SynergyScroll("Tanker2");
+            SynergyScroll("Warrior");
+        }
+
+        if(Input.GetKeyDown(KeyCode.N))
+        {
+            expansionUserID.text = Database.Instance.userInfo.username;
+        }
     }
 
     #region OnClick
-    public void OnClickSettingButton()
+    public void OnClickSettingButton() //세팅 띄우는 버튼
+    {
+        settingContentsPopup.SetActive(true);
+    }
+
+    public void OnClickSettingApplyButton() //세팅 창 적용
+    {
+        settingContentsPopup.SetActive(false);
+    }
+
+    public void OnClickBuyExp() // 경험치 구매
+    {
+        
+    }
+
+
+    public void OnClickDrawWeapon() // 장비 구매
     {
 
     }
 
-    public void OnClickRanking1Player()
+    public void OnClickDrawUnit() // 유닛 구매
+    {
+
+    }
+
+    public void OnClickRanking1Player() // 1P보기
     {
 
     }
@@ -102,15 +144,17 @@ public class RealUIManager : MonoBehaviour
 
     }
 
-    public void OnClickDrawWeapon()
-    {
-
-    }
-
-    public void OnClickDrawUnit()
-    {
-
-    }
 
     #endregion
+
+    public void SynergyScroll(string prefabName) // string name 넘겨받으면 알아서 들어감
+    {
+        for(int i = 0;i<synergyList.Length;i++)
+        {
+            if (prefabName.Equals(synergyList[i].name))
+            {
+                Instantiate(synergyList[i],synergyScroll.content.transform);
+            }
+        }
+    }
 }

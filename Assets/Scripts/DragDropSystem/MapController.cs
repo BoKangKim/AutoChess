@@ -167,6 +167,7 @@ namespace ZoneSystem
 
         private void Start()
         {
+            /* <- 임시로 for test
             if (photonView.IsMine == true)
             {
                 UIManager.Inst.UnitInstButton = OnClick_UnitInst;
@@ -174,12 +175,14 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+            
 
             if (PhotonNetwork.IsMasterClient == true
                 && photonView.IsMine)
             {
                 StartCoroutine(WaitPlayer());
             }
+            */
         }
 
 
