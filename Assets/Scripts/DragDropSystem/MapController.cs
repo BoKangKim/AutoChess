@@ -46,6 +46,14 @@ namespace ZoneSystem
         public bool isMirrorModePlayer = true;
         private bool isInitIndex = false;
 
+        public AudioClip DropSound = null;
+        public AudioClip SelectSound = null;
+        public AudioClip SellSound = null;
+
+        public AudioClip BuySound = null;
+        public AudioSource audioSource = null;
+
+
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
             photonView.RPC("RPC_SetIsMirrorPlayer",RpcTarget.All, isMirrorModePlayer);
@@ -124,6 +132,9 @@ namespace ZoneSystem
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             playerData = GetComponent<PlayerData>();
+
+            audioSource = GetComponent<AudioSource>();
+
 
             initializingUnitName();
 
@@ -574,6 +585,9 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+
+                            audioSource.clip = BuySound;
+                            audioSource.Play();
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;

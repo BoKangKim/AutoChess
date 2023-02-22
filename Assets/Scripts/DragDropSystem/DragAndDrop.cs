@@ -29,10 +29,15 @@ namespace ZoneSystem
 
         Button posCheckButton = null;
 
+
+
+
         private void Awake()
         {
             mapController = GetComponent<MapController>();
             playerData = GetComponent<PlayerData>();
+
+
         }
         private void Start()
         {
@@ -79,8 +84,6 @@ namespace ZoneSystem
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
                         //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
 
-
-
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
 
@@ -98,8 +101,11 @@ namespace ZoneSystem
                             mapController.battleObject[(int)vec.z, (int)vec.x] = null;
 
                             beforePos = CastRay(battleSpaceLayer).collider.transform.localPosition;
-
                         }
+
+                        mapController.audioSource.clip = mapController.SelectSound;
+                        mapController.audioSource.Play();
+
                     }
                     else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
@@ -116,6 +122,8 @@ namespace ZoneSystem
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
+                        mapController.audioSource.clip = mapController.SelectSound;
+                        mapController.audioSource.Play();
                     }
                 }
                 //Drop
@@ -126,20 +134,25 @@ namespace ZoneSystem
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                    Debug.Log(CastRay(safetySpaceLayer).collider);
-                    Debug.Log(CastRay(battleSpaceLayer).collider);
+
 
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
                         DropPosition(safetySpaceLayer);
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
                     else if (CastRay(battleSpaceLayer).collider != null)
                     {
                         DropPosition(battleSpaceLayer);
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
                     else
                     {
                         outRange();
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
 
                     battleZoneTile.gameObject.SetActive(false);
@@ -205,7 +218,7 @@ namespace ZoneSystem
                 }
                 posCheckButton = null;
 
-                Destroy(selectedObject);
+                PhotonNetwork.Destroy(selectedObject);
 
                 playerData.gold += 3;
 
@@ -214,19 +227,24 @@ namespace ZoneSystem
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
+                mapController.audioSource.clip = mapController.SellSound;
+                mapController.audioSource.Play();
 
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
             {
                 posCheckButton = null;
 
-                Destroy(selectedObject);
+                PhotonNetwork.Destroy(selectedObject);
                 playerData.gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
+
+                mapController.audioSource.clip = mapController.SellSound;
+                mapController.audioSource.Play();
             }
         }
         #endregion

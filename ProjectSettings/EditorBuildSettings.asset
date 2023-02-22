@@ -14,9 +14,12 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/RoomScene.unity
     guid: 0b631ffc5143b3f459fe28175e3083e8
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: 3c864489df1c03c43813b2129ed13a02
   - enabled: 1
     path: Assets/Scenes/SyncUnit.unity
     guid: fb1ef3715ae385a4f8549bd6f651c166

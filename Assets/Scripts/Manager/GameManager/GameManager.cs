@@ -31,6 +31,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
 
+    [Header("UIManager")]
+    public UIManage UIManage;
+    [Header("NetworkManager")]
+    public NetworkManager networkManager;
+    [Header("DataBase")]
+    public Database dataBase;
+    [Header("MataTrendAPI")]
+    public MetaTrendAPI metaTrendAPI;
+    [Header("SoundOption")]
+    public SoundOption soundOption;
+
+
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
 
