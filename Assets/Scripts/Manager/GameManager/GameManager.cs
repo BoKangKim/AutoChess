@@ -30,6 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
+    private int playerUnitCount = 0;
+
 
     [Header("UIManager")]
     public UIManage UIManage;
@@ -43,15 +45,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     public SoundOption soundOption;
 
 
-    // À¯´Ö ÃÑ °¹¼ö °ü¸®
-    // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
+    private PlayerData player = null;
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // Manager ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù°ï¿½
+    [SerializeField] private RealUIManager UIManager = null;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
+        player = new PlayerData();
     }
 
+    #region GAMETYPE
     private GAMETYPE type = GAMETYPE.MAX;
 
     public GAMETYPE getType()
@@ -69,7 +75,9 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         this.type = type;
     }
+    #endregion
 
+    #region SyncMasterInfo
     public void SyncStageIndex(int row , int col)
     {
         stageIndex.row = row;
@@ -81,27 +89,45 @@ public class GameManager : MonoBehaviourPunCallbacks
         return stageIndex;
     }
 
-    public void poolOFF()
-    {
-        pool.gameObject.SetActive(false);
-    }
-
-    public void poolON()
-    {
-        pool.gameObject.SetActive(true);
-    }
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
         if(PhotonNetwork.IsMasterClient == true)
         {
-            poolOFF();
             PhotonNetwork.Instantiate("StageControl",Vector3.zero,Quaternion.identity);
             Timer timer = FindObjectOfType<Timer>();
             timer.setNowTime(time);
             timer.findStageControl();
         }
 
-        poolON();
     }
+
+    #endregion
+
+    #region Player Info
+    public void PlusUnitCount()
+    {
+        playerUnitCount++;
+    }
+
+    public void MinusUnitCount()
+    {
+        playerUnitCount--;
+    }
+
+    public void ResetUnitCount()
+    {
+        playerUnitCount = 0;
+    }
+
+    public int GetUnitCount()
+    {
+        return playerUnitCount;
+    }
+
+    public PlayerData GetPlayer()
+    {
+        return player;
+    }
+    #endregion
 }

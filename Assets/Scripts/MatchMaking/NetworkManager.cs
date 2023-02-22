@@ -25,6 +25,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     [Header("LoadingPanel")]
     public Canvas loadingPanel;
     public TextMeshProUGUI metchingSecText;
+    public TextMeshProUGUI metchingCurPlyaerText;
+
+
+    public TextMeshProUGUI statusText;
 
     PhotonView PV;
     RoomOptions room;
@@ -41,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "SyncUnit";
+        gameScene = "MainGameScene";
     }
 
     private void Start()
@@ -75,9 +79,20 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        //닉네임을 데이타베이스로, 포톤 네트워크에 인스턴스화?를 시키는 듯?
+        int rnd = Random.Range(0, 2147483645);
 
-       // chatmanager.enabled = true;
+        lobbyPanel.gameObject.SetActive(true);
+
+        logingPanel.gameObject.SetActive(false);
+
+        Debug.Log(Database.Instance.userInfo.username);
+        myNickName.text = Database.Instance.userInfo.username;
+        PhotonNetwork.NickName = Database.Instance.userInfo.username + rnd.ToString();
+
+        Debug.Log(PhotonNetwork.NickName);
+        chatmanager.enabled = true;
+        PV = photonView;
+        //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
     }
 
     public void joinFreeNet()
@@ -134,7 +149,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.LoadLevel(gameScene);
+        UpdatePlayerCount();
+        //PhotonNetwork.LoadLevel(gameScene);
+
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
         {
@@ -163,9 +180,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     }
 
+
     
 
 
     float time = 0f;
 }
 
+
+
+}

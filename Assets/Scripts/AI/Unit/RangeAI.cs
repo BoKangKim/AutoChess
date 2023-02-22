@@ -24,19 +24,25 @@ public class RangeAI : UnitAI
 
         Effect flash = null;
         Effect project = null;
-        PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name , effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash);
-        flash.setOwner(this);
+        if (PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name, effectStartPos.transform.position, Quaternion.identity).TryGetComponent<Effect>(out flash))
+        {
+            flash.setOwner(this);
+        }
 
-        PhotonNetwork.Instantiate(projectile.gameObject.name,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project);
-        project.setOwner(this);
-        project.setDirection(target.transform.position);
+        if(PhotonNetwork.Instantiate(projectile.gameObject.name, effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out project))
+        {
+            project.setOwner(this);
+            project.setDirection(target.transform.position);
+        }
     }
 
     public override void StartSkillEffect()
     {
         SkillEffect skill = null;
-        PhotonNetwork.Instantiate(skillEffect.gameObject.name,effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill);
-        skill.setOwner(this);
-        skill.setDirection(target.transform.position);
+        if(PhotonNetwork.Instantiate(skillEffect.gameObject.name, effectStartPos.transform.position, Quaternion.LookRotation(transform.forward)).TryGetComponent<SkillEffect>(out skill))
+        {
+            skill.setOwner(this);
+            skill.setDirection(target.transform.position);
+        }
     }
 }

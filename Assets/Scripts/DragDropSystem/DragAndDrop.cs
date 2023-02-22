@@ -10,7 +10,6 @@ namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviourPun
     {
-        private PlayerData playerData;
         private MapController mapController;
         private GameObject selectedObject;
         private Camera cam;
@@ -35,9 +34,6 @@ namespace ZoneSystem
         private void Awake()
         {
             mapController = GetComponent<MapController>();
-            playerData = GetComponent<PlayerData>();
-
-
         }
         private void Start()
         {
@@ -49,6 +45,7 @@ namespace ZoneSystem
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
+            /* <--- null떠서 임시로
             if (photonView.IsMine)
             {
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
@@ -57,13 +54,15 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+            */
         }
         private void Update()
         {
-            if (!photonView.IsMine)
-            {
-                return;
-            }
+
+            //if (!photonView.IsMine)
+            //{
+            //    return;
+            //}
 
 
             #region PC��
@@ -91,7 +90,6 @@ namespace ZoneSystem
                         if (CastRay(safetySpaceLayer).collider != null)
                         {
                             var vec = safetyPosToIndex(selectedObject.transform.localPosition);
-                            Debug.Log(vec);
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
@@ -158,7 +156,7 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                storeButtonChange();
+                //storeButtonChange();
 
             }
             //Drag
@@ -220,7 +218,7 @@ namespace ZoneSystem
 
                 PhotonNetwork.Destroy(selectedObject);
 
-                playerData.gold += 3;
+                GameManager.Inst.GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
@@ -235,8 +233,8 @@ namespace ZoneSystem
             {
                 posCheckButton = null;
 
-                PhotonNetwork.Destroy(selectedObject);
-                playerData.gold += 3;
+                Destroy(selectedObject);
+                GameManager.Inst.GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
