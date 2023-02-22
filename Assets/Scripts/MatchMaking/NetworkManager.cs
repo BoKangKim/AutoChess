@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using Photon.Realtime;
 
-public enum GAMETYPE 
+public enum GAMETYPE
 {
     FREENET,
     LIVENET,
@@ -39,7 +39,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI metchingSecText;
     public TextMeshProUGUI metchingCurPlyaerText;
 
-    
+
     public TextMeshProUGUI statusText;
 
     PhotonView PV;
@@ -56,7 +56,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Screen.SetResolution(480,480,false);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "SyncUnit";
+        gameScene = "MainGameScene";
     }
 
     private void Start()
@@ -86,7 +86,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public void joinFreeNet()
     {
-        GameManager.Inst.setType(GAMETYPE.FREENET,gameObject);
+        GameManager.Inst.setType(GAMETYPE.FREENET, gameObject);
         JoinRandomOrCreateRoom();
 
     }
@@ -138,7 +138,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         {
             if (PhotonNetwork.PlayerList[i].ActorNumber == PhotonNetwork.LocalPlayer.ActorNumber)
             {
-      
+
                 PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"] = i;
 
                 PhotonNetwork.PlayerList[i].SetCustomProperties(PhotonNetwork.LocalPlayer.CustomProperties);
@@ -171,7 +171,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         metchingCurPlyaerText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}";
     }
 
-    
+
     float time = 0f;
 
     void Update()

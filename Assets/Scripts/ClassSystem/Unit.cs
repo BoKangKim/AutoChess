@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace UnitClass
 {
@@ -19,6 +21,14 @@ namespace UnitClass
         #endregion
 
         #region 유닛 지역변수
+
+        // 설명란
+        // origin + stat -> 등급에 의한 기본 데이터
+        // eq + stat -> 장비에 의해 추가될 데이터
+        // total stat -> 전투에서 사용될 데이터 -> origin + eq로 계속 갱신됨(시너지가 바뀌거나 장비 장착이 빈번히 변경되서 따로 선언)
+        // 추가로 기획서 상에서 장비 장착한 데이터까지 계산되는 경우도 있고 기본 공격력의 X% 인경우도 있어서 분리해서 가지고 있게 할 예정 -> 좋은 방법이 있다면 의견좀
+
+
 
         // 설명란
         // origin + stat -> 등급에 의한 기본 데이터
@@ -48,6 +58,7 @@ namespace UnitClass
         private float originStunTime; //기절 시간(CC기)
         private float originBlindnessTime; //실명 시간(CC기)
         private float originWeakness; //허약 시간(CC기)
+
         private string speciesName;
         private string className;
         [SerializeField] private bool speciesSynergy1Grade = false;
@@ -82,6 +93,7 @@ namespace UnitClass
         private float totalStunTime; //기절 시간(CC기)
         private float totalBlindnessTime; //실명 시간(CC기)
         private float totalWeakness; //허약 시간(CC기)
+
         #endregion
 
         #region 프로퍼티
@@ -204,6 +216,6 @@ namespace UnitClass
 
             }
         }
+            }
+        }
 
-    }
-}

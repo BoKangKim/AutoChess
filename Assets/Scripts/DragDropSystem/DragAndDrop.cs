@@ -42,6 +42,7 @@ namespace ZoneSystem
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
+            /* <--- null떠서 임시로
             if (photonView.IsMine)
             {
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
@@ -50,13 +51,15 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+            */
         }
         private void Update()
         {
-            if (!photonView.IsMine)
-            {
-                return;
-            }
+
+            //if (!photonView.IsMine)
+            //{
+            //    return;
+            //}
 
 
             #region PC��
@@ -142,7 +145,7 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                storeButtonChange();
+                //storeButtonChange();
 
             }
             //Drag

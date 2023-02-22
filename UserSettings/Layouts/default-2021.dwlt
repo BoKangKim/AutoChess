@@ -16,6 +16,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 43
+    x: 0
+    y: 43
     width: 1920
     height: 1117
   m_ShowMode: 4
@@ -40,6 +42,9 @@ MonoBehaviour:
   - {fileID: 3}
   - {fileID: 5}
   - {fileID: 4}
+  - {fileID: 3}
+  - {fileID: 5}
+  - {fileID: 4}
   m_Position:
     serializedVersion: 2
     x: 0
@@ -52,6 +57,7 @@ MonoBehaviour:
   m_TopViewHeight: 30
   m_UseBottomView: 1
   m_BottomViewHeight: 20
+--- !u!114 &3
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -74,6 +80,7 @@ MonoBehaviour:
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
   m_LastLoadedLayoutName: 
+--- !u!114 &4
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -262,6 +269,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
+  m_Children: []
+  m_Position:
     serializedVersion: 2
     x: 0
     y: 0
@@ -287,6 +296,8 @@ MonoBehaviour:
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_Children: []
+  m_Position:
   m_Children: []
   m_Position:
     serializedVersion: 2
