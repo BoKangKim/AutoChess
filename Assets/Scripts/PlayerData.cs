@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData
+public class PlayerData : MonoBehaviour
 {
     // ID
     public string playerName;
@@ -17,7 +17,7 @@ public class PlayerData
     public float[] MaxExp;
     public float CurExp;
 
-    public PlayerData()
+    private void Awake()
     {
         playerName = "name";
         gold = 0;
@@ -26,8 +26,6 @@ public class PlayerData
         CurHP = MaxHP;
         MaxExp = new float[10] { 0, 2, 6, 10, 20, 36, 56, 70, 80, 100 };
         CurExp = 0;
-        UIManager_KSR.Inst.UpdatePlayerName(playerName);
-        UIManager_KSR.Inst.UpdatePlayerInfo(gold, CurExp, playerLevel, CurHP);
     }
 
     // 골드는 유닛을 구매할때 장비를 구매할때사용
