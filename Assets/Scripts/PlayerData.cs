@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData
+public class PlayerData : MonoBehaviour
 {
     // ID
     public string playerName;
@@ -17,7 +17,7 @@ public class PlayerData
     public float[] MaxExp;
     public float CurExp;
 
-    public PlayerData()
+    private void Awake()
     {
         Initializing();
     }
