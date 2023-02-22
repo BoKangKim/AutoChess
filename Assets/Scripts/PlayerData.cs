@@ -12,12 +12,17 @@ public class PlayerData : MonoBehaviour
     public int playerLevel;
     //hp
     public int CurHP;
-    public int MaxHP;
+    private int MaxHP;
     //°æÇèÄ¡
     public float[] MaxExp;
     public float CurExp;
 
     private void Awake()
+    {
+        Initializing();
+    }
+
+    private void Initializing()
     {
         playerName = "name";
         gold = 0;

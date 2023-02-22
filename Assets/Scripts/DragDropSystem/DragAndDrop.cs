@@ -10,7 +10,6 @@ namespace ZoneSystem
 {
     public class DragAndDrop : MonoBehaviourPun
     {
-        private PlayerData playerData;
         private MapController mapController;
         private GameObject selectedObject;
         private Camera cam;
@@ -32,7 +31,6 @@ namespace ZoneSystem
         private void Awake()
         {
             mapController = GetComponent<MapController>();
-            playerData = GetComponent<PlayerData>();
         }
         private void Start()
         {
@@ -206,7 +204,7 @@ namespace ZoneSystem
 
                 Destroy(selectedObject);
 
-                playerData.gold += 3;
+                GameManager.Inst.GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
@@ -220,7 +218,7 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 Destroy(selectedObject);
-                playerData.gold += 3;
+                GameManager.Inst.GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
