@@ -56,8 +56,6 @@ namespace ZoneSystem
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
-       
-
         private void Awake()
         {
             //if (!photonView.IsMine) return;
@@ -67,7 +65,6 @@ namespace ZoneSystem
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             initializingUnitName();
-
             #region FreeNet Random Three Random Unit 
             //int index = 0;
             //if(PhotonNetwork.IsMasterClient == true)

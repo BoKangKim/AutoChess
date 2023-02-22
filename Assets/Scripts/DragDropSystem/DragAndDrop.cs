@@ -204,7 +204,7 @@ namespace ZoneSystem
 
                 Destroy(selectedObject);
 
-                GameManager.Inst.GetPlayer().gold += 3;
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
@@ -218,7 +218,7 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 Destroy(selectedObject);
-                GameManager.Inst.GetPlayer().gold += 3;
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
                 storeButtonChange();
