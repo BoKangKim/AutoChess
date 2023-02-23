@@ -179,7 +179,7 @@ namespace ZoneSystem
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
-                bt.SetState(stage);
+                bt.setState(stage);
             }
 
             return bt;

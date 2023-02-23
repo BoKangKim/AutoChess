@@ -93,7 +93,7 @@ public class RealUIManager : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.N))
         {
-            expansionUserID.text = Database.Instance.userInfo.username;
+            expansionUserID.text = GameManager.Inst.dataBase.userInfo.username;
         }
     }
 
