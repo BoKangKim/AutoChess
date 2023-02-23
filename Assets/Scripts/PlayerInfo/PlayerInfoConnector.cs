@@ -9,9 +9,9 @@ public class PlayerInfoConnector : MonoBehaviourPun
     private int playerUnitCount = 0;
     private PlayerData player = null;
 
-    private void Awake()
+    private void Start()
     {
-        if(photonView.IsMine == true)
+        if (photonView.IsMine == true)
         {
             player = new PlayerData();
             GameManager.Inst.SetPlayerInfoConnector(this);
