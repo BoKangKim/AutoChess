@@ -4,19 +4,16 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.EventSystems;
 using TMPro.Examples;
+using System.Collections;
 
 public class RealUIManager : MonoBehaviour
 {
+    /*
     [Header("[UnitState]")]
     [SerializeField] private GameObject unitStatusContents;
     [SerializeField] private GameObject unitStatusInfo;
     [SerializeField] private GameObject unitStatusDetailInfo;
     [SerializeField] private GameObject unitSkillInfo;
-
-    [Header("[Setting]")]
-    [SerializeField] private Button settingButton;
-    [SerializeField] private GameObject settingContentsPopup;
-    [SerializeField] private Button applyButton;
 
     [Header("[Player]")]
     [SerializeField] private TextMeshProUGUI playerExpensionLv;
@@ -61,11 +58,20 @@ public class RealUIManager : MonoBehaviour
     [Header("[Gacha]")]
     [SerializeField] private TextMeshProUGUI gachaWeponGold;
     [SerializeField] private TextMeshProUGUI gachaUnitGold;
+    */
 
 
+
+    [Header("[Setting]")]
+    [SerializeField] private Button settingButton;
+    [SerializeField] private GameObject settingContentsPopup;
+    [SerializeField] private Button applyButton;
+
+    [Header("Synergy")]
     [SerializeField] private ScrollRect synergyScroll = null;
     [SerializeField] private GameObject[] synergyList = null;
 
+    [Header("Buy")]
     [SerializeField] private PlayerData playerData = null;
 
     private void Awake()
@@ -108,9 +114,30 @@ public class RealUIManager : MonoBehaviour
         settingContentsPopup.SetActive(false);
     }
 
-    public void OnClickBuyExp() // 경험치 구매
+    public void OnClickBuyExp()
     {
-        
+        if (playerData.gold < 4)
+        {
+            Debug.Log("골드가 부족합니다.");
+            return;
+        }
+        if (playerData.playerLevel > 8)
+        {
+            Debug.Log("최대레벨 입니다.");
+            return;
+        }
+        playerData.CurExp += 4;
+        //레벨업
+        if (playerData.CurExp <= playerData.MaxExp[playerData.playerLevel])
+        {
+            playerData.CurExp -= playerData.MaxExp[playerData.playerLevel];
+            ++playerData.playerLevel;
+            if (playerData.playerLevel == 9)
+            {
+                playerData.CurExp = 0;
+            }
+
+        }
     }
 
 
@@ -157,4 +184,6 @@ public class RealUIManager : MonoBehaviour
             }
         }
     }
+
+
 }

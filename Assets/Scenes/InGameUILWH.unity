@@ -5406,7 +5406,6 @@ MonoBehaviour:
   - {fileID: 723669213}
   - {fileID: 0}
   - {fileID: 0}
-  myDictEntries: []
 --- !u!114 &672620862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8104,7 +8103,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1829490063}
         m_TargetAssemblyTypeName: RealUIManager, Assembly-CSharp
         m_MethodName: OnClickSettingApplyButton
         m_Mode: 1
@@ -13259,7 +13258,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1829490063}
         m_TargetAssemblyTypeName: RealUIManager, Assembly-CSharp
         m_MethodName: OnClickSettingButton
         m_Mode: 1
@@ -15953,50 +15952,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a05d2d85b33f15146b27788d451650a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitStatusContents: {fileID: 0}
-  unitStatusInfo: {fileID: 0}
-  unitStatusDetailInfo: {fileID: 0}
-  unitSkillInfo: {fileID: 0}
-  settingButton: {fileID: 0}
-  settingContentsPopup: {fileID: 0}
-  applyButton: {fileID: 0}
-  playerExpensionLv: {fileID: 0}
-  playerRankingLv: {fileID: 0}
-  playerGold: {fileID: 0}
-  playerHpSlider: {fileID: 0}
-  roundContents: {fileID: 0}
-  roundExContents: {fileID: 0}
-  roundResultContents: {fileID: 0}
-  roundInfoNum: {fileID: 0}
-  roundStageNum: {fileID: 0}
-  roundDetailNum: {fileID: 0}
-  roundDetailStepNum:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  synergyContents: {fileID: 0}
-  synergyExContents: {fileID: 0}
-  synergyExContentsPopup: {fileID: 0}
-  synergyContentsPopupName: {fileID: 0}
-  synergyContentsPopupInfo: []
-  synergyUnitIcon: []
-  synergyUnitPopupIcon: []
-  synergyPlus: {fileID: 0}
-  classSynergy: []
-  speciesSynergy: []
-  rankingContents: {fileID: 0}
-  rankingUserID: {fileID: 0}
-  rankingUserLV: {fileID: 0}
-  rankUserInfo: []
-  expansionUserID: {fileID: 0}
-  expansionGold: {fileID: 0}
-  expensionLV: {fileID: 0}
-  expansionEXPSlider: {fileID: 0}
-  gachaWeponGold: {fileID: 0}
-  gachaUnitGold: {fileID: 0}
-  synergyScroll: {fileID: 0}
-  synergyList: []
+  settingButton: {fileID: 1499447295}
+  settingContentsPopup: {fileID: 672620859}
+  applyButton: {fileID: 1055664487}
+  synergyScroll: {fileID: 1832223777}
+  synergyList:
+  - {fileID: 4408472444328385277, guid: e686abdcaf45427419c288fb9a9a683c, type: 3}
+  - {fileID: 4408472444328385277, guid: bf1f010aa3d905246846d154dcf185aa, type: 3}
+  - {fileID: 2669092845776350616, guid: 530b76cada05de648a7805ab6c885f49, type: 3}
+  - {fileID: 2669092845776350616, guid: 5b9f5c2f63b08d94d88532517d9ce137, type: 3}
+  - {fileID: 3956013531364257236, guid: 40b33f15c653ad64f82d1b53f01b5e44, type: 3}
+  - {fileID: 3956013531364257236, guid: aca4716dbb044c643a930f6275011f77, type: 3}
+  - {fileID: 340644857561833055, guid: cc0b9c732ee8cb24cb1572052b5f7b10, type: 3}
+  - {fileID: 340644857561833055, guid: 17cedc0be93b1aa4c83df2e896a4c781, type: 3}
+  - {fileID: 3664884975107298391, guid: 848579597148b7b4ab83cd3e7a615647, type: 3}
+  - {fileID: 3664884975107298391, guid: ea4fb175d0faea443829019fbfbb045a, type: 3}
+  - {fileID: 1944586027066572604, guid: bf3ee654943fc7d48b2400de9964caad, type: 3}
+  - {fileID: 1944586027066572604, guid: 2263e1fd89783b24aa69b786457040fa, type: 3}
+  - {fileID: 4913238871678044015, guid: 2c33eef96e1c8cf4aab0c11568e4535c, type: 3}
+  - {fileID: 4913238871678044015, guid: d78966d50f3ef4c4f86c67b7d3e460fc, type: 3}
+  - {fileID: 1891024266094356318, guid: 01c0b6801096403488b470ddf4d471a5, type: 3}
+  - {fileID: 1891024266094356318, guid: 3f7499c609a88194a9441975bd3d939d, type: 3}
   playerData: {fileID: 0}
 --- !u!4 &1829490064
 Transform:
