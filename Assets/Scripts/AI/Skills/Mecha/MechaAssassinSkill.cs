@@ -33,7 +33,7 @@ public class MechaAssassinSkill : SkillEffect
     }
     private void OnEnable()
     {
-        gameObject.GetComponent<BoxCollider>().enabled = true;
+        owner.getSkillTarget().doDamage(owner.getAttackDamage() * 6f);
     }
 
     private void OnDestroy()
@@ -49,23 +49,7 @@ public class MechaAssassinSkill : SkillEffect
             inst = PhotonNetwork.Instantiate(collisionEffect.name, new Vector3(transform.position.x, 0.2f, transform.position.z),Quaternion.Euler(euler));
         }
     }
-    protected override void OnCollisionEnter(Collision collision)
-    {
+    
 
-        if (collision.gameObject.GetComponent<Battle.AI.ParentBT>() != null)
-        {
-            if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
-            {
-                Debug.Log("µûÄá!");
-                collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage(attackDamage * 6);
-                gameObject.GetComponent<BoxCollider>().enabled = false;
-            }
-
-        }
-
-
-
-
-
-    }
+  
 }

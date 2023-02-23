@@ -32,8 +32,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     [HideInInspector] public float time = 0f;
     private PlayerInfoConnector connector = null;
 
-    // À¯´Ö ÃÑ °¹¼ö °ü¸®
-    // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
+    [Header("UIManager")]
+    public UIManage UIManage;
+    [Header("NetworkManager")]
+    public NetworkManager networkManager;
+    [Header("DataBase")]
+    public Database dataBase;
+    [Header("MataTrendAPI")]
+    public MetaTrendAPI metaTrendAPI;
+    [Header("SoundOption")]
+    public SoundOption soundOption;
+
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // Manager ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù°ï¿½
+    [SerializeField] private RealUIManager UIManager = null;
 
     private void Awake()
     {

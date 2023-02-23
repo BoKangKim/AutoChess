@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 namespace UnitClass
 {
@@ -19,6 +21,14 @@ namespace UnitClass
         #endregion
 
         #region 유닛 지역변수
+
+        // 설명란
+        // origin + stat -> 등급에 의한 기본 데이터
+        // eq + stat -> 장비에 의해 추가될 데이터
+        // total stat -> 전투에서 사용될 데이터 -> origin + eq로 계속 갱신됨(시너지가 바뀌거나 장비 장착이 빈번히 변경되서 따로 선언)
+        // 추가로 기획서 상에서 장비 장착한 데이터까지 계산되는 경우도 있고 기본 공격력의 X% 인경우도 있어서 분리해서 가지고 있게 할 예정 -> 좋은 방법이 있다면 의견좀
+
+
 
         // 설명란
         // origin + stat -> 등급에 의한 기본 데이터
@@ -48,6 +58,7 @@ namespace UnitClass
         private float originStunTime; //기절 시간(CC기)
         private float originBlindnessTime; //실명 시간(CC기)
         private float originWeakness; //허약 시간(CC기)
+
         private string speciesName;
         private string className;
         [SerializeField] private bool speciesSynergy1Grade = false;
@@ -62,26 +73,27 @@ namespace UnitClass
         private float eqAttackSpeed;
         private float eqSpellPower;
 
-        private float totalMaxHp; // total stats -> 안쓰는건 나중에 지워야함
-        private float totalCurHp;
-        private float totalMaxMp;
-        private float totalCurMp;
-        private float totalMpRecovery;
-        private float totalMoveSpeed;
-        private float totalAtk;
-        private float totalAttackRange;
-        private float totalAtkDamage;
-        private float totalAttackSpeed;
-        private float totalSpellPower;
-        private float totalMagicDamage;
-        private float totalMagicCastingTime; //스킬을 캐스팅 하는 시간
-        private float totalCrowdControlTime; //CC(군중제어 = 상태이상)시간
-        private float totalTenacity; //강인함 -> 롤에서 CC기를 줄여주는 비율 100%
-        private float totalAttackTarget; //공격가능한 타겟 수
-        private float totalBarrier; //체력대신 데미지를 입을 보호막
-        private float totalStunTime; //기절 시간(CC기)
-        private float totalBlindnessTime; //실명 시간(CC기)
-        private float totalWeakness; //허약 시간(CC기)
+        
+       public float totalMaxHp { get; private set; } // total stats -> 안쓰는건 나중에 지워야함
+       public float totalCurHp { get; private set; }
+       public float totalMaxMp { get; private set; }
+        public float totalCurMp { get; private set; }
+        public float totalMpRecovery { get; private set; }
+        public float totalMoveSpeed { get; private set; }
+        public float totalAtk { get; private set; }
+        public float totalAttackRange { get; private set; }
+        public float totalAtkDamage { get; private set; }
+        public float totalAttackSpeed { get; private set; }
+        public float totalSpellPower { get; private set; }
+        public float totalMagicDamage { get; private set; }
+        public float totalMagicCastingTime; //스킬을 캐스팅 하는 시간
+       public float totalCrowdControlTime; //CC(군중제어 = 상태이상)시간
+       public float totalTenacity; //강인함 -> 롤에서 CC기를 줄여주는 비율 100%
+       public float totalAttackTarget; //공격가능한 타겟 수
+       public float totalBarrier; //체력대신 데미지를 입을 보호막
+       public float totalStunTime; //기절 시간(CC기)
+       public float totalBlindnessTime; //실명 시간(CC기)
+        public float totalWeakness; //허약 시간(CC기)
         #endregion
 
         #region 프로퍼티
@@ -118,7 +130,14 @@ namespace UnitClass
             SetUnitStat();
         }
 
-
+        public void SettotalAtk(float add)
+        {
+            totalAtk += add;
+        }
+        public void SettotalSpellPower(float add)
+        {
+            totalSpellPower += add;
+        }
         public int Upgrade()
         {
             return grade++;
@@ -204,6 +223,6 @@ namespace UnitClass
 
             }
         }
+            }
+        }
 
-    }
-}

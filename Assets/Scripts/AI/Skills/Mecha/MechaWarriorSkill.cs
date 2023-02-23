@@ -33,8 +33,7 @@ public class MechaWarriorSkill : SkillEffect
         {
             //if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
             {
-                Debug.Log("µûÄá~");
-                //collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((this.gameObject.GetComponent<UnitClass.Unit>().GetTotalSpellPower / 100) * 100 + (attackDamage * 1.5f));
+                collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((owner.getSpellPower() / 100) * 100 + (owner.getAttackDamage() * 1.5f));
                 gameObject.GetComponent<BoxCollider>().enabled = false;
             }
         }

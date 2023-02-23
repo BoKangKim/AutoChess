@@ -28,6 +28,9 @@ namespace ZoneSystem
 
         Button posCheckButton = null;
 
+
+
+
         private void Awake()
         {
             mapController = GetComponent<MapController>();
@@ -42,6 +45,7 @@ namespace ZoneSystem
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
+            /* <--- null떠서 임시로
             if (photonView.IsMine)
             {
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
@@ -50,13 +54,15 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+            */
         }
         private void Update()
         {
-            if (!photonView.IsMine)
-            {
-                return;
-            }
+
+            //if (!photonView.IsMine)
+            //{
+            //    return;
+            //}
 
 
             #region PC��
@@ -77,8 +83,6 @@ namespace ZoneSystem
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
                         //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
 
-
-
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
 
@@ -95,8 +99,11 @@ namespace ZoneSystem
                             mapController.battleObject[(int)vec.z, (int)vec.x] = null;
 
                             beforePos = CastRay(battleSpaceLayer).collider.transform.localPosition;
-
                         }
+
+                        mapController.audioSource.clip = mapController.SelectSound;
+                        mapController.audioSource.Play();
+
                     }
                     else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
@@ -113,6 +120,8 @@ namespace ZoneSystem
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
+                        mapController.audioSource.clip = mapController.SelectSound;
+                        mapController.audioSource.Play();
                     }
                 }
                 //Drop
@@ -123,26 +132,31 @@ namespace ZoneSystem
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                    Debug.Log(CastRay(safetySpaceLayer).collider);
-                    Debug.Log(CastRay(battleSpaceLayer).collider);
+
 
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
                         DropPosition(safetySpaceLayer);
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
                     else if (CastRay(battleSpaceLayer).collider != null)
                     {
                         DropPosition(battleSpaceLayer);
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
                     else
                     {
                         outRange();
+                        mapController.audioSource.clip = mapController.DropSound;
+                        mapController.audioSource.Play();
                     }
 
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                storeButtonChange();
+                //storeButtonChange();
 
             }
             //Drag
@@ -202,7 +216,7 @@ namespace ZoneSystem
                 }
                 posCheckButton = null;
 
-                Destroy(selectedObject);
+                PhotonNetwork.Destroy(selectedObject);
 
                 GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
@@ -211,6 +225,8 @@ namespace ZoneSystem
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
+                mapController.audioSource.clip = mapController.SellSound;
+                mapController.audioSource.Play();
 
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
@@ -224,6 +240,9 @@ namespace ZoneSystem
                 storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
+
+                mapController.audioSource.clip = mapController.SellSound;
+                mapController.audioSource.Play();
             }
         }
         #endregion

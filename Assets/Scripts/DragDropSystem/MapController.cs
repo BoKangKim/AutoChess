@@ -1,11 +1,10 @@
+using Battle.AI;
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Battle.AI;
 
 namespace ZoneSystem
 {
@@ -38,6 +37,12 @@ namespace ZoneSystem
 
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
+
+        private string[] priorityOrder = {
+    "Demon2", "Mecha2", "Orc2", "Assassin2", "Magician2", "RangeDealer2",
+    "Tanker2", "Warrior2", "Demon", "Mecha", "Orc", "Assassin", "Magician",
+    "RangeDealer", "Tanker", "Warrior"
+                                    };
 
         public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
@@ -144,6 +149,14 @@ namespace ZoneSystem
             return myNickName;
         }
 
+        public AudioClip DropSound = null;
+        public AudioClip SelectSound = null;
+        public AudioClip SellSound = null;
+
+        public AudioClip BuySound = null;
+        public AudioSource audioSource = null;
+
+
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
             photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
@@ -163,7 +176,7 @@ namespace ZoneSystem
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
-                bt.SetState(stage);
+                bt.setState(stage);
             }
 
             return bt;
@@ -294,7 +307,7 @@ namespace ZoneSystem
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyObject[z,x]!=null)
+                    if (safetyObject[z, x] != null)
                     {
                         SafetyObjectCount++;
                     }
@@ -340,7 +353,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            
+
                         }
                         else
                         {
@@ -567,11 +580,29 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+            //여기서 시너지를 뱉어줘야함
+            for (int z = 0; z < 3; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (battleObject[z, x] != null)
+                    {
+                        battleObject[z, x].GetComponent<UnitClass.Unit>().SetSynergy(activeSynergyList);
+                    }
+                }
+            }
 
-            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
+            //여기서 시너지 정렬해야함
+            activeSynergyList.Sort((x, y) =>
+            {
+                int xIndex = Array.IndexOf(priorityOrder, x);
+                int yIndex = Array.IndexOf(priorityOrder, y);
+                if (xIndex != -1 && yIndex != -1) return xIndex.CompareTo(yIndex);
+                if (xIndex != -1) return -1;
+                if (yIndex != -1) return 1;
+                return x.CompareTo(y);
+            });
 
-            //시너지 ui표시
             UIManager.Inst.SynergyText(null);
             activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
             activeSynergyList.Clear();
@@ -590,13 +621,13 @@ namespace ZoneSystem
             //playerData.gold -= 5; 
 
             string UnitPrefab = null;
-            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
+            if (GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
+            else if (GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = Random.Range(0, 15);
+                int index = UnityEngine.Random.Range(0, 15);
 
                 UnitPrefab = freenetUnits[index];
                 //int index = freenetUnitIndex[Random.Range(0, 3)];
@@ -621,6 +652,9 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+
+                            audioSource.clip = BuySound;
+                            audioSource.Play();
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;
@@ -668,7 +702,7 @@ namespace ZoneSystem
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 5)];
 
                         if (PlayerMapSpawner.Map != null)
                         {
@@ -705,10 +739,5 @@ namespace ZoneSystem
                 }
             }
         }
-
-
-
-
-
     }
 }

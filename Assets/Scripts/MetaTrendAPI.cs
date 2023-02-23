@@ -38,10 +38,10 @@ public class MetaTrendAPI : MonoBehaviour
 	
 
 
-	public Res_UserProfile res_UserProfile = null;
+	public Res_UserProfile res_UserProfile { get; private set; }
+	public Res_dummyTournamentPool res_DummyTournamentPool { get; private set; }
 	Res_UserSessionID res_UserSessionID = null;
 	Res_BettingSetting res_BettingSetting = null;
-	Res_dummyTournamentPool res_DummyTournamentPool = null;
 
 	
     private void Start()
@@ -66,8 +66,8 @@ public class MetaTrendAPI : MonoBehaviour
 				//Debug.Log("## " + response.ToString());
 				res_UserProfile = response;
 				//Debug.Log("" + res_UserProfile.userProfile.username);
-				Database.Instance.userInfo.public_address = res_UserProfile.userProfile.public_address;
-				Database.Instance.userInfo.username = res_UserProfile.userProfile.username;
+				GameManager.Inst.dataBase.userInfo.public_address = res_UserProfile.userProfile.public_address;
+				GameManager.Inst.dataBase.userInfo.username = res_UserProfile.userProfile.username;
 			}
 			else
 			{
