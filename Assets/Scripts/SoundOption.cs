@@ -63,14 +63,56 @@ public class SoundOption : MonoBehaviour
     }
     public void bgmPlay(string bgmName)
     {
+<<<<<<< Updated upstream
         this.gameObject.AddComponent<AudioSource>();
+=======
+        AudioSource audiosource;
+        AudioClip clip = null;
+        if (!gameObject.TryGetComponent<AudioSource>(out audiosource))
+        {
+            audiosource = this.gameObject.AddComponent<AudioSource>();
+        }
+       
+        if(ClipDictionary.TryGetValue(bgmName, out clip))
+        {
+            audiosource.clip = clip;
+            audiosource.Play();
+        }
+        else
+        {
+            Debug.Log("해당하는 사운드가 없습니다.");
+        }
+        audiosource.loop = true;
+
+>>>>>>> Stashed changes
     }
-    public void SFXPlay(string sfxName, GameObject go)
+
+
+    public void SFXPlay(string sfxName)
     {
+<<<<<<< Updated upstream
         AudioSource audiosource = go.AddComponent<AudioSource>();
         audiosource.Play();
+=======
+        AudioSource[] audiosources = this.gameObject.GetComponents<AudioSource>();
+        AudioClip clip = null;
+        ClipDictionary.TryGetValue(sfxName, out clip);
 
+        foreach (AudioSource source in audiosources)
+        {
+            if (source.clip == clip)
+            {
+                source.Play();
+                return;
+            }
+        }
+>>>>>>> Stashed changes
+
+        AudioSource audiosource = this.gameObject.AddComponent<AudioSource>();
+        audiosource.clip = clip;
+        audiosource.Play();
     }
+
 
    
 
