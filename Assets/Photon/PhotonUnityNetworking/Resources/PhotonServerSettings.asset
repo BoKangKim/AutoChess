@@ -61,6 +61,7 @@ MonoBehaviour:
   - RPC_DoDamage
   - setIsDeath
   - RPC_initializingAfterBattle
+  - RPC_IsEndSetEnemy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

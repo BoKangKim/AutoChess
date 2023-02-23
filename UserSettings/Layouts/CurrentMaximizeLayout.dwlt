@@ -86,9 +86,10 @@ MonoBehaviour:
     m_VAllowExceedBaseRangeMax: 1
     m_ScaleWithWindow: 0
     m_HSlider: 0
+    m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 1
+    m_EnableMouseInput: 0
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -454,9 +455,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 107.45971, y: 1.465112, z: 0.27605152}
+    m_Target: {x: 1.0383718, y: -0.50234336, z: -0.8642508}
     speed: 2
-    m_Value: {x: 107.45971, y: 1.465112, z: 0.27605152}
+    m_Value: {x: 1.0383718, y: -0.50234336, z: -0.8642508}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -503,13 +504,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.37194735, y: 0.03463413, z: -0.013248483, w: 0.9276471}
+    m_Target: {x: 0.13573064, y: 0.7835013, z: -0.18298657, w: 0.5784102}
     speed: 2
-    m_Value: {x: -0.37194735, y: -0.03463413, z: 0.013248483, w: -0.9276471}
+    m_Value: {x: 0.1357076, y: 0.78336835, z: -0.18295552, w: 0.57831204}
   m_Size:
-    m_Target: 2.8759418
+    m_Target: 5.8531
     speed: 2
-    m_Value: 2.8759418
+    m_Value: 5.8531
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -895,7 +896,7 @@ MonoBehaviour:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 106d0000
       m_LastClickedID: 0
-      m_ExpandedIDs: f09bffffb09cffffb4a0ffffcca0ffff2afbffff
+      m_ExpandedIDs: ee08ffffae09ffffbc0dffffde0dffff3869ffff0485fffff09bffffb09cffffb4a0ffffcca0ffff94acffffe2b0ffffa0b1ffffa4b5ffffb6b5ffffccf0ffff8af1ffff8ef5ffffa0f5ffff1efbffff2afbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -986,13 +987,13 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets
+    - Assets/Scripts/PlayerInfo
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets
+  - Assets/Scripts/PlayerInfo
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\User\Desktop\RealProject\AutoChess
   m_LockTracker:

@@ -663,13 +663,13 @@ namespace Battle.AI
             if(photonView.IsMine == true)
             {
                 PhotonNetwork.Destroy(gameObject);
-                GameManager.Inst.MinusUnitCount();
+                GameManager.Inst.GetPlayerInfoConnector().MinusUnitCount();
 
-                if(GameManager.Inst.GetUnitCount() <= 0
+                if(GameManager.Inst.GetPlayerInfoConnector().GetUnitCount() <= 0
                     && myType.CompareTo("UnitAI") == 0)
                 {
-                    GameManager.Inst.GetPlayer().CurHP -= (enemies.Count * 2);
-                    Debug.Log(GameManager.Inst.GetPlayer().CurHP);
+                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 2);
+                    Debug.Log(GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP);
                 }
             }
         }

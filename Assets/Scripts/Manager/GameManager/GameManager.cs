@@ -30,10 +30,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
-    private int playerUnitCount = 0;
+    private PlayerInfoConnector connecter = null;
 
-
-    private PlayerData player = null;
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
 
@@ -41,7 +39,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        player = new PlayerData();
+        
     }
 
     #region GAMETYPE
@@ -91,30 +89,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Player Info
-    public void PlusUnitCount()
+    public void SetPlayerInfoConnector(PlayerInfoConnector player)
     {
-        playerUnitCount++;
+        this.connecter = player;
     }
 
-    public void MinusUnitCount()
+    public PlayerInfoConnector GetPlayerInfoConnector()
     {
-        playerUnitCount--;
+        return connecter;
     }
-
-    public void ResetUnitCount()
-    {
-        playerUnitCount = 0;
-    }
-
-    public int GetUnitCount()
-    {
-        return playerUnitCount;
-    }
-
-    public PlayerData GetPlayer()
-    {
-        return player;
-    }
-    #endregion
 }
