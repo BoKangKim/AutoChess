@@ -352,7 +352,7 @@ namespace Battle.AI
             attackRange = unitData.totalAttackRange;
             attackDamage = unitData.totalAtkDamage;
             spellPower = unitData.totalSpellPower;
-            myAni.speed = unitData.totalAttackSpeed;
+            //myAni.speed = unitData.totalAttackSpeed;
         }
 
         public void changeStage(STAGETYPE stageType)

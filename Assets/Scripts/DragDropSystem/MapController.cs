@@ -655,9 +655,7 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
-
-                            audioSource.clip = BuySound;
-                            audioSource.Play();
+                            GameManager.Inst.soundOption.SFXPlay("BuySFX");
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;

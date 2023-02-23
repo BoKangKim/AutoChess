@@ -16,6 +16,9 @@ namespace ZoneSystem
         private int ObjectLayer;
         private int battleSpaceLayer;
         private int safetySpaceLayer;
+
+   
+
         private int itemLayer;
 
         public GameObject safetyZoneTile;
@@ -40,12 +43,13 @@ namespace ZoneSystem
             cam = Camera.main;
             safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace"); //이거 비트연산자가 더 빠르지 않나?
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
+
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
-            /* <--- null떠서 임시로
+      
             if (photonView.IsMine)
             {
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
@@ -54,7 +58,7 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
-            */
+            
         }
         private void Update()
         {
@@ -101,8 +105,8 @@ namespace ZoneSystem
                             beforePos = CastRay(battleSpaceLayer).collider.transform.localPosition;
                         }
 
-                        mapController.audioSource.clip = mapController.SelectSound;
-                        mapController.audioSource.Play();
+                        GameManager.Inst.soundOption.SFXPlay("SelectSFX");
+
 
                     }
                     else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
@@ -120,8 +124,8 @@ namespace ZoneSystem
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
-                        mapController.audioSource.clip = mapController.SelectSound;
-                        mapController.audioSource.Play();
+                        GameManager.Inst.soundOption.SFXPlay("SelectSFX");
+
                     }
                 }
                 //Drop
@@ -137,20 +141,23 @@ namespace ZoneSystem
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
                         DropPosition(safetySpaceLayer);
-                        mapController.audioSource.clip = mapController.DropSound;
-                        mapController.audioSource.Play();
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
+
                     }
                     else if (CastRay(battleSpaceLayer).collider != null)
                     {
                         DropPosition(battleSpaceLayer);
-                        mapController.audioSource.clip = mapController.DropSound;
-                        mapController.audioSource.Play();
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
+
                     }
                     else
                     {
                         outRange();
-                        mapController.audioSource.clip = mapController.DropSound;
-                        mapController.audioSource.Play();
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
+
                     }
 
                     battleZoneTile.gameObject.SetActive(false);
@@ -217,6 +224,7 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 PhotonNetwork.Destroy(selectedObject);
+                GameManager.Inst.soundOption.bgmPlay("SellSFX");
 
                 GameManager.Inst.GetPlayer().gold += 3;
 
@@ -225,8 +233,7 @@ namespace ZoneSystem
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
-                mapController.audioSource.clip = mapController.SellSound;
-                mapController.audioSource.Play();
+     
 
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
@@ -241,8 +248,6 @@ namespace ZoneSystem
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
-                mapController.audioSource.clip = mapController.SellSound;
-                mapController.audioSource.Play();
             }
         }
         #endregion
@@ -276,6 +281,8 @@ namespace ZoneSystem
         }
         #endregion
 
+
+
         #region DropPos
         private void DropPosition(int Layer)
         {
@@ -283,6 +290,8 @@ namespace ZoneSystem
             var safetyPos = safetyPosToIndex(worldPosition);
             var battlePos = battlePosToIndex(worldPosition);
             var beforePos = safetyPosToIndex(this.beforePos);
+
+
 
 
 
@@ -392,7 +401,8 @@ namespace ZoneSystem
 
                 }
             }
-                selectedObject = null;
+            Debug.Log($"WP : { worldPosition}, SPINDEX :  { safetyPos} BPINDEX : { battlePos} BFINDEX {beforePos}");
+            selectedObject = null;
         }
         #endregion
 
