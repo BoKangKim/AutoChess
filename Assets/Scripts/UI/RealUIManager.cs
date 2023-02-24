@@ -1,22 +1,17 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
-using TMPro.Examples;
 
 public class RealUIManager : MonoBehaviour
 {
+    /*
     [Header("[UnitState]")]
     [SerializeField] private GameObject unitStatusContents;
     [SerializeField] private GameObject unitStatusInfo;
     [SerializeField] private GameObject unitStatusDetailInfo;
     [SerializeField] private GameObject unitSkillInfo;
-
-    [Header("[Setting]")]
-    [SerializeField] private Button settingButton;
-    [SerializeField] private GameObject settingContentsPopup;
-    [SerializeField] private Button applyButton;
 
     [Header("[Player]")]
     [SerializeField] private TextMeshProUGUI playerExpensionLv;
@@ -58,15 +53,34 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
 
-    [Header("[Gacha]")]
-    [SerializeField] private TextMeshProUGUI gachaWeponGold;
-    [SerializeField] private TextMeshProUGUI gachaUnitGold;
+    
+    */
 
 
+
+    [Header("[Setting]")]
+    [SerializeField] private Button settingButton;
+    [SerializeField] private GameObject settingContentsPopup;
+    [SerializeField] private Button applyButton;
+
+    [Header("Synergy")]
     [SerializeField] private ScrollRect synergyScroll = null;
     [SerializeField] private GameObject[] synergyList = null;
 
-    [SerializeField] private PlayerData playerData = null;
+    [Header("Buy")]
+    private PlayerData player = null;
+    [SerializeField] private TextMeshProUGUI gachaWeponGold = null;
+    [SerializeField] private TextMeshProUGUI gachaUnitGold = null;
+    public Button buyUnitButton = null;
+    public Action UnitInstButton;
+    [SerializeField] private Button buyItemButton = null;
+
+    [SerializeField] private Image player1HpBar = null;
+    [SerializeField] private TextMeshProUGUI player1Lv = null;
+    [SerializeField] private TextMeshProUGUI player1Name = null;
+
+    [Header("Buy")]
+    [SerializeField] private TextMeshProUGUI playerCurExp = null;
 
     private void Awake()
     {
@@ -75,27 +89,46 @@ public class RealUIManager : MonoBehaviour
 
     private void Start()
     {
-        
+        player = new PlayerData();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            Debug.Log("����");
-            SynergyScroll("Mecha2");
-            SynergyScroll("Orc");
-            SynergyScroll("Demon");
-            SynergyScroll("Assassin2");
-            SynergyScroll("Tanker2");
-            SynergyScroll("Warrior");
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Add("Mecha");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Magician");
+
+            SynergyScroll(activeSynergyList);
         }
 
-        if(Input.GetKeyDown(KeyCode.N))
+        if(Input.GetKeyDown(KeyCode.B))
         {
-            //expansionUserID.text = Database.Instance.userInfo.username;
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Clear();
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Magician");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("Mecha");
+
+            SynergyScroll(activeSynergyList);
         }
+
+
     }
+
+    public void unitInstButton() => UnitInstButton();
 
     #region OnClick
     public void OnClickSettingButton() //���� ���� ��ư
@@ -108,20 +141,49 @@ public class RealUIManager : MonoBehaviour
         settingContentsPopup.SetActive(false);
     }
 
-    public void OnClickBuyExp() // ����ġ ����
+    public void OnClickBuyExp()
     {
-        
+        if (player.gold < 4)
+        {
+            Debug.Log("��尡 �����մϴ�.");
+            return;
+        }
+        if (player.playerLevel > 8)
+        {
+            Debug.Log("�ִ뷹�� �Դϴ�.");
+            return;
+        }
+        player.CurExp += 4;
+        //������
+        if (player.CurExp <= player.MaxExp[player.playerLevel])
+        {
+            player.CurExp -= player.MaxExp[player.playerLevel];
+            ++player.playerLevel;
+            if (player.playerLevel == 9)
+            {
+                player.CurExp = 0;
+            }
+        }
+        playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
     }
 
 
     public void OnClickDrawWeapon() // ��� ����
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("��尡 �����մϴ�.");
+            return;
+        }
     }
 
     public void OnClickDrawUnit() // ���� ����
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("��尡 �����մϴ�.");
+            return;
+        }
     }
 
     public void OnClickRanking1Player() // 1P����
@@ -147,14 +209,39 @@ public class RealUIManager : MonoBehaviour
 
     #endregion
 
-    public void SynergyScroll(string prefabName) // string name �Ѱܹ����� �˾Ƽ� ��
+    public void SynergyScroll(List<string> activeSynergyList) //list�� �޾Ƽ� �ʱ�ȭ ���� �ϳ��� �ֱ�
     {
-        for(int i = 0;i<synergyList.Length;i++)
+        RectTransform contentTransform = synergyScroll.content.GetComponentInChildren<RectTransform>();
+
+        foreach (Transform child in contentTransform) // ������ ����
         {
-            if (prefabName.Equals(synergyList[i].name))
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < activeSynergyList.Count; i++) //���� 2������ Ȯ��
+        {
+            for (int j = 0; j < synergyList.Length; j++)
             {
-                Instantiate(synergyList[i],synergyScroll.content.transform);
+                if (activeSynergyList[i].Equals(synergyList[j].name))
+                {
+                    Instantiate(synergyList[j], synergyScroll.content.transform);
+                }
             }
+
         }
     }
+
+    public void PlayerHpRanking()
+    {
+
+    }
+
+    public void PlayerInfoUpdate() // �ӽ÷� �÷��̾� �Ѹ� �� ��
+    {
+        player1HpBar.fillAmount = player.CurHP / 100;
+        player1Lv.text = "LV : " + player.playerLevel.ToString();
+        player1Name.text = player.playerName;
+    }
+
+
 }

@@ -61,8 +61,6 @@ namespace ZoneSystem
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
-       
-
         private void Awake()
         {
             //if (!photonView.IsMine) return;
@@ -72,7 +70,6 @@ namespace ZoneSystem
             RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
 
             initializingUnitName();
-
             #region FreeNet Random Three Random Unit 
             //int index = 0;
             //if(PhotonNetwork.IsMasterClient == true)
@@ -609,8 +606,11 @@ namespace ZoneSystem
                 return x.CompareTo(y);
             });
 
-            UIManager.Inst.SynergyText(null);
-            activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
+            //여기서 UI에다가 시너지 전달 해줘야함(전달 하는 순간 기존거는 초기화 시켜
+            
+            //RealUIManager.SynergyScroll(activeSynergyList)
+
+
             activeSynergyList.Clear();
             return battleUnitCount;
         }

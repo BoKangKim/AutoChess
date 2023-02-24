@@ -14,6 +14,7 @@ public class PlayerMapSpawner : MonoBehaviourPun
         GameManager.Inst.soundOption.SFXPlay("IngameStartSFX");
 
         Map = PhotonNetwork.Instantiate("Map", Vector3.zero, Quaternion.identity);
+        PhotonNetwork.Instantiate("InfoConnector",Vector3.zero,Quaternion.identity);
 
         switch (PhotonNetwork.LocalPlayer.CustomProperties["PlayerNum"])
         {
