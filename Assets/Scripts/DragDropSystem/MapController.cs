@@ -310,7 +310,6 @@ namespace ZoneSystem
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
 
-            //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
