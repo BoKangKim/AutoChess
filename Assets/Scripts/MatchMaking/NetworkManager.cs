@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "MainGameScene";
+        gameScene = "SyncUnit";
     }
 
     private void Start()
@@ -60,8 +60,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         StartCoroutine(Co_JoinLobby());
         GameManager.Inst.UIManage.startbutton.interactable = false;
-        //GameManager.Inst.UIManage.audioSource.clip = GameManager.Inst.UIManage.buttonSound;
-        //GameManager.Inst.UIManage.audioSource.Play();
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
+
 
     }
     private IEnumerator Co_JoinLobby()
@@ -79,15 +80,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedLobby()
     {
-        int rnd = Random.Range(0, 2147483645);
-
-        lobbyPanel.gameObject.SetActive(true);
-
-        logingPanel.gameObject.SetActive(false);
-
-        Debug.Log(Database.Instance.userInfo.username);
-        myNickName.text = Database.Instance.userInfo.username;
-        PhotonNetwork.NickName = Database.Instance.userInfo.username + rnd.ToString();
 
         Debug.Log(PhotonNetwork.NickName);
         chatmanager.enabled = true;
@@ -102,6 +94,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         JoinRandomOrCreateRoom();
         tempCoritineu = uIManage.MatchTimer();
         StartCoroutine(tempCoritineu);
+        GameManager.Inst.soundOption.bgmPlay("MatchingBgm");
+
 
     }
 
@@ -138,8 +132,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("방 떠남.");
         PhotonNetwork.LeaveRoom();
         StopCoroutine(tempCoritineu);
-        //GameManager.Inst.UIManage.audioSource.clip = GameManager.Inst.UIManage.buttonSound;
-        //GameManager.Inst.UIManage.audioSource.Play();
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+        GameManager.Inst.soundOption.bgmPlay("LobbyBgm");
+
+
     }
 
     public override void OnCreatedRoom()
@@ -149,8 +145,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        UpdatePlayerCount();
-        //PhotonNetwork.LoadLevel(gameScene);
+        //UpdatePlayerCount();
+        PhotonNetwork.LoadLevel(gameScene);
 
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -177,16 +173,17 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-
+        GameManager.Inst.soundOption.SFXPlay("MatchingSFX", GameManager.Inst.UIManage.mainLobby.gameObject);
     }
 
 
-    
 
-
-    float time = 0f;
-}
 
 
 
 }
+
+
+
+
+

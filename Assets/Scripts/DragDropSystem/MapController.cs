@@ -176,7 +176,7 @@ namespace ZoneSystem
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
-                bt.SetState(stage);
+                bt.setState(stage);
             }
 
             return bt;
@@ -303,12 +303,14 @@ namespace ZoneSystem
 
         public int SafetyZoneCheck()
         {
+            
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
                 {
                     if (safetyObject[z, x] != null)
                     {
+                        Debug.Log(safetyObject[z, x].transform.position);
                         SafetyObjectCount++;
                     }
                 }
@@ -345,6 +347,7 @@ namespace ZoneSystem
                         {
                             bt.enabled = true;
                         }
+
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
@@ -655,9 +658,7 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
-
-                            audioSource.clip = BuySound;
-                            audioSource.Play();
+                            GameManager.Inst.soundOption.SFXPlay("BuySFX");
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;

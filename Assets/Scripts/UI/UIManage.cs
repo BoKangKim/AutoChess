@@ -63,15 +63,18 @@ public class UIManage : MonoBehaviour
     public void Start()
     {
         StartCoroutine(Fadeintitle());
-        audioSource = gameObject.AddComponent<AudioSource>();
+
+        GameManager.Inst.soundOption.bgmPlay("LobbyBgm");
     }
 
     public void ShopOpen()
     {
         //mainLobby.gameObject.SetActive(false);
         shopCanvas.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
+
+
 
     }
 
@@ -79,150 +82,173 @@ public class UIManage : MonoBehaviour
     {
         shopCanvas.gameObject.SetActive(false);
         //mainLobby.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void SelectionIconOn()
     {
         selecticonPopup.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void SelectionIconOff()
     {
         selecticonPopup.gameObject.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
+
     }
     public void SelectBattleMode()
     {
         selectbattle.gameObject.SetActive(true);
         mainLobby.gameObject.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void SelectBattleExit()
     {
         selectbattle.gameObject.SetActive(false);
         mainLobby.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
     }
 
     public void LiveOutPopup()
     {
         cantLivenet.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void LiveOutPopupExit()
     {
         cantLivenet.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
     }
     public void BuyTicket()
     {
         ticket.gameObject.SetActive(true);
         shopCanvas.gameObject.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void BuyTicketExit()
     {
         ticket.gameObject.SetActive(false);
         shopCanvas.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void BuyUnit()
     {
         unitShop.SetActive(true);
         selectShop.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void BuyUnitExit()
     {
         unitShop.SetActive(false);
         selectShop.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void RecordOn()
     {
         record.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void RecordExit()
     {
         record.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void CollectionbookOpen()
     {
         collectionBook.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void CollectionbookExit()
     {
         collectionBook.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void NextPage1()
     {
         book1Page.SetActive(false);
         book2Page.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void NextPage2()
     {
         book2Page.SetActive(false);
         book3Page.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void BeforePage1()
     {
         book1Page.SetActive(true);
         book2Page.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void BeforePage2()
     {
         book2Page.SetActive(true);
         book3Page.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void SettingOn()
     {
         setting.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void SettingOff()
     {
         setting.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void GameOut()
     {
         Application.Quit();
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -236,8 +262,9 @@ public class UIManage : MonoBehaviour
         int num = int.Parse(str[1]);
         userIcon.sprite = userIconImage[num];
         GameManager.Inst.dataBase.userInfo.userIconIndex = num;
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
 
     }
 
@@ -247,81 +274,93 @@ public class UIManage : MonoBehaviour
         sellunit.sprite = newImage;
         comfirmation.SetActive(true);
         exitbutton.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void SetSellItem(TextMeshProUGUI SellUnitText)
     {
         TextMeshProUGUI newtext = SellUnitText;
         sUnitText.text = newtext.text;
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void comfirmationExit()
     {
         comfirmation.SetActive(false);
         exitbutton.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void TicketToolTip1On()
     {
         ticketToolTip1.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void TicketToolTip1Off()
     {
         ticketToolTip1.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void TicketToolTip2On()
     {
         ticketToolTip2.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void TicketToolTip2Off()
     {
         ticketToolTip2.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void TicketToolTip3On()
     {
         ticketToolTip3.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void TicketToolTip3Off()
     {
         ticketToolTip3.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
     public void GotoDappx()
     {
         Application.OpenURL("https://dappstore.me");
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void Letsmatch()
     {
         matching.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public void MatchExit()
     {
         matching.gameObject.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
     }
 
     public IEnumerator MatchTimer()

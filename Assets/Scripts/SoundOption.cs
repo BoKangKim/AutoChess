@@ -22,16 +22,26 @@ public class SoundOption : MonoBehaviour
     // bgm
     // LobbyBgm, IngameBgm, BossBgm, MatchingBgm
 
-    // È¿°úÀ½
-    // °ÔÀÓ ½ÃÀÛ ÈÄ ±ºÁß¼Ò¸® IngameStartSFX
-    // ¸ÅÄª ¼º°ø½Ã »ç¿îµå  MatchingSFX
-    // ¸ÓÁö È¿°úÀ½ MergeSFX
-    // ½Ã³ÊÁö È°¼ºÈ­ »ç¿îµå SynergySFX
-    // À¯´Ö ¹èÄ¡»ç¿îµå DropSFX
-    // À¯´Ö ¼ÒÈ¯ »ç¿îµå BuySFX
-    // À¯´Ö ÆÇ¸Å »ç¿îµå SellSFX
-    // À¯´Ö ÇÈ¾÷ »ç¿îµå SelectSFX
-    // ÆË¾÷»ç¿îµå ClickSFX
+    // È¿ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ß¼Ò¸ï¿½ IngameStartSFX
+    //SFXPlay("IngameStartSFX");
+    // ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  MatchingSFX
+    //SFXPlay("MatchingSFX");
+    // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ MergeSFX
+    //SFXPlay("MergeSFX");
+    // ï¿½Ã³ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ SynergySFX
+    //SFXPlay("SynergySFX");
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ DropSFX
+    //SFXPlay("DropSFX");
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ BuySFX
+    //SFXPlay("BuySFX");
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ SellSFX
+    //SFXPlay("SellSFX");
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½ï¿½ï¿½ï¿½ SelectSFX
+    //SFXPlay("SelectSFX");
+    // ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ ClickSFX
+    //SFXPlay("ClickSFX");
+
 
     public Dictionary<string, AudioClip> ClipDictionary;
 
@@ -46,6 +56,7 @@ public class SoundOption : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        bgmPlay("LobbyBgm");
     }
 
 
@@ -64,14 +75,64 @@ public class SoundOption : MonoBehaviour
     public void bgmPlay(string bgmName)
     {
         this.gameObject.AddComponent<AudioSource>();
+        AudioSource audiosource;
+        AudioClip clip = null;
+        if (!gameObject.TryGetComponent<AudioSource>(out audiosource))
+        {
+            audiosource = this.gameObject.AddComponent<AudioSource>();
+        }
+       
+        if(ClipDictionary.TryGetValue(bgmName, out clip))
+        {
+            audiosource.clip = clip;
+            audiosource.Play();
+        }
+        else
+        {
+            Debug.Log("ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
+        }
+        audiosource.loop = true;
+
     }
+
+
+    public void SFXPlay(string sfxName)
+    {
+        AudioSource[] audiosources = this.gameObject.GetComponents<AudioSource>();
+        AudioClip clip = null;
+        ClipDictionary.TryGetValue(sfxName, out clip);
+
+        foreach (AudioSource source in audiosources)
+        {
+            if (source.clip == clip)
+            {
+                source.Play();
+                return;
+            }
+        }
+
+        AudioSource audiosource = this.gameObject.AddComponent<AudioSource>();
+        audiosource.clip = clip;
+        audiosource.Play();
+    }
+
     public void SFXPlay(string sfxName, GameObject go)
     {
+        AudioSource[] audiosources = go.GetComponents<AudioSource>();
+        AudioClip clip = null;
+        ClipDictionary.TryGetValue(sfxName, out clip);
+
+        foreach (AudioSource source in audiosources)
+        {
+            if (source.clip == clip)
+            {
+                source.Play();
+                return;
+            }
+        }
+
         AudioSource audiosource = go.AddComponent<AudioSource>();
+        audiosource.clip = clip;
         audiosource.Play();
-
     }
-
-   
-
 }

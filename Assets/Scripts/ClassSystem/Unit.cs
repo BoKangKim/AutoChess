@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -145,7 +144,7 @@ namespace UnitClass
 
         public int EquipCount()
         {
-            equipmentCount = transform.childCount;
+            equipmentCount = transform.Find("Equipment").childCount;
             return equipmentCount;
         }
 
