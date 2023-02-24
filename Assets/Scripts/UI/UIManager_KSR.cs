@@ -16,7 +16,7 @@ using TMPro.Examples;
 public class UIManager_KSR : MonoBehaviour
 {
 
-    #region 잠깐 싱글턴 해놓은거
+    #region 잠깐 싱글턴 해놓은거 <- 씨발 왜 해냐고
     private UIManager_KSR() { }
     private static UIManager_KSR inst = null;
     public static UIManager_KSR Inst
@@ -34,7 +34,7 @@ public class UIManager_KSR : MonoBehaviour
             return inst;
         }
     }
-    #endregion
+    #endregion 
 
     #region Canvas
     [Header("[UnitState]")]
@@ -391,17 +391,11 @@ public class UIManager_KSR : MonoBehaviour
     }
     void Update()
     {
-
         pointerEventData.position = Input.mousePosition;
         // 배치된 유닛에 따른 시너지 확인
         DeployedUnitSynergy();
 
-        // 업데이트 문 줄여야 함
-        if (playerHPValue <= 0) IsDead = true;
-        if (playerGoldValue <= 0) playerGoldValue = 0;
         
-        // 체력에 따른 랭킹 컨텐츠 위치 이동
-        ChangeRankerPosition();
 
     }
 

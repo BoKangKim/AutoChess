@@ -46,7 +46,7 @@ public class MechaRangeSkill : SkillEffect
                 if (damageTime >= 1f)
                 {
                     Debug.Log(count);
-                    //collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((this.gameObject.GetComponent<UnitClass.Unit>().GetTotalSpellPower / 100) * 30 + (attackDamage * 0.5f));
+                    collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((owner.getSpellPower() / 100) * 30 + (owner.getAttackDamage() * 0.5f));
                     damageTime = 0f;
                     ++count;
                 }

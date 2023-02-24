@@ -16,6 +16,9 @@ namespace ZoneSystem
         private int ObjectLayer;
         private int battleSpaceLayer;
         private int safetySpaceLayer;
+
+   
+
         private int itemLayer;
 
         public GameObject safetyZoneTile;
@@ -28,6 +31,9 @@ namespace ZoneSystem
 
         Button posCheckButton = null;
 
+
+
+
         private void Awake()
         {
             mapController = GetComponent<MapController>();
@@ -37,11 +43,13 @@ namespace ZoneSystem
             cam = Camera.main;
             safetySpaceLayer = 1 << LayerMask.NameToLayer("SafetySpace"); //이거 비트연산자가 더 빠르지 않나?
             battleSpaceLayer = 1 << LayerMask.NameToLayer("BattleSpace");
+
             ObjectLayer = 1 << LayerMask.NameToLayer("Object");
             itemLayer = 1 << LayerMask.NameToLayer("Item");
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
+      
             if (photonView.IsMine)
             {
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
@@ -50,13 +58,15 @@ namespace ZoneSystem
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
+            
         }
         private void Update()
         {
-            if (!photonView.IsMine)
-            {
-                return;
-            }
+
+            //if (!photonView.IsMine)
+            //{
+            //    return;
+            //}
 
 
             #region PC��
@@ -71,37 +81,35 @@ namespace ZoneSystem
 
                 if (selectedObject == null)
                 {
+                    if (CastRay(ObjectLayer).collider == null) return;
 
-                    if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
+                    if (CastRay(ObjectLayer).collider.GetComponent<UnitClass.Unit>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
-
-
 
                         battleZoneTile.gameObject.SetActive(true);
                         safetyZoneTile.gameObject.SetActive(true);
 
-
                         if (CastRay(safetySpaceLayer).collider != null)
                         {
-                            var vec = safetyPosToIndex(selectedObject.transform.localPosition);
+                            var vec = safetyPosToIndex(CastRay(safetySpaceLayer).collider.transform.localPosition);
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
                         else if (CastRay(battleSpaceLayer).collider != null)
                         {
+
                             var vec = battlePosToIndex(CastRay(battleSpaceLayer).collider.transform.localPosition);
-                            mapController.battleObject[(int)vec.z, (int)vec.x] = null;
-
+                            mapController.battleObject[vec.z, vec.x] = null;
                             beforePos = CastRay(battleSpaceLayer).collider.transform.localPosition;
-
                         }
+
+                        GameManager.Inst.soundOption.SFXPlay("SelectSFX");
+
                     }
-                    else if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
+                    else if (CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                     {
                         selectedObject = CastRay(ObjectLayer).collider.gameObject;
-                        //selectedObject.transform.parent = PlayerMapSpawner.Map.transform;
 
 
                         safetyZoneTile.gameObject.SetActive(true);
@@ -113,6 +121,8 @@ namespace ZoneSystem
                             mapController.safetyObject[vec.z, vec.x] = null;
                             beforePos = CastRay(safetySpaceLayer).collider.transform.localPosition;
                         }
+                        GameManager.Inst.soundOption.SFXPlay("SelectSFX");
+
                     }
                 }
                 //Drop
@@ -123,26 +133,31 @@ namespace ZoneSystem
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
-                    Debug.Log(CastRay(safetySpaceLayer).collider);
-                    Debug.Log(CastRay(battleSpaceLayer).collider);
-
                     if (CastRay(safetySpaceLayer).collider != null)
                     {
                         DropPosition(safetySpaceLayer);
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
+
                     }
                     else if (CastRay(battleSpaceLayer).collider != null)
                     {
                         DropPosition(battleSpaceLayer);
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
+
                     }
                     else
                     {
                         outRange();
+                        GameManager.Inst.soundOption.SFXPlay("DropSFX");
+
                     }
 
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                storeButtonChange();
+                //storeButtonChange();
 
             }
             //Drag
@@ -163,7 +178,7 @@ namespace ZoneSystem
 
             Physics.Raycast(screenMousePosNear, screenMousePosFar - screenMousePosNear, out RaycastHit hit, Vector3.Magnitude(screenMousePosFar - screenMousePosNear), Layer);
             Debug.DrawRay(screenMousePosNear, screenMousePosFar - screenMousePosNear, Color.red);
-
+            
             return hit;
         }
         #endregion
@@ -195,22 +210,24 @@ namespace ZoneSystem
                 {
                     for (int i = 0; i < count; i++)
                     {
-                        mapController.UnitOutItem(selectedObject.transform.GetChild(i).gameObject);
+                        mapController.UnitOutItem(selectedObject.transform.Find("Equipment").GetChild(i).gameObject);
                         count--;
                         i--;
                     }
                 }
                 posCheckButton = null;
 
-                Destroy(selectedObject);
+                PhotonNetwork.Destroy(selectedObject);
+                GameManager.Inst.soundOption.bgmPlay("SellSFX");
 
-                GameManager.Inst.GetPlayer().gold += 3;
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
-                storeButtonChange();
+                //storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
+     
 
             }
             if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
@@ -218,12 +235,13 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 Destroy(selectedObject);
-                GameManager.Inst.GetPlayer().gold += 3;
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
-                storeButtonChange();
+                //storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
+
             }
         }
         #endregion
@@ -265,8 +283,6 @@ namespace ZoneSystem
             var battlePos = battlePosToIndex(worldPosition);
             var beforePos = safetyPosToIndex(this.beforePos);
 
-
-
             if (Layer == safetySpaceLayer)
             {
                 if (mapController.safetyObject[safetyPos.z, safetyPos.x] == null)
@@ -290,7 +306,7 @@ namespace ZoneSystem
                             mapController.safetyObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
                             mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
-                            selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                            mapController.safetyObject[safetyPos.z, safetyPos.x].transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
                     else
@@ -307,7 +323,7 @@ namespace ZoneSystem
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.safetyObject[safetyPos.z, safetyPos.x];
                             mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
-                            selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                            mapController.safetyObject[safetyPos.z, safetyPos.x].transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
                 }
@@ -315,6 +331,8 @@ namespace ZoneSystem
 
             else if (Layer == battleSpaceLayer)
             {
+
+                Debug.Log(battlePos);
                 if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
                     selectedObject.transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
@@ -337,7 +355,6 @@ namespace ZoneSystem
                         if (Merge(selectedObject, mapController.battleObject[battlePos.z, battlePos.x]))
                         {
                             CastRay(Layer).collider.GetComponent<MeshRenderer>().material.color = tileColor;
-
                             mapController.safetyObject[beforePos.z, beforePos.x] = null;
                         }
                         else
@@ -346,7 +363,7 @@ namespace ZoneSystem
                             mapController.safetyObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
-                            selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
+                            mapController.battleObject[battlePos.z, battlePos.x].transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
                     else
@@ -361,19 +378,18 @@ namespace ZoneSystem
                         }
                         else
                         {
-
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
                             mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
 
-                            selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-
+                            mapController.battleObject[battlePos.z, battlePos.x].transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
                         }
                     }
 
                 }
             }
-                selectedObject = null;
+            Debug.Log($"WP : { worldPosition}, SPINDEX :  {safetyPos} BPINDEX : {battlePos} BFINDEX {beforePos}");
+            selectedObject = null;
         }
         #endregion
 
@@ -448,8 +464,6 @@ namespace ZoneSystem
         Vector3 battleInterval = new Vector3(1.5f, 0 , 2.5f);
         (int x , int z) battlePosToIndex(Vector3 Vec)
         {
-            //Debug.Log($"pos + {Vec}");
-
             Vec.z = (Vec.z / battleInterval.z);
 
             if (Vec.z % 2 == 0) { Vec.x -= battleInterval.x; }
@@ -457,6 +471,9 @@ namespace ZoneSystem
             else { }
 
             Vec.x /= 3f;
+
+            Debug.Log($"{(int)Vec.x},{(int)Vec.z}");
+
             return ((int)Vec.x,(int)Vec.z);
         }
         (int x, int z) safetyPosToIndex(Vector3 Vec)
@@ -493,16 +510,16 @@ namespace ZoneSystem
         {
             List<Transform> items = new List<Transform>();
 
-            for (int i = 0; i < selected.childCount; i++)
+            for (int i = 0; i < selected.Find("Equipment").childCount; i++)
             {
-                selected.GetChild(i).GetComponent<Equipment>().SaveGrade();
-                items.Add(selected.GetChild(i).transform);
+                selected.Find("Equipment").GetChild(i).GetComponent<Equipment>().SaveGrade();
+                items.Add(selected.Find("Equipment").GetChild(i).transform);
             }
 
-            for (int i = 0; i < stay.childCount; i++)
+            for (int i = 0; i < stay.Find("Equipment").childCount; i++)
             {
-                stay.GetChild(i).GetComponent<Equipment>().SaveGrade();
-                items.Add(stay.GetChild(i).transform);
+                stay.Find("Equipment").GetChild(i).GetComponent<Equipment>().SaveGrade();
+                items.Add(stay.Find("Equipment").GetChild(i).transform);
             }
 
             return EquipmentAutoMergeResult(items);
@@ -512,14 +529,14 @@ namespace ZoneSystem
         {
             List<Transform> items = new List<Transform>();
 
-            for (int i = 0; i < selected.childCount; i++)
+            for (int i = 0; i < selected.Find("Equipment").childCount; i++)
             {
-                items.Add(selected.GetChild(i).transform);
+                items.Add(selected.Find("Equipment").GetChild(i).transform);
             }
 
-            for (int i = 0; i < stay.childCount; i++)
+            for (int i = 0; i < stay.Find("Equipment").childCount; i++)
             {
-                items.Add(stay.GetChild(i).transform);
+                items.Add(stay.Find("Equipment").GetChild(i).transform);
             }
 
             bool merged = true;
@@ -555,9 +572,9 @@ namespace ZoneSystem
         {
             List<Transform> items = new List<Transform>();
 
-            for (int i = 0; i < stay.childCount; i++)
+            for (int i = 0; i < stay.Find("Equipment").childCount; i++)
             {
-                items.Add(stay.GetChild(i).transform);
+                items.Add(stay.Find("Equipment").GetChild(i).transform);
             }
 
             items.Add(Item);
@@ -602,6 +619,8 @@ namespace ZoneSystem
             //유닛 끼리 머지
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
+                if (selectedObject.name != stayObject.name) return false;
+       
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
@@ -627,12 +646,12 @@ namespace ZoneSystem
                     {
                         for (int i = 0; i < selectedEqCount; i++)
                         {
-                            selectedUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
+                            selectedUnit.transform.Find("Equipment").GetChild(i).GetComponent<Equipment>().LoadGrade();
                         }
 
                         for(int i = 0; i<stayEqCount; i++)
                         {
-                            stayUnit.transform.GetChild(i).GetComponent<Equipment>().LoadGrade();
+                            stayUnit.transform.Find("Equipment").GetChild(i).GetComponent<Equipment>().LoadGrade();
                         }
 
                         EquipmentAutoMerge(selectedObject.transform, stayObject.transform);
@@ -651,7 +670,7 @@ namespace ZoneSystem
                         {
                             for (int i = 0; i < selectedEqCount; i++)//얘는 장비 사출
                             {
-                                mapController.UnitOutItem(selectedUnit.transform.GetChild(i).gameObject);
+                                mapController.UnitOutItem(selectedUnit.transform.Find("Equipment").GetChild(i).gameObject);
                                 selectedEqCount--;
                                 i--;
                             }
@@ -659,9 +678,6 @@ namespace ZoneSystem
                             stayUnit.Upgrade();
                         }
                     }
-
-
-
 
                     return true;
                 }

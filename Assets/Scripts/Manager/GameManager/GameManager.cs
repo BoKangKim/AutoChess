@@ -30,18 +30,29 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
-    private int playerUnitCount = 0;
+    private PlayerInfoConnector connecter = null;
+
+    [Header("UIManager")]
+    public UIManage UIManage;
+    [Header("NetworkManager")]
+    public NetworkManager networkManager;
+    [Header("DataBase")]
+    public Database dataBase;
+    [Header("MataTrendAPI")]
+    public MetaTrendAPI metaTrendAPI;
+    [Header("SoundOption")]
+    public SoundOption soundOption;
 
 
-    private PlayerData player = null;
-    // À¯´Ö ÃÑ °¹¼ö °ü¸®
-    // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // Manager ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù°ï¿½
+    [SerializeField] private RealUIManager UIManager = null;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        player = new PlayerData();
+        
     }
 
     #region GAMETYPE
@@ -91,30 +102,13 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Player Info
-    public void PlusUnitCount()
+    public void SetPlayerInfoConnector(PlayerInfoConnector player)
     {
-        playerUnitCount++;
+        this.connecter = player;
     }
 
-    public void MinusUnitCount()
+    public PlayerInfoConnector GetPlayerInfoConnector()
     {
-        playerUnitCount--;
+        return connecter;
     }
-
-    public void ResetUnitCount()
-    {
-        playerUnitCount = 0;
-    }
-
-    public int GetUnitCount()
-    {
-        return playerUnitCount;
-    }
-
-    public PlayerData GetPlayer()
-    {
-        return player;
-    }
-    #endregion
 }

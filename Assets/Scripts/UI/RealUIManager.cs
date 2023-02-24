@@ -1,22 +1,17 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
-using TMPro.Examples;
 
 public class RealUIManager : MonoBehaviour
 {
+    /*
     [Header("[UnitState]")]
     [SerializeField] private GameObject unitStatusContents;
     [SerializeField] private GameObject unitStatusInfo;
     [SerializeField] private GameObject unitStatusDetailInfo;
     [SerializeField] private GameObject unitSkillInfo;
-
-    [Header("[Setting]")]
-    [SerializeField] private Button settingButton;
-    [SerializeField] private GameObject settingContentsPopup;
-    [SerializeField] private Button applyButton;
 
     [Header("[Player]")]
     [SerializeField] private TextMeshProUGUI playerExpensionLv;
@@ -27,7 +22,7 @@ public class RealUIManager : MonoBehaviour
     [Header("[Round]")]
     [SerializeField] private GameObject roundContents;
     [SerializeField] private GameObject roundExContents;
-    [SerializeField] private GameObject roundResultContents; // ½ÂÆÐ °á°ú
+    [SerializeField] private GameObject roundResultContents; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     [SerializeField] private TextMeshProUGUI roundInfoNum;
     [SerializeField] private TextMeshProUGUI roundStageNum;
     [SerializeField] private TextMeshProUGUI roundDetailNum;
@@ -37,36 +32,55 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private GameObject synergyContents;
     [SerializeField] private Image synergyExContents;
     [SerializeField] private Image synergyExContentsPopup;
-    [SerializeField] private TextMeshProUGUI synergyContentsPopupName; // ½Ã³ÊÁö ÆË¾÷Ã¢ - Á¾Á· ÀÌ¸§
-    [SerializeField] private TextMeshProUGUI[] synergyContentsPopupInfo; // ½Ã³ÊÁö ¼³¸í
-    [SerializeField] private Image[] synergyUnitIcon; // ½Ã³ÊÁö 3¸¶¸® µé¾î°¥ °÷
-    [SerializeField] private Image[] synergyUnitPopupIcon; // ÆË¾÷ ¾ÆÀÌÄÜ 5°³
-    [SerializeField] private TextMeshProUGUI synergyPlus; // º¸À¯ÇÑ À¯´Ö ¼ö ºñ±³ Ä«¿îÆ® ¼ö -> ¹è¿­ µ¥ÀÌÅÍ·Î ¹Þ¾Æ¿À±â 
-    [SerializeField] private GameObject[] classSynergy, speciesSynergy; // ÄÁÅÙÃ÷ ¿ÀºêÁ§Æ®
+    [SerializeField] private TextMeshProUGUI synergyContentsPopupName; // ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½Ã¢ - ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+    [SerializeField] private TextMeshProUGUI[] synergyContentsPopupInfo; // ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private Image[] synergyUnitIcon; // ï¿½Ã³ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½
+    [SerializeField] private Image[] synergyUnitPopupIcon; // ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½
+    [SerializeField] private TextMeshProUGUI synergyPlus; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½ï¿½ -> ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ 
+    [SerializeField] private GameObject[] classSynergy, speciesSynergy; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
-    // ÄÁÅÙÃ÷ ¹Ú½º¾È¿¡ ´ã±æ Á¤º¸ : Á¾Á· ÀÌ¸§, Á¾Á· Ä«¿îÆ® ¼ö, ¼³¸í±Û  
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½, ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 
     [Header("[Ranking]")]
     [SerializeField] private GameObject rankingContents;
-    [SerializeField] private TextMeshProUGUI rankingUserID; // ·©Å· UI¿¡ ¶ß´Â ID  - get data
+    [SerializeField] private TextMeshProUGUI rankingUserID; // ï¿½ï¿½Å· UIï¿½ï¿½ ï¿½ß´ï¿½ ID  - get data
     [SerializeField] private TextMeshProUGUI rankingUserLV;
     [SerializeField] private GameObject[] rankUserInfo;
 
     [Header("[Expansion]")]
-    [SerializeField] private TextMeshProUGUI expansionUserID; // È®Àå UI¿¡ ¶ß´Â ID  - get data
-    [SerializeField] private TextMeshProUGUI expansionGold; // È®Àå ½Ã »ç¿ëÇÏ´Â °ñµå
+    [SerializeField] private TextMeshProUGUI expansionUserID; // È®ï¿½ï¿½ UIï¿½ï¿½ ï¿½ß´ï¿½ ID  - get data
+    [SerializeField] private TextMeshProUGUI expansionGold; // È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
 
-    [Header("[Gacha]")]
-    [SerializeField] private TextMeshProUGUI gachaWeponGold;
-    [SerializeField] private TextMeshProUGUI gachaUnitGold;
+    
+    */
 
 
+
+    [Header("[Setting]")]
+    [SerializeField] private Button settingButton;
+    [SerializeField] private GameObject settingContentsPopup;
+    [SerializeField] private Button applyButton;
+
+    [Header("Synergy")]
     [SerializeField] private ScrollRect synergyScroll = null;
     [SerializeField] private GameObject[] synergyList = null;
 
-    [SerializeField] private PlayerData playerData = null;
+    [Header("Buy")]
+    private PlayerData player = null;
+    [SerializeField] private TextMeshProUGUI gachaWeponGold = null;
+    [SerializeField] private TextMeshProUGUI gachaUnitGold = null;
+    public Button buyUnitButton = null;
+    public Action UnitInstButton;
+    [SerializeField] private Button buyItemButton = null;
+
+    [SerializeField] private Image player1HpBar = null;
+    [SerializeField] private TextMeshProUGUI player1Lv = null;
+    [SerializeField] private TextMeshProUGUI player1Name = null;
+
+    [Header("Buy")]
+    [SerializeField] private TextMeshProUGUI playerCurExp = null;
 
     private void Awake()
     {
@@ -75,56 +89,104 @@ public class RealUIManager : MonoBehaviour
 
     private void Start()
     {
-        
+        player = new PlayerData();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            Debug.Log("»ý¼º");
-            SynergyScroll("Mecha2");
-            SynergyScroll("Orc");
-            SynergyScroll("Demon");
-            SynergyScroll("Assassin2");
-            SynergyScroll("Tanker2");
-            SynergyScroll("Warrior");
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Add("Mecha");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Magician");
+
+            SynergyScroll(activeSynergyList);
         }
 
-        if(Input.GetKeyDown(KeyCode.N))
+        if(Input.GetKeyDown(KeyCode.B))
         {
-            //expansionUserID.text = Database.Instance.userInfo.username;
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Clear();
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Magician");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("Mecha");
+
+            SynergyScroll(activeSynergyList);
         }
+
+
     }
 
+    public void unitInstButton() => UnitInstButton();
+
     #region OnClick
-    public void OnClickSettingButton() //¼¼ÆÃ ¶ç¿ì´Â ¹öÆ°
+    public void OnClickSettingButton() //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
     {
         settingContentsPopup.SetActive(true);
     }
 
-    public void OnClickSettingApplyButton() //¼¼ÆÃ Ã¢ Àû¿ë
+    public void OnClickSettingApplyButton() //ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½
     {
         settingContentsPopup.SetActive(false);
     }
 
-    public void OnClickBuyExp() // °æÇèÄ¡ ±¸¸Å
+    public void OnClickBuyExp()
     {
-        
+        if (player.gold < 4)
+        {
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
+            return;
+        }
+        if (player.playerLevel > 8)
+        {
+            Debug.Log("ï¿½Ö´ë·¹ï¿½ï¿½ ï¿½Ô´Ï´ï¿½.");
+            return;
+        }
+        player.CurExp += 4;
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+        if (player.CurExp <= player.MaxExp[player.playerLevel])
+        {
+            player.CurExp -= player.MaxExp[player.playerLevel];
+            ++player.playerLevel;
+            if (player.playerLevel == 9)
+            {
+                player.CurExp = 0;
+            }
+        }
+        playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
     }
 
 
-    public void OnClickDrawWeapon() // Àåºñ ±¸¸Å
+    public void OnClickDrawWeapon() // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
+            return;
+        }
     }
 
-    public void OnClickDrawUnit() // À¯´Ö ±¸¸Å
+    public void OnClickDrawUnit() // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
+            return;
+        }
     }
 
-    public void OnClickRanking1Player() // 1Pº¸±â
+    public void OnClickRanking1Player() // 1Pï¿½ï¿½ï¿½ï¿½
     {
 
     }
@@ -147,14 +209,39 @@ public class RealUIManager : MonoBehaviour
 
     #endregion
 
-    public void SynergyScroll(string prefabName) // string name ³Ñ°Ü¹ÞÀ¸¸é ¾Ë¾Æ¼­ µé¾î°¨
+    public void SynergyScroll(List<string> activeSynergyList) //listï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½
     {
-        for(int i = 0;i<synergyList.Length;i++)
+        RectTransform contentTransform = synergyScroll.content.GetComponentInChildren<RectTransform>();
+
+        foreach (Transform child in contentTransform) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
-            if (prefabName.Equals(synergyList[i].name))
+            Destroy(child.gameObject);
+        }
+
+        for (int i = 0; i < activeSynergyList.Count; i++) //ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
+        {
+            for (int j = 0; j < synergyList.Length; j++)
             {
-                Instantiate(synergyList[i],synergyScroll.content.transform);
+                if (activeSynergyList[i].Equals(synergyList[j].name))
+                {
+                    Instantiate(synergyList[j], synergyScroll.content.transform);
+                }
             }
+
         }
     }
+
+    public void PlayerHpRanking()
+    {
+
+    }
+
+    public void PlayerInfoUpdate() // ï¿½Ó½Ã·ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ñ¸ï¿½ ï¿½ï¿½ ï¿½ï¿½
+    {
+        player1HpBar.fillAmount = player.CurHP / 100;
+        player1Lv.text = "LV : " + player.playerLevel.ToString();
+        player1Name.text = player.playerName;
+    }
+
+
 }

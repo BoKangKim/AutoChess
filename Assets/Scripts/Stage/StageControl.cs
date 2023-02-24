@@ -44,7 +44,7 @@ namespace Battle.Stage
         private delegate IEnumerator waitMaster();
 
         private Vector3 camStartPos = Vector3.zero;
-        
+        private PlayerData player = null;
 
         public STAGETYPE getNowStage()
         {
@@ -133,6 +133,11 @@ namespace Battle.Stage
                 GameManager.Inst.nowStage = nowStage;
             }
 
+            if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
+            {
+
+            }
+
             if (changeStage != null)
             {
                 //changeStage(nowStage);
@@ -174,7 +179,7 @@ namespace Battle.Stage
                 if (PhotonNetwork.IsMasterClient == true)
                 {
                     isEndSetEnemy = setNextEnemy();
-                    photonView.RPC("SetIsEndSetEnemy", RpcTarget.All);
+                    photonView.RPC("RPC_IsEndSetEnemy", RpcTarget.All);
                 }
             }
             else if (nowStage == STAGETYPE.MONSTER)
@@ -204,14 +209,14 @@ namespace Battle.Stage
         }
 
         [PunRPC]
-        public void SetIsEndSetEnemy()
+        public void RPC_IsEndSetEnemy()
         {
             changeUnitMap();
         }
 
         private void changeUnitMap()
         {
-            GameManager.Inst.ResetUnitCount();
+            GameManager.Inst.GetPlayerInfoConnector().ResetUnitCount();
             battleObject = myMap.getBattleObjects();
             ParentBT bt = null;
 
@@ -227,7 +232,7 @@ namespace Battle.Stage
                     if (battleObject[i, j].TryGetComponent<ParentBT>(out bt) == true)
                     {
                         bt.setEnemyNickName(myMap.getEnemy().getMyNickName());
-                        GameManager.Inst.PlusUnitCount();
+                        GameManager.Inst.GetPlayerInfoConnector().PlusUnitCount();
                     }
 
                     if (myMap.isMirrorModePlayer == false)
