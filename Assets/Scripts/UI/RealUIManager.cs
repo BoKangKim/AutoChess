@@ -22,7 +22,7 @@ public class RealUIManager : MonoBehaviour
     [Header("[Round]")]
     [SerializeField] private GameObject roundContents;
     [SerializeField] private GameObject roundExContents;
-    [SerializeField] private GameObject roundResultContents; // ½ÂÆÐ °á°ú
+    [SerializeField] private GameObject roundResultContents; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     [SerializeField] private TextMeshProUGUI roundInfoNum;
     [SerializeField] private TextMeshProUGUI roundStageNum;
     [SerializeField] private TextMeshProUGUI roundDetailNum;
@@ -32,24 +32,24 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private GameObject synergyContents;
     [SerializeField] private Image synergyExContents;
     [SerializeField] private Image synergyExContentsPopup;
-    [SerializeField] private TextMeshProUGUI synergyContentsPopupName; // ½Ã³ÊÁö ÆË¾÷Ã¢ - Á¾Á· ÀÌ¸§
-    [SerializeField] private TextMeshProUGUI[] synergyContentsPopupInfo; // ½Ã³ÊÁö ¼³¸í
-    [SerializeField] private Image[] synergyUnitIcon; // ½Ã³ÊÁö 3¸¶¸® µé¾î°¥ °÷
-    [SerializeField] private Image[] synergyUnitPopupIcon; // ÆË¾÷ ¾ÆÀÌÄÜ 5°³
-    [SerializeField] private TextMeshProUGUI synergyPlus; // º¸À¯ÇÑ À¯´Ö ¼ö ºñ±³ Ä«¿îÆ® ¼ö -> ¹è¿­ µ¥ÀÌÅÍ·Î ¹Þ¾Æ¿À±â 
-    [SerializeField] private GameObject[] classSynergy, speciesSynergy; // ÄÁÅÙÃ÷ ¿ÀºêÁ§Æ®
+    [SerializeField] private TextMeshProUGUI synergyContentsPopupName; // ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½Ë¾ï¿½Ã¢ - ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½
+    [SerializeField] private TextMeshProUGUI[] synergyContentsPopupInfo; // ï¿½Ã³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    [SerializeField] private Image[] synergyUnitIcon; // ï¿½Ã³ï¿½ï¿½ï¿½ 3ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î°¥ ï¿½ï¿½
+    [SerializeField] private Image[] synergyUnitPopupIcon; // ï¿½Ë¾ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 5ï¿½ï¿½
+    [SerializeField] private TextMeshProUGUI synergyPlus; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½ï¿½ -> ï¿½è¿­ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½Þ¾Æ¿ï¿½ï¿½ï¿½ 
+    [SerializeField] private GameObject[] classSynergy, speciesSynergy; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
-    // ÄÁÅÙÃ÷ ¹Ú½º¾È¿¡ ´ã±æ Á¤º¸ : Á¾Á· ÀÌ¸§, Á¾Á· Ä«¿îÆ® ¼ö, ¼³¸í±Û  
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½, ï¿½ï¿½ï¿½ï¿½ Ä«ï¿½ï¿½Æ® ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  
 
     [Header("[Ranking]")]
     [SerializeField] private GameObject rankingContents;
-    [SerializeField] private TextMeshProUGUI rankingUserID; // ·©Å· UI¿¡ ¶ß´Â ID  - get data
+    [SerializeField] private TextMeshProUGUI rankingUserID; // ï¿½ï¿½Å· UIï¿½ï¿½ ï¿½ß´ï¿½ ID  - get data
     [SerializeField] private TextMeshProUGUI rankingUserLV;
     [SerializeField] private GameObject[] rankUserInfo;
 
     [Header("[Expansion]")]
-    [SerializeField] private TextMeshProUGUI expansionUserID; // È®Àå UI¿¡ ¶ß´Â ID  - get data
-    [SerializeField] private TextMeshProUGUI expansionGold; // È®Àå ½Ã »ç¿ëÇÏ´Â °ñµå
+    [SerializeField] private TextMeshProUGUI expansionUserID; // È®ï¿½ï¿½ UIï¿½ï¿½ ï¿½ß´ï¿½ ID  - get data
+    [SerializeField] private TextMeshProUGUI expansionGold; // È®ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
 
@@ -131,12 +131,12 @@ public class RealUIManager : MonoBehaviour
     public void unitInstButton() => UnitInstButton();
 
     #region OnClick
-    public void OnClickSettingButton() //¼¼ÆÃ ¶ç¿ì´Â ¹öÆ°
+    public void OnClickSettingButton() //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ°
     {
         settingContentsPopup.SetActive(true);
     }
 
-    public void OnClickSettingApplyButton() //¼¼ÆÃ Ã¢ Àû¿ë
+    public void OnClickSettingApplyButton() //ï¿½ï¿½ï¿½ï¿½ Ã¢ ï¿½ï¿½ï¿½ï¿½
     {
         settingContentsPopup.SetActive(false);
     }
@@ -145,16 +145,16 @@ public class RealUIManager : MonoBehaviour
     {
         if (player.gold < 4)
         {
-            Debug.Log("°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
             return;
         }
         if (player.playerLevel > 8)
         {
-            Debug.Log("ÃÖ´ë·¹º§ ÀÔ´Ï´Ù.");
+            Debug.Log("ï¿½Ö´ë·¹ï¿½ï¿½ ï¿½Ô´Ï´ï¿½.");
             return;
         }
         player.CurExp += 4;
-        //·¹º§¾÷
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         if (player.CurExp <= player.MaxExp[player.playerLevel])
         {
             player.CurExp -= player.MaxExp[player.playerLevel];
@@ -168,25 +168,25 @@ public class RealUIManager : MonoBehaviour
     }
 
 
-    public void OnClickDrawWeapon() // Àåºñ ±¸¸Å
+    public void OnClickDrawWeapon() // ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (player.gold < 3)
         {
-            Debug.Log("°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
             return;
         }
     }
 
-    public void OnClickDrawUnit() // À¯´Ö ±¸¸Å
+    public void OnClickDrawUnit() // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     {
         if (player.gold < 3)
         {
-            Debug.Log("°ñµå°¡ ºÎÁ·ÇÕ´Ï´Ù.");
+            Debug.Log("ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
             return;
         }
     }
 
-    public void OnClickRanking1Player() // 1Pº¸±â
+    public void OnClickRanking1Player() // 1Pï¿½ï¿½ï¿½ï¿½
     {
 
     }
@@ -209,16 +209,16 @@ public class RealUIManager : MonoBehaviour
 
     #endregion
 
-    public void SynergyScroll(List<string> activeSynergyList) //list¸¦ ¹Þ¾Æ¼­ ÃÊ±âÈ­ ÀÌÈÄ ÇÏ³ª¾¿ ³Ö±â
+    public void SynergyScroll(List<string> activeSynergyList) //listï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ ï¿½Ê±ï¿½È­ ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½Ö±ï¿½
     {
         RectTransform contentTransform = synergyScroll.content.GetComponentInChildren<RectTransform>();
 
-        foreach (Transform child in contentTransform) // ±âÁ¸°Å »èÁ¦
+        foreach (Transform child in contentTransform) // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             Destroy(child.gameObject);
         }
 
-        for (int i = 0; i < activeSynergyList.Count; i++) //¿©±â 2ÁßÆ÷¹® È®ÀÎ
+        for (int i = 0; i < activeSynergyList.Count; i++) //ï¿½ï¿½ï¿½ï¿½ 2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
         {
             for (int j = 0; j < synergyList.Length; j++)
             {
@@ -236,7 +236,7 @@ public class RealUIManager : MonoBehaviour
 
     }
 
-    public void PlayerInfoUpdate() // ÀÓ½Ã·Î ÇÃ·¹ÀÌ¾î ÇÑ¸í ÇÇ ±ð
+    public void PlayerInfoUpdate() // ï¿½Ó½Ã·ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Ñ¸ï¿½ ï¿½ï¿½ ï¿½ï¿½
     {
         player1HpBar.fillAmount = player.CurHP / 100;
         player1Lv.text = "LV : " + player.playerLevel.ToString();

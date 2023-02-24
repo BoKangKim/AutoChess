@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class MechaTankerSkill : SkillEffect
 {
-    private void Awake()
+
+
+    private void OnEnable()
     {
-        Debug.Log("Èú~");
-        owner.SetRecoveryCurrentHP((owner.GetUnitData().GetTotalMaxHp / 100) * 20);
+        owner.setRecoveryCurrentHP((owner.getUnitData().GetTotalMaxHp / 100) * 20);
     }
     protected override float setDestroyTime()
     {

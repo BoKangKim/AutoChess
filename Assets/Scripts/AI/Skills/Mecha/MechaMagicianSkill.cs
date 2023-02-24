@@ -35,7 +35,9 @@ public class MechaMagicianSkill : SkillEffect
     private void OnCollisionStay(Collision collision)
     {
         damageTime += Time.deltaTime;
-        if (collision.gameObject.GetComponent<Battle.AI.ParentBT>() != null)
+        Battle.AI.ParentBT skillTarget = null;
+
+        if (collision.gameObject.TryGetComponent<Battle.AI.ParentBT>(out skillTarget))
         {
             //if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
             {
@@ -48,7 +50,7 @@ public class MechaMagicianSkill : SkillEffect
 
                 if (damageTime >= 1f)
                 {
-                    //collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((this.gameObject.GetComponent<UnitClass.Unit>().GetTotalSpellPower / 100) * 40);
+                    skillTarget.doDamage((owner.getSpellPower() / 100) * 40);
                     damageTime = 0f;
                     ++count;
 

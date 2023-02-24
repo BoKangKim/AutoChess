@@ -18,4 +18,19 @@ public class DemonTankerSkill : SkillEffect
     {
         return true;
     }
+
+    protected override void OnCollisionEnter(Collision collision)
+    {
+        Battle.AI.ParentBT skilltarget = null;
+
+        if (collision.gameObject.TryGetComponent<Battle.AI.ParentBT>(out skilltarget))
+        {
+            //if (owner.getMyNickName() == skilltarget.getMyNickName())
+            {
+                Debug.Log(skilltarget.gameObject.name + "Èú");
+                skilltarget.setRecoveryCurrentHP((skilltarget.getMaxHP() * 100)*10 );
+            }
+        }
+    }
+
 }

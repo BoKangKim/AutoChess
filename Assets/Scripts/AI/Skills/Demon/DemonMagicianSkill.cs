@@ -22,4 +22,13 @@ public class DemonMagicianSkill : SkillEffect
     protected override void specialLogic()
     {
     }
+
+    private void OnEnable()
+    {
+        for (int i = 0; i < owner.getFindMyUnits().Count; i++)
+        {
+            owner.getFindMyUnits()[i].setAttackDamage(5f);
+            owner.getFindMyUnits()[i].setSpellPower(5f);
+        }
+    }
 }

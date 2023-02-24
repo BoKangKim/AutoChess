@@ -7,7 +7,7 @@ public class OrcAssassinSkill : SkillEffect
 {
     protected override float setSpeed()
     {
-        return 0f;
+        return 1f;
     }
 
     protected override float setDestroyTime()
@@ -17,7 +17,11 @@ public class OrcAssassinSkill : SkillEffect
 
     protected override void specialLogic()
     {
-        // 지속뎀
-        // 실명
+        
+    }
+    private void OnEnable()
+    {
+        Debug.Log("따콩!");
+        owner.getTarget().doDamage(owner.getAttackDamage() * 6f);
     }
 }

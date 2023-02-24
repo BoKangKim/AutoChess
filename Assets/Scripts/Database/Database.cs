@@ -10,29 +10,7 @@ using System.Collections;
 
 public class Database : MonoBehaviour
 {
-    private static Database _instance = null;
-    public static Database Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                // find
-                _instance = GameObject.FindObjectOfType<Database>();
-                if (_instance == null)
-                {
-                    // Create
-                    _instance = new GameObject("Database").GetComponent<Database>();
-                }
-            }
-            return _instance;
-        }
 
-    // DataBase : Collection�� ������ �����̳�
-    // Collection : Document�� �׷�, Document�� ���ο� ��ġ�� ����.
-    // Document : �Ѱ� �̻��� Key-value ������ �̷���� ���� <BsonDocument>
-    // Key / Field : �÷� ���� ���� ��
-    }
 
     #region Client �ּ� ����
     MongoClient client = new MongoClient("mongodb+srv://mongo:mongo1234@autochesscluster.ogdgk4g.mongodb.net/?retryWrites=true&w=majority");
@@ -105,7 +83,6 @@ public class Database : MonoBehaviour
 
 
         //api���� �����͸� �޾ƿ����� ����(�ϴ��� db/ start���� �����ϰ��س���)
-        GetUserInfo();
     }
 
 
@@ -142,7 +119,6 @@ public class Database : MonoBehaviour
         if (userInfos == null)
         {
             DataInst(userInfo.public_address);
-            Debug.Log("�����Ǵ�?");
         }
         else
         {

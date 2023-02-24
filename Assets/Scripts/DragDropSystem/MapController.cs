@@ -1,12 +1,10 @@
+using Battle.AI;
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Battle.AI;
-using System;
 
 namespace ZoneSystem
 {
@@ -150,6 +148,14 @@ namespace ZoneSystem
         {
             return myNickName;
         }
+
+        public AudioClip DropSound = null;
+        public AudioClip SelectSound = null;
+        public AudioClip SellSound = null;
+
+        public AudioClip BuySound = null;
+        public AudioSource audioSource = null;
+
 
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
@@ -301,7 +307,7 @@ namespace ZoneSystem
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyObject[z,x]!=null)
+                    if (safetyObject[z, x] != null)
                     {
                         SafetyObjectCount++;
                     }
@@ -347,7 +353,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            
+
                         }
                         else
                         {
@@ -618,11 +624,11 @@ namespace ZoneSystem
             //playerData.gold -= 5; 
 
             string UnitPrefab = null;
-            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
+            if (GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
+            else if (GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
                 int index = UnityEngine.Random.Range(0, 15);
 
@@ -649,6 +655,9 @@ namespace ZoneSystem
                         if (PlayerMapSpawner.Map != null)
                         {
                             safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+
+                            audioSource.clip = BuySound;
+                            audioSource.Play();
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;
@@ -733,10 +742,5 @@ namespace ZoneSystem
                 }
             }
         }
-
-
-
-
-
     }
 }
