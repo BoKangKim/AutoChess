@@ -306,12 +306,14 @@ namespace ZoneSystem
 
         public int SafetyZoneCheck()
         {
+            
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
                 {
                     if (safetyObject[z, x] != null)
                     {
+                        Debug.Log(safetyObject[z, x].transform.position);
                         SafetyObjectCount++;
                     }
                 }
@@ -348,6 +350,7 @@ namespace ZoneSystem
                         {
                             bt.enabled = true;
                         }
+
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");

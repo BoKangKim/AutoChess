@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "MainGameScene";
+        gameScene = "SyncUnit";
     }
 
     private void Start()
@@ -60,8 +60,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
         StartCoroutine(Co_JoinLobby());
         GameManager.Inst.UIManage.startbutton.interactable = false;
-        //GameManager.Inst.UIManage.audioSource.clip = GameManager.Inst.UIManage.buttonSound;
-        //GameManager.Inst.UIManage.audioSource.Play();
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+
+
 
     }
     private IEnumerator Co_JoinLobby()
@@ -93,6 +94,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         JoinRandomOrCreateRoom();
         tempCoritineu = uIManage.MatchTimer();
         StartCoroutine(tempCoritineu);
+        GameManager.Inst.soundOption.bgmPlay("MatchingBgm");
+
 
     }
 
@@ -129,8 +132,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         Debug.Log("방 떠남.");
         PhotonNetwork.LeaveRoom();
         StopCoroutine(tempCoritineu);
-        //GameManager.Inst.UIManage.audioSource.clip = GameManager.Inst.UIManage.buttonSound;
-        //GameManager.Inst.UIManage.audioSource.Play();
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
+        GameManager.Inst.soundOption.bgmPlay("LobbyBgm");
+
+
     }
 
     public override void OnCreatedRoom()
@@ -141,7 +146,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //UpdatePlayerCount();
-        //PhotonNetwork.LoadLevel(gameScene);
+        PhotonNetwork.LoadLevel(gameScene);
 
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)

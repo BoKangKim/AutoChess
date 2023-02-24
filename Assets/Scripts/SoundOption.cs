@@ -24,14 +24,24 @@ public class SoundOption : MonoBehaviour
 
     // 효과음
     // 게임 시작 후 군중소리 IngameStartSFX
+    //SFXPlay("IngameStartSFX");
     // 매칭 성공시 사운드  MatchingSFX
+    //SFXPlay("MatchingSFX");
     // 머지 효과음 MergeSFX
+    //SFXPlay("MergeSFX");
     // 시너지 활성화 사운드 SynergySFX
+    //SFXPlay("SynergySFX");
     // 유닛 배치사운드 DropSFX
+    //SFXPlay("DropSFX");
     // 유닛 소환 사운드 BuySFX
+    //SFXPlay("BuySFX");
     // 유닛 판매 사운드 SellSFX
+    //SFXPlay("SellSFX");
     // 유닛 픽업 사운드 SelectSFX
+    //SFXPlay("SelectSFX");
     // 팝업사운드 ClickSFX
+    //SFXPlay("ClickSFX");
+
 
     public Dictionary<string, AudioClip> ClipDictionary;
 
@@ -46,6 +56,7 @@ public class SoundOption : MonoBehaviour
     private void Awake()
     {
         DontDestroyOnLoad(this);
+        bgmPlay("LobbyBgm");
     }
 
 
@@ -63,9 +74,7 @@ public class SoundOption : MonoBehaviour
     }
     public void bgmPlay(string bgmName)
     {
-<<<<<<< Updated upstream
         this.gameObject.AddComponent<AudioSource>();
-=======
         AudioSource audiosource;
         AudioClip clip = null;
         if (!gameObject.TryGetComponent<AudioSource>(out audiosource))
@@ -84,16 +93,11 @@ public class SoundOption : MonoBehaviour
         }
         audiosource.loop = true;
 
->>>>>>> Stashed changes
     }
 
 
     public void SFXPlay(string sfxName)
     {
-<<<<<<< Updated upstream
-        AudioSource audiosource = go.AddComponent<AudioSource>();
-        audiosource.Play();
-=======
         AudioSource[] audiosources = this.gameObject.GetComponents<AudioSource>();
         AudioClip clip = null;
         ClipDictionary.TryGetValue(sfxName, out clip);
@@ -106,14 +110,29 @@ public class SoundOption : MonoBehaviour
                 return;
             }
         }
->>>>>>> Stashed changes
 
         AudioSource audiosource = this.gameObject.AddComponent<AudioSource>();
         audiosource.clip = clip;
         audiosource.Play();
     }
 
+    public void SFXPlay(string sfxName, GameObject go)
+    {
+        AudioSource[] audiosources = go.GetComponents<AudioSource>();
+        AudioClip clip = null;
+        ClipDictionary.TryGetValue(sfxName, out clip);
 
-   
+        foreach (AudioSource source in audiosources)
+        {
+            if (source.clip == clip)
+            {
+                source.Play();
+                return;
+            }
+        }
 
+        AudioSource audiosource = go.AddComponent<AudioSource>();
+        audiosource.clip = clip;
+        audiosource.Play();
+    }
 }

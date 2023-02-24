@@ -70,17 +70,10 @@ public class UIManage : MonoBehaviour
     {
         //mainLobby.gameObject.SetActive(false);
         shopCanvas.gameObject.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
 
 
-        //audioSource.clip = buttonSound;
-        //audioSource.Play();
->>>>>>> Stashed changes
 
     }
 
@@ -88,264 +81,173 @@ public class UIManage : MonoBehaviour
     {
         shopCanvas.gameObject.SetActive(false);
         //mainLobby.gameObject.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
-        //audioSource.clip = buttonSound;
-        //audioSource.Play();
->>>>>>> Stashed changes
     }
 
     public void SelectionIconOn()
     {
         selecticonPopup.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void SelectionIconOff()
     {
         selecticonPopup.gameObject.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
+
     }
     public void SelectBattleMode()
     {
         selectbattle.gameObject.SetActive(true);
-<<<<<<< Updated upstream
         mainLobby.gameObject.SetActive(false);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
-        //mainLobby.gameObject.SetActive(false);
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void SelectBattleExit()
     {
         selectbattle.gameObject.SetActive(false);
-<<<<<<< Updated upstream
         mainLobby.gameObject.SetActive(true);
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
-        //mainLobby.gameObject.SetActive(true);
-        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
+
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
     }
 
     public void LiveOutPopup()
     {
         cantLivenet.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void LiveOutPopupExit()
     {
         cantLivenet.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
-        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
+        GameManager.Inst.soundOption.SFXPlay("ClickSFX");
     }
     public void BuyTicket()
     {
         ticket.gameObject.SetActive(true);
         shopCanvas.gameObject.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void BuyTicketExit()
     {
         ticket.gameObject.SetActive(false);
         shopCanvas.gameObject.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void BuyUnit()
     {
         unitShop.SetActive(true);
         selectShop.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void BuyUnitExit()
     {
         unitShop.SetActive(false);
         selectShop.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void RecordOn()
     {
         record.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void RecordExit()
     {
         record.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void CollectionbookOpen()
     {
         collectionBook.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void CollectionbookExit()
     {
         collectionBook.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void NextPage1()
     {
         book1Page.SetActive(false);
         book2Page.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void NextPage2()
     {
         book2Page.SetActive(false);
         book3Page.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void BeforePage1()
     {
         book1Page.SetActive(true);
         book2Page.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void BeforePage2()
     {
         book2Page.SetActive(true);
         book3Page.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void SettingOn()
     {
         setting.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void SettingOff()
     {
         setting.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void GameOut()
     {
         Application.Quit();
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
 
 #if UNITY_EDITOR
         EditorApplication.isPlaying = false;
@@ -359,13 +261,9 @@ public class UIManage : MonoBehaviour
         int num = int.Parse(str[1]);
         userIcon.sprite = userIconImage[num];
         GameManager.Inst.dataBase.userInfo.userIconIndex = num;
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
 
     }
 
@@ -375,141 +273,93 @@ public class UIManage : MonoBehaviour
         sellunit.sprite = newImage;
         comfirmation.SetActive(true);
         exitbutton.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void SetSellItem(TextMeshProUGUI SellUnitText)
     {
         TextMeshProUGUI newtext = SellUnitText;
         sUnitText.text = newtext.text;
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void comfirmationExit()
     {
         comfirmation.SetActive(false);
         exitbutton.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void TicketToolTip1On()
     {
         ticketToolTip1.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void TicketToolTip1Off()
     {
         ticketToolTip1.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void TicketToolTip2On()
     {
         ticketToolTip2.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void TicketToolTip2Off()
     {
         ticketToolTip2.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void TicketToolTip3On()
     {
         ticketToolTip3.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void TicketToolTip3Off()
     {
         ticketToolTip3.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
     public void GotoDappx()
     {
         Application.OpenURL("https://dappstore.me");
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void Letsmatch()
     {
         matching.gameObject.SetActive(true);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public void MatchExit()
     {
         matching.gameObject.SetActive(false);
-<<<<<<< Updated upstream
-        audioSource.clip = buttonSound;
-        audioSource.Play();
-=======
+
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
 
->>>>>>> Stashed changes
     }
 
     public IEnumerator MatchTimer()
