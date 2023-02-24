@@ -1,10 +1,8 @@
+using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
-using UnityEngine.EventSystems;
-using TMPro.Examples;
-using System.Collections;
 
 public class RealUIManager : MonoBehaviour
 {
@@ -55,9 +53,7 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
 
-    [Header("[Gacha]")]
-    [SerializeField] private TextMeshProUGUI gachaWeponGold;
-    [SerializeField] private TextMeshProUGUI gachaUnitGold;
+    
     */
 
 
@@ -72,7 +68,19 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private GameObject[] synergyList = null;
 
     [Header("Buy")]
-    [SerializeField] private PlayerData playerData = null;
+    private PlayerData player = null;
+    [SerializeField] private TextMeshProUGUI gachaWeponGold = null;
+    [SerializeField] private TextMeshProUGUI gachaUnitGold = null;
+    public Button buyUnitButton = null;
+    public Action UnitInstButton;
+    [SerializeField] private Button buyItemButton = null;
+
+    [SerializeField] private Image player1HpBar = null;
+    [SerializeField] private TextMeshProUGUI player1Lv = null;
+    [SerializeField] private TextMeshProUGUI player1Name = null;
+
+    [Header("Buy")]
+    [SerializeField] private TextMeshProUGUI playerCurExp = null;
 
     private void Awake()
     {
@@ -81,27 +89,46 @@ public class RealUIManager : MonoBehaviour
 
     private void Start()
     {
-        
+        player = new PlayerData();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.V))
+        if (Input.GetKeyDown(KeyCode.V))
         {
-            Debug.Log("생성");
-            SynergyScroll("Mecha2");
-            SynergyScroll("Orc");
-            SynergyScroll("Demon");
-            SynergyScroll("Assassin2");
-            SynergyScroll("Tanker2");
-            SynergyScroll("Warrior");
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Add("Mecha");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Magician");
+
+            SynergyScroll(activeSynergyList);
         }
 
-        if(Input.GetKeyDown(KeyCode.N))
+        if(Input.GetKeyDown(KeyCode.B))
         {
-            //expansionUserID.text = Database.Instance.userInfo.username;
+            List<string> activeSynergyList = new List<string>();
+            activeSynergyList.Clear();
+            activeSynergyList.Add("Warrior");
+            activeSynergyList.Add("Assassin");
+            activeSynergyList.Add("Magician");
+            activeSynergyList.Add("RangeDealer");
+            activeSynergyList.Add("Orc");
+            activeSynergyList.Add("Demon");
+            activeSynergyList.Add("Tanker");
+            activeSynergyList.Add("Mecha");
+
+            SynergyScroll(activeSynergyList);
         }
+
+
     }
+
+    public void unitInstButton() => UnitInstButton();
 
     #region OnClick
     public void OnClickSettingButton() //세팅 띄우는 버튼
@@ -116,39 +143,47 @@ public class RealUIManager : MonoBehaviour
 
     public void OnClickBuyExp()
     {
-        if (playerData.gold < 4)
+        if (player.gold < 4)
         {
             Debug.Log("골드가 부족합니다.");
             return;
         }
-        if (playerData.playerLevel > 8)
+        if (player.playerLevel > 8)
         {
             Debug.Log("최대레벨 입니다.");
             return;
         }
-        playerData.CurExp += 4;
+        player.CurExp += 4;
         //레벨업
-        if (playerData.CurExp <= playerData.MaxExp[playerData.playerLevel])
+        if (player.CurExp <= player.MaxExp[player.playerLevel])
         {
-            playerData.CurExp -= playerData.MaxExp[playerData.playerLevel];
-            ++playerData.playerLevel;
-            if (playerData.playerLevel == 9)
+            player.CurExp -= player.MaxExp[player.playerLevel];
+            ++player.playerLevel;
+            if (player.playerLevel == 9)
             {
-                playerData.CurExp = 0;
+                player.CurExp = 0;
             }
-
         }
+        playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
     }
 
 
     public void OnClickDrawWeapon() // 장비 구매
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("골드가 부족합니다.");
+            return;
+        }
     }
 
     public void OnClickDrawUnit() // 유닛 구매
     {
-
+        if (player.gold < 3)
+        {
+            Debug.Log("골드가 부족합니다.");
+            return;
+        }
     }
 
     public void OnClickRanking1Player() // 1P보기
@@ -174,15 +209,38 @@ public class RealUIManager : MonoBehaviour
 
     #endregion
 
-    public void SynergyScroll(string prefabName) // string name 넘겨받으면 알아서 들어감
+    public void SynergyScroll(List<string> activeSynergyList) //list를 받아서 초기화 이후 하나씩 넣기
     {
-        for(int i = 0;i<synergyList.Length;i++)
+        RectTransform contentTransform = synergyScroll.content.GetComponentInChildren<RectTransform>();
+
+        foreach (Transform child in contentTransform) // 기존거 삭제
         {
-            if (prefabName.Equals(synergyList[i].name))
-            {
-                Instantiate(synergyList[i],synergyScroll.content.transform);
-            }
+            Destroy(child.gameObject);
         }
+
+        for (int i = 0; i < activeSynergyList.Count; i++) //여기 2중포문 확인
+        {
+            for (int j = 0; j < synergyList.Length; j++)
+            {
+                if (activeSynergyList[i].Equals(synergyList[j].name))
+                {
+                    Instantiate(synergyList[j], synergyScroll.content.transform);
+                }
+            }
+
+        }
+    }
+
+    public void PlayerHpRanking()
+    {
+
+    }
+
+    public void PlayerInfoUpdate() // 임시로 플레이어 한명 피 깎
+    {
+        player1HpBar.fillAmount = player.CurHP / 100;
+        player1Lv.text = "LV : " + player.playerLevel.ToString();
+        player1Name.text = player.playerName;
     }
 
 

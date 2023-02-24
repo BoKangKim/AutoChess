@@ -142,7 +142,7 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                storeButtonChange();
+                //storeButtonChange();
 
             }
             //Drag
@@ -207,7 +207,7 @@ namespace ZoneSystem
                 GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
-                storeButtonChange();
+                //storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
@@ -221,7 +221,7 @@ namespace ZoneSystem
                 GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
                 selectedObject = null;
-                storeButtonChange();
+                //storeButtonChange();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
             }

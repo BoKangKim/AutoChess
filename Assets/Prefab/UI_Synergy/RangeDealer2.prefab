@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 2669092845776350619}
   - component: {fileID: 2669092845776350618}
   m_Layer: 5
-  m_Name: Dealer2
+  m_Name: RangeDealer2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,7 +164,7 @@ RectTransform:
   m_GameObject: {fileID: 2669092845776350616}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 0.6, z: 0.8}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2669092846652353117}

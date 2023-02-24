@@ -6,6 +6,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 using Battle.AI;
+using System;
 
 namespace ZoneSystem
 {
@@ -38,6 +39,12 @@ namespace ZoneSystem
 
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
+
+        private string[] priorityOrder = {
+    "Demon2", "Mecha2", "Orc2", "Assassin2", "Magician2", "RangeDealer2",
+    "Tanker2", "Warrior2", "Demon", "Mecha", "Orc", "Assassin", "Magician",
+    "RangeDealer", "Tanker", "Warrior"
+                                    };
 
         public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
@@ -567,13 +574,34 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+            //여기서 시너지를 뱉어줘야함
+            for (int z = 0; z < 3; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (battleObject[z, x] != null)
+                    {
+                        battleObject[z, x].GetComponent<UnitClass.Unit>().SetSynergy(activeSynergyList);
+                    }
+                }
+            }
 
-            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
+            //여기서 시너지 정렬해야함
+            activeSynergyList.Sort((x, y) =>
+            {
+                int xIndex = Array.IndexOf(priorityOrder, x);
+                int yIndex = Array.IndexOf(priorityOrder, y);
+                if (xIndex != -1 && yIndex != -1) return xIndex.CompareTo(yIndex);
+                if (xIndex != -1) return -1;
+                if (yIndex != -1) return 1;
+                return x.CompareTo(y);
+            });
 
-            //시너지 ui표시
-            UIManager.Inst.SynergyText(null);
-            activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
+            //여기서 UI에다가 시너지 전달 해줘야함(전달 하는 순간 기존거는 초기화 시켜
+            
+            //RealUIManager.SynergyScroll(activeSynergyList)
+
+
             activeSynergyList.Clear();
             return battleUnitCount;
         }
@@ -596,7 +624,7 @@ namespace ZoneSystem
             }
             else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = Random.Range(0, 15);
+                int index = UnityEngine.Random.Range(0, 15);
 
                 UnitPrefab = freenetUnits[index];
                 //int index = freenetUnitIndex[Random.Range(0, 3)];
@@ -668,7 +696,7 @@ namespace ZoneSystem
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 5)];
 
                         if (PlayerMapSpawner.Map != null)
                         {
