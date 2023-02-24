@@ -22,24 +22,24 @@ public class SoundOption : MonoBehaviour
     // bgm
     // LobbyBgm, IngameBgm, BossBgm, MatchingBgm
 
-    // È¿°úÀ½
-    // °ÔÀÓ ½ÃÀÛ ÈÄ ±ºÁß¼Ò¸® IngameStartSFX
+    // È¿ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ß¼Ò¸ï¿½ IngameStartSFX
     //SFXPlay("IngameStartSFX");
-    // ¸ÅÄª ¼º°ø½Ã »ç¿îµå  MatchingSFX
+    // ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½  MatchingSFX
     //SFXPlay("MatchingSFX");
-    // ¸ÓÁö È¿°úÀ½ MergeSFX
+    // ï¿½ï¿½ï¿½ï¿½ È¿ï¿½ï¿½ï¿½ï¿½ MergeSFX
     //SFXPlay("MergeSFX");
-    // ½Ã³ÊÁö È°¼ºÈ­ »ç¿îµå SynergySFX
+    // ï¿½Ã³ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ SynergySFX
     //SFXPlay("SynergySFX");
-    // À¯´Ö ¹èÄ¡»ç¿îµå DropSFX
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½ DropSFX
     //SFXPlay("DropSFX");
-    // À¯´Ö ¼ÒÈ¯ »ç¿îµå BuySFX
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½ BuySFX
     //SFXPlay("BuySFX");
-    // À¯´Ö ÆÇ¸Å »ç¿îµå SellSFX
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ç¸ï¿½ ï¿½ï¿½ï¿½ï¿½ SellSFX
     //SFXPlay("SellSFX");
-    // À¯´Ö ÇÈ¾÷ »ç¿îµå SelectSFX
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½ï¿½ï¿½ï¿½ SelectSFX
     //SFXPlay("SelectSFX");
-    // ÆË¾÷»ç¿îµå ClickSFX
+    // ï¿½Ë¾ï¿½ï¿½ï¿½ï¿½ï¿½ ClickSFX
     //SFXPlay("ClickSFX");
 
 
@@ -89,7 +89,7 @@ public class SoundOption : MonoBehaviour
         }
         else
         {
-            Debug.Log("ÇØ´çÇÏ´Â »ç¿îµå°¡ ¾ø½À´Ï´Ù.");
+            Debug.Log("ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½.");
         }
         audiosource.loop = true;
 

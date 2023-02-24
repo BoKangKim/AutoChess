@@ -173,15 +173,16 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
-
+        GameManager.Inst.soundOption.SFXPlay("MatchingSFX", GameManager.Inst.UIManage.mainLobby.gameObject);
     }
 
 
-    
 
 
-    float time = 0f;
+
+
 }
+
 
 
 

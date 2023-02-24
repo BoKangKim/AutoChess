@@ -63,7 +63,8 @@ public class UIManage : MonoBehaviour
     public void Start()
     {
         StartCoroutine(Fadeintitle());
-        audioSource = gameObject.AddComponent<AudioSource>();
+
+        GameManager.Inst.soundOption.bgmPlay("LobbyBgm");
     }
 
     public void ShopOpen()
