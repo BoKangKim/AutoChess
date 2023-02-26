@@ -11,6 +11,12 @@ public class Timer : MonoBehaviour
     private const float STAGE_TIME = 30f;
     private float nowTime = 0f;
     private bool scIsNull = true;
+    private bool isPlaying = true;
+
+    private void Start()
+    {
+        GameManager.Inst.SetTimer(this);
+    }
 
     public float getNowTime()
     {
@@ -27,8 +33,17 @@ public class Timer : MonoBehaviour
         nowTime = time;
     }
 
+    public void SetIsPlaying(bool isPlaying)
+    {
+        this.isPlaying = isPlaying;
+    }
+
     private void Update()
     {
+        if (isPlaying == false)
+        {
+            return;
+        }
         
         if(sc == null)
         {

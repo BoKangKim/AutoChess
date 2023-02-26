@@ -28,9 +28,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
     private (int row, int col) stageIndex = (0, -1);
     private Pool pool = null;
-    public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
+    private Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
     private PlayerInfoConnector connecter = null;
+    private PlayerInfoConnector[] players = null;
+    private Timer timer = null;
 
     // À¯´Ö ÃÑ °¹¼ö °ü¸®
     // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
@@ -39,7 +41,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        
     }
 
     #region GAMETYPE
@@ -74,6 +75,58 @@ public class GameManager : MonoBehaviourPunCallbacks
         return stageIndex;
     }
 
+    public void SetNowStage(Battle.Stage.STAGETYPE nowStage)
+    {
+        this.nowStage = nowStage;
+
+        if(PhotonNetwork.IsMasterClient == true
+            && nowStage == Battle.Stage.STAGETYPE.PREPARE)
+        {
+            if (players == null)
+            {
+                players = FindObjectsOfType<PlayerInfoConnector>();
+            }
+
+            for(int i = 0; i < players.Length; i++)
+            {
+                if(players[i].GetPlayer().CurHP <= 0)
+                {
+                    timer.SetIsPlaying(false);
+                    CalcRank();
+                    break;
+                }
+            }
+        }
+    }
+
+    public void CalcRank()
+    {
+        PlayerInfoConnector temp = null;
+
+        for(int i = 0; i < players.Length; i++)
+        {
+            for(int j = 0; j < players.Length - 1; j++)
+            {
+                if (players[j].GetPlayer().CurHP < players[j + 1].GetPlayer().CurHP)
+                {
+                    temp = players[j];
+                    players[j] = players[j + 1];
+                    players[j + 1] = temp;
+                }
+            }
+        }
+
+        for(int i = 0; i < players.Length; i++)
+        {
+            players[i].SetRank(i + 1);
+        }
+    }
+
+    public Battle.Stage.STAGETYPE GetNowStage()
+    {
+        return nowStage;
+    }
+
 
     public override void OnMasterClientSwitched(Player newMasterClient)
     {
@@ -97,5 +150,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerInfoConnector GetPlayerInfoConnector()
     {
         return connecter;
+    }
+
+    public void SetTimer(Timer timer)
+    {
+        this.timer = timer;
     }
 }
