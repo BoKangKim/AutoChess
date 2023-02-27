@@ -11,16 +11,4 @@ public class ScriptableClass : ScriptableObject
 
     [SerializeField] private float mpRecovery;
     public float GetMpRecovery { get { return mpRecovery; } }
-
-    [SerializeField] private float atkPercentage;
-    public float GetAtkPercentage { get { return atkPercentage; } }
-
-    [SerializeField] private float hpPercentage;
-    public float GetHpPercentage { get { return hpPercentage; } }
-
-    [SerializeField] private float skillDamagePercentage;
-    public float GetSkillDamagePercentage { get { return skillDamagePercentage; } }
-
-    [SerializeField] private float attackSpeed;
-    public float GetAttackSpeed { get { return attackSpeed; } }
 }

@@ -45,7 +45,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "SyncUnit";
+        gameScene = "InGameUILWH";
     }
 
     private void Start()
