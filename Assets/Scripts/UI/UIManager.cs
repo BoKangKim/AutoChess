@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class RealUIManager : MonoBehaviour
+
+public class UIManager : MonoBehaviour
 {
     /*
     [Header("[UnitState]")]
@@ -56,7 +58,9 @@ public class RealUIManager : MonoBehaviour
     
     */
 
-
+    GraphicRaycaster graphicRaycaster = null;
+    PointerEventData pointerEventData = null;
+    List<RaycastResult> rrList = null;
 
     [Header("[Setting]")]
     [SerializeField] private Button settingButton;
@@ -68,28 +72,42 @@ public class RealUIManager : MonoBehaviour
     [SerializeField] private GameObject[] synergyList = null;
 
     [Header("Buy")]
-    private PlayerData player = null;
-    [SerializeField] private TextMeshProUGUI gachaWeponGold = null;
-    [SerializeField] private TextMeshProUGUI gachaUnitGold = null;
+    public PlayerData player = null;
+    public TextMeshProUGUI playerGold = null;
+    public Button buyItemButton = null;
     public Button buyUnitButton = null;
+    public Button sellButton = null;
+
     public Action UnitInstButton;
-    [SerializeField] private Button buyItemButton = null;
+    public Action ItemInstButton;
+    public Action SellButton;
+
 
     [SerializeField] private Image player1HpBar = null;
     [SerializeField] private TextMeshProUGUI player1Lv = null;
     [SerializeField] private TextMeshProUGUI player1Name = null;
+    [SerializeField] private Slider ExpSlider = null;
 
     [Header("Buy")]
     [SerializeField] private TextMeshProUGUI playerCurExp = null;
+    [SerializeField] private TextMeshProUGUI limitUnitNum = null;
+
+    public int buttlezoneUnitNum = 0;
+
 
     private void Awake()
     {
         //expansionUserID.text = Database.Instance.userInfo.username;
+        graphicRaycaster = GetComponent<GraphicRaycaster>();
+        pointerEventData = new PointerEventData(EventSystem.current);
+        rrList = new List<RaycastResult>();
     }
 
     private void Start()
     {
         player = new PlayerData();
+        GameManager.Inst.SetUIManager();
+        PlayerInfoUpdate();
     }
 
     private void Update()
@@ -109,7 +127,7 @@ public class RealUIManager : MonoBehaviour
             SynergyScroll(activeSynergyList);
         }
 
-        if(Input.GetKeyDown(KeyCode.B))
+        if (Input.GetKeyDown(KeyCode.B))
         {
             List<string> activeSynergyList = new List<string>();
             activeSynergyList.Clear();
@@ -125,11 +143,25 @@ public class RealUIManager : MonoBehaviour
             SynergyScroll(activeSynergyList);
         }
 
-
+        pointerEventData.position = Input.mousePosition;
     }
 
-    public void unitInstButton() => UnitInstButton();
+    //public T RaycastUI<T>(int num) where T : Component
+    //{
+    //    rrList.Clear();
 
+    //    Debug.Log(rrList);
+    //    graphicRaycaster.Raycast(pointerEventData, rrList);
+        
+
+    //    if (rrList.Count == 0) return null;
+    //    return rrList[num].gameObject.GetComponent<T>();
+    //}
+
+    public void unitInstButton() => UnitInstButton();
+    public void itemInstButton() => ItemInstButton();
+    public void sellDestroyButton() => SellButton();
+    
     #region OnClick
     public void OnClickSettingButton() //���� ���� ��ư
     {
@@ -143,28 +175,37 @@ public class RealUIManager : MonoBehaviour
 
     public void OnClickBuyExp()
     {
-        if (player.gold < 4)
+        if (player.gold < 12)
         {
             Debug.Log("��尡 �����մϴ�.");
             return;
         }
-        if (player.playerLevel > 8)
+        if (player.playerLevel > 6)
         {
             Debug.Log("�ִ뷹�� �Դϴ�.");
             return;
         }
+        player.gold -= 12;
         player.CurExp += 4;
-        //������
-        if (player.CurExp <= player.MaxExp[player.playerLevel])
+        
+        if (player.CurExp >= player.MaxExp[player.playerLevel])
         {
             player.CurExp -= player.MaxExp[player.playerLevel];
             ++player.playerLevel;
-            if (player.playerLevel == 9)
-            {
-                player.CurExp = 0;
-            }
+
         }
-        playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
+        //playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
+        if (player.playerLevel < 7)
+        {
+            PlayerInfoUpdate();
+        }
+        else if (player.playerLevel == 7)
+        {
+            PlayerInfoUpdate();
+            playerCurExp.text = "MAX";
+            ExpSlider.value = 1;
+
+        }
     }
 
 
@@ -215,7 +256,7 @@ public class RealUIManager : MonoBehaviour
 
         foreach (Transform child in contentTransform) // ������ ����
         {
-            Destroy(child.gameObject);
+           Destroy(child.gameObject);
         }
 
         for (int i = 0; i < activeSynergyList.Count; i++) //���� 2������ Ȯ��
@@ -241,7 +282,17 @@ public class RealUIManager : MonoBehaviour
         player1HpBar.fillAmount = player.CurHP / 100;
         player1Lv.text = "LV : " + player.playerLevel.ToString();
         player1Name.text = player.playerName;
+        playerGold.text = player.gold.ToString();
+        playerCurExp.text = $"{player.CurExp} / {player.MaxExp[player.playerLevel]}";
+        limitUnitNum.text = $"{buttlezoneUnitNum} / {player.playerLevel + 2}";
+        ExpSlider.value = player.CurExp / player.MaxExp[player.playerLevel];
     }
+
+    //스테이지 끝날때 
+    //hp 마이너스
+    //gold 획득
+
+
 
 
 }

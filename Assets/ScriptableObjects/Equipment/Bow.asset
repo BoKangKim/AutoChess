@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50e2f5ba12bec9340932ebab30ac3e4f, type: 3}
-  m_Name: Dagger
+  m_Name: Bow
   m_EditorClassIdentifier: 
-  equipmentName: dagger
+  equipmentName: bow
   equipmentAtk: 0
   equipmentSpellPower: 0
   equipmentAttackSpeed: 1
-  equipmentMp: 0
+  equipmentMpRecovery: 0
   equipmentHp: 0
