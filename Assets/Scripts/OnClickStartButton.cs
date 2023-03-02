@@ -23,4 +23,9 @@ public class OnClickStartButton : MonoBehaviour
         Battle.Stage.StageControl stage = FindObjectOfType<Battle.Stage.StageControl>();
 
     }
+
+    public void OnMonsterInst()
+    {
+        PhotonNetwork.Instantiate("skeleton_king", new Vector3(10,0,10) ,Quaternion.identity );
+    }
 }

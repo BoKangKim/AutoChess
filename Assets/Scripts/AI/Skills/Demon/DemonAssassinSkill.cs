@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class DemonAssassinSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_Assassin_Skill");
+    }
     protected override float setSpeed()
     {
         return 1f;

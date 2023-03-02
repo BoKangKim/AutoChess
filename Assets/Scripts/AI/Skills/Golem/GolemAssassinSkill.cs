@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GolemAssassinSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Golem_Assassin_Skill");
+    }
     protected override float setSpeed()
     {
         return 1f;

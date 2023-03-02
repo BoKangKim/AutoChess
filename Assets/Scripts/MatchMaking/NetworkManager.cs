@@ -160,6 +160,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {

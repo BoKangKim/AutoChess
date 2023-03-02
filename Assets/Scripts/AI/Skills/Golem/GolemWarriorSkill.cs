@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GolemWarriorSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Golem_Warrior_Skill");
+    }
     protected override float setSpeed()
     {
         return 1f;

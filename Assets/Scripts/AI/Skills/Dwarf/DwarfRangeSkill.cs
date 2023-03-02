@@ -5,6 +5,10 @@ using Battle.AI;
 
 public class DwarfRangeSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Dwarf_RangeDealer_Skill");
+    }
     protected override float setSpeed()
     {
         return 15f;

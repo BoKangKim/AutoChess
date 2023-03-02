@@ -5,7 +5,10 @@ using UnityEngine;
 public class MechaTankerSkill : SkillEffect
 {
 
-
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Tanker_Skill");
+    }
     private void OnEnable()
     {
         owner.setRecoveryCurrentHP((owner.getUnitData().GetTotalMaxHp / 100) * 20);

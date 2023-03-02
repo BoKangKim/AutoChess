@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GolemRangeSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Golem_RangeDealer_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 3f;

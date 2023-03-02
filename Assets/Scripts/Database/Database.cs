@@ -87,8 +87,6 @@ public class Database : MonoBehaviour
 
 
 
-    //---------------
-    // ���� ����
     public void GetUserInfo()
 	{
 		StartCoroutine(processRequestGetUserInfo());
@@ -107,10 +105,7 @@ public class Database : MonoBehaviour
 	delegate void Callback_GetUserInfo(UserInfo response);
 	IEnumerator requestGetUserInfo(Callback_GetUserInfo callback)
 	{
-        // get user profile
-        //yield return WaitUntil(()=> userInfo.public_address != null) ;
         yield return new WaitUntil(() => userInfo.public_address != null); 
-        //txtInputField.text = www.downloadHandler.text;
 
         BsonDocument userInfos = DataFind(userInfo.public_address);
 

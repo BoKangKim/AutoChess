@@ -9,6 +9,11 @@ public class DwarfMagicianSkill : SkillEffect
     private GameObject inst = null;
     private bool isExplosion = false;
 
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Dwarf_Magician_Skill");
+    }
+
     protected override float setSpeed()
     {
         return 15f;

@@ -11,6 +11,11 @@ public class OrcRangeSkill : SkillEffect
     private float initAttackSpeed = 0f;
     private float initAttackRange = 0f;
 
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_RangeDealer_Skill");
+    }
+
     private void Start()
     {
     }

@@ -39224,6 +39224,84 @@ MonoBehaviour:
     value: {fileID: 8300000, guid: b7df7dd1536192442972784983ee8476, type: 3}
   - key: Dwarf_Assassin_Flat
     value: {fileID: 8300000, guid: 7e03230906393524cb30e31d5470a12a, type: 3}
+  - key: Dwarf_Assassin_Skill
+    value: {fileID: 8300000, guid: d77f9debfe2d2f74d8f6fa991c99f070, type: 3}
+  - key: Dwarf_Magician_Flat
+    value: {fileID: 8300000, guid: 1b9d72f2934a51f4483b8b776ecc3476, type: 3}
+  - key: Dwarf_Magician_Skill
+    value: {fileID: 8300000, guid: 09ca5359129888d47bb5c639150f11a1, type: 3}
+  - key: Dwarf_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 9bdca82dc26262244b90c6f9d3ed60cd, type: 3}
+  - key: Dwarf_RangeDealer_Skill
+    value: {fileID: 8300000, guid: c28612bf336b89e45b9e04f27566a7b7, type: 3}
+  - key: Dwarf_Tanker_Flat
+    value: {fileID: 8300000, guid: f745863a93f348745a9fb166b452910b, type: 3}
+  - key: Dwarf_Tanker_Skill
+    value: {fileID: 8300000, guid: 50511632a55da4d49b0673ebe4dde574, type: 3}
+  - key: Dwarf_Warrior_Flat
+    value: {fileID: 8300000, guid: c9253ae48cf6f78418ce4b73a8952380, type: 3}
+  - key: Dwarf_Warrior_Skill
+    value: {fileID: 8300000, guid: 75a49ae3f0e68654684342b0118f5a9e, type: 3}
+  - key: Golem_Assassin_Flat
+    value: {fileID: 8300000, guid: 1b6d16f2bac609c409f173a3f37121b1, type: 3}
+  - key: Golem_Assassin_Skill
+    value: {fileID: 8300000, guid: 6e6ec425231844046907caae379c1993, type: 3}
+  - key: Golem_Magician_Flat
+    value: {fileID: 8300000, guid: 36830500162b2ef419829099992814e1, type: 3}
+  - key: Golem_Magician_Skill
+    value: {fileID: 8300000, guid: c3fbfc4f242f1be4f90bfd6479d9ed28, type: 3}
+  - key: Golem_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 7220dde482b1c9747bcda53f2ab9704e, type: 3}
+  - key: Golem_RangeDealer_Skill
+    value: {fileID: 8300000, guid: 5ca102aa2ececb74da00ee17e362aa59, type: 3}
+  - key: Golem_Tanker_Flat
+    value: {fileID: 8300000, guid: 652619ff421b2b245873ac50c1860425, type: 3}
+  - key: Golem_Tanker_Skill
+    value: {fileID: 8300000, guid: f49152ca4ab3b9e4298ef50ccbefc684, type: 3}
+  - key: Golem_Warrior_Flat
+    value: {fileID: 8300000, guid: 87f08112e98b0a745b3f0ca4bd56170c, type: 3}
+  - key: Golem_Warrior_Skill
+    value: {fileID: 8300000, guid: 33793c1cd029cb547a82b62c5266ba61, type: 3}
+  - key: Mecha_Assassin_Flat
+    value: {fileID: 8300000, guid: 14e146f7f3ac71045bcc0a94597f58b2, type: 3}
+  - key: Mecha_Assassin_Skill
+    value: {fileID: 8300000, guid: f9c2265bdd69641429b63a87f7f59e12, type: 3}
+  - key: Mecha_Magician_Flat
+    value: {fileID: 8300000, guid: 31866ac36d754eb4ea4ca4c2daae89c1, type: 3}
+  - key: Mecha_Magician_Skill
+    value: {fileID: 8300000, guid: 634464fbfbe994644b6ee08d959226df, type: 3}
+  - key: Mecha_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 590bfa90931d95d498247f5e7421e05e, type: 3}
+  - key: Mecha_RangeDealer_Skill
+    value: {fileID: 8300000, guid: 216bf79aac48ca949bbc8c4651a2389a, type: 3}
+  - key: Mecha_Tanker_Flat
+    value: {fileID: 8300000, guid: a4ac1ab130b9caf46b378c41faba5200, type: 3}
+  - key: Mecha_Tanker_Skill
+    value: {fileID: 8300000, guid: 798200c0b16d5a4408bc5b96df59ac0a, type: 3}
+  - key: Mecha_Warrior_Flat
+    value: {fileID: 8300000, guid: c6c9f7583dc40ce44b507485ec311ba4, type: 3}
+  - key: Mecha_Warrior_Skill
+    value: {fileID: 8300000, guid: c05ad63e1a45905409fdc6af3c903c4c, type: 3}
+  - key: Orc_Assassin_Flat
+    value: {fileID: 8300000, guid: b7783ca1e345e394f8a8019e10f1db4d, type: 3}
+  - key: Orc_Assassin_Skill
+    value: {fileID: 8300000, guid: 1879c05a9b7be77449fc75c6d18ba5a5, type: 3}
+  - key: Orc_Magician_Flat
+    value: {fileID: 8300000, guid: 3d999f7bb6ddbc04db5035512ddf6494, type: 3}
+  - key: Orc_Magician_Skill
+    value: {fileID: 8300000, guid: f75cafab2a9f2814ebebb5481f933c50, type: 3}
+  - key: Orc_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 81e410343983018458cfeebaae937706, type: 3}
+  - key: Orc_RangeDealer_Skill
+    value: {fileID: 8300000, guid: dd8cca19e333ee44f906e133d3d37e7a, type: 3}
+  - key: Orc_Tanker_Flat
+    value: {fileID: 8300000, guid: b8fcae58229416a458d597dc991bb65d, type: 3}
+  - key: Orc_Tanker_Skill
+    value: {fileID: 8300000, guid: fc2cde27f9305f34ea5992ee8d56d459, type: 3}
+  - key: Orc_Warrior_Flat
+    value: {fileID: 8300000, guid: 23a7219391f059f41ae39866f2aa1c51, type: 3}
+  - key: Orc_Warrior_Skill
+    value: {fileID: 8300000, guid: 046fde4dbc49b9145aaafe4aa378126a, type: 3}
 --- !u!4 &1066856418
 Transform:
   m_ObjectHideFlags: 0

@@ -8,6 +8,10 @@ public class DemonRangeSkill : SkillEffect
     float damageTime = 0f;
     int count = 0;
 
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_RangeDealer_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 4f;

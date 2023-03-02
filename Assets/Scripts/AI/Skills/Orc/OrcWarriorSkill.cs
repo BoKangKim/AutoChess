@@ -6,6 +6,10 @@ using UnityEngine;
 public class OrcWarriorSkill : SkillEffect
 {
     private Animator ownerAni = null;
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_Warrior_Skill");
+    }
     private void Start()
     {
         owner.TryGetComponent<Animator>(out ownerAni);
