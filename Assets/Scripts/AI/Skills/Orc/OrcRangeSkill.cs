@@ -10,11 +10,9 @@ public class OrcRangeSkill : SkillEffect
     private const float skillTime = 3f;
     private float initAttackSpeed = 0f;
     private float initAttackRange = 0f;
-    private Animator ownerAni = null;
 
     private void Start()
     {
-        owner.TryGetComponent<Animator>(out ownerAni);
     }
 
     protected override float setSpeed()
@@ -42,10 +40,12 @@ public class OrcRangeSkill : SkillEffect
     {
         if(sTime == 0f)
         {
-            ownerAni.speed = initAttackSpeed;
+            
+
+            owner.getAnimator().speed = initAttackSpeed;
             owner.setAttackRange(initAttackRange);
 
-            ownerAni.speed = 5f;
+            owner.getAnimator().speed = 5f;
             owner.setAttackRange(initAttackRange + 1f);
         }
 
@@ -53,7 +53,7 @@ public class OrcRangeSkill : SkillEffect
 
         if(sTime >= skillTime)
         {
-            ownerAni.speed = initAttackSpeed;
+            owner.getAnimator().speed = initAttackSpeed;
             owner.setAttackRange(initAttackRange);
 
             Destroy(gameObject);

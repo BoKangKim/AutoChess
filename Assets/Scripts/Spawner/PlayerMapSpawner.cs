@@ -10,6 +10,9 @@ public class PlayerMapSpawner : MonoBehaviourPun
     public GameObject Cam;
     void Start()
     {
+       // GameManager.Inst.soundOption.bgmPlay("IngameBgm1");
+       // GameManager.Inst.soundOption.SFXPlay("IngameStartSFX");
+
         Map = PhotonNetwork.Instantiate("Map", Vector3.zero, Quaternion.identity);
         PhotonNetwork.Instantiate("InfoConnector",Vector3.zero,Quaternion.identity);
 

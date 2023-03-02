@@ -1,15 +1,20 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 public class Flip : MonoBehaviour
 {
     public GameObject frontSide;
     public GameObject backSide;
     public GameObject bodycard;
-    public float duration = 0.5f;
+    private Button button;
+    private float duration = 0.3f;
     private bool alreadyselect = false;
+
+    private void Start()
+    {
+        button = bodycard.GetComponent<Button>();
+    }
 
     public void letsgoo()
     {
@@ -17,8 +22,9 @@ public class Flip : MonoBehaviour
         {
             StartCoroutine(RotateImage());
             alreadyselect = true;
-        }   
         }
+        button.interactable = false;
+    }
     IEnumerator RotateImage()
     {
         iTween.ScaleTo(bodycard, iTween.Hash("scale", new Vector3(0, 0.4f, 0.4f), "time", duration, "easetype", iTween.EaseType.easeOutQuad));

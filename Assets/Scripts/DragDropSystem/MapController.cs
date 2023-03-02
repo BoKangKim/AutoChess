@@ -1,11 +1,10 @@
+using Battle.AI;
+using Photon.Pun;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using Photon.Pun;
-using Photon.Realtime;
-using Battle.AI;
 
 namespace ZoneSystem
 {
@@ -39,7 +38,13 @@ namespace ZoneSystem
         //아이템 랜뽑 일단은 스트링값으로
         private string[] RandomItem;
 
-        public int battleUnitCount = 0;
+        private string[] priorityOrder = {
+    "Demon2", "Mecha2", "Orc2", "Assassin2", "Magician2", "RangeDealer2",
+    "Tanker2", "Warrior2", "Demon", "Mecha", "Orc", "Assassin", "Magician",
+    "RangeDealer", "Tanker", "Warrior"
+                                    };
+
+        //public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
 
         private MapController enemy = null;
@@ -62,7 +67,7 @@ namespace ZoneSystem
             freenetUnits = new string[15];
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
-            RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
+            RandomItem = new string[] { "Sword", "Staff", "Bow", "Sheild" };
 
             initializingUnitName();
             #region FreeNet Random Three Random Unit 
@@ -110,8 +115,9 @@ namespace ZoneSystem
 
             if (photonView.IsMine == true)
             {
-                UIManager.Inst.UnitInstButton = OnClick_UnitInst;
-
+                GameManager.Inst.UIManager.UnitInstButton = OnClick_UnitInst;
+                GameManager.Inst.UIManager.ItemInstButton = OnClick_ItemInst;
+                
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
@@ -144,6 +150,14 @@ namespace ZoneSystem
             return myNickName;
         }
 
+        public AudioClip DropSound = null;
+        public AudioClip SelectSound = null;
+        public AudioClip SellSound = null;
+
+        public AudioClip BuySound = null;
+        public AudioSource audioSource = null;
+
+
         public void StartRPC_SetIsMirrorPlayer(bool isMirrorModePlayer)
         {
             photonView.RPC("RPC_SetIsMirrorPlayer", RpcTarget.All, isMirrorModePlayer);
@@ -163,7 +177,7 @@ namespace ZoneSystem
             if (inst.TryGetComponent<ParentBT>(out bt) == true)
             {
                 bt.setMyLocation();
-                bt.SetState(stage);
+                bt.setState(stage);
             }
 
             return bt;
@@ -290,12 +304,14 @@ namespace ZoneSystem
 
         public int SafetyZoneCheck()
         {
+            
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
                 {
-                    if (safetyObject[z,x]!=null)
+                    if (safetyObject[z, x] != null)
                     {
+                        Debug.Log(safetyObject[z, x].transform.position);
                         SafetyObjectCount++;
                     }
                 }
@@ -306,8 +322,8 @@ namespace ZoneSystem
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
+            int battleUnitCount =0;
 
-            //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
@@ -328,10 +344,12 @@ namespace ZoneSystem
                     if (battleObject[z, x] != null)
                     {
                         ParentBT bt = null;
+
                         if (battleObject[z, x].TryGetComponent<ParentBT>(out bt))
                         {
                             bt.enabled = true;
                         }
+
 
                         ++battleUnitCount;
                         //Debug.Log($"{z},{x}");
@@ -340,7 +358,7 @@ namespace ZoneSystem
 
                         if (unitCount.ContainsKey(battleObject[z, x].GetComponent<UnitClass.Unit>().GetSynergyName))
                         {
-                            
+
                         }
                         else
                         {
@@ -567,36 +585,56 @@ namespace ZoneSystem
                 }
             }
 
-            //여기서 시너지를 뱉어줘야함 근데 실제 유닛 적용은 유닛 생성(Awake)에서 ㄱ
+            //여기서 시너지를 뱉어줘야함
+            for (int z = 0; z < 3; z++)
+            {
+                for (int x = 0; x < 7; x++)
+                {
+                    if (battleObject[z, x] != null)
+                    {
+                        battleObject[z, x].GetComponent<UnitClass.Unit>().SetSynergy(activeSynergyList);
+                    }
+                }
+            }
 
-            //맵컨트롤이랑 드래그앤 드롭은 서로 연결 되어있다 보면됨?
+            //여기서 시너지 정렬해야함
+            activeSynergyList.Sort((x, y) =>
+            {
+                int xIndex = Array.IndexOf(priorityOrder, x);
+                int yIndex = Array.IndexOf(priorityOrder, y);
+                if (xIndex != -1 && yIndex != -1) return xIndex.CompareTo(yIndex);
+                if (xIndex != -1) return -1;
+                if (yIndex != -1) return 1;
+                return x.CompareTo(y);
+            });
 
-            //시너지 ui표시
-            UIManager.Inst.SynergyText(null);
-            activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
+            //여기서 UI에다가 시너지 전달 해줘야함(전달 하는 순간 기존거는 초기화 시켜
+
+            GameManager.Inst.UIManager.SynergyScroll(activeSynergyList);
+
+
             activeSynergyList.Clear();
             return battleUnitCount;
         }
 
         public void OnClick_UnitInst() //유닛 구매
         {
-            //if (playerData.gold < 5)
-            //{ 
-
-            //    debug.text = "골드가 부족합니다.";
-            //    return;
-            //}
-
-            //playerData.gold -= 5; 
+            if (GameManager.Inst.UIManager.player.gold < 10)
+            { 
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.UIManager.PlayerInfoUpdate();
 
             string UnitPrefab = null;
-            if(GameManager.Inst.getType() == GAMETYPE.LIVENET)
+            if (GameManager.Inst.getType() == GAMETYPE.LIVENET)
             {
                 //UnitPrefab = units[Random.Range(0, Database.Instance.userInfo.UserUnitCount)];
             }
-            else if(GameManager.Inst.getType() == GAMETYPE.FREENET)
+            else if (GameManager.Inst.getType() == GAMETYPE.FREENET)
             {
-                int index = Random.Range(0, 15);
+                int index = UnityEngine.Random.Range(0, 15);
 
                 UnitPrefab = freenetUnits[index];
                 //int index = freenetUnitIndex[Random.Range(0, 3)];
@@ -616,11 +654,12 @@ namespace ZoneSystem
                         if(photonView.IsMine == true)
                         {
                             safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                            //GameManager.Inst.soundOption.SFXPlay("BuySFX");
                         }
 
                         if (PlayerMapSpawner.Map != null)
                         {
-                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+                            safetyObject[z, x].transform.SetParent(PlayerMapSpawner.Map.transform, false);
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;
@@ -633,6 +672,14 @@ namespace ZoneSystem
 
         public void OnClick_ItemInst()
         {
+            if (GameManager.Inst.UIManager.player.gold < 10)
+            {
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.UIManager.PlayerInfoUpdate();
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -641,9 +688,17 @@ namespace ZoneSystem
                     {
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
+                        if (photonView.IsMine == true)
+                        {
+                            safetyObject[z, x] = PhotonNetwork.Instantiate(RandomItem[UnityEngine.Random.Range(0, 4)], new Vector3(PosX, 0.5f, PosZ), Quaternion.identity);
+                            safetyObject[z, x].layer = 31;
+                        }
+                        if (PlayerMapSpawner.Map != null)
+                        {
+                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
 
-                        safetyObject[z, x] = Instantiate(ItemPrefab, new Vector3(PosX, 0.25f, PosZ), Quaternion.identity);
-                        safetyObject[z, x].layer = 31;
+                        }
+                        safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
 
                         return;
                     }
@@ -668,7 +723,7 @@ namespace ZoneSystem
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 4)];
 
                         if (PlayerMapSpawner.Map != null)
                         {
@@ -705,10 +760,5 @@ namespace ZoneSystem
                 }
             }
         }
-
-
-
-
-
     }
 }

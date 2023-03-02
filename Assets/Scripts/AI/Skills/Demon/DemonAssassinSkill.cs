@@ -11,11 +11,15 @@ public class DemonAssassinSkill : SkillEffect
 
     protected override float setDestroyTime()
     {
-        return 1.5f;
+        return 2f;
     }
 
     protected override bool setIsNonAttackEffect()
     {
         return true;
+    }
+    private void OnEnable()
+    {
+        owner.getSkillTarget().doDamage(owner.getAttackDamage() * 5);
     }
 }

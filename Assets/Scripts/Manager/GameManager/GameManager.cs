@@ -34,8 +34,21 @@ public class GameManager : MonoBehaviourPunCallbacks
     private PlayerInfoConnector[] players = null;
     private Timer timer = null;
 
-    // À¯´Ö ÃÑ °¹¼ö °ü¸®
-    // Manager ±Þ Å¬·¡½ºµé ¿©±â´Ù°¡
+    [Header("UIManager")]
+    public UIManage UIManage;
+    [Header("NetworkManager")]
+    public NetworkManager networkManager;
+    [Header("DataBase")]
+    public Database dataBase;
+    [Header("MataTrendAPI")]
+    public MetaTrendAPI metaTrendAPI;
+    [Header("SoundOption")]
+    public SoundOption soundOption;
+
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    // Manager ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ù°ï¿½
+    public UIManager UIManager = null;
 
     private void Awake()
     {
@@ -150,6 +163,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerInfoConnector GetPlayerInfoConnector()
     {
         return connecter;
+    }
+
+    public void SetUIManager()
+    {
+        UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        UIManager.transform.SetParent(this.transform);
     }
 
     public void SetTimer(Timer timer)

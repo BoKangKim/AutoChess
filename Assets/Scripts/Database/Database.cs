@@ -10,29 +10,7 @@ using System.Collections;
 
 public class Database : MonoBehaviour
 {
-    private static Database _instance = null;
-    public static Database Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                // find
-                _instance = GameObject.FindObjectOfType<Database>();
-                if (_instance == null)
-                {
-                    // Create
-                    _instance = new GameObject("Database").GetComponent<Database>();
-                }
-            }
-            return _instance;
-        }
 
-    // DataBase : Collection�� ������ �����̳�
-    // Collection : Document�� �׷�, Document�� ���ο� ��ġ�� ����.
-    // Document : �Ѱ� �̻��� Key-value ������ �̷���� ���� <BsonDocument>
-    // Key / Field : �÷� ���� ���� ��
-    }
 
     #region Client �ּ� ����
     MongoClient client = new MongoClient("mongodb+srv://mongo:mongo1234@autochesscluster.ogdgk4g.mongodb.net/?retryWrites=true&w=majority");
@@ -105,7 +83,6 @@ public class Database : MonoBehaviour
 
 
         //api���� �����͸� �޾ƿ����� ����(�ϴ��� db/ start���� �����ϰ��س���)
-        GetUserInfo();
     }
 
 
@@ -142,7 +119,6 @@ public class Database : MonoBehaviour
         if (userInfos == null)
         {
             DataInst(userInfo.public_address);
-            Debug.Log("�����Ǵ�?");
         }
         else
         {
@@ -315,49 +291,3 @@ public class Database : MonoBehaviour
 
 
 
-
-
-//{
-//    "status":"success",
-//"message":"Fetchedsuccessfully!",
-//"data":
-//    {
-//        "redirectionURL":null,
-//        "records":
-//            [
-//                {
-//                    "_id":"63e3115a32e6b608299fe87c",
-//                  "title":"Tournament Prize Pool 1",
-//                  "amount":20,
-//                  "totalCollectedAmount":1960,
-//                  "startTime":"2023-02-08T03:04:58.749Z",
-//                  "endTime":"2023-02-15T03:04:58.750Z",
-//                  "createdAt":"2023-02-08T03:04:58.765Z",
-//                  "updatedAt":"2023-02-08T03:04:58.765Z",
-//                  "__v":0
-//                },
-//                {
-//                    "_id":"63e3115a32e6b608299fe87d",
-//                  "title":"Tournament Prize Pool 2",
-//                  "amount":15,
-//                  "totalCollectedAmount":1600,
-//                  "startTime":"2023-02-08T03:04:58.752Z",
-//                  "endTime":"2023-02-16T03:04:58.752Z",
-//                  "createdAt":"2023-02-08T03:04:58.765Z",
-//                  "updatedAt":"2023-02-08T03:04:58.765Z",
-//                  "__v":0
-//                },
-//                {
-//                    "_id":"63e3115a32e6b608299fe87e",
-//                  "title":"Tournament Prize Pool 3",
-//                  "amount":50,
-//                  "totalCollectedAmount":350,
-//                  "startTime":"2023-02-08T03:04:58.753Z",
-//                  "endTime":"2023-02-23T03:04:58.753Z",
-//                  "createdAt":"2023-02-08T03:04:58.766Z",
-//                  "updatedAt":"2023-02-08T03:04:58.766Z",
-//                  "__v":0
-//                }
-//    ]
-//    }
-//}

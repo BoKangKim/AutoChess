@@ -2,8 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class OrcWarriorSkill : SkillEffect
 {
+    private Animator ownerAni = null;
+    private void Start()
+    {
+        owner.TryGetComponent<Animator>(out ownerAni);
+    }
     protected override float setDestroyTime()
     {
         return 2f;
@@ -22,5 +28,9 @@ public class OrcWarriorSkill : SkillEffect
     protected override void specialLogic()
     {
         
+    }
+    private void OnEnable()
+    {
+        owner.getAnimator().speed += 0.07f;
     }
 }
