@@ -653,12 +653,12 @@ namespace ZoneSystem
                         if(photonView.IsMine == true)
                         {
                             safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
-                            GameManager.Inst.soundOption.SFXPlay("BuySFX");
+                            //GameManager.Inst.soundOption.SFXPlay("BuySFX");
                         }
 
                         if (PlayerMapSpawner.Map != null)
                         {
-                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
+                            safetyObject[z, x].transform.SetParent(PlayerMapSpawner.Map.transform, false);
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;

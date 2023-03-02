@@ -42,10 +42,10 @@ public class Timer : MonoBehaviour
 
         nowTime += Time.deltaTime;
         GameManager.Inst.time = nowTime;
+
         if(nowTime >= STAGE_TIME)
         {
             nowTime = 0;
-
             sc.checkNextStageInfo();
             sc.startNextStage();
         }

@@ -29,14 +29,11 @@ namespace ZoneSystem
 
         Button posCheckButton = null;
 
-
-
-
-
         private void Awake()
         {
             mapController = GetComponent<MapController>();
         }
+
         private void Start()
         {
             cam = Camera.main;
@@ -64,10 +61,10 @@ namespace ZoneSystem
         private void Update()
         {
 
-            //if (!photonView.IsMine)
-            //{
-            //    return;
-            //}
+            if (!photonView.IsMine)
+            {
+                return;
+            }
 
 
             #region PC��

@@ -52,7 +52,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        
     }
 
     #region GAMETYPE
