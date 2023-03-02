@@ -46,13 +46,12 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     // ���� �� ���� ����
     // Manager �� Ŭ������ ����ٰ�
-    [SerializeField] private RealUIManager UIManager = null;
+    public UIManager UIManager = null;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        
     }
 
     #region GAMETYPE
@@ -110,5 +109,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerInfoConnector GetPlayerInfoConnector()
     {
         return connecter;
+    }
+
+    public void SetUIManager()
+    {
+        UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        UIManager.transform.SetParent(this.transform);
     }
 }
