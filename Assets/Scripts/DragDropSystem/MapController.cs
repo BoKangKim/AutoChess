@@ -344,6 +344,7 @@ namespace ZoneSystem
                     if (battleObject[z, x] != null)
                     {
                         ParentBT bt = null;
+
                         if (battleObject[z, x].TryGetComponent<ParentBT>(out bt))
                         {
                             bt.enabled = true;
