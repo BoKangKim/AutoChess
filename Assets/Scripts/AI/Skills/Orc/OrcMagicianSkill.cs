@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class OrcMagicianSkill : SkillEffect
 {
+
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_Magician_Skill");
+    }
     protected override float setSpeed()
     {
         return 0f;

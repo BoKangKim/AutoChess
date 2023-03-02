@@ -50,7 +50,7 @@ namespace Battle.AI
         protected float attackDamage = 0f;
         protected float spellPower = 0f;
         protected float maxMana = 10f;
-        protected float maxHP = 0f;
+        protected float maxHP = 100f;
         protected float shield = 0f;
 
         protected float mana = 0f;
@@ -67,6 +67,8 @@ namespace Battle.AI
         private StageControl sc = null;
         #endregion
         #region GET,SET
+
+        
 
         public ParentBT getSkillTarget()
         {
@@ -346,6 +348,9 @@ namespace Battle.AI
             }
 
             currentHP = unitData.totalMaxHp;
+            maxHP = unitData.totalMaxHp;
+            currentHP = 100;
+            maxHP = 100;
             maxMana = unitData.totalMaxMp;
             maxMana = 5f;
             manaRecovery += unitData.totalMpRecovery;

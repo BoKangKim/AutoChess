@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class DemonTankerSkill : SkillEffect
 {
+
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_Tanker_Skill");
+    }
+
+
     protected override float setSpeed()
     {
         return 1f;

@@ -22,26 +22,6 @@ public class SoundOption : MonoBehaviour
     // bgm
     // LobbyBgm, IngameBgm, BossBgm, MatchingBgm
 
-    // ȿ����
-    // ���� ���� �� ���߼Ҹ� IngameStartSFX
-    //SFXPlay("IngameStartSFX");
-    // ��Ī ������ ����  MatchingSFX
-    //SFXPlay("MatchingSFX");
-    // ���� ȿ���� MergeSFX
-    //SFXPlay("MergeSFX");
-    // �ó��� Ȱ��ȭ ���� SynergySFX
-    //SFXPlay("SynergySFX");
-    // ���� ��ġ���� DropSFX
-    //SFXPlay("DropSFX");
-    // ���� ��ȯ ���� BuySFX
-    //SFXPlay("BuySFX");
-    // ���� �Ǹ� ���� SellSFX
-    //SFXPlay("SellSFX");
-    // ���� �Ⱦ� ���� SelectSFX
-    //SFXPlay("SelectSFX");
-    // �˾����� ClickSFX
-    //SFXPlay("ClickSFX");
-
 
     public Dictionary<string, AudioClip> ClipDictionary;
 

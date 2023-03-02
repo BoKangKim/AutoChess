@@ -41,7 +41,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        Screen.SetResolution(1920, 1080, false);
+        Screen.SetResolution(960, 960, false);
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
@@ -82,7 +82,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     {
 
         Debug.Log(PhotonNetwork.NickName);
-        chatmanager.enabled = true;
+        //chatmanager.enabled = true;
         PV = photonView;
         //PhotonNetwork.LocalPlayer.NickName = Database.Instance.userInfo.NickName;
     }
@@ -94,6 +94,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         JoinRandomOrCreateRoom();
         tempCoritineu = uIManage.MatchTimer();
         StartCoroutine(tempCoritineu);
+        GameManager.Inst.UIManage.Letsmatch();
         GameManager.Inst.soundOption.bgmPlay("MatchingBgm");
 
 
@@ -164,6 +165,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     public override void OnPlayerEnteredRoom(Player newPlayer)
     {
+        Debug.Log(PhotonNetwork.CurrentRoom.PlayerCount);
 
         if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 4)
         {

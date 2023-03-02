@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class DwarfAssassinSkill : SkillEffect
 {
+
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Dwarf_Assassin_Skill");
+    }
+
     protected override float setSpeed()
     {
         return 5f;

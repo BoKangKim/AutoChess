@@ -19,6 +19,7 @@ public class MeleeAI : UnitAI
         Effect attack = null;
         if(PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack))
         {
+            
             attack.setAttackDamage(unitData.GetUnitData.GetAtk);
             attack.setOwner(this);
         }

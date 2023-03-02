@@ -10,7 +10,11 @@ public class MechaAssassinSkill : SkillEffect
     private GameObject inst = null;
     private Vector3 euler = new Vector3(-90f, 0f, 0f);
 
-    
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Assassin_Skill");
+    }
+
     protected override float setDestroyTime()
     {
         return 3f;

@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class DemonMagicianSkill : SkillEffect
 {
+
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_Magician_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 3f;

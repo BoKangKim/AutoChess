@@ -5,6 +5,11 @@ using Battle.EFFECT;
 
 public class OrcAssassinSkill : SkillEffect
 {
+
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_Assassin_Skill");
+    }
     protected override float setSpeed()
     {
         return 1f;

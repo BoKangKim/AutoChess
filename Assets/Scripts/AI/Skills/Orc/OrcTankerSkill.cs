@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class OrcTankerSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_Tanker_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 3f;

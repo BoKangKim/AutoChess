@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class GolemTankerSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Golem_Tanker_Skill");
+    }
     protected override float setSpeed()
     {
         return 1f;

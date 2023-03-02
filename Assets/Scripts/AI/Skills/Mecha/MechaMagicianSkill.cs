@@ -6,6 +6,10 @@ public class MechaMagicianSkill : SkillEffect
 {
     float damageTime = 0f;
     int count = 0;
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Magician_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 2f;

@@ -17,8 +17,6 @@ namespace ZoneSystem
         private int battleSpaceLayer;
         private int safetySpaceLayer;
 
-   
-
         private int itemLayer;
 
         public GameObject safetyZoneTile;
@@ -62,13 +60,10 @@ namespace ZoneSystem
         }
         private void Update()
         {
-
             //if (!photonView.IsMine)
             //{
             //    return;
             //}
-
-
             #region PC��
             if (Input.GetMouseButtonDown(0))
             {

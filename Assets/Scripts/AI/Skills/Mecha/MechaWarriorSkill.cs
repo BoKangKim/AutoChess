@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class MechaWarriorSkill : SkillEffect
 {
+    private void Awake()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Warrior_Skill");
+    }
     protected override float setDestroyTime()
     {
         return 1.5f;
