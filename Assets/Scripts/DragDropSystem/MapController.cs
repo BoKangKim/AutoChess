@@ -44,7 +44,7 @@ namespace ZoneSystem
     "RangeDealer", "Tanker", "Warrior"
                                     };
 
-        public int battleUnitCount = 0;
+        //public int battleUnitCount = 0;
         public int SafetyObjectCount = 0;
 
         private MapController enemy = null;
@@ -61,18 +61,15 @@ namespace ZoneSystem
         [SerializeField] private GameObject ItemPrefab;
         [SerializeField] private GameObject battleZoneTile;
 
-       
-
         private void Awake()
         {
             //if (!photonView.IsMine) return;
             freenetUnits = new string[15];
             safetyObject = new GameObject[2, 7];
             battleObject = new GameObject[3, 7];
-            RandomItem = new string[] { "sword", "cane", "dagger", "Armor", "robe" };
+            RandomItem = new string[] { "Sword", "Staff", "Bow", "Sheild" };
 
             initializingUnitName();
-
             #region FreeNet Random Three Random Unit 
             //int index = 0;
             //if(PhotonNetwork.IsMasterClient == true)
@@ -118,8 +115,9 @@ namespace ZoneSystem
 
             if (photonView.IsMine == true)
             {
-                UIManager.Inst.UnitInstButton = OnClick_UnitInst;
-
+                GameManager.Inst.UIManager.UnitInstButton = OnClick_UnitInst;
+                GameManager.Inst.UIManager.ItemInstButton = OnClick_ItemInst;
+                
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
@@ -324,8 +322,8 @@ namespace ZoneSystem
 
         public int BattleZoneCheck() //배틀존 모든 드롭 시점관여
         {
+            int battleUnitCount =0;
 
-            //Debug.Log("AA");
             unitCount = new Dictionary<string, int>();
             orcSynergyCount = 0;
             dwarfSynergyCount = 0;
@@ -609,22 +607,24 @@ namespace ZoneSystem
                 return x.CompareTo(y);
             });
 
-            UIManager.Inst.SynergyText(null);
-            activeSynergyList.ForEach(str => UIManager.Inst.SynergyText(str));
+            //여기서 UI에다가 시너지 전달 해줘야함(전달 하는 순간 기존거는 초기화 시켜
+
+            GameManager.Inst.UIManager.SynergyScroll(activeSynergyList);
+
+
             activeSynergyList.Clear();
             return battleUnitCount;
         }
 
         public void OnClick_UnitInst() //유닛 구매
         {
-            //if (playerData.gold < 5)
-            //{ 
-
-            //    debug.text = "골드가 부족합니다.";
-            //    return;
-            //}
-
-            //playerData.gold -= 5; 
+            if (GameManager.Inst.UIManager.player.gold < 10)
+            { 
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.UIManager.PlayerInfoUpdate();
 
             string UnitPrefab = null;
             if (GameManager.Inst.getType() == GAMETYPE.LIVENET)
@@ -653,12 +653,12 @@ namespace ZoneSystem
                         if(photonView.IsMine == true)
                         {
                             safetyObject[z, x] = PhotonNetwork.Instantiate(UnitPrefab, Vector3.zero, Quaternion.identity);
+                            //GameManager.Inst.soundOption.SFXPlay("BuySFX");
                         }
 
                         if (PlayerMapSpawner.Map != null)
                         {
-                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
-                            GameManager.Inst.soundOption.SFXPlay("BuySFX");
+                            safetyObject[z, x].transform.SetParent(PlayerMapSpawner.Map.transform, false);
                         }
                         safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
                         return;
@@ -671,6 +671,14 @@ namespace ZoneSystem
 
         public void OnClick_ItemInst()
         {
+            if (GameManager.Inst.UIManager.player.gold < 10)
+            {
+                debug.text = "골드가 부족합니다.";
+                return;
+            }
+            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.UIManager.PlayerInfoUpdate();
+
             for (int z = 0; z < 2; z++)
             {
                 for (int x = 0; x < 7; x++)
@@ -679,9 +687,17 @@ namespace ZoneSystem
                     {
                         int PosX = (x * 3) + 1;
                         int PosZ = (z * 3) - 7;
+                        if (photonView.IsMine == true)
+                        {
+                            safetyObject[z, x] = PhotonNetwork.Instantiate(RandomItem[UnityEngine.Random.Range(0, 4)], new Vector3(PosX, 0.5f, PosZ), Quaternion.identity);
+                            safetyObject[z, x].layer = 31;
+                        }
+                        if (PlayerMapSpawner.Map != null)
+                        {
+                            safetyObject[z, x].transform.parent = PlayerMapSpawner.Map.transform;
 
-                        safetyObject[z, x] = Instantiate(ItemPrefab, new Vector3(PosX, 0.25f, PosZ), Quaternion.identity);
-                        safetyObject[z, x].layer = 31;
+                        }
+                        safetyObject[z, x].transform.localPosition = new Vector3(PosX, 0.25f, PosZ);
 
                         return;
                     }
@@ -706,7 +722,7 @@ namespace ZoneSystem
 
                         //Debug.Log(RandomItem[Random.Range(0, 5)]);
                         safetyObject[z, x] = getItem;
-                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 5)];
+                        safetyObject[z, x].name = RandomItem[UnityEngine.Random.Range(0, 4)];
 
                         if (PlayerMapSpawner.Map != null)
                         {

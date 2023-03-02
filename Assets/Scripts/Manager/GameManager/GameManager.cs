@@ -30,8 +30,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private Pool pool = null;
     public Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
-    private int playerUnitCount = 0;
-
+    private PlayerInfoConnector connecter = null;
 
     [Header("UIManager")]
     public UIManage UIManage;
@@ -45,16 +44,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     public SoundOption soundOption;
 
 
-    private PlayerData player = null;
     // ���� �� ���� ����
     // Manager �� Ŭ������ ����ٰ�
-    [SerializeField] private RealUIManager UIManager = null;
+    public UIManager UIManager = null;
 
     private void Awake()
     {
         DontDestroyOnLoad(this);
         pool = FindObjectOfType<Pool>();
-        player = new PlayerData();
     }
 
     #region GAMETYPE
@@ -104,30 +101,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     #endregion
 
-    #region Player Info
-    public void PlusUnitCount()
+    public void SetPlayerInfoConnector(PlayerInfoConnector player)
     {
-        playerUnitCount++;
+        this.connecter = player;
     }
 
-    public void MinusUnitCount()
+    public PlayerInfoConnector GetPlayerInfoConnector()
     {
-        playerUnitCount--;
+        return connecter;
     }
 
-    public void ResetUnitCount()
+    public void SetUIManager()
     {
-        playerUnitCount = 0;
+        UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        UIManager.transform.SetParent(this.transform);
     }
-
-    public int GetUnitCount()
-    {
-        return playerUnitCount;
-    }
-
-    public PlayerData GetPlayer()
-    {
-        return player;
-    }
-    #endregion
 }

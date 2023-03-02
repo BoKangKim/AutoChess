@@ -1,10 +1,8 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Realtime;
-using System.Linq;
 
 namespace ZoneSystem
 {
@@ -16,6 +14,8 @@ namespace ZoneSystem
         private int ObjectLayer;
         private int battleSpaceLayer;
         private int safetySpaceLayer;
+
+
 
         private int itemLayer;
 
@@ -29,13 +29,11 @@ namespace ZoneSystem
 
         Button posCheckButton = null;
 
-
-
-
         private void Awake()
         {
             mapController = GetComponent<MapController>();
         }
+
         private void Start()
         {
             cam = Camera.main;
@@ -47,23 +45,28 @@ namespace ZoneSystem
             dragObject = new List<GameObject>();
             tileColor = new Color(51 / 255f, 83 / 255f, 113 / 255f, 1);
 
-      
+
             if (photonView.IsMine)
             {
+                GameManager.Inst.UIManager.SellButton = sellObject;
+
                 safetyZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 safetyZoneTile = safetyZoneTile.transform.Find("SafetyZone").gameObject;
 
                 battleZoneTile = PlayerMapSpawner.Map.transform.Find("Tile").gameObject;
                 battleZoneTile = battleZoneTile.transform.Find("BattleZone").gameObject;
             }
-            
+
         }
         private void Update()
         {
-            //if (!photonView.IsMine)
-            //{
-            //    return;
-            //}
+
+            if (!photonView.IsMine)
+            {
+                return;
+            }
+
+
             #region PC��
             if (Input.GetMouseButtonDown(0))
             {
@@ -124,7 +127,7 @@ namespace ZoneSystem
                 else
                 {
                     // ���� �Ǹ�
-                    sellObject();
+                    //sellObject();
 
                     if (EventSystem.current.IsPointerOverGameObject()) return;
 
@@ -152,14 +155,14 @@ namespace ZoneSystem
                     battleZoneTile.gameObject.SetActive(false);
                     safetyZoneTile.gameObject.SetActive(false);
                 }
-                //storeButtonChange();
+                storeButtonChange();
 
             }
             //Drag
             if (selectedObject != null)
             {
                 tileChangeColor();
-                buttonPosCheck();
+                //buttonPosCheck();
                 Drag();
             }
             #endregion
@@ -173,7 +176,7 @@ namespace ZoneSystem
 
             Physics.Raycast(screenMousePosNear, screenMousePosFar - screenMousePosNear, out RaycastHit hit, Vector3.Magnitude(screenMousePosFar - screenMousePosNear), Layer);
             Debug.DrawRay(screenMousePosNear, screenMousePosFar - screenMousePosNear, Color.red);
-            
+
             return hit;
         }
         #endregion
@@ -195,10 +198,11 @@ namespace ZoneSystem
         #endregion
 
         #region sellUnit
-        void sellObject()
+        private void sellObject()
         {
+            if (selectedObject == null) return;
 
-            if (posCheckButton && selectedObject.GetComponent<UnitClass.Unit>() != null)
+            if (selectedObject.GetComponent<UnitClass.Unit>() != null)
             {
                 int count = selectedObject.GetComponent<UnitClass.Unit>().GetEquipmentCount;
                 if (count != 0) // 판매시 장비 뱉는 로직
@@ -215,22 +219,28 @@ namespace ZoneSystem
                 PhotonNetwork.Destroy(selectedObject);
                 GameManager.Inst.soundOption.bgmPlay("SellSFX");
 
-                GameManager.Inst.GetPlayer().gold += 3;
+                //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
+                GameManager.Inst.UIManager.player.gold += 3;
+                GameManager.Inst.UIManager.buttlezoneUnitNum = mapController.BattleZoneCheck();
+                GameManager.Inst.UIManager.PlayerInfoUpdate();
 
                 selectedObject = null;
                 storeButtonChange();
+                GameManager.Inst.UIManager.PlayerInfoUpdate();
                 battleZoneTile.gameObject.SetActive(false);
                 safetyZoneTile.gameObject.SetActive(false);
 
-     
-
             }
-            if (posCheckButton && selectedObject.GetComponent<Equipment>() != null)
+            else if (selectedObject.GetComponent<Equipment>() != null)
             {
                 posCheckButton = null;
 
-                Destroy(selectedObject);
-                GameManager.Inst.GetPlayer().gold += 3;
+                PhotonNetwork.Destroy(selectedObject);
+                GameManager.Inst.soundOption.bgmPlay("SellSFX");
+
+                //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
+                GameManager.Inst.UIManager.player.gold += 3;
+
 
                 selectedObject = null;
                 storeButtonChange();
@@ -241,23 +251,25 @@ namespace ZoneSystem
         }
         #endregion
 
-        #region buttonChange
-        void buttonPosCheck()
-        {
-            if (UIManager.Inst.RaycastUI<Button>(1) != null && selectedObject != null)
-            {
-                posCheckButton = UIManager.Inst.RaycastUI<Button>(1);
-                Debug.Log(UIManager.Inst.RaycastUI<Button>(0));
-            }
-            else
-            {
-                if (posCheckButton != null)
-                {
 
-                    posCheckButton = null;
-                }
-            }
-        }
+
+
+        #region buttonChange
+        //void buttonPosCheck()
+        //{
+        //    if (GameManager.Inst.UIManager.RaycastUI<Button>(0) != null && selectedObject != null)
+        //    {
+        //        posCheckButton = GameManager.Inst.UIManager.RaycastUI<Button>(0);
+        //        Debug.Log(GameManager.Inst.UIManager.RaycastUI<Button>(0));
+        //    }
+        //    else
+        //    {
+        //        if (posCheckButton != null)
+        //        {
+        //            posCheckButton = null;
+        //        }
+        //    }
+        //}
         #endregion
         #region Drag
         private void Drag()
@@ -284,7 +296,8 @@ namespace ZoneSystem
                 {
                     mapController.safetyObject[safetyPos.z, safetyPos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattleZoneCheck();
+
+                    
                 }
                 else
                 {
@@ -327,7 +340,6 @@ namespace ZoneSystem
             else if (Layer == battleSpaceLayer)
             {
 
-                Debug.Log(battlePos);
                 if (CastRay(ObjectLayer).collider != null && CastRay(ObjectLayer).collider.GetComponent<Equipment>() != null)
                 {
                     selectedObject.transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
@@ -338,9 +350,15 @@ namespace ZoneSystem
 
                 if (mapController.battleObject[battlePos.z, battlePos.x] == null)
                 {
+                    if (mapController.BattleZoneCheck() >= GameManager.Inst.UIManager.player.playerLevel + 2)
+                    {
+                        outRange();
+                        return;
+                    }
                     mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
                     selectedObject.transform.localPosition = new Vector3(worldPosition.x, 0.25f, worldPosition.z);
-                    mapController.BattleZoneCheck();
+
+
                 }
                 else
                 {
@@ -373,6 +391,8 @@ namespace ZoneSystem
                         }
                         else
                         {
+              
+
                             mapController.battleObject[beforePos.z, beforePos.x] = mapController.battleObject[battlePos.z, battlePos.x];
                             mapController.battleObject[beforePos.z, beforePos.x].transform.localPosition = new Vector3(this.beforePos.x, 0.25f, this.beforePos.z);
                             mapController.battleObject[battlePos.z, battlePos.x] = selectedObject;
@@ -383,7 +403,8 @@ namespace ZoneSystem
 
                 }
             }
-            Debug.Log($"WP : { worldPosition}, SPINDEX :  {safetyPos} BPINDEX : {battlePos} BFINDEX {beforePos}");
+            GameManager.Inst.UIManager.buttlezoneUnitNum = mapController.BattleZoneCheck();
+            GameManager.Inst.UIManager.PlayerInfoUpdate();
             selectedObject = null;
         }
         #endregion
@@ -439,15 +460,15 @@ namespace ZoneSystem
         {
             if (selectedObject == null)
             {
-                UIManager.Inst.unitBuyButton.gameObject.SetActive(true);
-                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(true);
-                UIManager.Inst.sellButton.gameObject.SetActive(false);
+                GameManager.Inst.UIManager.buyItemButton.gameObject.SetActive(true);
+                GameManager.Inst.UIManager.buyUnitButton.gameObject.SetActive(true);
+                GameManager.Inst.UIManager.sellButton.gameObject.SetActive(false);
             }
             else
             {
-                UIManager.Inst.unitBuyButton.gameObject.SetActive(false);
-                UIManager.Inst.equipmentBuyButton.gameObject.SetActive(false);
-                UIManager.Inst.sellButton.gameObject.SetActive(true);
+                GameManager.Inst.UIManager.buyItemButton.gameObject.SetActive(false);
+                GameManager.Inst.UIManager.buyUnitButton.gameObject.SetActive(false);
+                GameManager.Inst.UIManager.sellButton.gameObject.SetActive(true);
             }
 
 
@@ -456,8 +477,8 @@ namespace ZoneSystem
 
         #region 좌표변환
         int safetyInterval = 3;
-        Vector3 battleInterval = new Vector3(1.5f, 0 , 2.5f);
-        (int x , int z) battlePosToIndex(Vector3 Vec)
+        Vector3 battleInterval = new Vector3(1.5f, 0, 2.5f);
+        (int x, int z) battlePosToIndex(Vector3 Vec)
         {
             Vec.z = (Vec.z / battleInterval.z);
 
@@ -467,9 +488,7 @@ namespace ZoneSystem
 
             Vec.x /= 3f;
 
-            Debug.Log($"{(int)Vec.x},{(int)Vec.z}");
-
-            return ((int)Vec.x,(int)Vec.z);
+            return ((int)Vec.x, (int)Vec.z);
         }
         (int x, int z) safetyPosToIndex(Vector3 Vec)
         {
@@ -604,18 +623,18 @@ namespace ZoneSystem
         }
 
         #endregion
-  
+
 
         #region 머지시스템
         public bool Merge(GameObject selectedObject, GameObject stayObject)
         {
-       
+
             if (selectedObject == null || stayObject == null) return false;
             //유닛 끼리 머지
             if (selectedObject.GetComponent<UnitClass.Unit>() != null && stayObject.GetComponent<UnitClass.Unit>() != null)
             {
                 if (selectedObject.name != stayObject.name) return false;
-       
+
                 UnitClass.Unit selectedUnit = selectedObject.GetComponent<UnitClass.Unit>();
                 UnitClass.Unit stayUnit = stayObject.GetComponent<UnitClass.Unit>();
 
@@ -626,7 +645,7 @@ namespace ZoneSystem
                 int stayEqCount = stayUnit.GetEquipmentCount;
 
 
-                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName&&stayUnit.GetGrade <4)
+                if (selectedUnit.GetGrade == stayUnit.GetGrade && selectedUnit.GetSynergyName == stayUnit.GetSynergyName && stayUnit.GetGrade < 4)
                 {
 
                     if (stayEqCount + selectedEqCount < 4)
@@ -644,7 +663,7 @@ namespace ZoneSystem
                             selectedUnit.transform.Find("Equipment").GetChild(i).GetComponent<Equipment>().LoadGrade();
                         }
 
-                        for(int i = 0; i<stayEqCount; i++)
+                        for (int i = 0; i < stayEqCount; i++)
                         {
                             stayUnit.transform.Find("Equipment").GetChild(i).GetComponent<Equipment>().LoadGrade();
                         }
@@ -709,7 +728,7 @@ namespace ZoneSystem
                     stayObject.GetComponent<UnitClass.Unit>().EquipItem();
                 }
                 selectedObject.SetActive(false);
-     
+
                 return true;
             }
             return false;

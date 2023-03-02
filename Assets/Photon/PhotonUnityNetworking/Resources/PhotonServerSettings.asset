@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhotonServerSettings
   m_EditorClassIdentifier: 
   AppSettings:
-    AppIdRealtime: 7b0a57b8-170e-447e-b94c-16f9f98dc723
+    AppIdRealtime: 6a3e9c73-916b-4e88-8ba7-83f440a5479a
     AppIdFusion: 
     AppIdChat: a51bb116-d3a9-4e75-bd20-1e94de017865
     AppIdVoice: 
@@ -61,6 +61,7 @@ MonoBehaviour:
   - RPC_DoDamage
   - setIsDeath
   - RPC_initializingAfterBattle
+  - RPC_IsEndSetEnemy
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

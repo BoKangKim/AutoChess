@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerData : MonoBehaviour
+public class PlayerData
 {
     // ID
     public string playerName;
@@ -14,10 +14,10 @@ public class PlayerData : MonoBehaviour
     public int CurHP;
     private int MaxHP;
     //����ġ
-    public float[] MaxExp;
+    public int[] MaxExp;
     public float CurExp;
 
-    private void Awake()
+    public PlayerData()
     {
         Initializing();
     }
@@ -25,11 +25,11 @@ public class PlayerData : MonoBehaviour
     private void Initializing()
     {
         playerName = "name";
-        gold = 0;
+        gold = 500;
         playerLevel = 1;
         MaxHP = 100;
         CurHP = MaxHP;
-        MaxExp = new float[10] { 0, 2, 6, 10, 20, 36, 56, 70, 80, 100 };
+        MaxExp = new int[8] { 0, 2, 6, 10, 20, 36, 56, 70};
         CurExp = 0;
     }
 

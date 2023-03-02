@@ -41,11 +41,11 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        Screen.SetResolution(960, 960, false);
+        Screen.SetResolution(480, 480, false);
         DontDestroyOnLoad(this);
         PhotonNetwork.AutomaticallySyncScene = true;
         room = new RoomOptions();
-        gameScene = "SyncUnit";
+        gameScene = "InGameUILWH";
     }
 
     private void Start()
@@ -55,32 +55,29 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public void Connect() => PhotonNetwork.ConnectUsingSettings();
     //public override void OnConnectedToMaster() => StartCoroutine(Co_JoinLobby());
 
-
     public void joinLobby()
     {
         StartCoroutine(Co_JoinLobby());
         GameManager.Inst.UIManage.startbutton.interactable = false;
         GameManager.Inst.soundOption.SFXPlay("ClickSFX");
-
-
-
     }
+
     private IEnumerator Co_JoinLobby()
     {
         GameManager.Inst.dataBase.GetUserInfo();
         yield return new WaitUntil(() => GameManager.Inst.dataBase.userInfo.username != null);
 
+        int rnd = Random.Range(0,2100000000);
+
         myNickName.text = GameManager.Inst.dataBase.userInfo.username;
-        PhotonNetwork.NickName = GameManager.Inst.dataBase.userInfo.username;
+        PhotonNetwork.NickName = GameManager.Inst.dataBase.userInfo.username + rnd.ToString();
         GameManager.Inst.UIManage.userIcon.sprite = GameManager.Inst.UIManage.userIconImage[GameManager.Inst.dataBase.userInfo.userIconIndex];
         PhotonNetwork.JoinLobby();
         StartCoroutine(GameManager.Inst.UIManage.FadeoutStart());
-        
     }
 
     public override void OnJoinedLobby()
     {
-
         Debug.Log(PhotonNetwork.NickName);
         //chatmanager.enabled = true;
         PV = photonView;
@@ -96,8 +93,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         StartCoroutine(tempCoritineu);
         GameManager.Inst.UIManage.Letsmatch();
         GameManager.Inst.soundOption.bgmPlay("MatchingBgm");
-
-
     }
 
     public void joinLiveNet()
@@ -147,7 +142,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //UpdatePlayerCount();
-        PhotonNetwork.LoadLevel(gameScene);
+        //PhotonNetwork.LoadLevel(gameScene);
 
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
