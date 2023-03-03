@@ -201,6 +201,7 @@ namespace Battle.AI
             {
                 myAni = GetComponent<Animator>();
                 enemies = new List<ParentBT>();
+                myUnits = new List<ParentBT>();
                 myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             }
 
@@ -347,7 +348,7 @@ namespace Battle.AI
 
             currentHP = unitData.totalMaxHp;
             maxMana = unitData.totalMaxMp;
-            maxMana = 5f;
+            Debug.Log(maxMana);
             manaRecovery += unitData.totalMpRecovery;
             attackRange = unitData.totalAttackRange;
             attackDamage = unitData.totalAtkDamage;
@@ -370,6 +371,7 @@ namespace Battle.AI
             {
                 case "UnitAI":
                     addEnemyList(fieldAIObejects);
+                    addMyUnitList(fieldAIObejects);
                     break;
                 case "Monster":
                     addEnemyList(fieldAIObejects, "Monster");
@@ -380,6 +382,36 @@ namespace Battle.AI
             }
 
         }
+
+
+
+        private void addMyUnitList(ParentBT[] fieldAIObejects)
+        {
+            if (stageType == STAGETYPE.PVP
+             || stageType == STAGETYPE.CLONE)
+            {
+                for (int i = 0; i < fieldAIObejects.Length; i++)
+                {
+                    if (fieldAIObejects[i].nickName.CompareTo(enemyNickName) == 0)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].enabled == false)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)
+                    {
+                        myUnits.Add(fieldAIObejects[i]);
+                    }
+                }
+            }
+        }
+
+
+
 
         private void addEnemyList(ParentBT[] fieldAIObejects, string compare)
         {
@@ -495,7 +527,6 @@ namespace Battle.AI
 
                         if(target == null)
                         {
-                            Debug.Log(enemies.Count + " target null");
                             return;
                         }
 
@@ -607,8 +638,8 @@ namespace Battle.AI
 
                         Vector3 targetPos = LocationControl.convertLocationToPosition(enemies[i].getMyLocation());
 
-                        if (Vector3.Distance(targetPos, transform.localPosition) <= (LocationControl.radius * attackRange)
-                        && checkIsOverlapUnits() == false)
+                        
+                        if (Vector3.Distance(targetPos, transform.localPosition) <= (LocationControl.radius * attackRange))
                         {
                             rta.initCloseList();
                             target = enemies[i];

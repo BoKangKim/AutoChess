@@ -171,8 +171,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         UIManager.transform.SetParent(this.transform);
     }
 
+    public UIManager GetUIManager()
+    {
+        return UIManager;
+    }
+
     public void SetTimer(Timer timer)
     {
         this.timer = timer;
     }
+
 }

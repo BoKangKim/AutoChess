@@ -92,6 +92,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI playerCurExp = null;
     [SerializeField] private TextMeshProUGUI limitUnitNum = null;
 
+    [Header("Time")]
+    [SerializeField] private TextMeshProUGUI timeText = null;
+
     public int buttlezoneUnitNum = 0;
 
 
@@ -110,41 +113,6 @@ public class UIManager : MonoBehaviour
         PlayerInfoUpdate();
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            List<string> activeSynergyList = new List<string>();
-            activeSynergyList.Add("Mecha");
-            activeSynergyList.Add("Orc");
-            activeSynergyList.Add("Demon");
-            activeSynergyList.Add("Warrior");
-            activeSynergyList.Add("Assassin");
-            activeSynergyList.Add("Tanker");
-            activeSynergyList.Add("RangeDealer");
-            activeSynergyList.Add("Magician");
-
-            SynergyScroll(activeSynergyList);
-        }
-
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            List<string> activeSynergyList = new List<string>();
-            activeSynergyList.Clear();
-            activeSynergyList.Add("Warrior");
-            activeSynergyList.Add("Assassin");
-            activeSynergyList.Add("Magician");
-            activeSynergyList.Add("RangeDealer");
-            activeSynergyList.Add("Orc");
-            activeSynergyList.Add("Demon");
-            activeSynergyList.Add("Tanker");
-            activeSynergyList.Add("Mecha");
-
-            SynergyScroll(activeSynergyList);
-        }
-
-        pointerEventData.position = Input.mousePosition;
-    }
 
     //public T RaycastUI<T>(int num) where T : Component
     //{
@@ -171,6 +139,11 @@ public class UIManager : MonoBehaviour
     public void OnClickSettingApplyButton() //���� â ����
     {
         settingContentsPopup.SetActive(false);
+    }
+
+    public void SetTimeText(string time)
+    {
+        this.timeText.text = time;
     }
 
     public void OnClickBuyExp()

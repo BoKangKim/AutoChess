@@ -33,7 +33,8 @@ public class MechaRangeSkill : SkillEffect
     private void OnCollisionStay(Collision collision)
     {
         damageTime += Time.deltaTime;
-        if (collision.gameObject.GetComponent<Battle.AI.ParentBT>() != null)
+        Battle.AI.ParentBT collisionAI = null;
+        if ((collisionAI = collision.gameObject.GetComponent<Battle.AI.ParentBT>()) != null)
         {
             //if (owner.getMyNickName() != collision.gameObject.GetComponent<Battle.AI.ParentBT>().getMyNickName())
             {   
@@ -46,7 +47,7 @@ public class MechaRangeSkill : SkillEffect
                 if (damageTime >= 1f)
                 {
                     Debug.Log(count);
-                    collision.gameObject.GetComponent<Battle.AI.ParentBT>().doDamage((owner.getSpellPower() / 100) * 30 + (owner.getAttackDamage() * 0.5f));
+                    collisionAI.doDamage((owner.getSpellPower() / 100) * 30 + (owner.getAttackDamage() * 0.5f));
                     damageTime = 0f;
                     ++count;
                 }

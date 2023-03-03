@@ -64,6 +64,7 @@ MonoBehaviour:
   - RPC_IsEndSetEnemy
   - RPC_SetRank
   - RPC_SyncHP
+  - RPC_SyncTimer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

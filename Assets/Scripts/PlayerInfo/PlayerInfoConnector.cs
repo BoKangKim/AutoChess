@@ -21,10 +21,10 @@ public class PlayerInfoConnector : MonoBehaviourPun
         {
             GameManager.Inst.SetPlayerInfoConnector(this);
 
-            rankPanel = GameObject.Find("RankPanel");
-            rankText = GameObject.Find("RankText").GetComponent<TextMeshProUGUI>();
+            //rankPanel = GameObject.Find("RankPanel");
+            //rankText = GameObject.Find("RankText").GetComponent<TextMeshProUGUI>();
 
-            rankPanel.SetActive(false);
+            //rankPanel.SetActive(false);
         }
     }
 
@@ -51,9 +51,20 @@ public class PlayerInfoConnector : MonoBehaviourPun
         this.rank = rank;
         if(photonView.IsMine == true)
         {
-            rankPanel.SetActive(true);
-            rankText.text = "My Rank : " + this.rank;
+            //rankPanel.SetActive(true);
+            //rankText.text = "My Rank : " + this.rank;
         }
+    }
+
+    public void SyncTimer(string time)
+    {
+        photonView.RPC("RPC_SyncTimer",RpcTarget.All,time);
+    }
+
+    [PunRPC]
+    public void RPC_SyncTimer(string time)
+    {
+        GameManager.Inst.GetUIManager().SetTimeText(time);
     }
 
     public void PlusUnitCount()

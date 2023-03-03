@@ -31,6 +31,7 @@ public class DemonRangeSkill : SkillEffect
     {
         gameObject.GetComponent<BoxCollider>().enabled = true;
     }
+
     private void OnCollisionStay(Collision collision)
     {
         Battle.AI.ParentBT skilltarget = null;

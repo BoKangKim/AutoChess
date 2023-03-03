@@ -190,7 +190,9 @@ namespace UnitClass
             this.totalSpellPower = eqSpellPower + originSpellPower * grade;
             this.totalAttackSpeed = eqAttackSpeed + originAttackSpeed * grade;
             this.totalMaxHp = eqHp + originMaxHp * grade;
+            this.totalMaxMp = 50;
             this.totalMpRecovery = eqMpRecovery + originMpRecovery;
+            this.totalAttackRange = ClassData.GetAttackRange;
         }
 
         public void SetSynergy(List<string> activeSynergyList) //나는 병신이야
