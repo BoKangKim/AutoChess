@@ -7,8 +7,7 @@ using TMPro;
 
 public class PlayerInfoConnector : MonoBehaviourPun
 {
-    [SerializeField] private GameObject rankPanel = null;
-    [SerializeField] private TextMeshProUGUI rankText = null;
+    private GameObject endingCanvas = null;
     private int playerUnitCount = 0;
     private PlayerData player = null;
     private int rank = 0;
@@ -29,11 +28,8 @@ public class PlayerInfoConnector : MonoBehaviourPun
 
             GameManager.Inst.UIManager.PlayerInfoUpdate();
             SyncNickName();
-
-            //rankPanel = GameObject.Find("RankPanel");
-            //rankText = GameObject.Find("RankText").GetComponent<TextMeshProUGUI>();
-
-            //rankPanel.SetActive(false);
+            endingCanvas = GameObject.Find("Ending");
+            endingCanvas.SetActive(false);
         }
 
     }
@@ -90,8 +86,8 @@ public class PlayerInfoConnector : MonoBehaviourPun
         this.rank = rank;
         if(photonView.IsMine == true)
         {
-            //rankPanel.SetActive(true);
-            //rankText.text = "My Rank : " + this.rank;
+            endingCanvas.SetActive(true);
+            GameManager.Inst.GetEnding().RankStart(rank);
         }
     }
 

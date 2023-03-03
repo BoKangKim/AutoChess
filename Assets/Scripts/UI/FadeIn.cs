@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-// 복창하자 나는 바보다 스택오버플로우는 신이고 OPEN AI는 천지만물을 창조하신다 근데 최적화는 내가 한다
 using Photon.Pun;
 using Photon.Realtime;
 
@@ -72,12 +71,17 @@ public class FadeIn : MonoBehaviour
     [SerializeField] private WaitForSeconds WaitForone = new WaitForSeconds(1f);
     [SerializeField] private float startY;
 
+    private void Start()
+    {
+        GameManager.Inst.SetEnding(this);
+    }
 
     public void Fadein()
     {
         Button.SetActive(false);
         StartCoroutine(Fadeinco());
     }
+
     IEnumerator Fadeinco()
     {
         float fadecount = 0;
@@ -89,6 +93,7 @@ public class FadeIn : MonoBehaviour
         }
         yield return StartCoroutine(Fadeintext());
     }
+
     IEnumerator Fadeintext()
     {
 
@@ -119,6 +124,7 @@ public class FadeIn : MonoBehaviour
         rank3.gameObject.SetActive(false);
         rank4.gameObject.SetActive(false);
     }
+
     public void rankstart2()
     {
         StartCoroutine(Minicon(2));
@@ -127,6 +133,7 @@ public class FadeIn : MonoBehaviour
         rank3.gameObject.SetActive(false);
         rank4.gameObject.SetActive(false);
     }
+
     public void rankstart3()
     {
         StartCoroutine(Minicon(3));
@@ -135,6 +142,7 @@ public class FadeIn : MonoBehaviour
         rank3.gameObject.SetActive(false);
         rank4.gameObject.SetActive(false);
     }
+
     public void rankstart4()
     {
         StartCoroutine(Minicon(4));
@@ -143,6 +151,7 @@ public class FadeIn : MonoBehaviour
         rank3.gameObject.SetActive(false);
         rank4.gameObject.SetActive(false);
     }
+
     IEnumerator Minicon(int rank)
     {
         TextMeshProUGUI text = null;
