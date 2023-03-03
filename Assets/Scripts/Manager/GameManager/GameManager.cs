@@ -49,6 +49,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     // ���� �� ���� ����
     // Manager �� Ŭ������ ����ٰ�
     public UIManager UIManager = null;
+    private FadeIn ending = null;
 
     private void Awake()
     {
@@ -181,4 +182,13 @@ public class GameManager : MonoBehaviourPunCallbacks
         this.timer = timer;
     }
 
+    public FadeIn GetEnding()
+    {
+        return ending;
+    }
+
+    public void SetEnding(FadeIn ending)
+    {
+        this.ending = ending;
+    }
 }

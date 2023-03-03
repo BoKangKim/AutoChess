@@ -189,7 +189,6 @@ namespace Battle.AI
             if(photonView.IsMine == true)
             {
                 nickName = PhotonNetwork.NickName;
-                Debug.Log(nickName + " AWAKE");
                 photonView.RPC("RPC_SetNickName", RpcTarget.Others, nickName);
             }
         }
@@ -281,7 +280,6 @@ namespace Battle.AI
                 myAni.ResetTrigger("isAttack");
             }
             
-            
             sc = FindObjectOfType<StageControl>();
             if (sc != null)
             {
@@ -317,7 +315,7 @@ namespace Battle.AI
             isInit = false;
             enemies.Clear();
             target = null;
-            mana = 0;
+            mana = 0f;
             die = false;
             nickName = PhotonNetwork.NickName;
             initializingData();
@@ -348,10 +346,9 @@ namespace Battle.AI
 
             currentHP = unitData.totalMaxHp;
             maxMana = unitData.totalMaxMp;
-            Debug.Log(maxMana);
-            manaRecovery += unitData.totalMpRecovery;
+            manaRecovery = unitData.totalMpRecovery;
             attackRange = unitData.totalAttackRange;
-            attackDamage = unitData.totalAtkDamage;
+            attackDamage = unitData.totalAtk;
             spellPower = unitData.totalSpellPower;
             //myAni.speed = unitData.totalAttackSpeed;
         }
