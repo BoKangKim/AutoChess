@@ -24,7 +24,7 @@ public class PlayerData
 
     private void Initializing()
     {
-        playerName = "name";
+        playerName = "";
         gold = 500;
         playerLevel = 1;
         MaxHP = 10;

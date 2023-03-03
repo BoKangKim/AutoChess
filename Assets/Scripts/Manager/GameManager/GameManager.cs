@@ -45,9 +45,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("SoundOption")]
     public SoundOption soundOption;
 
-
-    // ���� �� ���� ����
-    // Manager �� Ŭ������ ����ٰ�
     public UIManager UIManager = null;
 
     private void Awake()
@@ -92,7 +89,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         this.nowStage = nowStage;
 
-        if(PhotonNetwork.IsMasterClient == true
+        connecter.SyncLevel();
+
+        if (PhotonNetwork.IsMasterClient == true
             && nowStage == Battle.Stage.STAGETYPE.PREPARE)
         {
             if (players == null)
@@ -133,6 +132,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             players[i].SetRank(i + 1);
         }
+        
     }
 
     public Battle.Stage.STAGETYPE GetNowStage()
@@ -165,20 +165,35 @@ public class GameManager : MonoBehaviourPunCallbacks
         return connecter;
     }
 
-    public void SetUIManager()
+    public PlayerInfoConnector[] GetPlayers()
     {
-        UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        UIManager.transform.SetParent(this.transform);
+        if(players == null)
+        {
+            players = FindObjectsOfType<PlayerInfoConnector>();
+        }
+
+        return players;
+    }
+
+    public void SetUIManager(UIManager uiManager)
+    {
+        this.UIManager = uiManager;
     }
 
     public UIManager GetUIManager()
     {
+
         return UIManager;
     }
 
     public void SetTimer(Timer timer)
     {
         this.timer = timer;
+    }
+
+    public void GetPlayerRankInfo()
+    {
+        
     }
 
 }

@@ -2919,7 +2919,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &365119484
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6938,7 +6938,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &872983717
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12437,7 +12437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1431850077
 RectTransform:
   m_ObjectHideFlags: 0
@@ -16265,13 +16265,15 @@ MonoBehaviour:
   buyItemButton: {fileID: 374034414}
   buyUnitButton: {fileID: 922230084}
   sellButton: {fileID: 1695520372}
-  player1HpBar: {fileID: 951997985}
-  player1Lv: {fileID: 32098656}
-  player1Name: {fileID: 14879721}
   ExpSlider: {fileID: 637761679}
   playerCurExp: {fileID: 1884441449}
   limitUnitNum: {fileID: 139748489}
   timeText: {fileID: 567034891}
+  playerObject:
+  - {fileID: 1543568890}
+  - {fileID: 1431850076}
+  - {fileID: 872983716}
+  - {fileID: 365119483}
   buttlezoneUnitNum: 0
 --- !u!4 &1829490064
 Transform:

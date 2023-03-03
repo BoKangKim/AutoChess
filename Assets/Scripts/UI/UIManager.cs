@@ -72,7 +72,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject[] synergyList = null;
 
     [Header("Buy")]
-    public PlayerData player = null;
     public TextMeshProUGUI playerGold = null;
     public Button buyItemButton = null;
     public Button buyUnitButton = null;
@@ -83,9 +82,6 @@ public class UIManager : MonoBehaviour
     public Action SellButton;
 
 
-    [SerializeField] private Image player1HpBar = null;
-    [SerializeField] private TextMeshProUGUI player1Lv = null;
-    [SerializeField] private TextMeshProUGUI player1Name = null;
     [SerializeField] private Slider ExpSlider = null;
 
     [Header("Buy")]
@@ -95,22 +91,32 @@ public class UIManager : MonoBehaviour
     [Header("Time")]
     [SerializeField] private TextMeshProUGUI timeText = null;
 
-    public int buttlezoneUnitNum = 0;
+
+
+
+    [Header("Ranking")]
+    [SerializeField] GameObject[] playerObject = null;
+
+    public int battlezoneUnitNum = 0;
 
 
     private void Awake()
     {
         //expansionUserID.text = Database.Instance.userInfo.username;
+
         graphicRaycaster = GetComponent<GraphicRaycaster>();
         pointerEventData = new PointerEventData(EventSystem.current);
-        rrList = new List<RaycastResult>();
+        
     }
 
     private void Start()
     {
-        player = new PlayerData();
-        GameManager.Inst.SetUIManager();
-        PlayerInfoUpdate();
+        GameManager.Inst.SetUIManager(this);
+
+       
+        
+
+
     }
 
 
@@ -120,11 +126,23 @@ public class UIManager : MonoBehaviour
 
     //    Debug.Log(rrList);
     //    graphicRaycaster.Raycast(pointerEventData, rrList);
-        
+
 
     //    if (rrList.Count == 0) return null;
     //    return rrList[num].gameObject.GetComponent<T>();
     //}
+
+    //
+    //체력 레벨 바뀔때마다 불러줘야함
+    public void SyncPlayerUI()
+    {
+        for (int i = 0; i < playerObject.Length; i++)
+        {
+            playerObject[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameManager.Inst.GetPlayers()[i].GetPlayer().playerLevel.ToString();
+            playerObject[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameManager.Inst.GetPlayers()[i].GetPlayer().playerName.ToString();
+            playerObject[i].transform.GetChild(3).GetComponent<Image>().fillAmount = GameManager.Inst.GetPlayers()[i].GetPlayer().CurHP/100;
+        }
+    }
 
     public void unitInstButton() => UnitInstButton();
     public void itemInstButton() => ItemInstButton();
@@ -148,31 +166,35 @@ public class UIManager : MonoBehaviour
 
     public void OnClickBuyExp()
     {
-        if (player.gold < 12)
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold < 12)
         {
             Debug.Log("��尡 �����մϴ�.");
             return;
         }
-        if (player.playerLevel > 6)
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel > 6)
         {
             Debug.Log("�ִ뷹�� �Դϴ�.");
             return;
         }
-        player.gold -= 12;
-        player.CurExp += 4;
+        GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold -= 12;
+        GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp += 4;
         
-        if (player.CurExp >= player.MaxExp[player.playerLevel])
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp >= GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel])
         {
-            player.CurExp -= player.MaxExp[player.playerLevel];
-            ++player.playerLevel;
+            GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp -= GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel];
+            ++GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel;
+
+             GameManager.Inst.GetPlayerInfoConnector().SyncLevel();
 
         }
         //playerCurExp.text = player.CurExp.ToString() + "/" + player.MaxExp[player.playerLevel];
-        if (player.playerLevel < 7)
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel < 7)
         {
             PlayerInfoUpdate();
+            
+            
         }
-        else if (player.playerLevel == 7)
+        else if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel == 7)
         {
             PlayerInfoUpdate();
             playerCurExp.text = "MAX";
@@ -184,7 +206,7 @@ public class UIManager : MonoBehaviour
 
     public void OnClickDrawWeapon() // ��� ����
     {
-        if (player.gold < 3)
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold < 3)
         {
             Debug.Log("��尡 �����մϴ�.");
             return;
@@ -193,33 +215,12 @@ public class UIManager : MonoBehaviour
 
     public void OnClickDrawUnit() // ���� ����
     {
-        if (player.gold < 3)
+        if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold < 3)
         {
             Debug.Log("��尡 �����մϴ�.");
             return;
         }
     }
-
-    public void OnClickRanking1Player() // 1P����
-    {
-
-    }
-
-    public void OnClickRanking2Player()
-    {
-
-    }
-
-    public void OnClickRanking3Player()
-    {
-
-    }
-
-    public void OnClickRanking4Player()
-    {
-
-    }
-
 
     #endregion
 
@@ -245,21 +246,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void PlayerHpRanking()
-    {
-
-    }
-
     public void PlayerInfoUpdate() // �ӽ÷� �÷��̾� �Ѹ� �� ��
     {
-        player1HpBar.fillAmount = player.CurHP / 100;
-        player1Lv.text = "LV : " + player.playerLevel.ToString();
-        player1Name.text = player.playerName;
-        playerGold.text = player.gold.ToString();
-        playerCurExp.text = $"{player.CurExp} / {player.MaxExp[player.playerLevel]}";
-        limitUnitNum.text = $"{buttlezoneUnitNum} / {player.playerLevel + 2}";
-        ExpSlider.value = player.CurExp / player.MaxExp[player.playerLevel];
+
+        // hp bar
+        //GameManager.Inst.GetPlayerInfoConnector();
+        playerGold.text = GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold.ToString();
+        playerCurExp.text = $"{GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp.ToString()} / {GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel].ToString()}";
+        limitUnitNum.text = $"{battlezoneUnitNum} / {GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel + 2}";
+        ExpSlider.value = GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp / GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel];
+        
     }
+
+
 
     //스테이지 끝날때 
     //hp 마이너스

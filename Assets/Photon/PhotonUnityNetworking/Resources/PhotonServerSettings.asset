@@ -65,6 +65,8 @@ MonoBehaviour:
   - RPC_SetRank
   - RPC_SyncHP
   - RPC_SyncTimer
+  - RPC_SyncLevel
+  - SyncNickName
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
