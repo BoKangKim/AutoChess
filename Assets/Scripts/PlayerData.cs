@@ -27,7 +27,7 @@ public class PlayerData
         playerName = "name";
         gold = 500;
         playerLevel = 1;
-        MaxHP = 100;
+        MaxHP = 10;
         CurHP = MaxHP;
         MaxExp = new int[8] { 0, 2, 6, 10, 20, 36, 56, 70};
         CurExp = 0;

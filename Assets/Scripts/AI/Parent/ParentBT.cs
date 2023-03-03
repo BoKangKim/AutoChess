@@ -719,7 +719,7 @@ namespace Battle.AI
                     && myType.CompareTo("UnitAI") == 0)
                 {
                     GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 2);
-                    Debug.Log(GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP);
+                    GameManager.Inst.GetPlayerInfoConnector().SyncOwnerHP();
                 }
             }
         }

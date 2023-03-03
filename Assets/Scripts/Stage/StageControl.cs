@@ -94,14 +94,14 @@ namespace Battle.Stage
             }
             else
             {
-                nowStage = GameManager.Inst.nowStage;
+                nowStage = GameManager.Inst.GetNowStage();
                 stageIndex = GameManager.Inst.getStageIndex();                
             }
 
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                GameManager.Inst.nowStage = nowStage;
+                GameManager.Inst.SetNowStage(nowStage);
                 photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
                 if (changeStage != null)
                 {
@@ -125,12 +125,12 @@ namespace Battle.Stage
             {
                 stageIndex.col = 5;
                 nowStage = STAGETYPE.PVP;
-                GameManager.Inst.nowStage = nowStage;
+                GameManager.Inst.SetNowStage(nowStage);
             }
             else
             {
                 nowStage = stages[stageIndex.row, stageIndex.col];
-                GameManager.Inst.nowStage = nowStage;
+                GameManager.Inst.SetNowStage(nowStage);
             }
 
             if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
@@ -145,7 +145,7 @@ namespace Battle.Stage
             }
 
             GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
-            GameManager.Inst.nowStage = nowStage;
+            GameManager.Inst.SetNowStage(nowStage);
             photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
             photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
         }
@@ -169,7 +169,7 @@ namespace Battle.Stage
         [PunRPC]
         public void CacheMasterStage(STAGETYPE stage)
         {
-            GameManager.Inst.nowStage = stage;
+            GameManager.Inst.SetNowStage(stage);
         }
 
         public void startNextStage()
