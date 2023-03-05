@@ -67,6 +67,7 @@ MonoBehaviour:
   - RPC_SyncTimer
   - RPC_SyncLevel
   - SyncNickName
+  - RPC_SyncPlayerUI
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

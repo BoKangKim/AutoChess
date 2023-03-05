@@ -54,8 +54,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI expansionGold; // Ȯ�� �� ����ϴ� ���
     [SerializeField] private TextMeshProUGUI expensionLV;
     [SerializeField] private Slider expansionEXPSlider;
-
-    
     */
 
     GraphicRaycaster graphicRaycaster = null;
@@ -81,7 +79,6 @@ public class UIManager : MonoBehaviour
     public Action ItemInstButton;
     public Action SellButton;
 
-
     [SerializeField] private Slider ExpSlider = null;
 
     [Header("Buy")]
@@ -91,18 +88,25 @@ public class UIManager : MonoBehaviour
     [Header("Time")]
     [SerializeField] private TextMeshProUGUI timeText = null;
 
-
-
-
     [Header("Ranking")]
     [SerializeField] GameObject[] playerObject = null;
 
-    public int battlezoneUnitNum = 0;
+    private Vector3[] rankVec = null;
 
+    [Header("Round")]
+    [SerializeField] private TextMeshProUGUI roundText = null;
+
+    [Header("BattleZonUnit")]
+    public int battlezoneUnitNum = 0;
 
     private void Awake()
     {
         //expansionUserID.text = Database.Instance.userInfo.username;
+
+        rankVec = new Vector3[] { new Vector3(132.5f, -148f, 0) ,
+                                   new Vector3(132.5f, -47f, 0),
+                                   new Vector3(132.5f, 55f, 0),
+                                   new Vector3(132.5f, 155f, 0) };
 
         graphicRaycaster = GetComponent<GraphicRaycaster>();
         pointerEventData = new PointerEventData(EventSystem.current);
@@ -112,13 +116,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GameManager.Inst.SetUIManager(this);
-
-       
-        
-
-
     }
-
 
     //public T RaycastUI<T>(int num) where T : Component
     //{
@@ -136,12 +134,48 @@ public class UIManager : MonoBehaviour
     //체력 레벨 바뀔때마다 불러줘야함
     public void SyncPlayerUI()
     {
-        for (int i = 0; i < playerObject.Length; i++)
+        for (int i = 0; i < GameManager.Inst.GetPlayers().Length; i++)
         {
             playerObject[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = GameManager.Inst.GetPlayers()[i].GetPlayer().playerLevel.ToString();
             playerObject[i].transform.GetChild(2).GetComponent<TextMeshProUGUI>().text = GameManager.Inst.GetPlayers()[i].GetPlayer().playerName.ToString();
-            playerObject[i].transform.GetChild(3).GetComponent<Image>().fillAmount = GameManager.Inst.GetPlayers()[i].GetPlayer().CurHP/100;
+            playerObject[i].transform.GetChild(3).GetComponent<Image>().fillAmount = GameManager.Inst.GetPlayers()[i].GetPlayer().CurHP/100f;
         }
+
+        GameObject temp = playerObject[0];
+
+        for(int i = 0; i < playerObject.Length; i++)
+        {
+            for(int j = 0; j < playerObject.Length - 1; j++)
+            {
+                if (playerObject[j].transform.GetChild(3).GetComponent<Image>().fillAmount
+                    < playerObject[j + 1].transform.GetChild(3).GetComponent<Image>().fillAmount)
+                {
+                    temp = playerObject[j];
+                    playerObject[j] = playerObject[j + 1];
+                    playerObject[j + 1] = temp;
+                }
+            }
+        }
+
+        RectTransform rect = null;
+
+        for(int i = 0; i < playerObject.Length; i++)
+        {
+            if (playerObject[i].TryGetComponent<RectTransform>(out rect) == true)
+            {
+                rect.anchoredPosition = rankVec[i];
+            }
+            else
+            {
+                Debug.Log("Not Found RectTransform");
+            }
+
+        }
+    }
+
+    public void SyncRound(string info)
+    {
+        this.roundText.text = info;
     }
 
     public void unitInstButton() => UnitInstButton();
@@ -248,14 +282,12 @@ public class UIManager : MonoBehaviour
 
     public void PlayerInfoUpdate() // �ӽ÷� �÷��̾� �Ѹ� �� ��
     {
-
         // hp bar
         //GameManager.Inst.GetPlayerInfoConnector();
         playerGold.text = GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold.ToString();
         playerCurExp.text = $"{GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp.ToString()} / {GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel].ToString()}";
         limitUnitNum.text = $"{battlezoneUnitNum} / {GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel + 2}";
         ExpSlider.value = GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurExp / GameManager.Inst.GetPlayerInfoConnector().GetPlayer().MaxExp[GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel];
-        
     }
 
 
@@ -263,8 +295,4 @@ public class UIManager : MonoBehaviour
     //스테이지 끝날때 
     //hp 마이너스
     //gold 획득
-
-
-
-
 }
