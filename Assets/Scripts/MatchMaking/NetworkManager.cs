@@ -142,7 +142,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public override void OnJoinedRoom()
     {
         //UpdatePlayerCount();
-        //PhotonNetwork.LoadLevel(gameScene);
+        PhotonNetwork.LoadLevel(gameScene);
 
 
         for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)

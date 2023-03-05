@@ -21,6 +21,7 @@ public class OrcMagicianSkill : SkillEffect
 
     protected override void specialLogic()
     {
+
     }
 
 

@@ -5,7 +5,7 @@ using Battle.AI;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class OnClickStartButton : MonoBehaviour
+public class OnClickStartButton : MonoBehaviourPun
 {
     private ParentBT[] units = null;
 
@@ -22,5 +22,9 @@ public class OnClickStartButton : MonoBehaviour
     {
         Battle.Stage.StageControl stage = FindObjectOfType<Battle.Stage.StageControl>();
 
+    }
+    public void OnClickMosterInst()
+    {
+        PhotonNetwork.Instantiate("skeleton_king",new Vector3(10,0,10), Quaternion.identity);
     }
 }

@@ -112,11 +112,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GameManager.Inst.SetUIManager(this);
-
-       
-        
-
-
+        GameManager.Inst.soundOption.bgmPlay("IngameBgm1");
     }
 
 

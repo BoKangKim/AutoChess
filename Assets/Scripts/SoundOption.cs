@@ -19,29 +19,6 @@ public class SoundOption : MonoBehaviour
 
     public List<MyDictionaryEntry> myDictEntries;
 
-    // bgm
-    // LobbyBgm, IngameBgm, BossBgm, MatchingBgm
-
-    // ȿ����
-    // ���� ���� �� ���߼Ҹ� IngameStartSFX
-    //SFXPlay("IngameStartSFX");
-    // ��Ī ������ ����  MatchingSFX
-    //SFXPlay("MatchingSFX");
-    // ���� ȿ���� MergeSFX
-    //SFXPlay("MergeSFX");
-    // �ó��� Ȱ��ȭ ���� SynergySFX
-    //SFXPlay("SynergySFX");
-    // ���� ��ġ���� DropSFX
-    //SFXPlay("DropSFX");
-    // ���� ��ȯ ���� BuySFX
-    //SFXPlay("BuySFX");
-    // ���� �Ǹ� ���� SellSFX
-    //SFXPlay("SellSFX");
-    // ���� �Ⱦ� ���� SelectSFX
-    //SFXPlay("SelectSFX");
-    // �˾����� ClickSFX
-    //SFXPlay("ClickSFX");
-
 
     public Dictionary<string, AudioClip> ClipDictionary;
 
@@ -72,6 +49,7 @@ public class SoundOption : MonoBehaviour
     {
         audioMixer.SetFloat("SFX", Mathf.Log10(soundSlider[2].value) * 20f);
     }
+
     public void bgmPlay(string bgmName)
     {
         this.gameObject.AddComponent<AudioSource>();
@@ -89,7 +67,7 @@ public class SoundOption : MonoBehaviour
         }
         else
         {
-            Debug.Log("�ش��ϴ� ���尡 �����ϴ�.");
+            Debug.Log("Not Sound");
         }
         audiosource.loop = true;
 

@@ -29,8 +29,16 @@ public class OrcWarriorSkill : SkillEffect
     {
         
     }
+
     private void OnEnable()
     {
+        StartCoroutine("CO_EnterOwner");
+    }
+
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         owner.getAnimator().speed += 0.07f;
     }
+
 }

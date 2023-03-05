@@ -217,7 +217,7 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 PhotonNetwork.Destroy(selectedObject);
-                GameManager.Inst.soundOption.bgmPlay("SellSFX");
+                GameManager.Inst.soundOption.SFXPlay("SellSFX");
 
                 //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
@@ -237,10 +237,10 @@ namespace ZoneSystem
                 posCheckButton = null;
 
                 PhotonNetwork.Destroy(selectedObject);
-                GameManager.Inst.soundOption.bgmPlay("SellSFX");
+                GameManager.Inst.soundOption.SFXPlay("SellSFX");
 
                 //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
-                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
+        GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
 
                 selectedObject = null;

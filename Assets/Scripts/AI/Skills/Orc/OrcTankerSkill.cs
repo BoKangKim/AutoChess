@@ -26,8 +26,12 @@ public class OrcTankerSkill : SkillEffect
 
     private void OnEnable()
     {
+        StartCoroutine("CO_EnterOwner");
+    }
 
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         owner.setShield((owner.getUnitData().GetTotalMaxHp / 100) * 30);
-
     }
 }

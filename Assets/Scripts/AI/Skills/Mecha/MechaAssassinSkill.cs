@@ -33,8 +33,16 @@ public class MechaAssassinSkill : SkillEffect
     }
     private void OnEnable()
     {
+        StartCoroutine("CO_EnterOwner");
+    }
+
+
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         owner.getSkillTarget().doDamage(owner.getAttackDamage() * 6f);
     }
+
 
     private void OnDestroy()
     {

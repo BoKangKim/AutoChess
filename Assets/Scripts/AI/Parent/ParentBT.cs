@@ -227,6 +227,7 @@ namespace Battle.AI
 
         private void Update()
         {
+            Debug.Log($"MAXHP : {maxHP} CURHP : {currentHP} name {this.name}");
             if (photonView.IsMine == false)
             {
                 return;
@@ -346,6 +347,7 @@ namespace Battle.AI
 
             currentHP = unitData.totalMaxHp;
             maxMana = unitData.totalMaxMp;
+            maxMana = 1;
             manaRecovery = unitData.totalMpRecovery;
             attackRange = unitData.totalAttackRange;
             attackDamage = unitData.totalAtk;

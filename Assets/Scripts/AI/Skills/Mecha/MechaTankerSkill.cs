@@ -8,8 +8,16 @@ public class MechaTankerSkill : SkillEffect
 
     private void OnEnable()
     {
+        StartCoroutine("CO_EnterOwner");
+    }
+
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         owner.setRecoveryCurrentHP((owner.getUnitData().GetTotalMaxHp / 100) * 20);
     }
+
+
     protected override float setDestroyTime()
     {
         return 5f;
@@ -27,6 +35,6 @@ public class MechaTankerSkill : SkillEffect
 
     protected override void specialLogic()
     {
-        
+
     }
 }

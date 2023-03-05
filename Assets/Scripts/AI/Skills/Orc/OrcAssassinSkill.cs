@@ -19,9 +19,16 @@ public class OrcAssassinSkill : SkillEffect
     {
         
     }
+
+
     private void OnEnable()
     {
-        Debug.Log("µûÄá!");
+        StartCoroutine("CO_EnterOwner");
+    }
+
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         owner.getTarget().doDamage(owner.getAttackDamage() * 6f);
     }
 }

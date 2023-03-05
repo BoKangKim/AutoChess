@@ -25,10 +25,25 @@ public class DemonMagicianSkill : SkillEffect
 
     private void OnEnable()
     {
+        StartCoroutine("CO_EnterOwner");
+    }
+
+
+    IEnumerable CO_EnterOwner()
+    {
+        yield return new WaitUntil(() => owner != null);
         for (int i = 0; i < owner.getFindMyUnits().Count; i++)
         {
             owner.getFindMyUnits()[i].setAttackDamage(5f);
             owner.getFindMyUnits()[i].setSpellPower(5f);
         }
     }
+
+
 }
+
+
+
+
+
+
