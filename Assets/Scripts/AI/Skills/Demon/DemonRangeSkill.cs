@@ -30,6 +30,8 @@ public class DemonRangeSkill : SkillEffect
     private void OnEnable()
     {
         gameObject.GetComponent<BoxCollider>().enabled = true;
+        GameManager.Inst.soundOption.SFXPlay("Demon_RangeDealer_Skill");
+
     }
 
     private void OnCollisionStay(Collision collision)

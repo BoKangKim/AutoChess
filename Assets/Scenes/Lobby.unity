@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -39142,103 +39142,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064857711}
   m_CullTransparentMesh: 1
---- !u!1 &1066856416
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1066856418}
-  - component: {fileID: 1066856417}
-  m_Layer: 0
-  m_Name: SoundMgr
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1066856417
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1066856416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcbd43e29171eff418d4a1d348c5f0fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audioMixer: {fileID: 0}
-  soundSlider: []
-  myDictEntries:
-  - key: LobbyBgm
-    value: {fileID: 8300000, guid: f47c4aada1b011a4ebe0cc7460c1a043, type: 3}
-  - key: IngameBgm1
-    value: {fileID: 8300000, guid: 639851ce4cc21d54b9bc342718bb0841, type: 3}
-  - key: IngameBgm2
-    value: {fileID: 8300000, guid: 12a70d5eea8eddf48a309f3eaa80a423, type: 3}
-  - key: IngameBgm3
-    value: {fileID: 8300000, guid: 1d2ee14e18436384db038e6da99ad413, type: 3}
-  - key: BossBgm
-    value: {fileID: 8300000, guid: dfa571da639eeed4a9238363a62ab370, type: 3}
-  - key: MatchingBgm
-    value: {fileID: 8300000, guid: 7baad967b03b42747bdd7db0c4ab544f, type: 3}
-  - key: IngameStartSFX
-    value: {fileID: 8300000, guid: 5c41cc0cb910cc74694e43dd930672e0, type: 3}
-  - key: MatchingSFX
-    value: {fileID: 8300000, guid: 89296486aa6f8314398a2ec1bc7b73fb, type: 3}
-  - key: MergeSFX
-    value: {fileID: 8300000, guid: ada51ac017e16164a9f5379dc89f3df2, type: 3}
-  - key: SynergySFX
-    value: {fileID: 8300000, guid: 69f7d1cdd46e6bd4c9450949f7f51c4d, type: 3}
-  - key: DropSFX
-    value: {fileID: 8300000, guid: 090b8b0725a76cc41b790ff6d22f7a8b, type: 3}
-  - key: BuySFX
-    value: {fileID: 8300000, guid: 0b1b1eb0dd4f0d2439132ff1722c2dd3, type: 3}
-  - key: SellSFX
-    value: {fileID: 8300000, guid: 60629e4bd4511984588e31c30cca6db0, type: 3}
-  - key: SelectSFX
-    value: {fileID: 8300000, guid: b94f8c11b69643c4894a21027ece276e, type: 3}
-  - key: ClickSFX
-    value: {fileID: 8300000, guid: a28d58294a724c747950368bc80711c2, type: 3}
-  - key: Demon_Assassin_Flat
-    value: {fileID: 8300000, guid: 393a073b047066143ab73a6b4668a422, type: 3}
-  - key: Demon_Magician_Flat
-    value: {fileID: 8300000, guid: 94ab52de41f68224e90ccb763b14a1c6, type: 3}
-  - key: Demon_Magician_Skill
-    value: {fileID: 8300000, guid: ef3143526902ec045b13ee3ecabaf6f7, type: 3}
-  - key: Demon_RangeDealer_Flat
-    value: {fileID: 8300000, guid: 0b168893bf9567549af81ba2d1da5d3e, type: 3}
-  - key: Demon_RangeDealer_Skill
-    value: {fileID: 8300000, guid: 2fed17ef719fe9148850772191bd0a65, type: 3}
-  - key: Demon_Tanker_Flat
-    value: {fileID: 8300000, guid: b2a5531894b6fe94da4df169fb881af2, type: 3}
-  - key: Demon_Tanker_Skill
-    value: {fileID: 8300000, guid: fb51bcf06f3f4ef4bbfbadc0da260130, type: 3}
-  - key: Demon_Warrior_Flat
-    value: {fileID: 8300000, guid: 2fc137a868f34e44aa4b83b54d2a1dda, type: 3}
-  - key: Demon_Warrior_Skill
-    value: {fileID: 8300000, guid: b7df7dd1536192442972784983ee8476, type: 3}
-  - key: Dwarf_Assassin_Flat
-    value: {fileID: 8300000, guid: 7e03230906393524cb30e31d5470a12a, type: 3}
---- !u!4 &1066856418
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1066856416}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.1108398, y: 32.652405, z: -8.49578}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1722078943}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1068498390
 GameObject:
   m_ObjectHideFlags: 0
@@ -62458,7 +62361,7 @@ MonoBehaviour:
   networkManager: {fileID: 1102851298}
   dataBase: {fileID: 82060030}
   metaTrendAPI: {fileID: 163444999}
-  soundOption: {fileID: 1066856417}
+  soundOption: {fileID: 0}
   UIManager: {fileID: 0}
 --- !u!4 &1722078943
 Transform:
@@ -62475,7 +62378,7 @@ Transform:
   - {fileID: 1102851299}
   - {fileID: 82060031}
   - {fileID: 163445000}
-  - {fileID: 1066856418}
+  - {fileID: 8397423726628461094}
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -78483,3 +78386,180 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8015206027912177442}
   m_CullTransparentMesh: 1
+--- !u!1 &8397423726628461092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8397423726628461094}
+  - component: {fileID: 8397423726628461093}
+  m_Layer: 0
+  m_Name: SoundMgr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &8397423726628461093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397423726628461092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcbd43e29171eff418d4a1d348c5f0fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioMixer: {fileID: 0}
+  soundSlider: []
+  myDictEntries:
+  - key: LobbyBgm
+    value: {fileID: 8300000, guid: f47c4aada1b011a4ebe0cc7460c1a043, type: 3}
+  - key: IngameBgm1
+    value: {fileID: 8300000, guid: 639851ce4cc21d54b9bc342718bb0841, type: 3}
+  - key: IngameBgm2
+    value: {fileID: 8300000, guid: 12a70d5eea8eddf48a309f3eaa80a423, type: 3}
+  - key: IngameBgm3
+    value: {fileID: 8300000, guid: 1d2ee14e18436384db038e6da99ad413, type: 3}
+  - key: BossBgm
+    value: {fileID: 8300000, guid: dfa571da639eeed4a9238363a62ab370, type: 3}
+  - key: MatchingBgm
+    value: {fileID: 8300000, guid: 7baad967b03b42747bdd7db0c4ab544f, type: 3}
+  - key: IngameStartSFX
+    value: {fileID: 8300000, guid: 5c41cc0cb910cc74694e43dd930672e0, type: 3}
+  - key: MatchingSFX
+    value: {fileID: 8300000, guid: 89296486aa6f8314398a2ec1bc7b73fb, type: 3}
+  - key: MergeSFX
+    value: {fileID: 8300000, guid: ada51ac017e16164a9f5379dc89f3df2, type: 3}
+  - key: SynergySFX
+    value: {fileID: 8300000, guid: 69f7d1cdd46e6bd4c9450949f7f51c4d, type: 3}
+  - key: DropSFX
+    value: {fileID: 8300000, guid: 090b8b0725a76cc41b790ff6d22f7a8b, type: 3}
+  - key: BuySFX
+    value: {fileID: 8300000, guid: 0b1b1eb0dd4f0d2439132ff1722c2dd3, type: 3}
+  - key: SellSFX
+    value: {fileID: 8300000, guid: 60629e4bd4511984588e31c30cca6db0, type: 3}
+  - key: SelectSFX
+    value: {fileID: 8300000, guid: b94f8c11b69643c4894a21027ece276e, type: 3}
+  - key: ClickSFX
+    value: {fileID: 8300000, guid: a28d58294a724c747950368bc80711c2, type: 3}
+  - key: Demon_Assassin_Flat
+    value: {fileID: 8300000, guid: 393a073b047066143ab73a6b4668a422, type: 3}
+  - key: Demon_Assassin_Skill
+    value: {fileID: 8300000, guid: 3b45d486dab89d6408f5ab5eb235a101, type: 3}
+  - key: Demon_Magician_Flat
+    value: {fileID: 8300000, guid: 94ab52de41f68224e90ccb763b14a1c6, type: 3}
+  - key: Demon_Magician_Skill
+    value: {fileID: 8300000, guid: ef3143526902ec045b13ee3ecabaf6f7, type: 3}
+  - key: Demon_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 0b168893bf9567549af81ba2d1da5d3e, type: 3}
+  - key: Demon_RangeDealer_Skill
+    value: {fileID: 8300000, guid: 2fed17ef719fe9148850772191bd0a65, type: 3}
+  - key: Demon_Tanker_Flat
+    value: {fileID: 8300000, guid: b2a5531894b6fe94da4df169fb881af2, type: 3}
+  - key: Demon_Tanker_Skill
+    value: {fileID: 8300000, guid: fb51bcf06f3f4ef4bbfbadc0da260130, type: 3}
+  - key: Demon_Warrior_Flat
+    value: {fileID: 8300000, guid: 2fc137a868f34e44aa4b83b54d2a1dda, type: 3}
+  - key: Demon_Warrior_Skill
+    value: {fileID: 8300000, guid: b7df7dd1536192442972784983ee8476, type: 3}
+  - key: Dwarf_Assassin_Flat
+    value: {fileID: 8300000, guid: 7e03230906393524cb30e31d5470a12a, type: 3}
+  - key: Dwarf_Assassin_Skill
+    value: {fileID: 8300000, guid: d77f9debfe2d2f74d8f6fa991c99f070, type: 3}
+  - key: Dwarf_Magician_Flat
+    value: {fileID: 8300000, guid: 1b9d72f2934a51f4483b8b776ecc3476, type: 3}
+  - key: Dwarf_Magician_Skill
+    value: {fileID: 8300000, guid: 09ca5359129888d47bb5c639150f11a1, type: 3}
+  - key: Dwarf_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 9bdca82dc26262244b90c6f9d3ed60cd, type: 3}
+  - key: Dwarf_RangeDealer_Skill
+    value: {fileID: 8300000, guid: c28612bf336b89e45b9e04f27566a7b7, type: 3}
+  - key: Dwarf_Tanker_Flat
+    value: {fileID: 8300000, guid: f745863a93f348745a9fb166b452910b, type: 3}
+  - key: Dwarf_Tanker_Skill
+    value: {fileID: 8300000, guid: 50511632a55da4d49b0673ebe4dde574, type: 3}
+  - key: Dwarf_Warrior_Flat
+    value: {fileID: 8300000, guid: c9253ae48cf6f78418ce4b73a8952380, type: 3}
+  - key: Dwarf_Warrior_Skill
+    value: {fileID: 8300000, guid: 75a49ae3f0e68654684342b0118f5a9e, type: 3}
+  - key: Golem_Assassin_Flat
+    value: {fileID: 8300000, guid: 1b6d16f2bac609c409f173a3f37121b1, type: 3}
+  - key: Golem_Assassin_Skill
+    value: {fileID: 8300000, guid: 6e6ec425231844046907caae379c1993, type: 3}
+  - key: Golem_Magician_Flat
+    value: {fileID: 8300000, guid: 36830500162b2ef419829099992814e1, type: 3}
+  - key: Golem_Magician_Skill
+    value: {fileID: 8300000, guid: c3fbfc4f242f1be4f90bfd6479d9ed28, type: 3}
+  - key: Golem_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 7220dde482b1c9747bcda53f2ab9704e, type: 3}
+  - key: Golem_RangeDealer_Skill
+    value: {fileID: 8300000, guid: 5ca102aa2ececb74da00ee17e362aa59, type: 3}
+  - key: Golem_Tanker_Flat
+    value: {fileID: 8300000, guid: 652619ff421b2b245873ac50c1860425, type: 3}
+  - key: Golem_Tanker_Skill
+    value: {fileID: 8300000, guid: f49152ca4ab3b9e4298ef50ccbefc684, type: 3}
+  - key: Golem_Warrior_Flat
+    value: {fileID: 8300000, guid: 87f08112e98b0a745b3f0ca4bd56170c, type: 3}
+  - key: Golem_Warrior_Skill
+    value: {fileID: 8300000, guid: 33793c1cd029cb547a82b62c5266ba61, type: 3}
+  - key: Mecha_Assassin_Flat
+    value: {fileID: 8300000, guid: 14e146f7f3ac71045bcc0a94597f58b2, type: 3}
+  - key: Mecha_Assassin_Skill
+    value: {fileID: 8300000, guid: f9c2265bdd69641429b63a87f7f59e12, type: 3}
+  - key: Mecha_Magician_Flat
+    value: {fileID: 8300000, guid: 31866ac36d754eb4ea4ca4c2daae89c1, type: 3}
+  - key: Mecha_Magician_Skill
+    value: {fileID: 8300000, guid: 634464fbfbe994644b6ee08d959226df, type: 3}
+  - key: Mecha_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 590bfa90931d95d498247f5e7421e05e, type: 3}
+  - key: Mecha_RangeDealer_Skill
+    value: {fileID: 8300000, guid: 216bf79aac48ca949bbc8c4651a2389a, type: 3}
+  - key: Mecha_Tanker_Flat
+    value: {fileID: 8300000, guid: a4ac1ab130b9caf46b378c41faba5200, type: 3}
+  - key: Mecha_Tanker_Skill
+    value: {fileID: 8300000, guid: 798200c0b16d5a4408bc5b96df59ac0a, type: 3}
+  - key: Mecha_Warrior_Flat
+    value: {fileID: 8300000, guid: c6c9f7583dc40ce44b507485ec311ba4, type: 3}
+  - key: Mecha_Warrior_Skill
+    value: {fileID: 8300000, guid: c05ad63e1a45905409fdc6af3c903c4c, type: 3}
+  - key: Orc_Assassin_Flat
+    value: {fileID: 8300000, guid: b7783ca1e345e394f8a8019e10f1db4d, type: 3}
+  - key: Orc_Assassin_Skill
+    value: {fileID: 8300000, guid: 1879c05a9b7be77449fc75c6d18ba5a5, type: 3}
+  - key: Orc_Magician_Flat
+    value: {fileID: 8300000, guid: 3d999f7bb6ddbc04db5035512ddf6494, type: 3}
+  - key: Orc_Magician_Skill
+    value: {fileID: 8300000, guid: f75cafab2a9f2814ebebb5481f933c50, type: 3}
+  - key: Orc_RangeDealer_Flat
+    value: {fileID: 8300000, guid: 81e410343983018458cfeebaae937706, type: 3}
+  - key: Orc_RangeDealer_Skill
+    value: {fileID: 8300000, guid: dd8cca19e333ee44f906e133d3d37e7a, type: 3}
+  - key: Orc_Tanker_Flat
+    value: {fileID: 8300000, guid: b8fcae58229416a458d597dc991bb65d, type: 3}
+  - key: Orc_Tanker_Skill
+    value: {fileID: 8300000, guid: fc2cde27f9305f34ea5992ee8d56d459, type: 3}
+  - key: Orc_Warrior_Flat
+    value: {fileID: 8300000, guid: 23a7219391f059f41ae39866f2aa1c51, type: 3}
+  - key: Orc_Warrior_Skill
+    value: {fileID: 8300000, guid: 046fde4dbc49b9145aaafe4aa378126a, type: 3}
+--- !u!4 &8397423726628461094
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8397423726628461092}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.1108398, y: 32.652405, z: -8.49578}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1722078943}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

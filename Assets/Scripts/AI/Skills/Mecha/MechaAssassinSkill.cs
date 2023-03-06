@@ -34,6 +34,7 @@ public class MechaAssassinSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Assassin_Skill");
     }
 
 

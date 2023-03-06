@@ -18,6 +18,11 @@ public class DemonWarriorSkill : SkillEffect
     {
         return true;
     }
+    private void OnEnable()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_Warrior_Skill");
+    }
+
     protected override void OnCollisionEnter(Collision collision)
     {
         DemonTankerAI skilltarget = null;

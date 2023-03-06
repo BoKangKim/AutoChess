@@ -30,6 +30,7 @@ public class MechaMagicianSkill : SkillEffect
     {
         count = 0;
         gameObject.GetComponent<BoxCollider>().enabled = true;
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Magician_Skill");
     }
 
     private void OnCollisionStay(Collision collision)

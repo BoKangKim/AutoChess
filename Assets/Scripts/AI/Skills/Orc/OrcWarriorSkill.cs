@@ -33,6 +33,7 @@ public class OrcWarriorSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Orc_Warrior_Skill");
     }
 
     IEnumerable CO_EnterOwner()

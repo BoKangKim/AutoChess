@@ -24,6 +24,7 @@ public class OrcAssassinSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Orc_Assassin_Skill");
     }
 
     IEnumerable CO_EnterOwner()

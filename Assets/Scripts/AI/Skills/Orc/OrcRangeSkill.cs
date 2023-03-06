@@ -11,9 +11,6 @@ public class OrcRangeSkill : SkillEffect
     private float initAttackSpeed = 0f;
     private float initAttackRange = 0f;
 
-    private void Start()
-    {
-    }
 
     protected override float setSpeed()
     {
@@ -34,6 +31,11 @@ public class OrcRangeSkill : SkillEffect
     {
         this.initAttackSpeed = attackSpeed;
         this.initAttackRange = attackArrange;
+    }
+
+    private void OnEnable()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_RangeDealer_Skill");
     }
 
     protected override void specialLogic()

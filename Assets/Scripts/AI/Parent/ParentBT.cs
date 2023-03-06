@@ -346,6 +346,10 @@ namespace Battle.AI
             }
 
             currentHP = unitData.totalMaxHp;
+
+            maxHP = 100;
+            currentHP = 100;
+
             maxMana = unitData.totalMaxMp;
             maxMana = 1;
             manaRecovery = unitData.totalMpRecovery;

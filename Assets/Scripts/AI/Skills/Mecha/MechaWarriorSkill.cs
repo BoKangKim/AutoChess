@@ -25,6 +25,7 @@ public class MechaWarriorSkill : SkillEffect
     private void OnEnable()
     {
         gameObject.GetComponent<BoxCollider>().enabled = true;
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Warrior_Skill");
 
     }
     protected override void OnCollisionEnter(Collision collision)

@@ -26,6 +26,7 @@ public class DemonMagicianSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Demon_Magician_Skill");
     }
 
 

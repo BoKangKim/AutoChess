@@ -22,6 +22,8 @@ public class DemonAssassinSkill : SkillEffect
     {
         
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Demon_Assassin_Skill");
+
     }
 
     IEnumerable CO_EnterOwner()

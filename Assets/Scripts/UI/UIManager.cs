@@ -256,9 +256,6 @@ public class UIManager : MonoBehaviour
 
 
 
-    //스테이지 끝날때 
-    //hp 마이너스
-    //gold 획득
 
 
 

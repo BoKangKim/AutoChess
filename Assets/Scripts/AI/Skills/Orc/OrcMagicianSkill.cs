@@ -18,7 +18,10 @@ public class OrcMagicianSkill : SkillEffect
     {
         return false;
     }
-
+    private void OnEnable()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Orc_Magician_Skill");
+    }
     protected override void specialLogic()
     {
 

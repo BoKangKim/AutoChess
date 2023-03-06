@@ -27,6 +27,7 @@ public class OrcTankerSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Orc_Tanker_Skill");
     }
 
     IEnumerable CO_EnterOwner()

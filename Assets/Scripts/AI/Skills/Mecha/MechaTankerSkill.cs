@@ -9,6 +9,7 @@ public class MechaTankerSkill : SkillEffect
     private void OnEnable()
     {
         StartCoroutine("CO_EnterOwner");
+        GameManager.Inst.soundOption.SFXPlay("Mecha_Tanker_Skill");
     }
 
     IEnumerable CO_EnterOwner()

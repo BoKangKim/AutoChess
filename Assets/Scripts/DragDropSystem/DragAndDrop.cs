@@ -286,6 +286,7 @@ namespace ZoneSystem
         #region DropPos
         private void DropPosition(int Layer)
         {
+            
             Vector3 worldPosition = CastRay(Layer).collider.transform.localPosition;
             var safetyPos = safetyPosToIndex(worldPosition);
             var battlePos = battlePosToIndex(worldPosition);

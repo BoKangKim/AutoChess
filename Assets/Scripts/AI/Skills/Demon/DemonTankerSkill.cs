@@ -18,7 +18,11 @@ public class DemonTankerSkill : SkillEffect
     {
         return true;
     }
+    private void OnEnable()
+    {
+        GameManager.Inst.soundOption.SFXPlay("Demon_Tanker_Skill");
 
+    }
     protected override void OnCollisionEnter(Collision collision)
     {
         Battle.AI.ParentBT skilltarget = null;
