@@ -264,9 +264,16 @@ namespace ZoneSystem
             //    }
             //}
 
+            photonView.RPC("RPC_SyncPlayerUI",RpcTarget.All);
             PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
 
             yield break;
+        }
+
+        [PunRPC]
+        public void RPC_SyncPlayerUI()
+        {
+            GameManager.Inst.UIManager.SyncPlayerUI();
         }
 
         //[PunRPC]

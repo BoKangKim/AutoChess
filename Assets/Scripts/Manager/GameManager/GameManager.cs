@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
     #endregion
-    private (int row, int col) stageIndex = (0, -1);
+    private int stageIndex = -1;
     private Pool pool = null;
     private Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
@@ -47,6 +47,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public UIManager UIManager = null;
     private FadeIn ending = null;
+
+    private int roundCount = 1;
 
     private void Awake()
     {
@@ -75,13 +77,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region SyncMasterInfo
-    public void SyncStageIndex(int row , int col)
+    public void SyncStageIndex(int stageIndex)
     {
-        stageIndex.row = row;
-        stageIndex.col = col;
+        this.stageIndex = stageIndex;
     }
 
-    public (int row,int col) getStageIndex()
+    public void SyncStageInfoUI()
+    {
+        roundCount++;
+
+        UIManager.SyncRound(roundCount.ToString());
+    }
+
+    public int getStageIndex()
     {
         return stageIndex;
     }
@@ -168,7 +176,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public PlayerInfoConnector[] GetPlayers()
     {
-        if(players == null)
+        if(players == null ||
+            PhotonNetwork.CurrentRoom.PlayerCount != players.Length)
         {
             players = FindObjectsOfType<PlayerInfoConnector>();
         }

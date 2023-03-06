@@ -15,44 +15,40 @@ public class PlayerInfoConnector : MonoBehaviourPun
     private void Awake()
     {
         player = new PlayerData();
-
- 
-
+        player.playerName = PhotonNetwork.NickName;
     }
+
     private void Start()
     {
-        player.playerName = PhotonNetwork.NickName;
         if (photonView.IsMine == true)
         {
             GameManager.Inst.SetPlayerInfoConnector(this);
-
             GameManager.Inst.UIManager.PlayerInfoUpdate();
             SyncNickName();
             endingCanvas = GameObject.Find("Ending");
             endingCanvas.SetActive(false);
+            GameManager.Inst.UIManager.SyncPlayerUI();
         }
 
     }
 
     #region Player Info
+
     public void SyncOwnerHP()
     {
-        photonView.RPC("RPC_SyncHP",RpcTarget.Others,player.CurHP);
-        GameManager.Inst.UIManager.SyncPlayerUI();
-
+        photonView.RPC("RPC_SyncHP",RpcTarget.All,player.CurHP);
     }
 
     [PunRPC]
-    public void RPC_SyncHP(int hp)
+    public void RPC_SyncHP(float hp)
     {
         this.player.CurHP = hp;
+        GameManager.Inst.UIManager.SyncPlayerUI();
     }
 
     public void SyncLevel()
     {
         photonView.RPC("RPC_SyncLevel", RpcTarget.Others, player.playerLevel);
-        GameManager.Inst.UIManager.SyncPlayerUI();
-
     }
 
     [PunRPC]
@@ -65,7 +61,6 @@ public class PlayerInfoConnector : MonoBehaviourPun
     {
         photonView.RPC("SyncNickName", RpcTarget.Others, player.playerName);
         GameManager.Inst.UIManager.SyncPlayerUI();
-
     }
 
     [PunRPC]

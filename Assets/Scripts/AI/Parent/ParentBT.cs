@@ -184,8 +184,8 @@ namespace Battle.AI
             InitializingRootNode();
             specialRoot = initializingSpecialRootNode();
             rta = new RTAstar(myLocation,gameObject.name);
-            myType = initializingMytype();
             initializingData();
+            myType = initializingMytype();
             if(photonView.IsMine == true)
             {
                 nickName = PhotonNetwork.NickName;
@@ -206,24 +206,35 @@ namespace Battle.AI
 
             initializingAfterBattle();
 
-            if(photonView.IsMine == true
-                && isEnabled == true
+            sc = FindObjectOfType<StageControl>();
+
+            sc.changeStage -= changeStage;
+
+            if (sc != null
+                && photonView.IsMine == true)
+            {
+                sc.changeStage += changeStage;
+            }
+
+            if(isEnabled == true
                 && myType.CompareTo("UnitAI") == 0)
             {
                 this.enabled = false;
 
                 isEnabled = false;
             }
+
         }
 
-        private void Start()
-        {
-            sc = FindObjectOfType<StageControl>();
-            if (sc != null)
-            {
-                sc.changeStage += changeStage;
-            }
-        }
+        //private void Start()
+        //{
+        //    sc = FindObjectOfType<StageControl>();
+        //    if (sc != null
+        //        && photonView.IsMine == true)
+        //    {
+        //        sc.changeStage += changeStage;
+        //    }
+        //}
 
         private void Update()
         {
@@ -281,12 +292,6 @@ namespace Battle.AI
                 myAni.ResetTrigger("isAttack");
             }
             
-            sc = FindObjectOfType<StageControl>();
-            if (sc != null)
-            {
-               sc.changeStage += changeStage;
-            }
-
             isInit = false;
             enemies.Clear();
             target = null;
@@ -752,7 +757,7 @@ namespace Battle.AI
                 if(GameManager.Inst.GetPlayerInfoConnector().GetUnitCount() <= 0
                     && myType.CompareTo("UnitAI") == 0)
                 {
-                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 2);
+                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 10);
                     GameManager.Inst.GetPlayerInfoConnector().SyncOwnerHP();
                 }
             }
