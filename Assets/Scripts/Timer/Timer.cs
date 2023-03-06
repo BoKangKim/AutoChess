@@ -57,6 +57,7 @@ public class Timer : MonoBehaviour
 
         nowTime += Time.deltaTime;
         GameManager.Inst.time = nowTime;
+        GameManager.Inst.GetPlayerInfoConnector().SyncTimer((30 -(int)nowTime).ToString());
 
         if(nowTime >= STAGE_TIME)
         {

@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
     }
     #endregion
-    private (int row, int col) stageIndex = (0, -1);
+    private int stageIndex = -1;
     private Pool pool = null;
     private Battle.Stage.STAGETYPE nowStage { get; set; } = Battle.Stage.STAGETYPE.PREPARE;
     [HideInInspector] public float time = 0f;
@@ -45,10 +45,10 @@ public class GameManager : MonoBehaviourPunCallbacks
     [Header("SoundOption")]
     public SoundOption soundOption;
 
-
-    // ���� �� ���� ����
-    // Manager �� Ŭ������ ����ٰ�
     public UIManager UIManager = null;
+    private FadeIn ending = null;
+
+    private int roundCount = 1;
 
     private void Awake()
     {
@@ -77,13 +77,19 @@ public class GameManager : MonoBehaviourPunCallbacks
     #endregion
 
     #region SyncMasterInfo
-    public void SyncStageIndex(int row , int col)
+    public void SyncStageIndex(int stageIndex)
     {
-        stageIndex.row = row;
-        stageIndex.col = col;
+        this.stageIndex = stageIndex;
     }
 
-    public (int row,int col) getStageIndex()
+    public void SyncStageInfoUI()
+    {
+        roundCount++;
+
+        UIManager.SyncRound(roundCount.ToString());
+    }
+
+    public int getStageIndex()
     {
         return stageIndex;
     }
@@ -92,7 +98,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         this.nowStage = nowStage;
 
-        if(PhotonNetwork.IsMasterClient == true
+        connecter.SyncLevel();
+
+        if (PhotonNetwork.IsMasterClient == true
             && nowStage == Battle.Stage.STAGETYPE.PREPARE)
         {
             if (players == null)
@@ -133,6 +141,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             players[i].SetRank(i + 1);
         }
+        
     }
 
     public Battle.Stage.STAGETYPE GetNowStage()
@@ -165,14 +174,40 @@ public class GameManager : MonoBehaviourPunCallbacks
         return connecter;
     }
 
-    public void SetUIManager()
+    public PlayerInfoConnector[] GetPlayers()
     {
-        UIManager = GameObject.Find("UIManager").GetComponent<UIManager>();
-        UIManager.transform.SetParent(this.transform);
+        if(players == null ||
+            PhotonNetwork.CurrentRoom.PlayerCount != players.Length)
+        {
+            players = FindObjectsOfType<PlayerInfoConnector>();
+        }
+
+        return players;
+    }
+
+    public void SetUIManager(UIManager uiManager)
+    {
+        this.UIManager = uiManager;
+    }
+
+    public UIManager GetUIManager()
+    {
+
+        return UIManager;
     }
 
     public void SetTimer(Timer timer)
     {
         this.timer = timer;
+    }
+
+    public FadeIn GetEnding()
+    {
+        return ending;
+    }
+
+    public void SetEnding(FadeIn ending)
+    {
+        this.ending = ending;
     }
 }

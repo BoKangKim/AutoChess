@@ -15,7 +15,17 @@ public class MeleeAI : UnitAI
         {
             return;
         }
+
         mana += manaRecovery;
+        if (photonView.IsMine == true)
+        {
+            Debug.Log(mana);
+        }
+        if (mana > maxMana)
+        {
+            return;
+        }
+
         Effect attack = null;
         if(PhotonNetwork.Instantiate(standardAttackEffect.gameObject.name, target.transform.position + Vector3.up, Quaternion.LookRotation(transform.forward)).TryGetComponent<Effect>(out attack))
         {

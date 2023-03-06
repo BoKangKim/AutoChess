@@ -26,9 +26,9 @@ namespace Battle.Stage
         [SerializeField] private GameObject[] Monsters = null;
         private GameObject cam = null;
 
-        private STAGETYPE[,] stages = new STAGETYPE[9, 4];
+        private STAGETYPE[] stages = new STAGETYPE[30];
         private STAGETYPE nowStage = STAGETYPE.PREPARE;
-        private (int row, int col) stageIndex = (0, -1);
+        private int stageIndex = -1;
         public ChangeStage changeStage = null;
 
         private ZoneSystem.MapController[] maps = null;
@@ -101,53 +101,33 @@ namespace Battle.Stage
             if (nowStage != STAGETYPE.PREPARE)
             {
                 nowStage = STAGETYPE.PREPARE;
-                GameManager.Inst.SetNowStage(nowStage);
-                photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
+                photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
                 if (changeStage != null)
                 {
-                    changeStage(nowStage);
                     photonView.RPC("RPC_changeStage", RpcTarget.All, nowStage);
                 }
 
                 return;
             }
 
-            stageIndex.col++;
+            stageIndex++;
 
-            if (stageIndex.col >= stages.GetLength(1)
-                || stages[stageIndex.row, stageIndex.col] == STAGETYPE.NULL)
+            if(stageIndex >= stages.Length)
             {
-                stageIndex.col = 0;
-                stageIndex.row++;
-            }
-
-            if (stageIndex.row >= stages.GetLength(0))
-            {
-                stageIndex.col = 5;
                 nowStage = STAGETYPE.PVP;
-                GameManager.Inst.SetNowStage(nowStage);
             }
             else
             {
-                nowStage = stages[stageIndex.row, stageIndex.col];
-                GameManager.Inst.SetNowStage(nowStage);
-            }
-
-            if(PhotonNetwork.CurrentRoom.PlayerCount == 3)
-            {
-
+                nowStage = stages[stageIndex];
             }
 
             if (changeStage != null)
             {
-                //changeStage(nowStage);
                 photonView.RPC("RPC_changeStage", RpcTarget.All, nowStage);
             }
 
-            GameManager.Inst.SyncStageIndex(stageIndex.row, stageIndex.col);
-            GameManager.Inst.SetNowStage(nowStage);
-            photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex.row, stageIndex.col);
-            photonView.RPC("CacheMasterStage", RpcTarget.Others, nowStage);
+            photonView.RPC("CacheMasterIndex", RpcTarget.All, stageIndex);
+            photonView.RPC("CacheMasterStage", RpcTarget.All, nowStage);
         }
 
         [PunRPC]
@@ -160,16 +140,17 @@ namespace Battle.Stage
         }
 
         [PunRPC]
-        public void CacheMasterIndex(int row, int col)
+        public void CacheMasterIndex(int stageIndex)
         {
-            GameManager.Inst.SyncStageIndex(row, col);
-            stageIndex = (row, col);
+            GameManager.Inst.SyncStageIndex(stageIndex);
+            this.stageIndex = stageIndex;
         }
 
         [PunRPC]
         public void CacheMasterStage(STAGETYPE stage)
         {
             GameManager.Inst.SetNowStage(stage);
+            nowStage = stage;
         }
 
         public void startNextStage()
@@ -255,6 +236,8 @@ namespace Battle.Stage
         [PunRPC]
         public void returnMyMap()
         {
+            GameManager.Inst.SyncStageInfoUI();
+
             battleObject = myMap.getBattleObjects();
 
             if(monster != null &&
@@ -295,8 +278,6 @@ namespace Battle.Stage
                     }
                 }
             }
-
-            
 
             myMap.isMirrorModePlayer = false;
         }
@@ -367,63 +348,11 @@ namespace Battle.Stage
 
         private void initializingStageInfo()
         {
-            // STAGE 1
-            {
-                stages[0, 0] = STAGETYPE.PVP;
-                stages[0, 1] = STAGETYPE.PVP;
-                stages[0, 2] = STAGETYPE.PVP;
-                stages[0, 3] = STAGETYPE.PVP;
-            }
-            
-            // STAGE 2
-            {
-                stages[1, 0] = STAGETYPE.MONSTER;
-                stages[1, 1] = STAGETYPE.PVP;
-                stages[1, 2] = STAGETYPE.BOSS;
-                stages[1, 3] = STAGETYPE.NULL;
-            }
+            stages[0] = STAGETYPE.MONSTER;
 
-            // STAGE 3
+            for(int i = 0; i < stages.Length; i++)
             {
-                stages[2, 0] = STAGETYPE.MONSTER;
-                stages[2, 1] = STAGETYPE.PVP;
-                stages[2, 2] = STAGETYPE.PVP;
-                stages[2, 3] = STAGETYPE.NULL;
-            }
-
-            // STAGE 4
-            {
-                stages[3, 0] = STAGETYPE.AUCTION;
-                stages[3, 1] = STAGETYPE.PVP;
-                stages[3, 2] = STAGETYPE.BOSS;
-                stages[3, 3] = STAGETYPE.NULL;
-            }
-
-            // STAGE 5
-            {
-                stages[4, 0] = STAGETYPE.MONSTER;
-                stages[4, 1] = STAGETYPE.PVP;
-                stages[4, 2] = STAGETYPE.PVP;
-                stages[4, 3] = STAGETYPE.NULL;
-            }
-
-            // STAGE 6 ~ 8
-            {
-                for (int i = 5; i <= 7; i++)
-                {
-                    stages[i, 0] = STAGETYPE.PVP;
-                    stages[i, 1] = STAGETYPE.PVP;
-                    stages[i, 2] = STAGETYPE.PVP;
-                    stages[i, 3] = STAGETYPE.NULL;
-                }
-            }
-
-            // STAGE 9
-            {
-                stages[8, 0] = STAGETYPE.BOSS;
-                stages[8, 1] = STAGETYPE.MONSTER;
-                stages[8, 2] = STAGETYPE.PVP;
-                stages[8, 3] = STAGETYPE.NULL;
+                stages[i] = STAGETYPE.PVP;
             }
 
         }

@@ -184,12 +184,11 @@ namespace Battle.AI
             InitializingRootNode();
             specialRoot = initializingSpecialRootNode();
             rta = new RTAstar(myLocation,gameObject.name);
-            myType = initializingMytype();
             initializingData();
+            myType = initializingMytype();
             if(photonView.IsMine == true)
             {
                 nickName = PhotonNetwork.NickName;
-                Debug.Log(nickName + " AWAKE");
                 photonView.RPC("RPC_SetNickName", RpcTarget.Others, nickName);
             }
         }
@@ -201,29 +200,41 @@ namespace Battle.AI
             {
                 myAni = GetComponent<Animator>();
                 enemies = new List<ParentBT>();
+                myUnits = new List<ParentBT>();
                 myLocation = LocationControl.convertPositionToLocation(gameObject.transform.localPosition);
             }
 
             initializingAfterBattle();
 
-            if(photonView.IsMine == true
-                && isEnabled == true
+            sc = FindObjectOfType<StageControl>();
+
+            sc.changeStage -= changeStage;
+
+            if (sc != null
+                && photonView.IsMine == true)
+            {
+                sc.changeStage += changeStage;
+            }
+
+            if(isEnabled == true
                 && myType.CompareTo("UnitAI") == 0)
             {
                 this.enabled = false;
 
                 isEnabled = false;
             }
+
         }
 
-        private void Start()
-        {
-            sc = FindObjectOfType<StageControl>();
-            if (sc != null)
-            {
-                sc.changeStage += changeStage;
-            }
-        }
+        //private void Start()
+        //{
+        //    sc = FindObjectOfType<StageControl>();
+        //    if (sc != null
+        //        && photonView.IsMine == true)
+        //    {
+        //        sc.changeStage += changeStage;
+        //    }
+        //}
 
         private void Update()
         {
@@ -280,13 +291,6 @@ namespace Battle.AI
                 myAni.ResetTrigger("isAttack");
             }
             
-            
-            sc = FindObjectOfType<StageControl>();
-            if (sc != null)
-            {
-               sc.changeStage += changeStage;
-            }
-
             isInit = false;
             enemies.Clear();
             target = null;
@@ -316,7 +320,7 @@ namespace Battle.AI
             isInit = false;
             enemies.Clear();
             target = null;
-            mana = 0;
+            mana = 0f;
             die = false;
             nickName = PhotonNetwork.NickName;
             initializingData();
@@ -347,10 +351,9 @@ namespace Battle.AI
 
             currentHP = unitData.totalMaxHp;
             maxMana = unitData.totalMaxMp;
-            maxMana = 5f;
-            manaRecovery += unitData.totalMpRecovery;
+            manaRecovery = unitData.totalMpRecovery;
             attackRange = unitData.totalAttackRange;
-            attackDamage = unitData.totalAtkDamage;
+            attackDamage = unitData.totalAtk;
             spellPower = unitData.totalSpellPower;
             //myAni.speed = unitData.totalAttackSpeed;
         }
@@ -370,6 +373,7 @@ namespace Battle.AI
             {
                 case "UnitAI":
                     addEnemyList(fieldAIObejects);
+                    addMyUnitList(fieldAIObejects);
                     break;
                 case "Monster":
                     addEnemyList(fieldAIObejects, "Monster");
@@ -380,6 +384,36 @@ namespace Battle.AI
             }
 
         }
+
+
+
+        private void addMyUnitList(ParentBT[] fieldAIObejects)
+        {
+            if (stageType == STAGETYPE.PVP
+             || stageType == STAGETYPE.CLONE)
+            {
+                for (int i = 0; i < fieldAIObejects.Length; i++)
+                {
+                    if (fieldAIObejects[i].nickName.CompareTo(enemyNickName) == 0)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].enabled == false)
+                    {
+                        continue;
+                    }
+
+                    if (fieldAIObejects[i].nickName.CompareTo(nickName) == 0)
+                    {
+                        myUnits.Add(fieldAIObejects[i]);
+                    }
+                }
+            }
+        }
+
+
+
 
         private void addEnemyList(ParentBT[] fieldAIObejects, string compare)
         {
@@ -495,7 +529,6 @@ namespace Battle.AI
 
                         if(target == null)
                         {
-                            Debug.Log(enemies.Count + " target null");
                             return;
                         }
 
@@ -607,8 +640,8 @@ namespace Battle.AI
 
                         Vector3 targetPos = LocationControl.convertLocationToPosition(enemies[i].getMyLocation());
 
-                        if (Vector3.Distance(targetPos, transform.localPosition) <= (LocationControl.radius * attackRange)
-                        && checkIsOverlapUnits() == false)
+                        
+                        if (Vector3.Distance(targetPos, transform.localPosition) <= (LocationControl.radius * attackRange))
                         {
                             rta.initCloseList();
                             target = enemies[i];
@@ -718,7 +751,7 @@ namespace Battle.AI
                 if(GameManager.Inst.GetPlayerInfoConnector().GetUnitCount() <= 0
                     && myType.CompareTo("UnitAI") == 0)
                 {
-                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 2);
+                    GameManager.Inst.GetPlayerInfoConnector().GetPlayer().CurHP -= (enemies.Count * 10);
                     GameManager.Inst.GetPlayerInfoConnector().SyncOwnerHP();
                 }
             }

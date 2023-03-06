@@ -11,8 +11,8 @@ public class PlayerData
     //����
     public int playerLevel;
     //hp
-    public int CurHP;
-    private int MaxHP;
+    public float CurHP;
+    private float MaxHP;
     //����ġ
     public int[] MaxExp;
     public float CurExp;
@@ -24,10 +24,10 @@ public class PlayerData
 
     private void Initializing()
     {
-        playerName = "name";
+        playerName = "";
         gold = 500;
         playerLevel = 1;
-        MaxHP = 10;
+        MaxHP = 100;
         CurHP = MaxHP;
         MaxExp = new int[8] { 0, 2, 6, 10, 20, 36, 56, 70};
         CurExp = 0;

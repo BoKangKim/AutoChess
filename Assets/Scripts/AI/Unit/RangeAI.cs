@@ -17,6 +17,11 @@ public class RangeAI : UnitAI
         }
 
         mana += manaRecovery;
+
+        if(photonView.IsMine == true)
+        {
+            Debug.Log(mana);
+        }
         if (mana > maxMana)
         {
             return;

@@ -264,9 +264,16 @@ namespace ZoneSystem
             //    }
             //}
 
+            photonView.RPC("RPC_SyncPlayerUI",RpcTarget.All);
             PhotonNetwork.Instantiate("StageControl", Vector3.zero, Quaternion.identity);
 
             yield break;
+        }
+
+        [PunRPC]
+        public void RPC_SyncPlayerUI()
+        {
+            GameManager.Inst.UIManager.SyncPlayerUI();
         }
 
         //[PunRPC]
@@ -619,12 +626,12 @@ namespace ZoneSystem
 
         public void OnClick_UnitInst() //유닛 구매
         {
-            if (GameManager.Inst.UIManager.player.gold < 10)
+            if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold < 10)
             { 
                 debug.text = "골드가 부족합니다.";
                 return;
             }
-            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold -= 10;
             GameManager.Inst.UIManager.PlayerInfoUpdate();
 
             string UnitPrefab = null;
@@ -672,12 +679,12 @@ namespace ZoneSystem
 
         public void OnClick_ItemInst()
         {
-            if (GameManager.Inst.UIManager.player.gold < 10)
+            if (GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold < 10)
             {
                 debug.text = "골드가 부족합니다.";
                 return;
             }
-            GameManager.Inst.UIManager.player.gold -= 10;
+            GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold -= 10;
             GameManager.Inst.UIManager.PlayerInfoUpdate();
 
             for (int z = 0; z < 2; z++)

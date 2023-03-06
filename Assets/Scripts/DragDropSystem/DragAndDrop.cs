@@ -220,8 +220,9 @@ namespace ZoneSystem
                 GameManager.Inst.soundOption.bgmPlay("SellSFX");
 
                 //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
-                GameManager.Inst.UIManager.player.gold += 3;
-                GameManager.Inst.UIManager.buttlezoneUnitNum = mapController.BattleZoneCheck();
+
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
+                GameManager.Inst.UIManager.battlezoneUnitNum = mapController.BattleZoneCheck();
                 GameManager.Inst.UIManager.PlayerInfoUpdate();
 
                 selectedObject = null;
@@ -239,7 +240,7 @@ namespace ZoneSystem
                 GameManager.Inst.soundOption.bgmPlay("SellSFX");
 
                 //GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
-                GameManager.Inst.UIManager.player.gold += 3;
+                GameManager.Inst.GetPlayerInfoConnector().GetPlayer().gold += 3;
 
 
                 selectedObject = null;
@@ -350,7 +351,7 @@ namespace ZoneSystem
 
                 if (mapController.battleObject[battlePos.z, battlePos.x] == null)
                 {
-                    if (mapController.BattleZoneCheck() >= GameManager.Inst.UIManager.player.playerLevel + 2)
+                    if (mapController.BattleZoneCheck() >= GameManager.Inst.GetPlayerInfoConnector().GetPlayer().playerLevel + 2)
                     {
                         outRange();
                         return;
@@ -403,7 +404,7 @@ namespace ZoneSystem
 
                 }
             }
-            GameManager.Inst.UIManager.buttlezoneUnitNum = mapController.BattleZoneCheck();
+            GameManager.Inst.UIManager.battlezoneUnitNum = mapController.BattleZoneCheck();
             GameManager.Inst.UIManager.PlayerInfoUpdate();
             selectedObject = null;
         }
